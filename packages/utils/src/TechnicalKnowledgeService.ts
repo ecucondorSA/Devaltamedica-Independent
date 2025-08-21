@@ -7,6 +7,11 @@ const logger = {
       console.log(message, data);
     }
   },
+  warn: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
   error: (message: string, data?: any) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);

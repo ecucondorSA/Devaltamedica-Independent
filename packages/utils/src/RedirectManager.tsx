@@ -137,7 +137,7 @@ export class RedirectManager {
 
       return true;
     } catch (error) {
-      logger.error('❌ [RedirectManager] Invalid URL format:', url, error);
+      logger.error(`❌ [RedirectManager] Invalid URL format: ${url}`, error);
       return false;
     }
   }
