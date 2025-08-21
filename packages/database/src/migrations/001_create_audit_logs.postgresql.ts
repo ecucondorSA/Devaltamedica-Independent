@@ -49,7 +49,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
     const client = await pool.connect();
     
     try {
-      logger.info('🔄 Aplicando migración PostgreSQL 001: audit_logs...');
+      logger.info('🔄 Aplicando migración PostgreSQL 001: audit_logs...', {});
       
       // Iniciar transacción para atomicidad
       await client.query('BEGIN');
@@ -65,7 +65,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       // 2. Ejecutar el schema completo de audit_logs
-      logger.info('   📋 Creando tabla audit_logs...');
+      logger.info('   📋 Creando tabla audit_logs...', {});
       await client.query(POSTGRES_AUDIT_SCHEMA);
 
       // 3. Insertar registro de migración
@@ -95,7 +95,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
         AND indexname LIKE 'idx_audit_logs_%';
       `);
 
-      logger.info(`   ✅ Creados ${indexCheck.rows.length} índices especializados`);
+      logger.info(`   ✅ Creados ${indexCheck.rows.length} índices especializados`, {});
 
       // 6. Verificar que las funciones se crearon
       const functionCheck = await client.query(`
@@ -104,7 +104,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
         WHERE proname IN ('cleanup_old_audit_logs', 'validate_medical_audit_entry');
       `);
 
-      logger.info(`   ✅ Creadas ${functionCheck.rows.length} funciones de auditoría`);
+      logger.info(`   ✅ Creadas ${functionCheck.rows.length} funciones de auditoría`, {});
 
       // 7. Verificar que las vistas se crearon
       const viewCheck = await client.query(`
@@ -113,13 +113,13 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
         WHERE viewname IN ('audit_summary', 'patient_access_history');
       `);
 
-      logger.info(`   ✅ Creadas ${viewCheck.rows.length} vistas de consulta`);
+      logger.info(`   ✅ Creadas ${viewCheck.rows.length} vistas de consulta`, {});
 
       // Confirmar transacción
       await client.query('COMMIT');
       
-      logger.info('✅ Migración PostgreSQL 001 aplicada exitosamente');
-      logger.info('📊 Sistema de auditoría Ley 26.529 Argentina completamente configurado');
+      logger.info('✅ Migración PostgreSQL 001 aplicada exitosamente', {});
+      logger.info('📊 Sistema de auditoría Ley 26.529 Argentina completamente configurado', {});
       
     } catch (error) {
       // Revertir en caso de error
@@ -138,27 +138,27 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
     const client = await pool.connect();
     
     try {
-      logger.info('🔄 Revirtiendo migración PostgreSQL 001: audit_logs...');
+      logger.info('🔄 Revirtiendo migración PostgreSQL 001: audit_logs...', {});
       
       await client.query('BEGIN');
 
       // 1. Eliminar vistas
       await client.query('DROP VIEW IF EXISTS patient_access_history CASCADE;');
       await client.query('DROP VIEW IF EXISTS audit_summary CASCADE;');
-      logger.info('   🗑️  Vistas eliminadas');
+      logger.info('   🗑️  Vistas eliminadas', {});
 
       // 2. Eliminar triggers
       await client.query('DROP TRIGGER IF EXISTS trigger_validate_medical_audit ON audit_logs;');
-      logger.info('   🗑️  Triggers eliminados');
+      logger.info('   🗑️  Triggers eliminados', {});
 
       // 3. Eliminar funciones
       await client.query('DROP FUNCTION IF EXISTS validate_medical_audit_entry() CASCADE;');
       await client.query('DROP FUNCTION IF EXISTS cleanup_old_audit_logs() CASCADE;');
-      logger.info('   🗑️  Funciones eliminadas');
+      logger.info('   🗑️  Funciones eliminadas', {});
 
       // 4. Eliminar tabla audit_logs
       await client.query('DROP TABLE IF EXISTS audit_logs CASCADE;');
-      logger.info('   🗑️  Tabla audit_logs eliminada');
+      logger.info('   🗑️  Tabla audit_logs eliminada', {});
 
       // 5. Actualizar registro de migración
       await client.query(`
@@ -169,8 +169,8 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
 
       await client.query('COMMIT');
       
-      logger.info('✅ Migración PostgreSQL 001 revertida exitosamente');
-      logger.info('⚠️  Sistema de auditoría completamente removido');
+      logger.info('✅ Migración PostgreSQL 001 revertida exitosamente', {});
+      logger.info('⚠️  Sistema de auditoría completamente removido', {});
       
     } catch (error) {
       await client.query('ROLLBACK');
@@ -197,7 +197,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (!tableCheck.rows[0].exists) {
-        logger.info('❌ Verificación fallida: tabla audit_logs no existe');
+        logger.info('❌ Verificación fallida: tabla audit_logs no existe', {});
         return false;
       }
 
@@ -211,7 +211,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
 
       const expectedIndexes = 6; // Según schema definido
       if (parseInt(indexCheck.rows[0].count) < expectedIndexes) {
-        logger.info(`❌ Verificación fallida: solo ${indexCheck.rows[0].count}/${expectedIndexes} índices encontrados`);
+        logger.info(`❌ Verificación fallida: solo ${indexCheck.rows[0].count}/${expectedIndexes} índices encontrados`, {});
         return false;
       }
 
@@ -223,7 +223,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (parseInt(functionCheck.rows[0].count) < 2) {
-        logger.info('❌ Verificación fallida: funciones de auditoría no encontradas');
+        logger.info('❌ Verificación fallida: funciones de auditoría no encontradas', {});
         return false;
       }
 
@@ -235,7 +235,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (parseInt(viewCheck.rows[0].count) < 2) {
-        logger.info('❌ Verificación fallida: vistas de consulta no encontradas');
+        logger.info('❌ Verificación fallida: vistas de consulta no encontradas', {});
         return false;
       }
 
@@ -247,7 +247,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (parseInt(triggerCheck.rows[0].count) < 1) {
-        logger.info('❌ Verificación fallida: trigger de validación no encontrado');
+        logger.info('❌ Verificación fallida: trigger de validación no encontrado', {});
         return false;
       }
 
@@ -262,7 +262,7 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (!insertTest.rows[0]?.id) {
-        logger.info('❌ Verificación fallida: no se puede insertar en audit_logs');
+        logger.info('❌ Verificación fallida: no se puede insertar en audit_logs', {});
         return false;
       }
 
@@ -275,12 +275,12 @@ export const migration_001_create_audit_logs: PostgreSQLMigration = {
       `);
 
       if (migrationCheck.rows[0]?.status !== 'applied') {
-        logger.info('❌ Verificación fallida: migración no registrada correctamente');
+        logger.info('❌ Verificación fallida: migración no registrada correctamente', {});
         return false;
       }
 
-      logger.info('✅ Verificación migración PostgreSQL 001: exitosa');
-      logger.info('📊 Sistema de auditoría Ley 26.529 completamente funcional');
+      logger.info('✅ Verificación migración PostgreSQL 001: exitosa', {});
+      logger.info('📊 Sistema de auditoría Ley 26.529 completamente funcional', {});
       return true;
       
     } catch (error) {
