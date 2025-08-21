@@ -255,7 +255,7 @@ export class PatientService {
   async deletePatient(id: string): Promise<boolean> {
     try {
       // In production, API call here
-      logger.info(`Deleting patient with ID: ${id}`);
+      logger.info(`Deleting patient with ID: ${id}`, {});
 
       // Remove from cache
       this.cache.delete(id);

@@ -47,7 +47,7 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
    */
   async up(firestore: Firestore): Promise<void> {
     try {
-      logger.info('🔄 Aplicando migración 001: audit_logs estructura Firestore...');
+      logger.info('🔄 Aplicando migración 001: audit_logs estructura Firestore...', {});
 
       // 1. Crear documento de configuración para la colección
       const configDoc = firestore.collection('_migrations').doc('001_audit_logs');
@@ -101,8 +101,8 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
         createdAt: new Date()
       });
 
-      logger.info('✅ Migración 001 aplicada exitosamente');
-      logger.info('ℹ️  Recordatorio: Crear índices compuestos manualmente en Firebase Console');
+      logger.info('✅ Migración 001 aplicada exitosamente', {});
+      logger.info('ℹ️  Recordatorio: Crear índices compuestos manualmente en Firebase Console', {});
     } catch (error) {
       logger.error('❌ Error aplicando migración 001:', error);
       throw error;
@@ -114,7 +114,7 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
    */
   async down(firestore: Firestore): Promise<void> {
     try {
-      logger.info('🔄 Revirtiendo migración 001: audit_logs...');
+      logger.info('🔄 Revirtiendo migración 001: audit_logs...', {});
 
       // 1. Eliminar documento de configuración
       const configDoc = firestore.collection('_migrations').doc('001_audit_logs');
@@ -133,8 +133,8 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
       // Nota: No eliminamos toda la colección por seguridad
       // Si hay datos reales, deben manejarse manualmente
 
-      logger.info('✅ Migración 001 revertida exitosamente');
-      logger.info('⚠️  Colección audit_logs no eliminada por seguridad');
+      logger.info('✅ Migración 001 revertida exitosamente', {});
+      logger.info('⚠️  Colección audit_logs no eliminada por seguridad', {});
     } catch (error) {
       logger.error('❌ Error revirtiendo migración 001:', error);
       throw error;
@@ -153,7 +153,7 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
         .get();
 
       if (!configDoc.exists) {
-        logger.info('❌ Verificación fallida: documento de configuración no existe');
+        logger.info('❌ Verificación fallida: documento de configuración no existe', {});
         return false;
       }
 
@@ -164,7 +164,7 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
         .get();
 
       if (!sampleDoc.exists) {
-        logger.info('❌ Verificación fallida: colección audit_logs no inicializada');
+        logger.info('❌ Verificación fallida: colección audit_logs no inicializada', {});
         return false;
       }
 
@@ -174,12 +174,12 @@ export const migration_001_create_audit_logs: FirestoreMigration = {
       
       for (const field of requiredFields) {
         if (!(field in sampleData!)) {
-          logger.info(`❌ Verificación fallida: campo requerido ${field} no encontrado`);
+          logger.info(`❌ Verificación fallida: campo requerido ${field} no encontrado`, {});
           return false;
         }
       }
 
-      logger.info('✅ Verificación migración 001: exitosa');
+      logger.info('✅ Verificación migración 001: exitosa', {});
       return true;
     } catch (error) {
       logger.error('❌ Error verificando migración 001:', error);
