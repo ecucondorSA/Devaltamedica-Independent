@@ -1,49 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM"
-    ],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@altamedica/*": [
-        "packages/*/src",
-        "packages/*/dist",
-        "packages/*"
-      ]
-    },
-    "types": [
-      "node"
-    ]
-  },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".next",
-    "out"
-  ]
-}
-
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES2022"
-    ],
+    "lib": ["dom", "dom.iterable", "ES2022"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -54,17 +12,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@altamedica/*": [
-        "./packages/*/src"
-      ]
+      "@/*": ["./src/*"],
+      "@altamedica/*": ["./packages/*/src", "./packages/*/dist"]
     },
-    "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
     "noUncheckedIndexedAccess": false,
     "exactOptionalPropertyTypes": false,
     "noImplicitReturns": false,
@@ -73,11 +27,5 @@
     "allowUnusedLabels": false,
     "noImplicitOverride": false
   },
-  "exclude": [
-    "node_modules",
-    ".next",
-    "dist",
-    "build",
-    "coverage"
-  ]
+  "exclude": ["node_modules", ".next", "dist", "build", "coverage", "out"]
 }
