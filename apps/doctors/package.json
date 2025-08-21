@@ -31,6 +31,7 @@
     "@altamedica/patient-services": "workspace:*",
     "@altamedica/shared": "workspace:*",
     "@altamedica/telemedicine-core": "workspace:*",
+    "@altamedica/types": "workspace:*",
     "@altamedica/ui": "workspace:*",
     "@altamedica/utils": "workspace:*",
     "@anthropic-ai/sdk": "^0.55.1",
