@@ -6,7 +6,29 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 // ==========================================
 // TIPOS
 // ==========================================

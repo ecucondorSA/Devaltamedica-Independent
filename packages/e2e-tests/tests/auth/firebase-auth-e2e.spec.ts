@@ -1,7 +1,29 @@
 import { test, expect, Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 const API_BASE = process.env.API_BASE_URL || 'http://localhost:3001';
 const WEB_BASE = process.env.WEB_BASE_URL || 'http://localhost:3000';
 const PATIENTS_BASE = process.env.PATIENTS_BASE_URL || 'http://localhost:3003';

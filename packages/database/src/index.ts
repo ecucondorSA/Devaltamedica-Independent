@@ -61,7 +61,19 @@ import { companyRepository } from './repositories/CompanyRepository';
 import { marketplaceRepository, applicationRepository } from './repositories/MarketplaceRepository';
 import { auditLogRepository } from './repositories/AuditLogRepository';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message: string, data?: any) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  error: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  }
+};
 // Convenience Functions for Quick Setup
 export async function initializeAltaMedicaDatabase() {
   try {

@@ -12,7 +12,29 @@ import {
   User,
 } from '../types';
 import { AuthStorage } from '../utils';
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 // Mapeo local de rutas por rol para evitar dependencia cruzada con @altamedica/shared
 const ROLE_ROUTES: Record<UserRole, string> = {
   [UserRole.PATIENT]: 'http://localhost:3003',

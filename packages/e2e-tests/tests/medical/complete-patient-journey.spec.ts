@@ -10,7 +10,29 @@
 import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
 import { authenticateAs } from '../helpers/auth';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 // Configuración del test
 const TEST_TIMEOUT = 60000; // 60 segundos para flujo completo
 const CRITICAL_OPERATION_TIMEOUT = 3000; // 3 segundos para operaciones críticas

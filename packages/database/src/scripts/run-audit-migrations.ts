@@ -8,7 +8,29 @@
 import { dbConnection } from '../core/DatabaseConnection';
 import { MigrationManager, runAutoMigrations } from '../migrations';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 async function main() {
   logger.info('🚀 AltaMedica - Ejecutor de Migraciones de Auditoría');
   logger.info('📋 Configurando sistema de auditoría para Ley 26.529 Argentina\n');

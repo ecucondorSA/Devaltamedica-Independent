@@ -7,7 +7,29 @@
 import { auditLogRepository } from '../repositories/AuditLogRepository';
 import { AUDIT_ACTIONS, AUDIT_RESOURCES, createAuditLogEntry, AuditAction } from '@altamedica/types';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 /**
  * EJEMPLO 1: Auditar acceso a historia clínica de paciente
  * Cumple con Ley 26.529 Art. 15 - "acceso con clave de identificación"

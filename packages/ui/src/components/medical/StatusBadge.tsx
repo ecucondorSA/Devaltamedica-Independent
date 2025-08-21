@@ -8,7 +8,29 @@
 import React from 'react';
 import { CheckCircle, Clock, AlertCircle, XCircle, Activity, Heart } from 'lucide-react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  warn: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message, data) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  debug: (message, data) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.debug(message, data);
+    }
+  }
+};
 // 🏥 TIPOS DE ESTADO MÉDICOS EXTENDIDOS
 export type StatusType = 
   | 'confirmed' | 'scheduled' | 'completed' | 'cancelled' 
