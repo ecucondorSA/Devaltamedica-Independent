@@ -1,3 +1,6 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 /**
  * 📢 NOTIFICATION SERVICE - DOCTORS APP (PRODUCTION READY)
  * 
@@ -93,7 +96,7 @@ export type {
  * 
  * NEW CODE:
  * ```typescript
- * import { notificationServiceUnified } from './services/notificationServiceUnified.ts';
+ * import { notificationServiceUnified } from './servicesUnified.ts';
  * await notificationServiceUnified.addNotification({...});
  * ```
  * 

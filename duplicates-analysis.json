@@ -1,0 +1,452 @@
+[
+  {
+    "app": "patients",
+    "file": "src\\app\\dashboard\\page.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\app\\telemedicine\\session\\[sessionId]\\page.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\dashboard\\__tests__\\PatientDashboard.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\dashboard\\__tests__\\TelemedicineDashboard.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\layout\\PatientLayout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\layout\\PatientLayoutModular.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\notifications\\__tests__\\NotificationSystem.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\optimized\\__tests__\\PerformanceOptimizer.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\components\\telemedicine\\__tests__\\TelemedicineCall.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\api\\index.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\api\\useApiBridge.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\api\\useDoctors.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\BACKUP_useAppointments.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\BACKUP_useMedicalRecords.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\firebase-auth-adapter.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\useDashboardData.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\usePatientData.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\usePatients.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\hooks\\__tests__\\useAppointments.test.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\lib\\api-client-jwt.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/apiClient/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\lib\\api-client-jwt.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\providers\\QueryProvider.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "patients",
+    "file": "src\\utils\\navigation.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/utils\\/navigation/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\app\\client-layout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\app\\client-layout.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\components\\dashboard\\__tests__\\DoctorDashboard.test.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\components\\qos\\QoSDashboard.tsx",
+    "shouldUse": "@altamedica/ui",
+    "reason": "/components\\/ui\\//"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\components\\qos\\RealtimeQoSMetrics.tsx",
+    "shouldUse": "@altamedica/ui",
+    "reason": "/components\\/ui\\//"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\hooks\\api\\useAppointments.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\hooks\\api\\useDoctors.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\hooks\\queries\\useAppointments.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\hooks\\usePatients.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\providers\\QueryProvider.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\api-client-adapter.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/apiClient/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\api-client-adapter.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\index.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\marketplaceService.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\notification.service.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "doctors",
+    "file": "src\\services\\notificationServiceUnified.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\app\\api\\test-firebase\\route.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\components\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\components\\providers\\QueryProvider.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\config\\auth-config.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/auth-config/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\hooks\\api-hooks.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\hooks\\gateway-hooks.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\hooks\\gateway-hooks.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\hooks\\useAPI.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/apiClient/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\hooks\\useAPI.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/api-client/"
+  },
+  {
+    "app": "web-app",
+    "file": "src\\services\\shared-auth.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\components\\dashboard\\hooks\\useHospitalDashboard.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\contexts\\CrisisDataContext.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\hooks\\useCompanies.test.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\providers\\QueryProvider.tsx",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/QueryProvider/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\services\\HospitalDataIntegrationService.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/apiClient/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\services\\marketplaceService.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "companies",
+    "file": "src\\test\\mocks\\auth.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "admin",
+    "file": "src\\app\\layout.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "admin",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/AuthProvider/"
+  },
+  {
+    "app": "admin",
+    "file": "src\\providers\\AuthProvider.tsx",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/useAuth/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\config\\auth-config.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/auth-config/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\config\\cors.config.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/auth-config/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\domains\\auth\\auth.types.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/auth\\.types/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\routes\\auth-firebase.routes.ts",
+    "shouldUse": "@altamedica/auth",
+    "reason": "/auth-config/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\__tests__\\notifications.test.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  },
+  {
+    "app": "api-server",
+    "file": "src\\__tests__\\telemedicine.test.ts",
+    "shouldUse": "@altamedica/api-client",
+    "reason": "/services\\/.*Service/"
+  }
+]

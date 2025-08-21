@@ -1,3 +1,6 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 /**
  * 🏥 HOOK PERSONALIZADO PARA DASHBOARD HOSPITALARIO
  * Maneja el estado y la lógica del dashboard de red hospitalaria
@@ -5,7 +8,7 @@
 
 import { logger } from '@altamedica/shared/services/logger.service';
 import { useCallback, useEffect, useState } from 'react';
-import { HospitalMetrics } from '../../../services/HospitalDataIntegrationService';
+import { HospitalMetrics } from '../../../services';
 import {
     DashboardState
 } from '../types/HospitalDashboardTypes';

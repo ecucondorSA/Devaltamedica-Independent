@@ -1,0 +1,2096 @@
+{
+  "timestamp": "2025-08-21T21:18:43.430Z",
+  "stats": {
+    "totalFiles": 868,
+    "filesToChange": 122,
+    "totalChanges": 156,
+    "importsToAdd": null
+  },
+  "preview": [
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\usePatientHistory.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\usePatientMedications.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 8,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\ApiService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 3,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\useDiagnosis.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 5,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\hooks\\useAPI.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 11,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\dashboard\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\layout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\telemedicine\\session\\[sessionId]\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useAppointmentService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 3,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\lib\\api-client.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 6,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\providers\\AuthProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\providers\\AuthProviderUnifiedMigration.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 11,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\api-client.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 6,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 7,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\appointments-service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 19,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\index.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 9,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\medical-records-service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 23,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\MedicalService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\patients-service-new.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\patients-service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 15,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\client-layout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\lib\\api-client.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\marketplaceService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\patients-service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\app\\layout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\hooks\\api-hooks.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 6,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\hooks\\gateway-hooks.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\app\\layout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\providers\\AuthProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "admin",
+      "file": "apps\\admin\\src\\providers\\AuthProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        },
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\alta-anamnesis\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\appointments\\[id]\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\app\\doctors\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\auth\\index.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\dashboard\\TelemedicineDashboard.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\layout\\PatientHeaderModular.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\layout\\PatientLayout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\layout\\PatientLayoutModular.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\layout\\PatientSidebar.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\layout\\PatientSidebarModular.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\security\\MFAChallenge.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\security\\RecordingConsent.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\security\\SecureSessionLauncher.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\telemedicine\\TelemedicineCall.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\telemedicine\\TelemedicineMVP.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\components\\triage\\TriageChat.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\api\\index.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\api\\useApiBridge.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\api\\useDoctors.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\BACKUP_useAppointments.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\BACKUP_useMedicalRecords.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\firebase-auth-adapter.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\index.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useDashboardData.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useLabResults.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 3,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useLoginForm.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useMedicalHistoryUnified.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\usePatientData.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\usePatients.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useTelemedicinePatientHybrid.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useTelemedicineSessionHybrid.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useTelemedicineUnified.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useTriageAgent.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useWebRTCPatientHybrid.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\lib\\api-client-jwt.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 14,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\providers\\QueryProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\utils\\navigation.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/utils\\/navigation/g",
+          "replacement": "utils/navigation",
+          "matches": 7,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\appointments\\[id]\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\job-applications\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 3,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\patients\\[id]\\crystal-ball\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\telemedicine\\dashboard\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\app\\telemedicine\\session\\[sessionId]\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\components\\layout\\DoctorLayout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\components\\prescriptions\\PrescriptionForm.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\components\\qos\\QoSDashboard.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 5,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\components\\qos\\RealtimeQoSMetrics.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\components\\telemedicine\\IntegratedDoctorVideoCall.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\api\\useAppointments.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\api\\useDoctors.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 5,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\DEPRECATED_useTelemedicineWebSocket.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\queries\\useAppointments.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\useDashboardData.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\useMarketplaceNotifications.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\hooks\\usePatients.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 5,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\providers\\QueryProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\api-client-adapter.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\index.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\notification.service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\notificationServiceUnified.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\app\\api\\test-firebase\\route.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\app\\auth\\select-role\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\app\\auth\\verify-email\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\app\\landing-demo\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\auth\\CompleteProfileForm.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\auth\\ForgotPasswordForm.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\auth\\GoogleSignInButton.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\auth\\RegisterForm.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\auth\\UnifiedAuthSystem.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\landing\\FeaturesSection.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\providers\\AuthProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 5,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\components\\providers\\QueryProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\hooks\\useProtectedRoute.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\hooks\\useRedirection.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\services\\shared-auth.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 2,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "web-app",
+      "file": "apps\\web-app\\src\\types\\global.d.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/api-client/g",
+          "replacement": "api-client",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\app\\b2c-communication\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\app\\compliance\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\components\\baa\\BAAComplianceStatus.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 1,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\components\\baa\\BAAOnboarding.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/ui",
+          "pattern": "/components\\/ui\\//g",
+          "replacement": "components/ui/",
+          "matches": 4,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\components\\dashboard\\hooks\\useHospitalDashboard.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\components\\marketplace\\MessagingSystem.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\contexts\\CrisisDataContext.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\hooks\\useMarketplaceNotifications.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\providers\\QueryProvider.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/QueryProvider/g",
+          "replacement": "QueryProvider",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\services\\HospitalDataIntegrationService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/apiClient/g",
+          "replacement": "apiClient",
+          "matches": 4,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\services\\marketplaceService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\test\\mocks\\auth.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "admin",
+      "file": "apps\\admin\\src\\app\\dashboard\\page.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "admin",
+      "file": "apps\\admin\\src\\app\\layout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/AuthProvider/g",
+          "replacement": "AuthProvider",
+          "matches": 3,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "admin",
+      "file": "apps\\admin\\src\\components\\layout\\AdminLayout.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "admin",
+      "file": "apps\\admin\\src\\hooks\\useRequireAuth.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/useAuth/g",
+          "replacement": "useAuth",
+          "matches": 2,
+          "currentUsage": "✅ Ya importado"
+        }
+      ],
+      "needsImports": false,
+      "estimatedImports": 0
+    },
+    {
+      "app": "api-server",
+      "file": "apps\\api-server\\src\\config\\cors.config.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/auth-config/g",
+          "replacement": "auth-config",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    },
+    {
+      "app": "api-server",
+      "file": "apps\\api-server\\src\\routes\\auth-firebase.routes.ts",
+      "changes": [
+        {
+          "package": "@altamedica/auth",
+          "pattern": "/auth-config/g",
+          "replacement": "auth-config",
+          "matches": 1,
+          "currentUsage": "❌ No importado"
+        }
+      ],
+      "needsImports": true,
+      "estimatedImports": 3
+    }
+  ],
+  "packageAnalysis": {
+    "@altamedica/auth": {
+      "files": 86,
+      "changes": 86,
+      "imports": 57
+    },
+    "@altamedica/api-client": {
+      "files": 64,
+      "changes": 64,
+      "imports": 30
+    },
+    "@altamedica/ui": {
+      "files": 6,
+      "changes": 6,
+      "imports": 4
+    }
+  }
+}

@@ -1,1 +1,10 @@
 name: Cloud Development with Claude AI
+
+on:
+  workflow_dispatch: # Solo manual para evitar que falle automáticamente
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow deshabilitado temporalmente"

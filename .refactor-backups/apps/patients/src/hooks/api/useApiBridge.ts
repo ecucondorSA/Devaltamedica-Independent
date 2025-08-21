@@ -1,0 +1,1 @@
+// This file has been removed. Please use hooks from @altamedica/api-client instead.

@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-08-21T18:35:26.796Z",
+  "fixes": [
+    "Fixed imports in apps\\admin\\src\\app\\users\\page.tsx",
+    "Fixed imports in apps\\admin\\src\\components\\dashboard\\AdminStats.tsx",
+    "Fixed imports in apps\\admin\\src\\components\\dashboard\\UserManagement.tsx"
+  ],
+  "backups": [
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\api-server\\package.json.backup.1755801325545",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\patients\\package.json.backup.1755801325549",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\doctors\\package.json.backup.1755801325551",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\web-app\\package.json.backup.1755801325554",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\companies\\package.json.backup.1755801325556",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\admin\\package.json.backup.1755801325558",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\admin\\src\\app\\users\\page.tsx.backup.1755801326044",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\admin\\src\\components\\dashboard\\AdminStats.tsx.backup.1755801326049",
+    "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\apps\\admin\\src\\components\\dashboard\\UserManagement.tsx.backup.1755801326054"
+  ],
+  "success": true
+}

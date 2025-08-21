@@ -1,0 +1,132 @@
+{
+  "timestamp": "2025-08-21T21:18:53.876Z",
+  "summary": {
+    "totalFilesChanged": 10,
+    "totalApps": 3,
+    "totalImportsAdded": 16
+  },
+  "changes": [
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\BACKUP_useMedicalRecords.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\useDashboardData.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\hooks\\usePatientData.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\ApiService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 0
+    },
+    {
+      "app": "patients",
+      "file": "apps\\patients\\src\\services\\MedicalService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 0
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\marketplaceService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "doctors",
+      "file": "apps\\doctors\\src\\services\\notification.service.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\components\\dashboard\\hooks\\useHospitalDashboard.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\contexts\\CrisisDataContext.tsx",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    },
+    {
+      "app": "companies",
+      "file": "apps\\companies\\src\\services\\marketplaceService.ts",
+      "changes": [
+        {
+          "package": "@altamedica/api-client",
+          "pattern": "/services\\/.*Service/g",
+          "replacement": "services"
+        }
+      ],
+      "importsAdded": 2
+    }
+  ],
+  "errors": [],
+  "backupLocation": "C:\\Users\\Eduardo\\Documents\\Devaltamedica-Independent\\.refactor-backups"
+}

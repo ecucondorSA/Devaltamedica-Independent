@@ -1,0 +1,1295 @@
+{
+  "timestamp": "2025-08-21T17:47:31.421Z",
+  "summary": {},
+  "details": {
+    "api-server": {
+      "app": "api-server",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/database",
+        "@altamedica/auth"
+      ],
+      "actual": [
+        "@altamedica/ai-agents",
+        "@altamedica/api-helpers",
+        "@altamedica/auth",
+        "@altamedica/database",
+        "@altamedica/diagnostic-engine",
+        "@altamedica/firebase",
+        "@altamedica/shared",
+        "@altamedica/types",
+        "@altamedica/utils"
+      ],
+      "missing": [],
+      "duplicateCode": [
+        {
+          "file": "config\\security-config.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "domains\\auth\\auth.types.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "domains\\patients\\patient.types.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "lib\\auth.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "lib\\finops-estimator.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "lib\\firebase-config.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "lib\\types.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "middleware\\auth.middleware.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "middleware\\auth.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "middleware\\authorization.middleware.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "middleware\\csrf.middleware.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "services\\monitoring.service.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "services\\telemedicine-monitoring.service.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "utils\\navigation.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "__tests__\\auth.test.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        }
+      ],
+      "integrationScore": 100
+    },
+    "patients": {
+      "app": "patients",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/auth",
+        "@altamedica/ui",
+        "@altamedica/hooks",
+        "@altamedica/api-client"
+      ],
+      "actual": [
+        "@altamedica/alta-agent",
+        "@altamedica/anamnesis",
+        "@altamedica/api-client",
+        "@altamedica/auth",
+        "@altamedica/firebase",
+        "@altamedica/hooks",
+        "@altamedica/shared",
+        "@altamedica/telemedicine-core",
+        "@altamedica/types",
+        "@altamedica/ui",
+        "@altamedica/utils",
+        "@altamedica/eslint-config"
+      ],
+      "missing": [],
+      "duplicateCode": [
+        {
+          "file": "app\\ai-diagnosis\\loading.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\anamnesis-juego\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\lab-results\\[id]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\medical-history\\layout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\medical-history\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\medical-history\\[id]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\notifications\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\onboarding\\select-role\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\onboarding\\select-role\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\patient-medical-layout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\patients\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\patients\\[id]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\prescriptions\\[id]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\support\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\session\\demo\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\waiting\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\anamnesis\\AnamnesisWizard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\appointments\\AppointmentCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\ApiStatusIndicator.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\ApiStatusIndicator.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\common\\ServiceStatus.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\ServiceStatus.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\dashboard\\appointments\\UpcomingAppointments.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\cards\\DiagnosisAssistantCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\cards\\HealthSummaryCard.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\dashboard\\cards\\HealthSummaryCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\HealthMetricsCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\lab\\LabResultsTrends.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\monitors\\VitalSignsMonitor.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\PatientDashboardIntegrated.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\dashboard\\PatientDashboardIntegrated.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\PatientDashboardIntegrated.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\dashboard\\QuickActionsCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\trackers\\MedicationTracker.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\PatientDashboard.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\PatientDashboard.test.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\TelemedicineDashboard.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\TelemedicineDashboard.test.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\lab-results\\LabResultCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\lab-results\\LabResultDetailCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\lab-results\\LabResultFilters.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\lab-results\\LabResultList.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\layout\\PatientFooterModular.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\layout\\PatientHeaderModular.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\layout\\PatientHeaderModular.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\layout\\PatientHeaderModular.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\Map.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\MedicalAIRobot3D.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\notifications\\__tests__\\NotificationSystem.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\notifications\\__tests__\\NotificationSystem.test.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\optimized\\__tests__\\PerformanceOptimizer.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\OptimizedImage.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\patients\\PatientCard.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\patients\\PatientCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\patients\\PatientDetailCard.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\patients\\PatientDetailCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\patients\\PatientListFilters.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\patients\\PatientListFilters.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\PatientsListExample.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\PatientsListExample.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\prescriptions\\PrescriptionCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\prescriptions\\PrescriptionDetailCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\prescriptions\\PrescriptionFilters.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\prescriptions\\PrescriptionList.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\telemedicine\\__tests__\\TelemedicineCall.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\ui\\ProgressBar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\QuickAccessCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\SimpleCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\VideoCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "hooks\\api\\index.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "hooks\\BACKUP_useMedicalRecords.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "hooks\\BACKUP_usePrescriptions.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "hooks\\useNotifications.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "hooks\\__tests__\\useAppointments.test.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "hooks\\__tests__\\useAppointments.test.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "lib\\api-client-jwt.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "providers\\AuthProvider.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "providers\\AuthProviderUnifiedMigration.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "providers\\QueryProvider.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "services\\appointments-service.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "services\\appointments-service.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "services\\medical-records-service.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "services\\patients-service.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "services\\patients-service.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "types\\dashboard-types.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "types\\dashboard-types.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        }
+      ],
+      "integrationScore": 100
+    },
+    "doctors": {
+      "app": "doctors",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/auth",
+        "@altamedica/ui",
+        "@altamedica/hooks",
+        "@altamedica/api-client",
+        "@altamedica/telemedicine-core"
+      ],
+      "actual": [
+        "@altamedica/api-client",
+        "@altamedica/auth",
+        "@altamedica/database",
+        "@altamedica/diagnostic-engine",
+        "@altamedica/hooks",
+        "@altamedica/maps",
+        "@altamedica/medical",
+        "@altamedica/patient-services",
+        "@altamedica/shared",
+        "@altamedica/telemedicine-core",
+        "@altamedica/ui",
+        "@altamedica/utils",
+        "@altamedica/eslint-config"
+      ],
+      "missing": [
+        "@altamedica/types"
+      ],
+      "duplicateCode": [
+        {
+          "file": "app\\marketplace\\applications\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\messages\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\profile\\edit\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\qos\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\qos\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\settings\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\settings\\page.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "app\\settings\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\room\\[roomId]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\telemedicine\\session\\demo\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\DashboardStats.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\MedicalDashboard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\DoctorDashboard.test.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\dashboard\\__tests__\\DoctorDashboard.test.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\layout\\VSCodeLayout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\navigation\\DashboardNavigation.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\navigation\\Footer.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\navigation\\Navbar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\NotificationCenter.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\telemedicine\\SessionControls.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\PermissionError.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\telemedicine.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\VirtualBackgroundControls.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "hooks\\queries\\usePrescriptions.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "utils\\navigation.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        }
+      ],
+      "integrationScore": 83
+    },
+    "web-app": {
+      "app": "web-app",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/auth",
+        "@altamedica/ui",
+        "@altamedica/hooks",
+        "@altamedica/api-client"
+      ],
+      "actual": [
+        "@altamedica/api-client",
+        "@altamedica/auth",
+        "@altamedica/config-next",
+        "@altamedica/firebase",
+        "@altamedica/hooks",
+        "@altamedica/shared",
+        "@altamedica/types",
+        "@altamedica/ui",
+        "@altamedica/utils",
+        "@altamedica/eslint-config"
+      ],
+      "missing": [],
+      "duplicateCode": [
+        {
+          "file": "app\\help\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\layout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\layout.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "app\\loading.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\not-found.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\privacy\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\sitemap.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\sitemap.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "app\\status\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "app\\status\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\terms\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\auth\\AccessDenied.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\auth\\AuthLoading.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\LazyComponentWrapper.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\LoadingScreen.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\RedirectingLoader.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\demo\\LeafletMapCore.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\demo\\LeafletMapCore.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\home\\VideoCarousel.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\home\\VideoCarouselOptimized.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\home\\VideoPlayer.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\landing\\FeaturesSection.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\landing\\StatsBar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\landing\\Testimonials.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\layout\\ResponsiveLayout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\marketplace\\UnifiedMarketplaceMap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\common.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\Disclosure.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\input.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\label.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "config\\auth-config.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "config\\auth-config.ts",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "config\\migration-config.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "lib\\rate-limiter.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "utils\\navigation.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        }
+      ],
+      "integrationScore": 100
+    },
+    "companies": {
+      "app": "companies",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/auth",
+        "@altamedica/ui",
+        "@altamedica/hooks",
+        "@altamedica/api-client"
+      ],
+      "actual": [
+        "@altamedica/api-client",
+        "@altamedica/auth",
+        "@altamedica/firebase",
+        "@altamedica/hooks",
+        "@altamedica/maps",
+        "@altamedica/shared",
+        "@altamedica/types",
+        "@altamedica/ui",
+        "@altamedica/utils",
+        "@altamedica/eslint-config"
+      ],
+      "missing": [],
+      "duplicateCode": [
+        {
+          "file": "app\\api\\companies\\route.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "app\\companies\\map\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\companies\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\companies\\page.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "app\\companies\\[id]\\booking\\page.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "app\\companies\\[id]\\booking\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\companies\\[id]\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\companies\\[id]\\reviews\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\error.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\InteractiveMap.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "app\\InteractiveMap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\operations-hub\\page.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\common\\ExpandableSection.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\CompanyCard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\CompanyFilters.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\ActivityBar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\CrisisControlCenter.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\CrisisMapPanel.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\CrisisMetrics.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\MainMap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\NetworkMinimap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\crisis\\StatusBar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\components\\SystemFooter.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\components\\UpdateInfo.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\DebugMarketplaceMap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\icons\\index.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\layout\\Header.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\layout\\Navigation.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\maps\\AltamedicaInteractiveMap.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\maps\\AltamedicaInteractiveMapSafe.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "components\\maps\\AltamedicaInteractiveMapSafe.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\marketplace\\JobForm.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\marketplace\\MarketplaceAnalytics.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\onboarding\\CompanyOnboarding.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\operations-hub\\MapShell.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\operations-hub\\OperationsHubLayout.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\operations-hub\\OperationsHubLayout.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "components\\operations-hub\\OperationsTopBar.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\overview\\AlertsSection.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\overview\\MetricsGrid.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\overview\\OverviewDashboard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\PerformanceDashboard.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\alert.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\checkbox.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\label.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\ui\\scroll-area.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "contexts\\MarketplaceContext.tsx",
+          "type": "types",
+          "shouldUse": "@altamedica/types"
+        },
+        {
+          "file": "providers\\QueryProvider.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "services\\marketplaceService.ts",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        },
+        {
+          "file": "test\\mocks\\auth.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "utils\\navigation.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "__tests__\\components\\HiringDashboard.test.tsx",
+          "type": "api",
+          "shouldUse": "@altamedica/api-client"
+        }
+      ],
+      "integrationScore": 100
+    },
+    "admin": {
+      "app": "admin",
+      "packageJsonExists": true,
+      "expected": [
+        "@altamedica/types",
+        "@altamedica/auth",
+        "@altamedica/ui",
+        "@altamedica/hooks",
+        "@altamedica/api-client"
+      ],
+      "actual": [
+        "@altamedica/api-client",
+        "@altamedica/auth",
+        "@altamedica/firebase",
+        "@altamedica/hooks",
+        "@altamedica/shared",
+        "@altamedica/types",
+        "@altamedica/ui",
+        "@altamedica/utils",
+        "@altamedica/eslint-config"
+      ],
+      "missing": [],
+      "duplicateCode": [
+        {
+          "file": "app\\error.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "app\\login\\page.tsx",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        },
+        {
+          "file": "components\\dashboard\\AdminStats.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "components\\dashboard\\SystemHealth.tsx",
+          "type": "components/Button",
+          "shouldUse": "@altamedica/ui"
+        },
+        {
+          "file": "utils\\navigation.ts",
+          "type": "auth",
+          "shouldUse": "@altamedica/auth"
+        }
+      ],
+      "integrationScore": 100
+    }
+  },
+  "recommendations": [
+    "pnpm --filter doctors add @altamedica/types@workspace:*"
+  ]
+}

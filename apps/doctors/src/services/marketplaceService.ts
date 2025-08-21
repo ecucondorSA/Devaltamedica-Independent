@@ -1,5 +1,8 @@
-// apps/doctors/src/services/marketplaceService.ts
-import { useAuth } from '@altamedica/auth';
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
+// apps/doctors/src/services.ts
+import { useAuth  } from '@altamedica/auth';;
 
 import { logger } from '@altamedica/shared/services/logger.service';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';

@@ -1,3 +1,6 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 /**
  * useDashboardData.tsx - Hook Especializado para Dashboard con APIs Reales
  * Proyecto: Altamedica Pacientes
@@ -5,7 +8,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { dashboardService } from '../services/DashboardService';
+import { dashboardService } from '../services';
 import { logger } from '@altamedica/shared/services/logger.service';
 import type {
   PatientDashboardDTO,

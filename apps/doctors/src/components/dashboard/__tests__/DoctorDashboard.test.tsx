@@ -20,7 +20,7 @@ jest.mock('../../../contexts/AuthContext', () => ({
 }));
 
 // Mock de useToast
-jest.mock('../../../hooks/useToast', () => ({
+jest.mock('@altamedica/hooks/ui', () => ({
   useToast: () => ({
     toast: jest.fn(),
   }),

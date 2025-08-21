@@ -1,8 +1,11 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 'use client';
 
 import type { LatLngTuple } from 'leaflet';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { HospitalDataIntegrationService, type HospitalMetrics } from '../services/HospitalDataIntegrationService';
+import { HospitalDataIntegrationService, type HospitalMetrics } from '../services';
 
 // Tipos compatibles con el mapa de redistribución
 export type MapHospital = {

@@ -1,3 +1,6 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 /**
  * 📋 HOOKS ESPECIALIZADOS MÉDICOS - ALTAMEDICA (DEPRECATED)
  *
@@ -33,7 +36,7 @@ import type {
   SymptomAnalysis,
   DrugInteractionCheck,
 } from '../types';
-import type { MedicalRecordFilters } from '../services/MedicalService';
+import type { MedicalRecordFilters } from '../services';
 
 // 📋 HOOK DE REGISTROS MÉDICOS
 export function useMedicalRecords(

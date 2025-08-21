@@ -1,10 +1,9 @@
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import jwt from 'jsonwebtoken';
-import {
-  UnifiedAuthService,
+import { UnifiedAuthService,
   UserRole,
   createAuthContext
-} from '../auth/UnifiedAuthSystem';
+ } from '@altamedica/auth';;
 
 // Mock de Firebase Admin
 vi.mock('../lib/firebase-admin', () => ({

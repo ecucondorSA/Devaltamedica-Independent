@@ -1,5 +1,8 @@
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
 import { useState, useEffect, useCallback } from 'react';
-import { apiService } from '../services/ApiService';
+import { apiService } from '../services';
 import { 
   Patient, 
   VitalSigns, 

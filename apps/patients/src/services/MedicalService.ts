@@ -8,7 +8,7 @@ import { logger } from '@altamedica/shared/services/logger.service';
  * Para migrar tu código:
  * 
  * ANTES:
- * import { medicalService } from './services/MedicalService.ts';
+ * import { medicalService } from './services.ts';
  * const patients = await medicalService.getPatients();
  * 
  * DESPUÉS:
@@ -16,7 +16,7 @@ import { logger } from '@altamedica/shared/services/logger.service';
  * const { data: patients } = usePatients();
  * 
  * ANTES:
- * import { medicalService } from './services/MedicalService.ts';
+ * import { medicalService } from './services.ts';
  * const appointments = await medicalService.getAppointments();
  * 
  * DESPUÉS:

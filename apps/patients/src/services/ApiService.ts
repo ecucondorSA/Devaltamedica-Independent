@@ -8,7 +8,7 @@ import { logger } from '@altamedica/shared/services/logger.service';
  * Para migrar tu código:
  * 
  * ANTES:
- * import { apiService } from './services/ApiService.ts';
+ * import { apiService } from './services.ts';
  * const data = await apiService.get('/endpoint');
  * 
  * DESPUÉS:

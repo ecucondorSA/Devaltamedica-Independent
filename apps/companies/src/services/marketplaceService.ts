@@ -1,4 +1,7 @@
-// apps/companies/src/services/marketplaceService.ts - INTEGRATED VERSION
+import { QueryProvider, apiClient } from '@altamedica/api-client';
+import { services } from '@altamedica/api-client';
+
+// apps/companies/src/services.ts - INTEGRATED VERSION
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';

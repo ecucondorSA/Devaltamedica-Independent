@@ -2,6 +2,7 @@
  * 🧪 ALTAMEDICA COMPANIES - COMPONENT TESTS
  * Tests de integración para componentes de empresas
  */
+import { Button, Card, Input } from '@altamedica/ui';
 import { Company } from '@altamedica/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'

@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-08-21T18:04:40.462Z",
+  "stats": {
+    "filesAnalyzed": 866,
+    "filesFixed": 0,
+    "backupsCreated": 0,
+    "errors": []
+  },
+  "issuesByCategory": {
+    "types": [
+      {
+        "file": "apps\\api-server\\src\\domains\\patients\\patient.types.ts",
+        "pattern": "Patient interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\app\\appointments\\book\\page.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\app\\appointments\\new\\page.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\app\\appointments\\page.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\app\\doctors\\page.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\components\\appointments\\AppointmentBooking.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\components\\dashboard\\cards\\HealthSummaryCard.tsx",
+        "pattern": "Patient interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\services\\appointments-service.ts",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\patients\\src\\services\\patients-service.ts",
+        "pattern": "Patient interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\doctors\\src\\hooks\\useDashboardData.ts",
+        "pattern": "Patient interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\web-app\\src\\components\\demo\\LeafletMapCore.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\companies\\src\\app\\companies\\[id]\\booking\\page.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      },
+      {
+        "file": "apps\\companies\\src\\app\\InteractiveMap.tsx",
+        "pattern": "Doctor interface",
+        "risk": "low"
+      }
+    ]
+  },
+  "issuesByApp": {
+    "api-server": 1,
+    "patients": 8,
+    "doctors": 1,
+    "web-app": 1,
+    "companies": 2
+  },
+  "recommendations": [
+    "Run automatic fix for low-risk patterns",
+    "Manual review recommended for medium/high risk patterns",
+    "Run tests after applying fixes"
+  ]
+}
