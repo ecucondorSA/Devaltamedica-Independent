@@ -15,7 +15,24 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  warn: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.warn(message, data);
+    }
+  },
+  error: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  },
+  info: (message: string, data?: any) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  }
+};
 interface RedirectOptions {
   timeout?: number; // Timeout en ms (default: 10000)
   maxRetries?: number; // Máximo reintentos (default: 3)

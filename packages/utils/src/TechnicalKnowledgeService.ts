@@ -1,6 +1,18 @@
 import fetch from 'node-fetch';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  info: (message: string, data?: any) => {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.log(message, data);
+    }
+  },
+  error: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  }
+};
 export interface TechnicalSolution {
   title: string;
   excerpt: string;

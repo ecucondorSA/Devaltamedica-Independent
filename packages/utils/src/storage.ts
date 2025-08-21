@@ -1,8 +1,15 @@
 /**
-import { logger } from '@altamedica/shared/services/logger.service';
-
  * Storage utilities for local and session storage
  */
+
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  error: (message: string, error?: any) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, error);
+    }
+  }
+};
 
 export const storage = {
   // Local Storage

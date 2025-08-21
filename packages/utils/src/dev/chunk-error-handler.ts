@@ -1,9 +1,16 @@
 /**
-import { logger } from '@altamedica/shared/services/logger.service';
-
  * Development utility to handle ChunkLoadError
  * This should only be used in development mode
  */
+
+// Simple logger implementation to avoid circular dependencies
+const logger = {
+  error: (message: string, data?: any) => {
+    if (typeof console !== 'undefined') {
+      console.error(message, data);
+    }
+  }
+};
 
 interface ChunkErrorHandlerOptions {
   /** Maximum number of retries before giving up */

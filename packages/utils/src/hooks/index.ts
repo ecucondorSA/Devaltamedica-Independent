@@ -5,6 +5,9 @@ export * from './useDebounce';
 
 // Storage hooks
 export * from './useLocalStorage';
+export * from './useSessionStorage';
+export * from './usePatientData';
+export * from './useMedicalRecords';
 
 // Media query hooks
 export * from './useMediaQuery';
@@ -18,12 +21,10 @@ export {
   useDebounceCallback,
 } from './useDebounce';
 
-export {
-  useLocalStorage,
-  useSessionStorage,
-  usePatientData,
-  useMedicalRecords,
-} from './useLocalStorage';
+export { useLocalStorage } from './useLocalStorage';
+export { useSessionStorage } from './useSessionStorage';
+export { usePatientData } from './usePatientData';
+export { useMedicalRecords } from './useMedicalRecords';
 
 export {
   useMediaQuery,
