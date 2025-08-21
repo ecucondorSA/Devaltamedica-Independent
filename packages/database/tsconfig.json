@@ -3,12 +3,20 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "strict": false,
-    "noEmit": false
+    "noEmit": false,
+    "composite": false,
+    "resolveJsonModule": true,
+    "paths": {
+      "@altamedica/*": [
+        "../*/src"
+      ]
+    }
   },
   "include": [
     "src/**/*"
@@ -18,6 +26,9 @@
     "dist",
     "**/*.test.ts",
     "**/*.spec.ts",
-    "**/*.d.ts"
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "jest.config.ts",
+    "vitest.config.ts"
   ]
 }

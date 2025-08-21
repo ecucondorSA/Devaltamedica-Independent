@@ -1,10 +1,41 @@
 // API Middleware Optimizado para Performance Médica - Altamedica
 // Request deduplication + Cache integration + Performance monitoring
 
-import { NextRequest, NextResponse } from 'next/server'
-import { medicalCache } from '@altamedica/medical';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+// Simple cache implementation to avoid circular dependencies
+const cacheStore = new Map<string, { data: any; expiry: number }>();
+
+const medicalCache = {
+  get(key: string) {
+    const item = cacheStore.get(key);
+    if (!item) return null;
+    if (Date.now() > item.expiry) {
+      cacheStore.delete(key);
+      return null;
+    }
+    return item.data;
+  },
+  set(key: string, data: any, ttl: number) {
+    cacheStore.set(key, {
+      data,
+      expiry: Date.now() + ttl
+    });
+  }
+};
+
+// Simple logger implementation
+const logger = {
+  info: (message: string, data?: any) => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[INFO] ${message}`, data || '');
+    }
+  },
+  error: (message: string, error?: any) => {
+    console.error(`[ERROR] ${message}`, error || '');
+  }
+};
+
 // Tipos para el middleware de optimización
 interface RequestMetrics {
   startTime: number
