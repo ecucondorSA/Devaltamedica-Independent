@@ -1,31 +1,31 @@
 /**
+ * Patient Service - Centralized patient management
+ * Migrated from @altamedica/medical-services
+ */
+
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (message: string, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message: string, data?: any) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message: string, data?: any) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message: string, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
   }
 };
-
- * Patient Service - Centralized patient management
- * Migrated from @altamedica/medical-services
- */
 
 import type { 
   Patient,
