@@ -127,7 +127,7 @@ function connectToEmulators(): void {
     }
   } catch (error) {
     // Los emuladores pueden ya estar conectados, ignorar errores
-    logger.info('🔧 Emuladores de Firebase ya configurados o no disponibles')
+    logger.info('🔧 Emuladores de Firebase ya configurados o no disponibles', {})
   }
 }
 

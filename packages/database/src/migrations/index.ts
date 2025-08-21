@@ -95,18 +95,18 @@ export class MigrationManager {
     const results: MigrationResult[] = [];
     const appliedMigrations = await this.getAppliedFirestoreMigrations();
 
-    logger.info('🔄 Ejecutando migraciones Firestore...');
+    logger.info('🔄 Ejecutando migraciones Firestore...', {});
 
     for (const [version, migration] of Object.entries(FIRESTORE_MIGRATIONS)) {
       if (appliedMigrations.includes(version)) {
-        logger.info(`⏭️  Migración ${version} ya aplicada, saltando...`);
+        logger.info(`⏭️  Migración ${version} ya aplicada, saltando...`, {});
         continue;
       }
 
       const startTime = Date.now();
       
       try {
-        logger.info(`🚀 Aplicando migración Firestore ${version}: ${migration.description}`);
+        logger.info(`🚀 Aplicando migración Firestore ${version}: ${migration.description}`, {});
         
         await migration.up(this.firestore);
         
@@ -119,7 +119,7 @@ export class MigrationManager {
         };
         
         results.push(result);
-        logger.info(`✅ Migración ${version} aplicada exitosamente (${duration}ms)`);
+        logger.info(`✅ Migración ${version} aplicada exitosamente (${duration}ms)`, {});
         
       } catch (error) {
         const duration = Date.now() - startTime;
@@ -134,7 +134,7 @@ export class MigrationManager {
         };
         
         results.push(result);
-        logger.error(`❌ Error aplicando migración ${version}: ${errorMessage}`);
+        logger.error(`❌ Error aplicando migración ${version}: ${errorMessage}`, {});
         
         // Detener en caso de error crítico
         break;
@@ -155,18 +155,18 @@ export class MigrationManager {
     const results: MigrationResult[] = [];
     const appliedMigrations = await this.getAppliedPostgreSQLMigrations();
 
-    logger.info('🔄 Ejecutando migraciones PostgreSQL...');
+    logger.info('🔄 Ejecutando migraciones PostgreSQL...', {});
 
     for (const [version, migration] of Object.entries(POSTGRESQL_MIGRATIONS)) {
       if (appliedMigrations.includes(version)) {
-        logger.info(`⏭️  Migración ${version} ya aplicada, saltando...`);
+        logger.info(`⏭️  Migración ${version} ya aplicada, saltando...`, {});
         continue;
       }
 
       const startTime = Date.now();
       
       try {
-        logger.info(`🚀 Aplicando migración PostgreSQL ${version}: ${migration.description}`);
+        logger.info(`🚀 Aplicando migración PostgreSQL ${version}: ${migration.description}`, {});
         
         await migration.up(this.postgresql);
         
@@ -179,7 +179,7 @@ export class MigrationManager {
         };
         
         results.push(result);
-        logger.info(`✅ Migración ${version} aplicada exitosamente (${duration}ms)`);
+        logger.info(`✅ Migración ${version} aplicada exitosamente (${duration}ms)`, {});
         
       } catch (error) {
         const duration = Date.now() - startTime;
@@ -194,7 +194,7 @@ export class MigrationManager {
         };
         
         results.push(result);
-        logger.error(`❌ Error aplicando migración ${version}: ${errorMessage}`);
+        logger.error(`❌ Error aplicando migración ${version}: ${errorMessage}`, {});
         
         // Detener en caso de error crítico
         break;
@@ -306,7 +306,7 @@ export class MigrationManager {
         const missingFirestore = criticalMigrations.filter(v => !appliedFirestore.includes(v));
         
         if (missingFirestore.length > 0) {
-          logger.error(`❌ Migraciones críticas faltantes en Firestore: ${missingFirestore.join(', ')}`);
+          logger.error(`❌ Migraciones críticas faltantes en Firestore: ${missingFirestore.join(', ')}`, {});
           allCriticalApplied = false;
         }
       }
@@ -317,13 +317,13 @@ export class MigrationManager {
         const missingPostgreSQL = criticalMigrations.filter(v => !appliedPostgreSQL.includes(v));
         
         if (missingPostgreSQL.length > 0) {
-          logger.error(`❌ Migraciones críticas faltantes en PostgreSQL: ${missingPostgreSQL.join(', ')}`);
+          logger.error(`❌ Migraciones críticas faltantes en PostgreSQL: ${missingPostgreSQL.join(', ')}`, {});
           allCriticalApplied = false;
         }
       }
 
       if (allCriticalApplied) {
-        logger.info('✅ Todas las migraciones críticas están aplicadas');
+        logger.info('✅ Todas las migraciones críticas están aplicadas', {});
       }
 
       return allCriticalApplied;
@@ -343,20 +343,20 @@ export class MigrationManager {
 export async function runAutoMigrations(firestore?: Firestore, postgresql?: Pool): Promise<void> {
   const manager = new MigrationManager(firestore, postgresql);
   
-  logger.info('🚀 Iniciando migraciones automáticas...');
+  logger.info('🚀 Iniciando migraciones automáticas...', {});
   
   // Ejecutar migraciones Firestore
   if (firestore) {
     const firestoreResults = await manager.runFirestoreMigrations();
     const successCount = firestoreResults.filter(r => r.success).length;
-    logger.info(`📊 Firestore: ${successCount}/${firestoreResults.length} migraciones exitosas`);
+    logger.info(`📊 Firestore: ${successCount}/${firestoreResults.length} migraciones exitosas`, {});
   }
 
   // Ejecutar migraciones PostgreSQL
   if (postgresql) {
     const postgresqlResults = await manager.runPostgreSQLMigrations();
     const successCount = postgresqlResults.filter(r => r.success).length;
-    logger.info(`📊 PostgreSQL: ${successCount}/${postgresqlResults.length} migraciones exitosas`);
+    logger.info(`📊 PostgreSQL: ${successCount}/${postgresqlResults.length} migraciones exitosas`, {});
   }
 
   // Verificar migraciones críticas
@@ -365,7 +365,7 @@ export async function runAutoMigrations(firestore?: Firestore, postgresql?: Pool
     throw new Error('❌ Migraciones críticas no completadas - Sistema no puede continuar');
   }
 
-  logger.info('✅ Migraciones automáticas completadas exitosamente');
+  logger.info('✅ Migraciones automáticas completadas exitosamente', {});
 }
 
 // Exportar migraciones individuales para uso directo

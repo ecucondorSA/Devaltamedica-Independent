@@ -50,7 +50,7 @@ export class AuditCollection {
     try {
       // Collection will be created automatically when first document is added
       // Firestore indexes should be configured via firestore.indexes.json
-      logger.info('Audit collection initialized successfully');
+      logger.info('Audit collection initialized successfully', {});
     } catch (error) {
       logger.error('Error initializing audit collection:', error);
       throw error;
