@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
@@ -13,14 +12,10 @@
     "composite": false,
     "resolveJsonModule": true,
     "paths": {
-      "@altamedica/*": [
-        "../*/src"
-      ]
+      "@altamedica/*": ["../*/src"]
     }
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
