@@ -1,0 +1,138 @@
+# 🔍 REPORTE DE AUDITORÍA DE CONFIGURACIÓN DE PAQUETES (Actualizado: 2025-08-17T10:07:43.794Z)
+
+Total de paquetes auditados: 25
+Paquetes conformes: 10/25
+
+## 📦 Estado por paquete
+- ✅ ai-agents
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ alta-agent
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - module debe apuntar a ./dist/* (actual: dist/index.esm.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ anamnesis
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ api-client
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+    - peerDependencies.react-dom debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ api-helpers
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+- ⚠️ auth
+  - Problemas:
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ config-next
+- ⚠️ database
+  - Problemas:
+    - version debe ser 1.0.0 (actual: 2.0.0)
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+    - exports["."] debe definir import y require a dist
+- ✅ diagnostic-engine
+- ⚠️ e2e-tests
+  - Problemas:
+    - version debe ser 1.0.0 (actual: 0.1.0)
+    - type debe ser "module" (actual: no definido)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ eslint-config
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: index.js)
+    - types debe apuntar a ./dist/* (actual: undefined)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ firebase
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ firebase-admin
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+- ⚠️ firebase-config
+  - Problemas:
+    - peerDependencies.react-dom debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+- ⚠️ hooks
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: dist/index.js)
+    - module debe apuntar a ./dist/* (actual: dist/esm/index.js)
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+    - peerDependencies.react-dom debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ maps
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ medical
+  - Problemas:
+    - peerDependencies.react-dom debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ patient-services
+- ✅ shared
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ tailwind-config
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: base.config.js)
+    - types debe apuntar a ./dist/* (actual: undefined)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ telemedicine-core
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ types
+  - Problemas:
+    - types debe apuntar a ./dist/* (actual: dist/index.d.ts)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ typescript-config
+  - Problemas:
+    - main debe apuntar a ./dist/* (actual: index.js)
+    - types debe apuntar a ./dist/* (actual: undefined)
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ✅ ui
+  - Advertencias:
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+- ⚠️ utils
+  - Problemas:
+    - peerDependencies.react debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+    - peerDependencies.react-dom debe ser ^18.2.0 || ^19.0.0 (actual: no definido)
+  - Advertencias:
+    - files incluye src (sugerido: sólo ["dist", "README.md"])
+    - dist incompleto (faltan artefactos CJS/ESM o .d.ts)
+
+## 🧬 Duplicaciones entre paquetes (hash idéntico)
+- ✅ Sin duplicaciones exactas detectadas entre paquetes
+
+## 🧹 Artefactos/archivos sospechosos a eliminar
+- ai-agents: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- api-client: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- auth: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- config-next: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- database: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- database: logs (Revisar/limpiar logs)
+- diagnostic-engine: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- firebase: dist/src (Eliminar: salida antigua, no usada)
+- firebase: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- firebase-config: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- hooks: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- maps: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- medical: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- shared: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- telemedicine-core: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- types: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- ui: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)
+- utils: tsconfig.tsbuildinfo (Eliminar: artefacto incremental)

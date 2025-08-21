@@ -1,0 +1,77 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection: Read own, Admin full access
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if request.auth != null && request.auth.uid == userId && validateUserData();
+      allow create: if request.auth != null && (request.auth.uid == userId || isAdmin()) && validateUserData();
+      allow update: if request.auth != null && (request.auth.uid == userId || isAdmin()) && validateUserUpdate();
+      allow delete: if isAdmin();
+    }
+    
+    // Roles collection: Read all authenticated, Write admin only
+    match /roles/{roleId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+    
+    // Permissions collection: Read all authenticated, Write admin only
+    match /permissions/{permId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+    
+    // Companies collection: Read by company members, Write admin/company
+    match /companies/{companyId} {
+      allow read: if request.auth != null && (isAdmin() || isCompanyMember(companyId));
+      allow write: if isAdmin() || (isCompanyMember(companyId) && hasPermission('manage:company'));
+    }
+    
+    // Departments collection: Read by company members, Write admin/company
+    match /departments/{departmentId} {
+      allow read: if request.auth != null && (isAdmin() || isCompanyMemberOfDepartment(departmentId));
+      allow write: if isAdmin() || (isCompanyMemberOfDepartment(departmentId) && hasPermission('manage:company'));
+    }
+    
+    // Helper functions
+    function isAdmin() {
+      return request.auth.token.userType == 'admin' || 
+             (request.auth.token.roles != null && 'admin' in request.auth.token.roles);
+    }
+    
+    function isCompanyMember(companyId) {
+      return request.auth.token.companyId == companyId;
+    }
+    
+    function isCompanyMemberOfDepartment(departmentId) {
+      return request.auth.token.departmentId == departmentId || 
+             (request.auth.token.companyId != null && 
+              get(/databases/$(database)/documents/departments/$(departmentId)).data.companyId == request.auth.token.companyId);
+    }
+    
+    function hasPermission(permission) {
+      return request.auth.token.permissions != null && 
+             permission in request.auth.token.permissions;
+    }
+    
+    function validateUserData() {
+      let data = request.resource.data;
+      return data.uid == request.auth.uid &&
+             data.email is string &&
+             data.userType in ['patient', 'doctor', 'company', 'admin', 'api'] &&
+             data.status in ['active', 'inactive', 'suspended', 'pending'] &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+    
+    function validateUserUpdate() {
+      let data = request.resource.data.diff(resource.data);
+      // Immutable fields cannot be changed
+      return !data.changedKeys().hasAny(['uid', 'userType', 'createdAt', 'customClaimsSet', 'customClaimsVersion']) &&
+             data.changedKeys().hasAll(['updatedAt']); // updatedAt must be present in updates
+    }
+  }
+}

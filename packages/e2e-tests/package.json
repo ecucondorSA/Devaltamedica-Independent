@@ -1,0 +1,54 @@
+{
+  "name": "@altamedica/e2e-tests",
+  "version": "0.1.0",
+  "private": true,
+  "description": "E2E smoke tests for AltaMedica",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:a11y": "playwright test -g '@a11y'",
+    "test:telemed": "playwright test -g '@telemedicine'",
+    "test:telemed:full": "playwright test -g '@telemedicine'",
+    "test:telemed:standalone": "playwright test -g '@telemedicine @standalone'",
+    "test:telemed:mock": "E2E_WEBRTC_MOCK=1 playwright test -g '@telemedicine'",
+    "test:telemed:quick": "E2E_WEBRTC_MOCK=1 playwright test -g '@telemedicine @standalone'",
+    "telemed:health": "powershell -File scripts/run-telemed-tests.ps1 -CheckHealth",
+    "telemed:run": "powershell -File scripts/run-telemed-tests.ps1",
+    "install:browsers": "playwright install",
+    "report": "playwright show-report",
+    "trace": "playwright show-trace",
+    "ai:generate": "node ai-test-generator.js",
+    "ai:list": "node ai-test-generator.js --list",
+    "multi:generate": "node multi-area-generator.js",
+    "multi:list": "node multi-area-generator.js --list",
+    "multi:medical-journey": "node multi-area-generator.js --workflow complete-medical-journey",
+    "multi:telemedicine": "node multi-area-generator.js --workflow telemedicine-ecosystem",
+    "multi:b2b-hiring": "node multi-area-generator.js --workflow b2b-medical-hiring",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.3.0",
+    "playwright": "^1.54.2",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3"
+  },
+  "type": "module",
+  "sideEffects": false
+}

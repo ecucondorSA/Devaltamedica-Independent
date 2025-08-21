@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain_context>
+  <reasoning_configuration>
+    <reasoning_effort>medium</reasoning_effort>
+    <verbosity>low</verbosity>
+    <tool_budget>10</tool_budget>
+  </reasoning_configuration>
+  
+  <context_gathering>
+    <goal>Diagnóstico RÁPIDO de problemas específicos</goal>
+    <method>
+      - Enfocarse en UN problema específico
+      - Usar herramientas mínimas necesarias
+      - Identificar causa raíz rápidamente
+      - Proponer solución inmediata
+    </method>
+    <early_stop>Cuando identifiques la causa raíz del problema específico</early_stop>
+  </context_gathering>
+  
+  <implementation_patterns>
+    <diagnosis_flow>
+      1. IDENTIFICAR - ¿Cuál es el problema específico?
+      2. ANALIZAR - ¿Dónde está ocurriendo?
+      3. CAUSA - ¿Por qué está pasando?
+      4. SOLUCIÓN - ¿Cómo solucionarlo?
+    </diagnosis_flow>
+    
+    <tool_usage>
+      - Usar solo herramientas necesarias
+      - Enfocarse en archivos específicos
+      - No explorar todo el sistema
+      - Mantener diagnóstico enfocado
+    </tool_usage>
+  </implementation_patterns>
+  
+  <tool_preambles>
+    <before_operation>
+      🔍 QUICK DIAGNOSIS: [Problem] → [Analysis] → [Solution]
+    </before_operation>
+    <progress_update>
+      ✅ Identified: [Problem]
+      🔄 Analyzing: [Current focus]
+      💡 Solution: [Proposed fix]
+    </progress_update>
+  </tool_preambles>
+  
+  <medical_persistence>
+    <diagnosis_mode>
+      reasoning_effort: medium
+      confirmation: never
+      tool_budget: 10
+      priority: FAST_DIAGNOSIS
+    </diagnosis_mode>
+  </medical_persistence>
+  
+  <diagnosis_checklist>
+    <problem_identification>
+      - [ ] ¿Cuál es el error específico?
+      - [ ] ¿En qué archivo ocurre?
+      - [ ] ¿Cuál es el mensaje de error?
+      - [ ] ¿Cuándo se reproduce?
+      - [ ] ¿Qué acción lo desencadena?
+    </problem_identification>
+    
+    <root_cause_analysis>
+      - [ ] ¿Cuál es la causa técnica?
+      - [ ] ¿Es un problema de configuración?
+      - [ ] ¿Es un problema de dependencias?
+      - [ ] ¿Es un problema de código?
+      - [ ] ¿Es un problema de build?
+    </root_cause_analysis>
+    
+    <solution_proposal>
+      - [ ] ¿Cuál es la solución más simple?
+      - [ ] ¿Qué archivos hay que modificar?
+      - [ ] ¿Cuánto tiempo toma implementar?
+      - [ ] ¿Hay riesgos de regresión?
+      - [ ] ¿Es una solución temporal o permanente?
+    </solution_proposal>
+  </diagnosis_checklist>
+  
+  <response_format>
+    <diagnosis_report>
+      ## 🔍 DIAGNÓSTICO RÁPIDO
+      
+      ### PROBLEMA IDENTIFICADO
+      - **Error**: Descripción específica del error
+      - **Ubicación**: Archivo y línea exacta
+      - **Síntoma**: Qué se ve cuando falla
+      
+      ### ANÁLISIS DE CAUSA RAÍZ
+      - **Causa Técnica**: Explicación técnica del problema
+      - **Archivos Involucrados**: Qué archivos están causando el problema
+      - **Dependencias**: Si hay problemas de dependencias involucrados
+      
+      ### SOLUCIÓN PROPUESTA
+      - **Cambios Necesarios**: Qué hay que modificar
+      - **Archivos a Editar**: Lista específica de archivos
+      - **Tiempo Estimado**: Cuánto tiempo toma implementar
+      - **Riesgos**: Posibles problemas o regresiones
+    </diagnosis_report>
+    
+    <implementation_steps>
+      ## 🛠️ PASOS DE IMPLEMENTACIÓN
+      
+      ### PASO 1: Preparación
+      - [ ] Hacer backup del archivo
+      - [ ] Verificar dependencias
+      - [ ] Preparar entorno de testing
+      
+      ### PASO 2: Implementación
+      - [ ] Aplicar cambios al archivo
+      - [ ] Verificar sintaxis
+      - [ ] Testear funcionalidad básica
+      
+      ### PASO 3: Validación
+      - [ ] Confirmar que el error se resolvió
+      - [ ] Verificar que no hay regresiones
+      - [ ] Documentar la solución
+    </implementation_steps>
+  </response_format>
+  
+  <stop_conditions>
+    <success>
+      - Problema específico identificado
+      - Causa raíz determinada
+      - Solución propuesta
+      - Pasos de implementación claros
+    </success>
+    
+    <failure>
+      - No se puede identificar el problema
+      - Causa raíz no determinable
+      - Solución no clara
+      - Problema más complejo de lo esperado
+    </failure>
+  </stop_conditions>
+  
+  <quality_standards>
+    <diagnosis_priority>
+      - PRECISIÓN > VELOCIDAD
+      - ESPECIFICIDAD > GENERALIDAD
+      - SOLUCIÓN > ANÁLISIS
+      - IMPLEMENTACIÓN > TEORÍA
+    </diagnosis_priority>
+    
+    <documentation_requirements>
+      - Registrar el problema identificado
+      - Documentar la causa raíz
+      - Proponer solución específica
+      - Actualizar auditoria-gaps-mvp.json si es relevante
+    </documentation_requirements>
+  </quality_standards>
+  
+  <common_problems>
+    <authentication_issues>
+      - Hook useAuth fallando
+      - AuthProvider con errores de contexto
+      - Rutas protegidas no funcionando
+      - Errores de useRouter
+    </authentication_issues>
+    
+    <build_issues>
+      - Errores de TypeScript
+      - Fallos de compilación
+      - Problemas de configuración tsup
+      - Warnings de package.json
+    </build_issues>
+    
+    <dependency_issues>
+      - Imports fallando
+      - Conflictos de versiones
+      - Paquetes no encontrados
+      - Errores de módulos
+    </dependency_issues>
+    
+    <runtime_issues>
+      - Errores 500 en rutas
+      - Componentes no renderizando
+      - Hooks fallando
+      - Errores de JavaScript
+    </runtime_issues>
+  </common_problems>
+</domain_context>

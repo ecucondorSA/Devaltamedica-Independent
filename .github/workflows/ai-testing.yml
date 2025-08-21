@@ -1,0 +1,162 @@
+name: 🧪 AI-Enhanced Testing Pipeline
+
+on:
+  push:
+    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, develop, fix/compilation-errors-resolved ]
+  pull_request:
+    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps ]
+
+jobs:
+  unit-tests:
+    name: 🔬 Unit Tests with AI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Run unit tests
+        run: pnpm test:unit --coverage
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: github.actor != 'dependabot[bot]'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          
+  integration-tests:
+    name: 🔗 Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Run integration tests
+        run: pnpm test:integration
+        
+  hipaa-compliance:
+    name: 🔒 HIPAA Compliance Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Run HIPAA compliance tests
+        run: pnpm test:hipaa
+        
+      - name: Generate compliance report
+        run: pnpm test:hipaa:report
+        
+      - name: Upload compliance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hipaa-compliance-report
+          path: reports/hipaa-compliance.json
+          
+  e2e-tests:
+    name: 🎭 E2E Tests with Playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+        
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        
+      - name: Upload E2E artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  multi-area-tests:
+    name: 🔄 Multi-Area MCP Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+        
+      - name: Setup MCP LLM for testing
+        run: node packages/e2e-tests/setup-mcp-llm.js --setup mock-llm
+        
+      - name: Generate multi-area tests
+        run: pnpm multi:medical-journey
+        
+      - name: Run Multi-Area E2E tests
+        run: pnpm test:e2e tests/multi-area/
+        
+      - name: Upload Multi-Area artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: multi-area-report
+          path: playwright-report/
+          retention-days: 30

@@ -1,0 +1,428 @@
+{
+  "folders": [
+    {
+      "name": "🏥 AltaMedica Root",
+      "path": "."
+    },
+    {
+      "name": "📱 Apps",
+      "path": "./apps"
+    },
+    {
+      "name": "🔧 API Server",
+      "path": "./apps/api-server"
+    },
+    {
+      "name": "👥 Patients App",
+      "path": "./apps/patients"
+    },
+    {
+      "name": "👨‍⚕️ Doctors App",
+      "path": "./apps/doctors"
+    },
+    {
+      "name": "🏢 Companies App",
+      "path": "./apps/companies"
+    },
+    {
+      "name": "⚙️ Admin App",
+      "path": "./apps/admin"
+    },
+    {
+      "name": "🌐 Web App",
+      "path": "./apps/web-app"
+    },
+    {
+      "name": "⚙️ Config",
+      "path": "./config"
+    },
+    {
+      "name": "📚 Docs",
+      "path": "./docs"
+    },
+    {
+      "name": "📦 Packages",
+      "path": "./packages"
+    },
+    {
+      "path": "../../Downloads/logs_43848848699"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.useAliasesForRenames": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.suggest.autoImports": true,
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "eslint.workingDirectories": [
+      "apps/api-server",
+      "apps/patients",
+      "apps/doctors",
+      "apps/companies",
+      "apps/admin",
+      "apps/web-app"
+    ],
+    "python.defaultInterpreterPath": "python",
+    "python.terminal.activateEnvironment": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "files.associations": {
+      "*.ts": "typescript",
+      "*.tsx": "typescriptreact",
+      "*.py": "python",
+      "*.md": "markdown"
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.next": true,
+      "**/__pycache__": true,
+      "**/coverage": true
+    },
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/dist": true,
+      "**/__pycache__": true
+    },
+    "terminal.integrated.cwd": ".",
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "emmet.includeLanguages": {
+      "typescript": "html",
+      "typescriptreact": "html"
+    },
+    "chat.mcp.autostart": "newAndOutdated",
+    "powershell.cwd": "🏥 AltaMedica Root",
+    "git.ignoreLimitWarning": true
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🚀 Start All Services",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "run",
+          "dev:all"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🔧 API Server",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "--filter",
+          "api-server",
+          "dev"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "👥 Patients App",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "--filter",
+          "patients",
+          "dev"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "👨‍⚕️ Doctors App",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "--filter",
+          "doctors",
+          "dev"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🌉 API Bridge",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "tools/python/api_frontend_bridge.py"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🎣 Generate Hooks",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "tools/python/frontend_hook_generator.py"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🔍 Detect Mocks",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "tools/python/mock_detector_replacer.py"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🧪 Test Integration",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "tools/python/api_integration_tester.py"
+        ],
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🎯 Complete Setup",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "tools/python/api_connection_master.py"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "📦 Install Dependencies",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "install"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🧹 Lint Fix",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "lint:fix"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🧪 Run Tests",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "test"
+        ],
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "📦 Build All",
+        "type": "shell",
+        "command": "pnpm",
+        "args": [
+          "build"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "problemMatcher": []
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "🌉 Debug API Bridge",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/python/api_frontend_bridge.py",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "🎣 Debug Hook Generator",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/python/frontend_hook_generator.py",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "🔍 Debug Mock Detector",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/python/mock_detector_replacer.py",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "🧪 Debug Integration Tester",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/python/api_integration_tester.py",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "🎯 Debug Complete Setup",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/python/api_connection_master.py",
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      }
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-python.python",
+      "ms-python.pylint",
+      "ms-python.debugpy",
+      "ms-vscode.vscode-json",
+      "redhat.vscode-yaml",
+      "ms-vscode.vscode-markdown",
+      "ms-vscode.vscode-markdown-math",
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "ms-vscode.vscode-terminal-profiles",
+      "ms-vscode.live-server",
+      "humao.rest-client",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+# Conector para Gestión de Doctores
+# Archivo: dataconnect/connectors/doctors/connector.yaml
+
+connectorId: doctors
+
+generate:
+  javascriptSdk: {}
+  kotlinSdk: {}
+  swiftSdk: {}
+  pythonSdk: {}

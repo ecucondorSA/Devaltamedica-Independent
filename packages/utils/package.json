@@ -1,0 +1,52 @@
+{
+  "name": "@altamedica/utils",
+  "version": "1.0.0",
+  "description": "Utilidades compartidas para la plataforma AltaMedica",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/cookie": "^1.0.0",
+    "@types/node": "^20.19.11",
+    "tsup": "^8.0.1",
+    "typescript": "5.5.4"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "utils",
+    "utilities",
+    "helpers",
+    "altamedica",
+    "medical",
+    "healthcare"
+  ],
+  "author": "AltaMedica Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/altamedica/platform"
+  },
+  "sideEffects": false
+}

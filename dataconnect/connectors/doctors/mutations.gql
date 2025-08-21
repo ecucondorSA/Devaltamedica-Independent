@@ -1,0 +1,252 @@
+# Mutaciones para Gestión de Doctores
+# Archivo: dataconnect/connectors/doctors/mutations.gql
+
+# ====================
+# MUTACIONES DE DOCTORES
+# ====================
+
+# Crear nuevo doctor
+mutation CreateDoctor($data: DoctorInsertInput!) {
+  doctor_insert(data: $data) {
+    id
+    cedula_profesional
+    nombre
+    apellidos
+    especialidad
+    email
+    fecha_registro
+  }
+}
+
+# Actualizar información del doctor
+mutation UpdateDoctor($id: UUID!, $data: DoctorUpdateInput!) {
+  doctor_update(id: $id, data: $data) {
+    id
+    cedula_profesional
+    nombre
+    apellidos
+    especialidad
+    telefono
+    email
+    estado_activo
+  }
+}
+
+# Desactivar doctor (soft delete)
+mutation DeactivateDoctor($id: UUID!) {
+  doctor_update(id: $id, data: { estado_activo: false }) {
+    id
+    estado_activo
+  }
+}
+
+# ====================
+# MUTACIONES DE PACIENTES
+# ====================
+
+# Registrar nuevo paciente
+mutation CreatePaciente($data: PacienteInsertInput!) {
+  paciente_insert(data: $data) {
+    id
+    numero_expediente
+    nombre
+    apellidos
+    fecha_nacimiento
+    genero
+    telefono
+    email
+    fecha_registro
+  }
+}
+
+# Actualizar información del paciente
+mutation UpdatePaciente($id: UUID!, $data: PacienteUpdateInput!) {
+  paciente_update(id: $id, data: $data) {
+    id
+    numero_expediente
+    nombre
+    apellidos
+    telefono
+    email
+    direccion
+    alergias
+    enfermedades_cronicas
+    tipo_sangre
+  }
+}
+
+# ====================
+# MUTACIONES DE CITAS
+# ====================
+
+# Programar nueva cita
+mutation CreateCita($data: CitaInsertInput!) {
+  cita_insert(data: $data) {
+    id
+    fecha_hora
+    motivo
+    estado
+    tipo_consulta
+    duracion_minutos
+    paciente {
+      nombre
+      apellidos
+      telefono
+    }
+    doctor {
+      nombre
+      apellidos
+    }
+  }
+}
+
+# Actualizar estado de cita
+mutation UpdateCitaEstado($id: UUID!, $estado: EstadoCitaType!, $notas: String) {
+  cita_update(id: $id, data: { estado: $estado, notas: $notas }) {
+    id
+    estado
+    notas
+    fecha_hora
+    paciente {
+      nombre
+      apellidos
+    }
+  }
+}
+
+# Cancelar cita
+mutation CancelCita($id: UUID!, $motivo: String!) {
+  cita_update(
+    id: $id
+    data: { estado: CANCELADA, notas: $motivo }
+  ) {
+    id
+    estado
+    notas
+  }
+}
+
+# Reprogramar cita
+mutation ReprogramarCita($id: UUID!, $nuevaFecha: Timestamp!, $notas: String) {
+  cita_update(
+    id: $id
+    data: { 
+      fecha_hora: $nuevaFecha
+      estado: REPROGRAMADA
+      notas: $notas
+    }
+  ) {
+    id
+    fecha_hora
+    estado
+    notas
+  }
+}
+
+# ====================
+# MUTACIONES DE HISTORIAL MÉDICO
+# ====================
+
+# Crear registro médico
+mutation CreateHistorialMedico($data: HistorialMedicoInsertInput!) {
+  historial_medico_insert(data: $data) {
+    id
+    fecha_consulta
+    motivo_consulta
+    diagnostico
+    tratamiento
+    paciente {
+      nombre
+      apellidos
+      numero_expediente
+    }
+    doctor {
+      nombre
+      apellidos
+    }
+  }
+}
+
+# Actualizar historial médico
+mutation UpdateHistorialMedico($id: UUID!, $data: HistorialMedicoUpdateInput!) {
+  historial_medico_update(id: $id, data: $data) {
+    id
+    diagnostico
+    tratamiento
+    medicamentos_recetados
+    recomendaciones
+    observaciones
+  }
+}
+
+# ====================
+# MUTACIONES DE RECETAS
+# ====================
+
+# Crear nueva receta
+mutation CreateReceta($data: RecetaInsertInput!) {
+  receta_insert(data: $data) {
+    id
+    numero_receta
+    fecha_emision
+    fecha_vencimiento
+    medicamentos {
+      nombre
+      dosis
+      frecuencia
+      duracion
+    }
+    paciente {
+      nombre
+      apellidos
+      numero_expediente
+    }
+    doctor {
+      nombre
+      apellidos
+      cedula_profesional
+    }
+  }
+}
+
+# Actualizar estado de receta
+mutation UpdateRecetaEstado($id: UUID!, $estado: EstadoRecetaType!) {
+  receta_update(id: $id, data: { estado: $estado }) {
+    id
+    estado
+    numero_receta
+  }
+}
+
+# ====================
+# MUTACIONES DE CLÍNICAS
+# ====================
+
+# Registrar nueva clínica
+mutation CreateClinica($data: ClinicaInsertInput!) {
+  clinica_insert(data: $data) {
+    id
+    nombre
+    direccion
+    telefono
+    email
+    horario_apertura
+    horario_cierre
+    especialidades
+  }
+}
+
+# Actualizar información de clínica
+mutation UpdateClinica($id: UUID!, $data: ClinicaUpdateInput!) {
+  clinica_update(id: $id, data: $data) {
+    id
+    nombre
+    direccion
+    telefono
+    email
+    horario_apertura
+    horario_cierre
+    especialidades
+    certificaciones
+  }
+}

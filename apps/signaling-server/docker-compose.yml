@@ -1,0 +1,72 @@
+# Lightweight Docker Compose for Signaling Server
+# Minimal setup for development and testing
+
+services:
+  # Signaling Server - Ultra-light
+  signaling:
+    build:
+      context: ../../  # Project root
+      dockerfile: apps/signaling-server/Dockerfile.minimal
+    container_name: altamedica-signaling-minimal
+    ports:
+      - "8888:8888"
+    environment:
+      - NODE_ENV=production
+      - PORT=8888
+      - LOG_LEVEL=info
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-development-secret-change-in-production}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000,http://localhost:3002,http://localhost:3003}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - signaling-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8888/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  # Redis - Minimal configuration
+  redis:
+    image: redis:7-alpine  # Alpine for minimal size
+    container_name: altamedica-redis-minimal
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --maxmemory 64mb
+      --maxmemory-policy allkeys-lru
+      --save ""
+      --appendonly no
+    networks:
+      - signaling-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+
+networks:
+  signaling-network:
+    driver: bridge
+
+# Minimal volumes - no persistence needed for signaling
+# Redis is configured without persistence for speed

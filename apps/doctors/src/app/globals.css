@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos modernos para accesibilidad - reemplazando -ms-high-contrast */
+@media (forced-colors: active) {
+  /* Forced Colors Mode - reemplaza -ms-high-contrast */
+  .high-contrast {
+    forced-color-adjust: none;
+  }
+  
+  /* Botones en modo alto contraste */
+  button {
+    forced-color-adjust: none;
+  }
+  
+  /* Enlaces en modo alto contraste */
+  a {
+    forced-color-adjust: none;
+  }
+  
+  /* Elementos de formulario en modo alto contraste */
+  input, textarea, select {
+    forced-color-adjust: none;
+  }
+}
+
+/* Estilos para modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+}
+
+/* Estilos para modo claro */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+}
+
+/* Estilos base */
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+/* Estilos para componentes de telemedicina */
+.telemedicine-container {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 via-gray-50 to-blue-100;
+}
+
+.telemedicine-video {
+  @apply rounded-lg shadow-lg;
+  aspect-ratio: 16/9;
+}
+
+.telemedicine-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 0.5rem;
+}
+
+.telemedicine-button {
+  @apply p-3 rounded-full transition-all duration-200 hover:scale-105 active:scale-95;
+}
+
+.telemedicine-button-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.telemedicine-button-secondary {
+  @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+}
+
+.telemedicine-button-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+/* Animaciones suaves */
+.smooth-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Estilos para notificaciones */
+.notification {
+  @apply fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Estilos para paneles modales */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto;
+}
+
+/* Estilos para indicadores de calidad */
+.quality-indicator {
+  @apply inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.quality-excellent {
+  @apply bg-green-100 text-green-800;
+}
+
+.quality-good {
+  /* Reemplazado yellow-* por blue-* para compatibilidad con la config Tailwind del monorepo */
+  @apply bg-blue-100 text-blue-800;
+}
+
+.quality-poor {
+  @apply bg-red-100 text-red-800;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .telemedicine-controls {
+    @apply flex-wrap gap-2 p-2;
+  }
+  
+  .telemedicine-button {
+    @apply p-2;
+  }
+  
+  .modal-content {
+    @apply max-w-full mx-2;
+  }
+}
+
+/* Estilos para pantallas grandes */
+@media (min-width: 1024px) {
+  .telemedicine-container {
+    @apply p-8;
+  }
+  
+  .telemedicine-video {
+    @apply max-w-4xl mx-auto;
+  }
+}

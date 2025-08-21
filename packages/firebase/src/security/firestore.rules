@@ -1,0 +1,240 @@
+rules_version = '2';
+
+// 🏥 ALTAMEDICA PLATFORM - HIPAA COMPLIANT FIRESTORE SECURITY RULES
+// Reglas de seguridad granulares para datos médicos y PHI
+// Última actualización: 2025-08-08
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== FUNCIONES DE UTILIDAD =====
+    
+    // Verificar si el usuario está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Verificar rol del usuario
+    function hasRole(role) {
+      return isAuthenticated() && 
+             request.auth.token.role == role;
+    }
+    
+    // Verificar múltiples roles
+    function hasAnyRole(roles) {
+      return isAuthenticated() && 
+             request.auth.token.role in roles;
+    }
+    
+    // Verificar si es el propietario del recurso
+    function isOwner(userId) {
+      return isAuthenticated() && 
+             request.auth.uid == userId;
+    }
+    
+    // Verificar si es doctor asignado al paciente
+    function isAssignedDoctor(patientData) {
+      return isAuthenticated() && 
+             (patientData.assignedDoctor == request.auth.uid ||
+              patientData.consultingDoctors[request.auth.uid] == true);
+    }
+    
+    // Verificar si es el mismo paciente
+    function isPatientOwner(patientId) {
+      return isAuthenticated() && 
+             request.auth.uid == patientId;
+    }
+    
+    // Verificar auditoría requerida
+    function hasAuditInfo() {
+      return request.writeFields.hasAll(['auditInfo']) &&
+             request.resource.data.auditInfo.accessedBy == request.auth.uid &&
+             request.resource.data.auditInfo.accessedAt == request.time &&
+             request.resource.data.auditInfo.reason is string;
+    }
+
+    // ===== COLECCIONES DE USUARIOS =====
+    
+    // 👨‍⚕️ DOCTORS - Solo doctores y admins pueden gestionar
+    match /doctors/{doctorId} {
+      allow read: if hasAnyRole(['DOCTOR', 'ADMIN', 'COMPANY']) ||
+                     isOwner(doctorId);
+      allow write: if hasRole('ADMIN') || 
+                      isOwner(doctorId);
+      
+      // Especializations subcollection
+      match /specializations/{specId} {
+        allow read: if hasAnyRole(['DOCTOR', 'ADMIN', 'PATIENT', 'COMPANY']);
+        allow write: if hasRole('ADMIN') || isOwner(doctorId);
+      }
+      
+      // Availability subcollection  
+      match /availability/{availId} {
+        allow read: if hasAnyRole(['DOCTOR', 'ADMIN', 'PATIENT', 'COMPANY']);
+        allow write: if hasRole('ADMIN') || isOwner(doctorId);
+      }
+    }
+
+    // 👥 PATIENTS - Acceso estricto solo a doctor asignado y el mismo paciente
+    match /patients/{patientId} {
+      allow read: if hasRole('ADMIN') ||
+                     isPatientOwner(patientId) ||
+                     isAssignedDoctor(resource.data);
+      
+      allow create: if hasAnyRole(['ADMIN', 'DOCTOR']) &&
+                       hasAuditInfo();
+      
+      allow update: if (hasRole('ADMIN') ||
+                        isPatientOwner(patientId) ||
+                        isAssignedDoctor(resource.data)) &&
+                       hasAuditInfo();
+      
+      allow delete: if hasRole('ADMIN') && hasAuditInfo();
+
+      // 📋 MEDICAL RECORDS - Máximo nivel de seguridad PHI
+      match /medicalRecords/{recordId} {
+        allow read: if hasRole('ADMIN') ||
+                       isPatientOwner(patientId) ||
+                       isAssignedDoctor(get(/databases/$(database)/documents/patients/$(patientId)).data);
+        
+        allow create: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                         hasAuditInfo();
+        
+        allow update: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                         hasAuditInfo();
+        
+        allow delete: if hasRole('ADMIN') && hasAuditInfo();
+      }
+
+      // 💊 PRESCRIPTIONS - Solo doctores autorizados
+      match /prescriptions/{prescriptionId} {
+        allow read: if hasRole('ADMIN') ||
+                       isPatientOwner(patientId) ||
+                       isAssignedDoctor(get(/databases/$(database)/documents/patients/$(patientId)).data);
+        
+        allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                        hasAuditInfo();
+      }
+
+      // 📊 VITAL SIGNS - Tiempo real para emergencias
+      match /vitalSigns/{vitalId} {
+        allow read: if hasRole('ADMIN') ||
+                       isPatientOwner(patientId) ||
+                       isAssignedDoctor(get(/databases/$(database)/documents/patients/$(patientId)).data);
+        
+        allow create: if hasAnyRole(['DOCTOR', 'PATIENT', 'ADMIN']);
+        allow update: if hasAnyRole(['DOCTOR', 'PATIENT', 'ADMIN']);
+        allow delete: if hasRole('ADMIN');
+      }
+    }
+
+    // 🏢 COMPANIES - Acceso empresarial controlado
+    match /companies/{companyId} {
+      allow read: if hasAnyRole(['ADMIN', 'COMPANY']) ||
+                     isOwner(companyId);
+      allow write: if hasRole('ADMIN') || 
+                      isOwner(companyId);
+
+      // Employees subcollection
+      match /employees/{employeeId} {
+        allow read: if hasAnyRole(['ADMIN', 'COMPANY']) ||
+                       isOwner(companyId) ||
+                       isOwner(employeeId);
+        allow write: if hasRole('ADMIN') || 
+                        isOwner(companyId);
+      }
+    }
+
+    // 📅 APPOINTMENTS - Acceso basado en participación
+    match /appointments/{appointmentId} {
+      allow read: if hasRole('ADMIN') ||
+                     resource.data.patientId == request.auth.uid ||
+                     resource.data.doctorId == request.auth.uid ||
+                     (hasRole('COMPANY') && 
+                      resource.data.companyId == request.auth.uid);
+      
+      allow create: if hasAnyRole(['PATIENT', 'DOCTOR', 'ADMIN']);
+      
+      allow update: if hasRole('ADMIN') ||
+                       resource.data.patientId == request.auth.uid ||
+                       resource.data.doctorId == request.auth.uid;
+      
+      allow delete: if hasRole('ADMIN') || 
+                       resource.data.patientId == request.auth.uid;
+
+      // Session notes para telemedicina
+      match /sessionNotes/{noteId} {
+        allow read: if hasRole('ADMIN') ||
+                       get(/databases/$(database)/documents/appointments/$(appointmentId)).data.patientId == request.auth.uid ||
+                       get(/databases/$(database)/documents/appointments/$(appointmentId)).data.doctorId == request.auth.uid;
+        
+        allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                        hasAuditInfo();
+      }
+    }
+
+    // 💬 MESSAGES - Sistema de mensajería segura
+    match /messages/{messageId} {
+      allow read: if hasRole('ADMIN') ||
+                     resource.data.senderId == request.auth.uid ||
+                     resource.data.recipientId == request.auth.uid ||
+                     resource.data.participants[request.auth.uid] == true;
+      
+      allow create: if isAuthenticated() &&
+                       request.resource.data.senderId == request.auth.uid;
+      
+      allow update: if hasRole('ADMIN') ||
+                       resource.data.senderId == request.auth.uid;
+      
+      allow delete: if hasRole('ADMIN') || 
+                       resource.data.senderId == request.auth.uid;
+    }
+
+    // 🔔 NOTIFICATIONS - Notificaciones médicas
+    match /notifications/{notificationId} {
+      allow read: if hasRole('ADMIN') ||
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if hasAnyRole(['DOCTOR', 'ADMIN', 'SYSTEM']);
+      
+      allow update: if hasRole('ADMIN') ||
+                       resource.data.userId == request.auth.uid;
+      
+      allow delete: if hasRole('ADMIN') || 
+                       resource.data.userId == request.auth.uid;
+    }
+
+    // 📊 ANALYTICS - Solo lectura para roles autorizados
+    match /analytics/{analyticsId} {
+      allow read: if hasAnyRole(['ADMIN', 'DOCTOR', 'COMPANY']);
+      allow write: if hasRole('ADMIN');
+    }
+
+    // 🔍 AUDIT LOGS - Solo administradores
+    match /auditLogs/{logId} {
+      allow read: if hasRole('ADMIN');
+      allow create: if hasAnyRole(['DOCTOR', 'ADMIN', 'SYSTEM']);
+      allow update: if false; // Los logs de auditoría son inmutables
+      allow delete: if false; // Los logs de auditoría no se pueden eliminar
+    }
+
+    // ⚙️ SYSTEM CONFIG - Solo administradores
+    match /systemConfig/{configId} {
+      allow read: if hasRole('ADMIN');
+      allow write: if hasRole('ADMIN');
+    }
+
+    // 🚫 DEFAULT DENY - Cualquier otro documento está denegado por defecto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// 🔐 SECURITY NOTES:
+// 1. Todas las operaciones con PHI requieren auditoría (hasAuditInfo())
+// 2. Los pacientes solo pueden ver sus propios datos médicos
+// 3. Los doctores solo pueden ver pacientes asignados
+// 4. Las empresas solo pueden ver empleados propios
+// 5. Los administradores tienen acceso completo pero auditable
+// 6. Los logs de auditoría son inmutables y solo administradores pueden leer

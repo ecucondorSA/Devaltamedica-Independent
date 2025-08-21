@@ -1,0 +1,83 @@
+{
+  "patients": [
+    {
+      "email": "paciente.demo@altamedica.com",
+      "password": "Demo123!@#",
+      "profile": {
+        "firstName": "Juan",
+        "lastName": "Pérez Demo",
+        "dni": "12345678",
+        "phone": "+54 11 5555-0001",
+        "birthDate": "1990-01-15",
+        "gender": "male",
+        "address": {
+          "street": "Av. Corrientes 1234",
+          "city": "Buenos Aires",
+          "state": "CABA",
+          "country": "Argentina",
+          "zipCode": "C1043"
+        },
+        "emergencyContact": {
+          "name": "María Pérez",
+          "relationship": "Esposa",
+          "phone": "+54 11 5555-0002"
+        },
+        "medicalInfo": {
+          "bloodType": "O+",
+          "allergies": ["Penicilina"],
+          "chronicConditions": ["Hipertensión"],
+          "currentMedications": [
+            {
+              "name": "Enalapril",
+              "dosage": "10mg",
+              "frequency": "1 vez al día"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "email": "paciente2.demo@altamedica.com",
+      "password": "Demo123!@#",
+      "profile": {
+        "firstName": "Ana",
+        "lastName": "García Demo",
+        "dni": "87654321",
+        "phone": "+54 11 5555-0003",
+        "birthDate": "1985-06-20",
+        "gender": "female",
+        "address": {
+          "street": "Av. Santa Fe 5678",
+          "city": "Buenos Aires",
+          "state": "CABA",
+          "country": "Argentina",
+          "zipCode": "C1425"
+        }
+      }
+    }
+  ],
+  "doctors": [
+    {
+      "email": "doctor.demo@altamedica.com",
+      "password": "Demo123!@#",
+      "profile": {
+        "firstName": "Dr. Carlos",
+        "lastName": "Martínez Demo",
+        "specialties": ["Cardiología", "Medicina Interna"],
+        "licenseNumber": "MN 12345",
+        "phone": "+54 11 5555-1001"
+      }
+    }
+  ],
+  "admin": [
+    {
+      "email": "admin.demo@altamedica.com",
+      "password": "Demo123!@#",
+      "profile": {
+        "firstName": "Admin",
+        "lastName": "Sistema",
+        "role": "SUPER_ADMIN"
+      }
+    }
+  ]
+}

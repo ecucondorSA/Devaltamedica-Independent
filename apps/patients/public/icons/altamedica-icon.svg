@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#2563eb"/>
+  
+  <!-- Medical cross in white -->
+  <rect x="220" y="140" width="72" height="232" fill="white" rx="8"/>
+  <rect x="140" y="220" width="232" height="72" fill="white" rx="8"/>
+  
+  <!-- AltaMedica "A" in the center -->
+  <path d="M256 180l40 80h-20l-8-16h-24l-8 16h-20l40-80zm0 24l-8 16h16l-8-16z" fill="#2563eb"/>
+  
+  <!-- Small medical symbols -->
+  <circle cx="180" cy="180" r="12" fill="white"/>
+  <circle cx="332" cy="180" r="12" fill="white"/>
+  <circle cx="180" cy="332" r="12" fill="white"/>
+  <circle cx="332" cy="332" r="12" fill="white"/>
+  
+  <!-- Heartbeat line -->
+  <path d="M120 300 L140 300 L150 280 L160 320 L170 260 L180 340 L190 300 L392 300" 
+        stroke="white" 
+        stroke-width="4" 
+        fill="none" 
+        stroke-linecap="round"/>
+</svg>

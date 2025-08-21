@@ -1,0 +1,72 @@
+﻿###############################################
+
+# Patients App Dockerignore (Optimizado)
+
+# Alineado con otras apps para reducir contexto build
+
+###############################################
+
+# Dependencias y caches
+
+node_modules
+.pnpm-store
+.turbo
+
+# Build outputs
+
+.next
+dist
+build
+out
+
+# VCS
+
+.git
+.gitignore
+.github
+
+# Entornos locales (NO copiar secretos)
+
+.env.local
+.env.development
+.env.test
+\*.env
+!.env.example
+
+# Logs y diagnósticos
+
+\*.log
+logs
+coverage
+playwright-report
+test-results
+
+# Documentación y archivos no necesarios en runtime
+
+README.md
+CLAUDE.md
+docs
+\*.md
+
+# IDE / OS
+
+.vscode
+.idea
+_.swp
+_.swo
+\*~
+.DS_Store
+Thumbs.db
+
+# TS build info / caches
+
+\*.tsbuildinfo
+.eslintcache
+.stylelintcache
+
+# Temporales
+
+tmp
+temp
+.tmp
+.cache

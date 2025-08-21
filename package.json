@@ -1,0 +1,117 @@
+{
+  "name": "altamedica-monorepo",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "AltaMedica - Healthcare Platform Monorepo",
+  "author": "AltaMedica Team",
+  "license": "PROPRIETARY",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.2",
+  "scripts": {
+    "repair:dry": "node scripts/repair-orchestrator.mjs",
+    "repair:write": "node scripts/repair-orchestrator.mjs --write",
+    "dev": "turbo dev",
+    "dev:min": "turbo dev --filter=api-server --filter=patients --filter=doctors --filter=web-app",
+    "dev:medical": "turbo dev --filter=api-server --filter=patients --filter=doctors",
+    "build": "turbo build",
+    "build:packages": "turbo build --filter=./packages/*",
+    "build:apps": "turbo build --filter=./apps/*",
+    "apps:repair:dry": "node scripts/apps-repair-orchestrator.mjs",
+    "apps:repair:write": "node scripts/apps-repair-orchestrator.mjs --write",
+    "clean:cache": "turbo clean && rimraf .turbo **/turbo",
+    "format": "prettier --write \"***.{ts,tsx,md,json}\"",
+    "audit": "pnpm audit --production",
+    "audit:fix": "pnpm audit --fix",
+    "deps:check": "pnpm outdated -r",
+    "deps:update": "pnpm update -r",
+    "ci:setup": "pnpm install --frozen-lockfile",
+    "ci:validate": "pnpm lint && pnpm type-check && pnpm test:unit",
+    "ci:build": "pnpm build:packages && pnpm build:apps",
+    "ci:test": "pnpm test:all",
+    "prepare": "husky install",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "test:unit": "turbo test:unit",
+    "test:integration": "turbo test:integration",
+    "test:e2e": "turbo test:e2e",
+    "test:all": "turbo test:unit test:integration test:e2e",
+    "test:hipaa": "turbo test:hipaa",
+    "test:hipaa:report": "turbo test:hipaa:report",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "firebase:deploy": "firebase deploy --only functions,firestore,storage",
+    "firebase:deploy:hosting": "echo 'Hosting migrado a Vercel'",
+    "firebase:deploy:patients": "echo 'Hosting de patients migrado a Vercel'",
+    "firebase:deploy:doctors": "echo 'Hosting de doctors migrado a Vercel'",
+    "firebase:deploy:admin": "echo 'Hosting de admin migrado a Vercel'",
+    "firebase:deploy:web": "echo 'Hosting de web migrado a Vercel'",
+    "firebase:emulator": "firebase emulators:start",
+    "predeploy": "pnpm build:apps"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@rollup/rollup-win32-x64-msvc": "^4.46.4",
+    "@types/express-rate-limit": "^6.0.2",
+    "@types/ioredis": "^5.0.0",
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.3",
+    "firebase": "^11.10.0",
+    "glob": "^11.0.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.2",
+    "next": "^15.3.4",
+    "prettier": "^3.2.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^5.0.0",
+    "tailwindcss": "^3.4.0",
+    "turbo": "^1.12.4",
+    "typescript": "5.5.4",
+    "vitest": "^1.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --config eslint.config.js",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.0.0",
+      "react-dom": "19.0.0",
+      "typescript": "5.5.4",
+      "firebase": "11.10.0",
+      "firebase-admin": "13.4.0",
+      "next": "15.3.4",
+      "tailwindcss": "^3.4.0",
+      "@types/react": "^19.0.0",
+      "@types/react-dom": "^19.0.0"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "19",
+        "react-dom": "19",
+        "eslint": "9",
+        "typescript": "5.5"
+      },
+      "ignoreMissing": [
+        "@babel/core",
+        "webpack"
+      ]
+    }
+  }
+}

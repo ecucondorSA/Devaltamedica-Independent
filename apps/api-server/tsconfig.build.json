@@ -1,0 +1,47 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "dist",
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false
+  },
+  "include": [
+    "src/server.ts",
+    "src/routes/health.v2.routes.ts",
+    "src/routes/auth-firebase.routes.ts",
+    "src/routes/auth-sso.routes.ts",
+    "src/routes/mfa.routes.ts",
+    "src/routes/basic-endpoints.routes.ts",
+    "src/middleware/index.ts",
+    "src/middleware/security.middleware.ts",
+    "src/middleware/csrf.middleware.ts",
+    "src/middleware/rbac.middleware.ts",
+    "src/config/**/*.ts",
+    "src/constants/**/*.ts",
+    "src/lib/encryption.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "src/app/**",
+    "src/domains/**",
+    "src/notifications/**",
+    "src/telemedicine/**",
+    "src/marketplace/**",
+    "src/services/**",
+    "src/middleware/optimized-api-middleware.ts",
+    "src/middleware/rate-limiter.ts",
+    "src/middleware/rateLimiter.ts",
+    "src/routes/ai-jobs.ts",
+    "src/routes/diagnostic.routes.ts",
+    "src/routes/metrics.ts",
+    "src/routes/notification-routes.ts",
+    "src/routes/telemedicine-routes.ts"
+  ]
+}

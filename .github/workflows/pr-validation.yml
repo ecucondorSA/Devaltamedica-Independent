@@ -1,0 +1,244 @@
+name: 🔍 PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.x'
+  PNPM_VERSION: '9.15.2'
+
+jobs:
+  # ============================================
+  # 🏷️ PR Labels & Size Check
+  # ============================================
+  pr-metadata:
+    name: 🏷️ PR Metadata
+    runs-on: ubuntu-latest
+    outputs:
+      size: ${{ steps.size.outputs.size }}
+      files_changed: ${{ steps.size.outputs.files_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📏 Calculate PR size
+        id: size
+        run: |
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | wc -l)
+          LINES_CHANGED=$(git diff --stat origin/${{ github.base_ref }}...HEAD | tail -1 | awk '{print $4}')
+          
+          echo "files_changed=$FILES_CHANGED" >> $GITHUB_OUTPUT
+          
+          if [ $LINES_CHANGED -lt 10 ]; then
+            echo "size=XS" >> $GITHUB_OUTPUT
+          elif [ $LINES_CHANGED -lt 50 ]; then
+            echo "size=S" >> $GITHUB_OUTPUT
+          elif [ $LINES_CHANGED -lt 200 ]; then
+            echo "size=M" >> $GITHUB_OUTPUT
+          elif [ $LINES_CHANGED -lt 500 ]; then
+            echo "size=L" >> $GITHUB_OUTPUT
+          else
+            echo "size=XL" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🏷️ Label PR by size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const size = '${{ steps.size.outputs.size }}';
+            const labels = ['size/XS', 'size/S', 'size/M', 'size/L', 'size/XL'];
+            
+            // Remove all size labels
+            for (const label of labels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: label
+                });
+              } catch (e) {
+                // Label doesn't exist, ignore
+              }
+            }
+            
+            // Add current size label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: [`size/${size}`]
+            });
+
+  # ============================================
+  # 🔍 Quick Checks (Paralelo)
+  # ============================================
+  quick-lint:
+    name: ⚡ Quick Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install dependencies
+        run: pnpm install
+      
+      - name: 🔍 Lint changed files only
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(ts|tsx|js|jsx)$' || true)
+          if [ ! -z "$CHANGED_FILES" ]; then
+            echo "$CHANGED_FILES" | xargs pnpm eslint --max-warnings=0
+          fi
+
+  quick-typecheck:
+    name: ⚡ Quick TypeCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install dependencies
+        run: pnpm install
+      
+      - name: 📊 TypeScript check
+        run: pnpm turbo type-check --filter='[HEAD^1]' --cache-dir=.turbo
+
+  # ============================================
+  # 🔒 Security Checks
+  # ============================================
+  security-check:
+    name: 🔒 Security Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install dependencies
+        run: pnpm install
+      
+      - name: 🔍 Check for secrets
+        run: |
+          # Check for hardcoded secrets
+          ! grep -r "PRIVATE_KEY\|SECRET_KEY\|API_KEY\|PASSWORD" \
+            --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" \
+            --exclude-dir=node_modules \
+            --exclude-dir=.next \
+            --exclude="*.test.*" \
+            --exclude="*.spec.*" || {
+              echo "⚠️ Potential secrets found in code!"
+              exit 1
+            }
+      
+      - name: 🔒 Dependency audit
+        run: pnpm audit --production --audit-level=high
+
+  # ============================================
+  # 📊 PR Comment with Results
+  # ============================================
+  pr-comment:
+    name: 💬 PR Comment
+    runs-on: ubuntu-latest
+    needs: [pr-metadata, quick-lint, quick-typecheck, security-check]
+    if: always()
+    steps:
+      - name: 💬 Comment PR results
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const size = '${{ needs.pr-metadata.outputs.size }}';
+            const filesChanged = '${{ needs.pr-metadata.outputs.files_changed }}';
+            const lintStatus = '${{ needs.quick-lint.result }}';
+            const typecheckStatus = '${{ needs.quick-typecheck.result }}';
+            const securityStatus = '${{ needs.security-check.result }}';
+            
+            const getSizeEmoji = (size) => {
+              const emojis = { 'XS': '🟢', 'S': '🟢', 'M': '🟡', 'L': '🟠', 'XL': '🔴' };
+              return emojis[size] || '⚪';
+            };
+            
+            const getStatusEmoji = (status) => {
+              return status === 'success' ? '✅' : status === 'failure' ? '❌' : '⏭️';
+            };
+            
+            const body = `## 📊 PR Validation Results
+            
+            ### 📏 PR Size
+            ${getSizeEmoji(size)} **Size: ${size}** (${filesChanged} files changed)
+            
+            ### 🔍 Quick Checks
+            | Check | Status |
+            |-------|--------|
+            | Lint | ${getStatusEmoji(lintStatus)} ${lintStatus} |
+            | TypeCheck | ${getStatusEmoji(typecheckStatus)} ${typecheckStatus} |
+            | Security | ${getStatusEmoji(securityStatus)} ${securityStatus} |
+            
+            ### 💡 Tips
+            ${size === 'XL' ? '- Consider breaking this PR into smaller, more focused changes' : ''}
+            ${lintStatus === 'failure' ? '- Run `pnpm lint:fix` to auto-fix lint issues' : ''}
+            ${typecheckStatus === 'failure' ? '- Run `pnpm type-check` locally to see TypeScript errors' : ''}
+            ${securityStatus === 'failure' ? '- Review security warnings and ensure no secrets are committed' : ''}
+            
+            ---
+            <sub>🤖 Generated by AltaMedica CI</sub>`;
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('PR Validation Results')
+            );
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }

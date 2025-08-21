@@ -1,0 +1,438 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+/* Variables CSS personalizadas de Altamedica */
+:root {
+  /* Colores principales de Altamedica */
+  --altamedica-primary: #0ea5e9;
+  --altamedica-primary-light: #38bdf8;
+  --altamedica-primary-dark: #0284c7;
+  --altamedica-secondary: #3b82f6;
+  --altamedica-accent: #06b6d4;
+  
+  /* Gradientes */
+  --altamedica-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  --altamedica-gradient-light: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --altamedica-gradient-dark: linear-gradient(135deg, #0c4a6e 0%, #1e3a8a 100%);
+  
+  /* Sombras */
+  --altamedica-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.1), 0 4px 6px -4px rgba(14, 165, 233, 0.1);
+  --altamedica-shadow-lg: 0 20px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+  
+  /* Transiciones */
+  --altamedica-transition: all 0.2s ease-in-out;
+  --altamedica-transition-slow: all 0.3s ease-in-out;
+}
+
+/* Estilos base */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  color: #1e293b;
+  background-color: #f8fafc;
+}
+
+/* Tipografía */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  color: #0f172a;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+/* Enlaces */
+a {
+  color: var(--altamedica-primary);
+  text-decoration: none;
+  transition: var(--altamedica-transition);
+}
+
+a:hover {
+  color: var(--altamedica-primary-dark);
+}
+
+/* Botones base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: var(--altamedica-transition);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.btn:focus {
+  outline: 2px solid var(--altamedica-primary);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variantes de botones */
+.btn-primary {
+  background: var(--altamedica-gradient);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--altamedica-primary);
+  border: 2px solid var(--altamedica-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--altamedica-primary);
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--altamedica-primary);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+/* Tamaños de botones */
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+.btn-md { padding: 0.75rem 1.5rem; font-size: 1rem; }
+.btn-lg { padding: 1rem 2rem; font-size: 1.125rem; }
+
+/* Tarjetas */
+.card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  transition: var(--altamedica-transition);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--altamedica-shadow);
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+/* Formularios */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: var(--altamedica-transition);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--altamedica-primary);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.form-input.error {
+  border-color: #ef4444;
+}
+
+.form-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Navegación */
+.nav {
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--altamedica-primary);
+}
+
+.nav-link {
+  color: #6b7280;
+  font-weight: 500;
+  transition: var(--altamedica-transition);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--altamedica-primary);
+}
+
+/* Sidebar */
+.sidebar {
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #6b7280;
+  font-weight: 500;
+  transition: var(--altamedica-transition);
+  border-radius: 0.5rem;
+  margin: 0.25rem 0.5rem;
+}
+
+.sidebar-item:hover {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--altamedica-primary);
+}
+
+.sidebar-item.active {
+  background: var(--altamedica-primary);
+  color: white;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+.badge-primary {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--altamedica-primary);
+}
+
+.badge-success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.badge-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+/* Alertas */
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.alert-info {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--altamedica-primary);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.alert-success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Tablas */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #374151;
+}
+
+.table tr:hover {
+  background: rgba(14, 165, 233, 0.05);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  h1 { font-size: 1.875rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding: 1rem;
+  }
+  
+  .btn-lg { padding: 0.75rem 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    transition: var(--altamedica-transition-slow);
+    z-index: 50;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+}
+
+/* Utilidades personalizadas */
+.altamedica-bg {
+  background: var(--altamedica-gradient-light);
+}
+
+.altamedica-text {
+  color: var(--altamedica-primary);
+}
+
+.altamedica-border {
+  border-color: var(--altamedica-primary);
+}
+
+.altamedica-shadow {
+  box-shadow: var(--altamedica-shadow);
+}
+
+.altamedica-gradient {
+  background: var(--altamedica-gradient);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes pulseAltamedica {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse-altamedica {
+  animation: pulseAltamedica 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Selección de texto */
+::selection {
+  background: rgba(14, 165, 233, 0.2);
+  color: #0f172a;
+}
+
+/* Focus visible para accesibilidad */
+*:focus-visible {
+  outline: 2px solid var(--altamedica-primary);
+  outline-offset: 2px;
+}

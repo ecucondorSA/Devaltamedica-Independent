@@ -1,0 +1,118 @@
+codecov:
+  require_ci_to_pass: true
+  bot: altamedica-bot
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...95"
+  
+  status:
+    project:
+      default:
+        target: 85%
+        threshold: 2%
+        base: auto
+        if_not_found: success
+        if_ci_failed: error
+        only_pulls: false
+        
+      medical:
+        target: 95%
+        threshold: 1%
+        paths:
+          - "packages/medical/**"
+          - "packages/anamnesis/**"
+          - "packages/patient-services/**"
+          - "apps/doctors/src/**"
+          - "apps/patients/src/**"
+          
+      hipaa:
+        target: 98%
+        threshold: 0%
+        paths:
+          - "**/auth/**"
+          - "**/security/**"
+          - "**/audit/**"
+          - "**/encryption/**"
+          
+      api:
+        target: 90%
+        threshold: 2%
+        paths:
+          - "apps/api-server/**"
+          
+      ui:
+        target: 80%
+        threshold: 3%
+        paths:
+          - "packages/ui/**"
+          - "**/components/**"
+          
+    patch:
+      default:
+        target: 85%
+        threshold: 5%
+        base: auto
+        
+    changes:
+      default:
+        branches:
+          - main
+          - develop
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: true
+      loop: true
+      method: true
+      macro: false
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+  
+flags:
+  unittests:
+    paths:
+      - "**/*.test.ts"
+      - "**/*.test.tsx"
+      - "**/*.spec.ts"
+      - "**/*.spec.tsx"
+    carryforward: true
+    
+  integration:
+    paths:
+      - "**/*.integration.test.ts"
+    carryforward: true
+    
+  hipaa:
+    paths:
+      - "**/hipaa/**"
+      - "**/compliance/**"
+    carryforward: false
+    
+  e2e:
+    paths:
+      - "packages/e2e-tests/**"
+      - "**/*.e2e.spec.ts"
+    carryforward: false
+
+ignore:
+  - "**/*.d.ts"
+  - "**/node_modules/**"
+  - "**/test/**"
+  - "**/tests/**"
+  - "**/__tests__/**"
+  - "**/vendor/**"
+  - "**/*.config.js"
+  - "**/*.config.ts"
+  - "**/migrations/**"
+  - "**/scripts/**"
+  - "**/mocks/**"
+  - "**/*.mock.ts"
+  - "**/fixtures/**"

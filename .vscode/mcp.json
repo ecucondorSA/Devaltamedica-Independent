@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schemas.claude.ai/mcp-vscode/v1.json",
+  "servers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@executeautomation/playwright-mcp-server"
+      ],
+      "env": {
+        "NODE_ENV": "test",
+        "PLAYWRIGHT_BROWSERS_PATH": "ms-playwright"
+      },
+      "capabilities": ["vision", "pdf"],
+      "description": "Playwright MCP Server for automated E2E test generation"
+    },
+    "playwright-isolated": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@executeautomation/playwright-mcp-server",
+        "--isolated",
+        "--config",
+        "./packages/e2e-tests/mcp.config.js"
+      ],
+      "env": {
+        "NODE_ENV": "test",
+        "PLAYWRIGHT_BROWSERS_PATH": "ms-playwright"
+      },
+      "capabilities": ["vision", "pdf"],
+      "description": "Playwright MCP Server in isolated mode for clean test runs"
+    }
+  }
+}

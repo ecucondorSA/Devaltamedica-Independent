@@ -1,0 +1,60 @@
+{
+  "fecha": "2025-07-19T22:04:13.552Z",
+  "estructuraArchivos": true,
+  "dependencias": true,
+  "apiFuncionando": true,
+  "datosPrueba": {
+    "id": "anamnesis_1752962651539_ggf0qyjme",
+    "pacienteId": "test-paciente-123",
+    "doctorId": "test-doctor-456",
+    "estado": "completada",
+    "datos": {
+      "nombre": "María González",
+      "edad": "28",
+      "genero": "Femenino",
+      "estadoCivil": "Soltera",
+      "ocupacion": "Diseñadora gráfica",
+      "antecedentesFamiliares": {
+        "diabetes": false,
+        "hipertension": true,
+        "cancer": false,
+        "enfermedadesCardiovasculares": false,
+        "otrasEnfermedades": ""
+      },
+      "alergias": true,
+      "alergiasDescripcion": "Penicilina y polen",
+      "cirugiasPrevias": false,
+      "medicamentosActuales": true,
+      "medicamentosLista": "Paracetamol ocasional",
+      "fuma": false,
+      "alcohol": true,
+      "ejercicio": true,
+      "dieta": "Equilibrada",
+      "sueno": "7",
+      "motivoConsulta": "Dolor de cabeza frecuente y fatiga",
+      "duracionSintomas": "3 semanas",
+      "intensidadDolor": "6",
+      "factoresAgravantes": "Estrés laboral y falta de sueño",
+      "factoresMejorantes": "Descanso y relajación",
+      "sintomasAsociados": "Fatiga, irritabilidad, dificultad para concentrarse",
+      "inicioSintomas": "Hace 3 semanas",
+      "evolucionSintomas": "Progresivo",
+      "sistemaCardiovascular": "Normal",
+      "sistemaRespiratorio": "Normal",
+      "sistemaDigestivo": "Normal",
+      "sistemaNeurologico": "Dolor de cabeza, fatiga",
+      "sistemaMusculoesqueletico": "Normal"
+    },
+    "fechaCompletada": "2025-07-19T22:04:11.539Z",
+    "fechaCreacion": "2025-07-19T22:04:11.539Z",
+    "fechaImportacion": "2025-07-19T22:04:11.539Z",
+    "fuente": "anamnesis_juego",
+    "metadata": {
+      "importadoEn": "2025-07-19T22:04:08.921Z",
+      "version": "1.0.0",
+      "origen": "juego_anamnesis",
+      "test": true
+    },
+    "version": "1.0.0"
+  }
+}

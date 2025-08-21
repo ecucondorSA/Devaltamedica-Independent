@@ -1,0 +1,93 @@
+{
+  "name": "@altamedica/hooks",
+  "version": "1.0.0",
+  "description": "React hooks centralizados para la plataforma AltaMedica - Medical, Auth, API, Realtime, UI, Performance y más",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build:watch": "tsup src/index.ts --format=esm --watch",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "storybook:serve": "serve storybook-static -l 6006",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "medical",
+    "healthcare",
+    "altamedica",
+    "telemedicine",
+    "hipaa",
+    "typescript"
+  ],
+  "author": "AltaMedica Platform",
+  "license": "MIT",
+  "devDependencies": {
+    "@altamedica/eslint-config": "workspace:*",
+    "@storybook/addon-a11y": "^7.5.0",
+    "@storybook/addon-backgrounds": "^7.5.0",
+    "@storybook/addon-controls": "^7.5.0",
+    "@storybook/addon-docs": "^7.5.0",
+    "@storybook/addon-essentials": "^7.5.0",
+    "@storybook/addon-interactions": "^7.5.0",
+    "@storybook/addon-links": "^7.5.0",
+    "@storybook/addon-measure": "^7.5.0",
+    "@storybook/addon-outline": "^7.5.0",
+    "@storybook/addon-storysource": "^7.5.0",
+    "@storybook/addon-viewport": "^7.5.0",
+    "@storybook/blocks": "^7.5.0",
+    "@storybook/manager-api": "^7.5.0",
+    "@storybook/react": "^7.5.0",
+    "@storybook/react-vite": "^7.5.0",
+    "@storybook/theming": "^7.5.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.49.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^5.0.0",
+    "serve": "^14.2.1",
+    "storybook": "^7.5.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@altamedica/shared": "workspace:*",
+    "@altamedica/telemedicine-core": "workspace:*",
+    "@altamedica/types": "workspace:*",
+    "@tanstack/react-query": "^5.81.2",
+    "zod": "^3.25.67"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

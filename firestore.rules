@@ -1,0 +1,424 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================================================================
+    // REGLAS DE SEGURIDAD MÉDICA - ALTAMEDICA
+    // Cumplimiento HIPAA y protección de datos médicos
+    // ===========================================================================
+    
+    // Función para verificar si el usuario está autenticado
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Función para obtener el UID del usuario actual
+    function currentUser() {
+      return request.auth.uid;
+    }
+    
+    // Función para verificar el rol del usuario desde su perfil
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(currentUser())).data.role;
+    }
+    
+    // Función para verificar si es doctor
+    function isDoctor() {
+      return isSignedIn() && getUserRole() == 'doctor';
+    }
+    
+    // Función para verificar si es paciente
+    function isPatient() {
+      return isSignedIn() && getUserRole() == 'patient';
+    }
+    
+    // Función para verificar si es empresa
+    function isCompany() {
+      return isSignedIn() && getUserRole() == 'company';
+    }
+    
+    // Función para verificar si el usuario puede acceder a datos de un paciente específico
+    function canAccessPatientData(patientId) {
+      return currentUser() == patientId || isDoctor();
+    }
+    
+    // ===========================================================================
+    // USUARIOS Y PERFILES
+    // ===========================================================================
+    match /users/{userId} {
+      // Permitir lectura del propio perfil o si eres doctor
+      allow read: if isSignedIn() && 
+        (currentUser() == userId || isDoctor());
+      
+      // Permitir escritura solo del propio perfil
+      allow write: if isSignedIn() && currentUser() == userId;
+      
+      // Permitir creación durante el registro
+      allow create: if isSignedIn() && currentUser() == userId;
+    }
+    
+    // ===========================================================================
+    // CONVERSACIONES MÉDICAS
+    // ===========================================================================
+    match /medical_conversations/{conversationId} {
+      // Solo participantes pueden leer conversaciones
+      allow read: if isSignedIn() && 
+        currentUser() in resource.data.participants;
+      
+      // Solo participantes pueden escribir
+      allow write: if isSignedIn() && 
+        currentUser() in resource.data.participants;
+      
+      // Permitir crear conversaciones si eres participante
+      allow create: if isSignedIn() && 
+        currentUser() in request.resource.data.participants;
+    }
+    
+    // ===========================================================================
+    // MENSAJES MÉDICOS
+    // ===========================================================================
+    match /medical_messages/{messageId} {
+      // Solo el remitente y destinatarios pueden leer mensajes
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.senderId ||
+        // Verificar si el usuario está en la conversación
+        currentUser() in get(/databases/$(database)/documents/medical_conversations/$(resource.data.conversationId)).data.participants
+      );
+      
+      // Solo usuarios autenticados pueden crear mensajes
+      allow create: if isSignedIn() && 
+        currentUser() == request.resource.data.senderId;
+      
+      // Solo el remitente puede editar sus mensajes
+      allow update: if isSignedIn() && 
+        currentUser() == resource.data.senderId;
+      
+      // No permitir eliminar mensajes (audit trail)
+      allow delete: if false;
+    }
+    
+    // ===========================================================================
+    // DOCUMENTOS MÉDICOS
+    // ===========================================================================
+    match /medical_documents/{documentId} {
+      // Solo usuarios con permisos pueden leer documentos
+      allow read: if isSignedIn() && (
+        // Es el paciente propietario
+        currentUser() == resource.data.patientId ||
+        // Es el doctor que subió el documento
+        currentUser() == resource.data.doctorId ||
+        // Está en la lista de usuarios con acceso
+        currentUser() in resource.data.sharedWith ||
+        // Tiene permisos específicos
+        currentUser() in resource.data.accessPermissions
+      );
+      
+      // Solo doctores pueden crear documentos médicos
+      allow create: if isSignedIn() && isDoctor() &&
+        currentUser() == request.resource.data.doctorId;
+      
+      // Solo el doctor propietario o usuarios con permisos de escritura pueden actualizar
+      allow update: if isSignedIn() && (
+        currentUser() == resource.data.doctorId ||
+        (currentUser() in resource.data.accessPermissions && 
+         resource.data.accessPermissions[currentUser()] in ['write', 'admin'])
+      );
+      
+      // Solo administradores pueden eliminar (soft delete)
+      allow delete: if isSignedIn() && 
+        resource.data.accessPermissions[currentUser()] == 'admin';
+    }
+    
+    // ===========================================================================
+    // NOTIFICACIONES MÉDICAS
+    // ===========================================================================
+    match /medical_notifications/{notificationId} {
+      // Solo el destinatario puede leer sus notificaciones
+      allow read: if isSignedIn() && 
+        currentUser() == resource.data.recipientId;
+      
+      // Solo el sistema o doctores pueden crear notificaciones
+      allow create: if isSignedIn() && (
+        isDoctor() || 
+        request.resource.data.senderId == 'system'
+      );
+      
+      // Solo el destinatario puede marcar como leída
+      allow update: if isSignedIn() && 
+        currentUser() == resource.data.recipientId &&
+        // Solo permitir cambiar el estado de lectura
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      
+      // Solo el destinatario puede eliminar sus notificaciones
+      allow delete: if isSignedIn() && 
+        currentUser() == resource.data.recipientId;
+    }
+    
+    // ===========================================================================
+    // PREFERENCIAS DE NOTIFICACIÓN
+    // ===========================================================================
+    match /notification_preferences/{userId} {
+      // Solo el usuario puede acceder a sus preferencias
+      allow read, write: if isSignedIn() && currentUser() == userId;
+    }
+    
+    // ===========================================================================
+    // AUDIT TRAIL (Solo lectura para administradores)
+    // ===========================================================================
+    match /document_audit/{auditId} {
+      // Solo lectura para doctores y administradores
+      allow read: if isSignedIn() && isDoctor();
+      
+      // Solo el sistema puede escribir logs de auditoría
+      allow create: if isSignedIn();
+      
+      // No permitir modificar o eliminar logs de auditoría
+      allow update, delete: if false;
+    }
+    
+    // ===========================================================================
+    // CITAS MÉDICAS
+    // ===========================================================================
+    match /appointments/{appointmentId} {
+      // Solo el paciente y doctor involucrados pueden leer
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId
+      );
+      
+      // Solo el paciente puede crear citas
+      allow create: if isSignedIn() && 
+        currentUser() == request.resource.data.patientId;
+      
+      // Solo el doctor y paciente pueden modificar
+      allow update: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId
+      );
+      
+      // Solo el doctor puede cancelar citas
+      allow delete: if isSignedIn() && 
+        currentUser() == resource.data.doctorId;
+    }
+    
+    // ===========================================================================
+    // PRESCRIPCIONES MÉDICAS
+    // ===========================================================================
+    match /prescriptions/{prescriptionId} {
+      // Solo el paciente y doctor pueden leer
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId
+      );
+      
+      // Solo doctores pueden crear prescripciones
+      allow create: if isSignedIn() && isDoctor() &&
+        currentUser() == request.resource.data.doctorId;
+      
+      // Solo el doctor creador puede modificar
+      allow update: if isSignedIn() && 
+        currentUser() == resource.data.doctorId;
+      
+      // No permitir eliminar prescripciones (compliance)
+      allow delete: if false;
+    }
+    
+    // ===========================================================================
+    // RESULTADOS DE LABORATORIO
+    // ===========================================================================
+    match /lab_results/{resultId} {
+      // Solo el paciente y doctor pueden leer
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId ||
+        currentUser() == resource.data.requestingDoctorId
+      );
+      
+      // Solo doctores o laboratorios pueden crear resultados
+      allow create: if isSignedIn() && isDoctor();
+      
+      // Solo el doctor que solicitó puede actualizar
+      allow update: if isSignedIn() && 
+        currentUser() == resource.data.requestingDoctorId;
+      
+      // No permitir eliminar resultados
+      allow delete: if false;
+    }
+    
+    // ===========================================================================
+    // SESIONES DE TELEMEDICINA - HIPAA COMPLIANT
+    // ===========================================================================
+    match /telemedicine_sessions/{sessionId} {
+      // Solo el paciente y doctor asignados pueden leer la sesión
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId
+      );
+      
+      // Solo el paciente puede crear una sesión inicial
+      allow create: if isSignedIn() && (
+        currentUser() == request.resource.data.patientId ||
+        isDoctor()
+      );
+      
+      // Solo paciente y doctor pueden actualizar la sesión
+      allow update: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.doctorId
+      ) && 
+      // Restricciones de actualización para seguridad médica
+      (
+        // Permitir cambios de estado
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'startedAt', 'endedAt', 'notes', 'duration', 'updatedAt']) ||
+        // Permitir actualizar URL de grabación solo por doctor
+        (isDoctor() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['recordingUrl', 'updatedAt']))
+      );
+      
+      // No permitir eliminar sesiones (compliance HIPAA)
+      allow delete: if false;
+      
+      // Subcolección de mensajes de chat
+      match /messages/{messageId} {
+        // Solo participantes de la sesión pueden leer mensajes
+        allow read: if isSignedIn() && (
+          currentUser() == get(/databases/$(database)/documents/telemedicine_sessions/$(sessionId)).data.patientId ||
+          currentUser() == get(/databases/$(database)/documents/telemedicine_sessions/$(sessionId)).data.doctorId
+        );
+        
+        // Solo participantes pueden crear mensajes
+        allow create: if isSignedIn() && 
+          currentUser() == request.resource.data.senderId &&
+          (
+            currentUser() == get(/databases/$(database)/documents/telemedicine_sessions/$(sessionId)).data.patientId ||
+            currentUser() == get(/databases/$(database)/documents/telemedicine_sessions/$(sessionId)).data.doctorId
+          );
+        
+        // No permitir modificar mensajes (audit trail)
+        allow update: if false;
+        
+        // No permitir eliminar mensajes (compliance)
+        allow delete: if false;
+      }
+    }
+    
+    // ===========================================================================
+    // REGISTROS MÉDICOS PACIENTES - MÁXIMA SEGURIDAD
+    // ===========================================================================
+    match /medical_records/{patientId} {
+      // Solo el paciente y doctores autorizados pueden leer
+      allow read: if isSignedIn() && (
+        currentUser() == patientId ||
+        (isDoctor() && currentUser() in resource.data.authorizedDoctors)
+      );
+      
+      // Solo doctores pueden crear registros médicos
+      allow create: if isSignedIn() && isDoctor();
+      
+      // Solo doctores autorizados pueden actualizar
+      allow update: if isSignedIn() && isDoctor() &&
+        currentUser() in resource.data.authorizedDoctors;
+      
+      // No permitir eliminar registros médicos
+      allow delete: if false;
+      
+      // Subcolección de registros individuales
+      match /records/{recordId} {
+        // Mismo acceso que el registro padre
+        allow read: if isSignedIn() && (
+          currentUser() == patientId ||
+          (isDoctor() && currentUser() in get(/databases/$(database)/documents/medical_records/$(patientId)).data.authorizedDoctors)
+        );
+        
+        // Solo doctores autorizados pueden crear registros
+        allow create: if isSignedIn() && isDoctor() &&
+          currentUser() == request.resource.data.doctorId;
+        
+        // Solo el doctor que creó puede actualizar dentro de 24h
+        allow update: if isSignedIn() && isDoctor() &&
+          currentUser() == resource.data.doctorId &&
+          request.time < resource.data.createdAt + duration.value(86400, 's'); // 24 horas
+        
+        // No permitir eliminar registros individuales
+        allow delete: if false;
+      }
+    }
+    
+    // ===========================================================================
+    // ANÁLISIS DE IA MÉDICA - DATOS SENSIBLES
+    // ===========================================================================
+    match /ai_medical_analysis/{analysisId} {
+      // Solo el paciente y doctor solicitante pueden leer
+      allow read: if isSignedIn() && (
+        currentUser() == resource.data.patientId ||
+        currentUser() == resource.data.requestingDoctorId
+      );
+      
+      // Solo doctores pueden solicitar análisis de IA
+      allow create: if isSignedIn() && isDoctor() &&
+        currentUser() == request.resource.data.requestingDoctorId;
+      
+      // Solo el sistema (via Cloud Functions) puede actualizar resultados
+      // Los doctores no pueden modificar resultados de IA
+      allow update: if false;
+      
+      // No permitir eliminar análisis
+      allow delete: if false;
+    }
+    
+    // ===========================================================================
+    // MARKETPLACE - REGLAS DE ACCESO
+    // ===========================================================================
+
+    // Reglas para Empresas
+    match /companies/{companyId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    // Reglas para Ofertas
+    match /marketplace_listings/{listingId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null && get(/databases/$(database)/documents/companies/$(request.resource.data.companyId)).data.ownerId == request.auth.uid;
+    }
+
+    // Reglas para Postulaciones
+    match /listing_applications/{applicationId} {
+      // Un médico puede crear una postulación para sí mismo.
+      allow create: if request.auth != null && request.resource.data.doctorId == request.auth.uid;
+      // La empresa o el médico pueden leer la postulación.
+      allow read: if request.auth != null && (resource.data.doctorId == request.auth.uid || get(/databases/$(database)/documents/companies/$(resource.data.companyId)).data.ownerId == request.auth.uid);
+      // La empresa puede actualizar el estado (aceptar/rechazar).
+      allow update: if request.auth != null && get(/databases/$(database)/documents/companies/$(resource.data.companyId)).data.ownerId == request.auth.uid;
+    }
+
+    // Reglas para Contratos
+    match /contracts/{contractId} {
+      // Solo el médico o la empresa pueden leer el contrato.
+      allow read: if request.auth != null && (resource.data.doctorId == request.auth.uid || get(/databases/$(database)/documents/companies/$(resource.data.companyId)).data.ownerId == request.auth.uid);
+      // Solo la empresa puede actualizar el contrato.
+      allow update: if request.auth != null && get(/databases/$(database)/documents/companies/$(resource.data.companyId)).data.ownerId == request.auth.uid;
+    }
+
+    // Reglas para Reseñas
+    match /doctor_reviews/{reviewId} {
+        // Solo la empresa que tuvo el contrato puede crear una reseña.
+        allow create: if request.auth != null && get(/databases/$(database)/documents/contracts/$(request.resource.data.contractId)).data.companyId == request.resource.data.companyId;
+        // Todos pueden leer las reseñas.
+        allow read: if true;
+    }
+
+    match /company_reviews/{reviewId} {
+        // Solo el médico que tuvo el contrato puede crear una reseña.
+        allow create: if request.auth != null && get(/databases/$(database)/documents/contracts/$(request.resource.data.contractId)).data.doctorId == request.auth.uid;
+        // Todos pueden leer las reseñas.
+        allow read: if true;
+    }
+
+    // ===========================================================================
+    // REGLA POR DEFECTO - DENEGAR TODO LO NO ESPECIFICADO
+    // ===========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

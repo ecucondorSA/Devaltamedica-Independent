@@ -1,0 +1,180 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introducción/Getting Started" />
+
+# 🏥 @altamedica/hooks
+
+**React hooks centralizados para la plataforma AltaMedica**
+
+Biblioteca completa de hooks especializados para aplicaciones médicas con compliance HIPAA, funcionalidades de telemedicina, IA médica y performance optimizado.
+
+## 🚀 Instalación
+
+```bash
+# NPM
+npm install @altamedica/hooks
+
+# Yarn
+yarn add @altamedica/hooks
+
+# PNPM
+pnpm add @altamedica/hooks
+```
+
+## 📦 Importación por Categorías
+
+### Medical Hooks
+```typescript
+import { usePatients, useMedicalAI, useVitalSigns } from '@altamedica/hooks/medical';
+```
+
+### Auth Hooks
+```typescript
+import { useAuth, usePermissions } from '@altamedica/hooks/auth';
+```
+
+### Realtime Hooks
+```typescript
+import { useWebSocket, useNotifications } from '@altamedica/hooks/realtime';
+```
+
+### Performance Hooks
+```typescript
+import { usePerformance, useOffline } from '@altamedica/hooks/performance';
+```
+
+### Utility Hooks
+```typescript
+import { useDebounce, useLocalStorage } from '@altamedica/hooks/utils';
+```
+
+### Composed Hooks
+```typescript
+import { useTelemedicineSession } from '@altamedica/hooks/composed';
+```
+
+## 🎯 Ejemplo Rápido
+
+```typescript
+import React from 'react';
+import { usePatients, useAuth } from '@altamedica/hooks';
+
+function MedicalDashboard() {
+  // Autenticación con permisos médicos
+  const { user, hasPermission } = useAuth();
+  
+  // Gestión de pacientes con compliance HIPAA
+  const { 
+    patients, 
+    isLoading, 
+    search,
+    createPatient 
+  } = usePatients({
+    hipaaCompliant: true,
+    auditLog: true
+  });
+
+  if (!hasPermission('read_medical_records')) {
+    return <div>Sin permisos para ver registros médicos</div>;
+  }
+
+  return (
+    <div>
+      <h1>Dashboard Médico - Dr. {user?.name}</h1>
+      
+      <input 
+        placeholder="Buscar pacientes..."
+        onChange={(e) => search(e.target.value)}
+      />
+      
+      {isLoading ? (
+        <div>Cargando pacientes...</div>
+      ) : (
+        patients.map(patient => (
+          <div key={patient.id}>
+            {patient.name} - {patient.priority}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+```
+
+## 🏥 Características Médicas Especiales
+
+### ✅ Compliance HIPAA
+- Encriptación automática de PHI (Protected Health Information)
+- Audit trails para todas las operaciones médicas
+- Validación de permisos granulares por rol médico
+
+### ✅ Telemedicina Avanzada
+- WebRTC optimizado para videollamadas médicas
+- Latencia ultra-baja para consultas críticas
+- Grabación segura con compliance médico
+
+### ✅ IA Médica Integrada
+- Análisis de síntomas con machine learning
+- Sugerencias diagnósticas basadas en evidencia
+- Detección automática de emergencias médicas
+
+### ✅ Performance Médico-Específico
+- Monitoreo de operaciones médicas críticas
+- Alertas de performance para sistemas hospitalarios
+- Optimización para workstations médicas
+
+## 🔒 Seguridad y Compliance
+
+### HIPAA Compliance Built-in
+- ✅ Encriptación AES-256 para datos PHI
+- ✅ Audit logs automáticos con timestamps
+- ✅ Validación de acceso basada en roles
+- ✅ Anonimización automática de datos sensibles
+
+### Roles Médicos Soportados
+- 👨‍⚕️ **Doctor**: Acceso completo a pacientes asignados
+- 👩‍⚕️ **Enfermera**: Lectura de signos vitales y medicamentos
+- 👨‍💼 **Admin**: Gestión de usuarios y configuración
+- 👤 **Patient**: Acceso a su propio historial médico
+
+## 📱 Compatibilidad
+
+### Navegadores Soportados
+- ✅ Chrome 90+ (Recomendado para WebRTC médico)
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
+
+### Frameworks Compatibles
+- ✅ React 16.8+ (Hooks nativos)
+- ✅ Next.js 12+ (SSR medical-safe)
+- ✅ Vite 4+ (Development optimizado)
+- ✅ React Native 0.70+ (Mobile médico)
+
+## 🎮 Playground Interactivo
+
+Esta documentación incluye ejemplos interactivos para cada hook. Puedes:
+
+1. **Experimentar** con diferentes configuraciones
+2. **Ver el código** generado automáticamente
+3. **Copiar snippets** directamente a tu proyecto
+4. **Probar escenarios** médicos reales
+
+## 🆘 Soporte de Emergencia
+
+Para sistemas médicos críticos en producción:
+
+- 📞 **Hotline**: +1-555-ALTAMED (24/7)
+- 📧 **Email crítico**: emergency@altamedica.com
+- 🚨 **Slack**: #medical-emergency
+
+## 📚 Próximos Pasos
+
+1. [**Arquitectura**](?path=/docs/introducción-arquitectura--docs) - Entiende la estructura interna
+2. [**Compliance HIPAA**](?path=/docs/introducción-compliance-hipaa--docs) - Configuración de seguridad
+3. [**Medical Hooks**](?path=/docs/medical-hooks-usepatients--docs) - Comienza con hooks médicos
+4. [**Ejemplos Avanzados**](?path=/docs/ejemplos-avanzados--docs) - Casos de uso complejos
+
+---
+
+*Desarrollado con ❤️ para profesionales médicos por el equipo AltaMedica*

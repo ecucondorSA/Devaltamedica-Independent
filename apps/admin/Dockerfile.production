@@ -1,0 +1,84 @@
+# Dockerfile.production
+# Optimizado por Lead Frontend Developer para aplicación de administración
+
+FROM node:20-alpine AS base
+
+RUN npm install -g pnpm@9
+
+# Instalar dependencias del sistema necesarias
+RUN apk add --no-cache \
+    dumb-init \
+    curl \
+    ca-certificates \
+    tzdata
+
+# Configurar timezone para logs precisos
+ENV TZ=America/Argentina/Buenos_Aires
+
+# Crear usuario no-root para seguridad
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Stage de dependencias del monorepo
+FROM base AS monorepo_deps
+WORKDIR /app
+
+# Copiar archivos de configuración del monorepo y package.json de la app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/ ./packages/
+COPY configs/ ./configs/
+COPY apps/admin/package.json ./apps/admin/
+
+# Instalar todas las dependencias del monorepo
+RUN pnpm install --frozen-lockfile
+
+# Stage de build de la aplicación
+FROM base AS builder
+WORKDIR /app
+
+# Copiar archivos de la aplicación admin
+COPY apps/admin/ ./
+
+# Copiar node_modules desde la etapa de dependencias del monorepo
+COPY --from=monorepo_deps /app/node_modules ./node_modules
+
+# Variables de entorno para build
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build de la aplicación admin-app
+WORKDIR /app/apps/admin
+RUN pnpm build
+
+# Stage final de producción
+FROM base AS runner
+WORKDIR /app/apps/admin
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Copiar archivos necesarios desde la etapa builder
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/standalone ./.next/standalone
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/public ./public
+
+# Crear directorio para logs
+RUN mkdir -p /app/logs && chown nextjs:nodejs /app/logs
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Cambiar a usuario no-root
+USER nextjs
+
+# Exponer puerto
+EXPOSE 3000
+
+# Variables de entorno
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Comando de inicio con dumb-init para manejo de señales
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "server.js"]

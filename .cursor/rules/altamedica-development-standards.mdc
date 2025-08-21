@@ -1,0 +1,53 @@
+# 🏥 AltaMedica - Estándares de Desarrollo
+
+## 🎯 Principios de Desarrollo
+
+### 🏗️ Arquitectura del Monorepo
+- **Usar packages compartidos** para funcionalidades comunes
+- **Evitar duplicación** de código entre aplicaciones
+- **Mantener dependencias sincronizadas** con pnpm
+- **Seguir el pipeline de Turbo** para builds y tests
+
+### 🔒 Compliance Médico (HIPAA)
+- **Encriptar datos sensibles** en tránsito y reposo
+- **Implementar logging de auditoría** para accesos
+- **Validar permisos** antes de acceder a datos médicos
+- **Usar HTTPS** en todas las comunicaciones
+
+### 🧪 Testing y Calidad
+- **Escribir tests unitarios** para lógica de negocio
+- **Implementar tests de integración** para APIs
+- **Usar tests E2E** para flujos críticos del usuario
+- **Mantener cobertura mínima** del 80%
+
+## 📝 Convenciones de Código
+
+### TypeScript
+- **Usar tipos estrictos** y evitar `any`
+- **Definir interfaces** para estructuras de datos
+- **Usar enums** para valores constantes
+- **Implementar error handling** robusto
+
+### React/Next.js
+- **Usar hooks personalizados** para lógica reutilizable
+- **Implementar lazy loading** para componentes pesados
+- **Optimizar re-renders** con React.memo y useMemo
+- **Usar Server Components** cuando sea posible
+
+### API Design
+- **Implementar versionado** de APIs
+- **Usar códigos de estado HTTP** apropiados
+- **Validar inputs** con esquemas (Zod, Joi)
+- **Implementar rate limiting** para seguridad
+
+## 🚨 Anti-patrones a Evitar
+
+- ❌ **Hardcodear credenciales** en el código
+- ❌ **Ignorar errores** sin logging apropiado
+- ❌ **Crear dependencias circulares** entre packages
+- ❌ **Usar console.log** en producción
+- ❌ **Implementar lógica de negocio** en componentes UI
+description:
+globs:
+alwaysApply: false
+---

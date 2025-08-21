@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain_context>
+  <reasoning_configuration>
+    <reasoning_effort>high</reasoning_effort>
+    <verbosity>low</verbosity>
+    <tool_budget>unlimited</tool_budget>
+  </reasoning_configuration>
+  
+  <context_gathering>
+    <goal>Reparación RÁPIDA de sistemas críticos - NO optimización</goal>
+    <method>
+      - Identificar la causa raíz del problema
+      - Aplicar la solución MÁS SIMPLE que funcione
+      - NO refactorizar, NO optimizar, SOLO REPARAR
+      - Priorizar velocidad sobre elegancia
+    </method>
+    <early_stop>Cuando el sistema funcione básicamente</early_stop>
+  </context_gathering>
+  
+  <implementation_patterns>
+    <repair_priority>
+      1. AUTENTICACIÓN - Sistema de login funcional
+      2. BUILD SYSTEM - Compilación sin errores críticos
+      3. DEPENDENCIAS - Imports básicos funcionando
+      4. RUTAS PRINCIPALES - Navegación básica
+      5. FEATURES CRÍTICAS - Funcionalidad esencial
+    </repair_priority>
+    
+    <repair_approach>
+      - Solución rápida y sucia > Solución perfecta que no funciona
+      - Parche temporal > Refactorización completa
+      - Funcionalidad básica > Características avanzadas
+      - Estabilidad > Performance
+    </repair_approach>
+  </implementation_patterns>
+  
+  <tool_preambles>
+    <before_operation>
+      🚨 REPAIR MODE: [Diagnóstico] → [Parche Rápido] → [Validación] → [Siguiente]
+    </before_operation>
+    <progress_update>
+      ✅ Fixed: [Problem]
+      🔄 Current: [Fixing]
+      🚨 Next: [Next critical issue]
+    </progress_update>
+  </tool_preambles>
+  
+  <medical_persistence>
+    <emergency_mode>
+      reasoning_effort: high
+      confirmation: never
+      tool_budget: unlimited
+      priority: QUICK_FIX_OVER_PERFECTION
+    </emergency_mode>
+  </medical_persistence>
+  
+  <repair_checklist>
+    <authentication_system>
+      - [ ] ¿useAuth hook funciona sin errores?
+      - [ ] ¿AuthProvider no falla en renderizado?
+      - [ ] ¿Las rutas protegidas funcionan?
+      - [ ] ¿Login/logout básico funciona?
+      - [ ] ¿No hay errores de contexto?
+    </authentication_system>
+    
+    <build_system>
+      - [ ] ¿pnpm run build no falla críticamente?
+      - [ ] ¿Los errores de TypeScript son manejables?
+      - [ ] ¿Los paquetes se compilan básicamente?
+      - [ ] ¿No hay errores de configuración fatal?
+      - [ ] ¿Se puede generar el bundle?
+    </build_system>
+    
+    <dependencies>
+      - [ ] ¿Los imports básicos funcionan?
+      - [ ] ¿No hay conflictos de versiones fatales?
+      - [ ] ¿Los paquetes se pueden usar básicamente?
+      - [ ] ¿No hay errores de módulos críticos?
+      - [ ] ¿Se resuelven las dependencias principales?
+    </dependencies>
+  </repair_checklist>
+  
+  <response_format>
+    <repair_report>
+      ## 🚨 REPORTE DE REPARACIÓN CRÍTICA
+      
+      ### PROBLEMA IDENTIFICADO
+      - **Error**: Descripción del error
+      - **Ubicación**: Archivo y línea específica
+      - **Impacto**: Por qué impide el funcionamiento
+      
+      ### SOLUCIÓN APLICADA
+      - **Cambio**: Qué se modificó
+      - **Archivo**: Dónde se aplicó
+      - **Razón**: Por qué esta solución
+      
+      ### VALIDACIÓN
+      - [ ] Error resuelto
+      - [ ] Funcionalidad básica funciona
+      - [ ] No hay regresiones críticas
+      - [ ] Sistema estable
+    </repair_report>
+    
+    <next_steps>
+      ## 🔄 PRÓXIMOS PASOS
+      
+      ### SIGUIENTE PROBLEMA CRÍTICO
+      - [ ] Identificar siguiente bloqueo
+      - [ ] Aplicar parche rápido
+      - [ ] Validar funcionamiento
+      
+      ### PRIORIDADES
+      1. **CRÍTICO**: Sistema de autenticación
+      2. **ALTO**: Build system funcional
+      3. **MEDIO**: Dependencias estables
+      4. **BAJO**: Features avanzadas
+    </next_steps>
+  </response_format>
+  
+  <stop_conditions>
+    <success>
+      - Sistema de autenticación funciona
+      - Aplicaciones se pueden levantar
+      - Build system compila sin errores fatales
+      - Funcionalidad básica disponible
+      - Usuarios pueden usar la plataforma
+    </success>
+    
+    <failure>
+      - Imposible reparar autenticación
+      - Build system completamente corrupto
+      - Dependencias irresolubles
+      - Más de 3 errores críticos sin resolver
+    </failure>
+  </stop_conditions>
+  
+  <quality_standards>
+    <repair_priority>
+      - FUNCIONAMIENTO > PERFECCIÓN
+      - ESTABILIDAD > OPTIMIZACIÓN
+      - VELOCIDAD > ELEGANCIA
+      - PARCHE > REFACTORIZACIÓN
+    </repair_priority>
+    
+    <documentation_requirements>
+      - Registrar cada reparación aplicada
+      - Documentar parches temporales
+      - Marcar para refactorización futura
+      - Actualizar auditoria-gaps-mvp.json
+    </documentation_requirements>
+  </quality_standards>
+  
+  <emergency_procedures>
+    <critical_failure>
+      - Si autenticación no se puede reparar: Crear sistema mínimo funcional
+      - Si build system está corrupto: Usar configuración básica de Next.js
+      - Si dependencias están rotas: Usar CDN o imports directos
+      - Si todo falla: Crear aplicación mínima funcional
+    </critical_failure>
+    
+    <fallback_system>
+      - Sistema de autenticación básico con localStorage
+      - Build manual sin tsup
+      - Dependencias mínimas
+      - Funcionalidad esencial únicamente
+    </fallback_system>
+  </emergency_procedures>
+</domain_context>

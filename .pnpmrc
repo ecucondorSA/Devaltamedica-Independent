@@ -1,0 +1,53 @@
+# 🔧 AltaMedica PNPM Configuration - Sin restricciones
+# Configuración optimizada para desarrollo local Windows
+
+# Workspace settings
+auto-install-peers=true
+strict-peer-dependencies=false
+shamefully-hoist=true
+shared-workspace-lockfile=true
+link-workspace-packages=true
+prefer-workspace-packages=true
+save-workspace-protocol=false
+enable-pre-post-scripts=true
+
+# Hoisting sin restricciones
+hoist=true
+hoist-pattern[]=*
+public-hoist-pattern[]=*
+
+# Performance optimization
+child-concurrency=10
+network-concurrency=16
+side-effects-cache=true
+side-effects-cache-readonly=false
+
+# Installation
+prefer-frozen-lockfile=false
+frozen-lockfile=false
+package-import-method=auto
+recursive-install=true
+
+# Node modules
+modules-dir=node_modules
+virtual-store-dir=node_modules/.pnpm
+modules-cache-max-age=604800000
+
+# Logging
+loglevel=info
+report-summary=true
+
+# Registry
+registry=https://registry.npmjs.org/
+
+# Symlinks
+symlink=true
+
+# Windows specific
+use-running-store-server=false
+verify-store-integrity=false
+
+# Resolver
+resolution-mode=highest
+dedupe-peer-dependents=false
+resolve-peers-from-workspace-root=true

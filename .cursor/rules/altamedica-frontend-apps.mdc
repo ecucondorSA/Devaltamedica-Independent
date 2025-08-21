@@ -1,0 +1,103 @@
+# 📱 AltaMedica Frontend Apps - Guía de Desarrollo
+
+## 🏗️ Arquitectura de Aplicaciones
+
+### 🎯 Aplicaciones Principales
+
+#### **Web App** (`apps/web-app/`)
+- **Propósito**: Portal principal para pacientes
+- **Tecnologías**: Next.js 15, React 19, Tailwind CSS
+- **Características**: Landing page, registro, login, dashboard
+
+#### **Doctors App** (`apps/doctors/`)
+- **Propósito**: Portal para profesionales médicos
+- **Tecnologías**: Next.js, React, TypeScript
+- **Características**: Gestión de citas, historiales, videollamadas
+
+#### **Patients App** (`apps/patients/`)
+- **Propósito**: Portal para pacientes
+- **Tecnologías**: Next.js, React, PWA
+- **Características**: Agendar citas, historial médico, chat
+
+#### **Companies App** (`apps/companies/`)
+- **Propósito**: Portal B2B para empresas médicas
+- **Tecnologías**: Next.js, React, Mapbox
+- **Características**: Marketplace, geolocalización, servicios
+
+#### **Admin App** (`apps/admin/`)
+- **Propósito**: Panel administrativo
+- **Tecnologías**: Next.js, React, Dashboard UI
+- **Características**: Gestión de usuarios, métricas, auditoría
+
+## 🎨 Sistema de Diseño
+
+### 🎨 Componentes UI
+- **Usar packages compartidos** de `packages/ui/`
+- **Seguir design system** consistente
+- **Implementar responsive design** mobile-first
+- **Usar Tailwind CSS** para estilos
+
+### 🎭 Estados y Animaciones
+- **Framer Motion** para transiciones
+- **Loading states** para mejor UX
+- **Error boundaries** para manejo de errores
+- **Skeleton loaders** para contenido
+
+## 🔐 Autenticación y Autorización
+
+### 🚪 Sistema de Login
+- **Firebase Auth** para autenticación
+- **JWT tokens** para sesiones
+- **Protección de rutas** por rol
+- **Redirect automático** post-login
+
+### 🛡️ Protección de Rutas
+- **Middleware de autenticación**
+- **Verificación de permisos** por página
+- **Guards de componente** para acceso condicional
+
+## 📱 PWA y Mobile
+
+### 📱 Progressive Web App
+- **Service Worker** para offline
+- **Manifest.json** para instalación
+- **Push notifications** para citas
+- **Background sync** para datos
+
+### 📱 Responsive Design
+- **Mobile-first approach**
+- **Breakpoints consistentes** con Tailwind
+- **Touch-friendly** interfaces
+- **Performance optimizada** para móviles
+
+## 🧪 Testing Frontend
+
+### 🧪 Tests Unitarios
+- **React Testing Library** para componentes
+- **Vitest** como test runner
+- **Mocks** para APIs externas
+- **Snapshots** para regresiones
+
+### 🧪 Tests E2E
+- **Playwright** para flujos completos
+- **Cypress** para testing de componentes
+- **Tests de accesibilidad** integrados
+- **Performance testing** con Lighthouse
+
+## 🚀 Performance y Optimización
+
+### ⚡ Next.js Optimizations
+- **Server Components** cuando sea posible
+- **Image optimization** automática
+- **Code splitting** por ruta
+- **Bundle analysis** regular
+
+### 📊 Métricas de Performance
+- **Core Web Vitals** monitoreados
+- **Lighthouse scores** > 90
+- **Bundle size** optimizado
+- **Lazy loading** de componentes
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,171 @@
+/* Estilos de Accesibilidad para Presbicia y Usuarios Mayores */
+
+/* Tamaños de fuente aumentados */
+.text-size-large {
+  font-size: 1.125rem !important; /* 18px base */
+}
+
+.text-size-large h1 { font-size: 2.5rem !important; }
+.text-size-large h2 { font-size: 2rem !important; }
+.text-size-large h3 { font-size: 1.75rem !important; }
+.text-size-large h4 { font-size: 1.5rem !important; }
+.text-size-large .text-xs { font-size: 0.875rem !important; }
+.text-size-large .text-sm { font-size: 1rem !important; }
+.text-size-large .text-base { font-size: 1.125rem !important; }
+.text-size-large .text-lg { font-size: 1.25rem !important; }
+
+.text-size-extra-large {
+  font-size: 1.25rem !important; /* 20px base */
+}
+
+.text-size-extra-large h1 { font-size: 3rem !important; }
+.text-size-extra-large h2 { font-size: 2.5rem !important; }
+.text-size-extra-large h3 { font-size: 2rem !important; }
+.text-size-extra-large h4 { font-size: 1.75rem !important; }
+.text-size-extra-large .text-xs { font-size: 1rem !important; }
+.text-size-extra-large .text-sm { font-size: 1.125rem !important; }
+.text-size-extra-large .text-base { font-size: 1.25rem !important; }
+.text-size-extra-large .text-lg { font-size: 1.5rem !important; }
+
+/* Mayor espaciado entre líneas para mejor legibilidad */
+.text-size-large p,
+.text-size-large li,
+.text-size-large div {
+  line-height: 1.7 !important;
+}
+
+.text-size-extra-large p,
+.text-size-extra-large li,
+.text-size-extra-large div {
+  line-height: 1.8 !important;
+}
+
+/* Alto contraste */
+.high-contrast {
+  --text-color: #000000;
+  --bg-color: #ffffff;
+  --border-color: #000000;
+}
+
+.high-contrast body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.high-contrast button,
+.high-contrast a {
+  border: 2px solid #000000 !important;
+  font-weight: 600 !important;
+}
+
+.high-contrast .text-gray-500,
+.high-contrast .text-gray-600,
+.high-contrast .text-gray-700 {
+  color: #000000 !important;
+}
+
+.high-contrast .bg-gray-50,
+.high-contrast .bg-gray-100 {
+  background-color: #f0f0f0 !important;
+}
+
+.high-contrast .border-gray-200,
+.high-contrast .border-gray-300 {
+  border-color: #000000 !important;
+}
+
+/* Objetivos de clic más grandes */
+.large-targets button,
+.large-targets a,
+.large-targets input[type="checkbox"],
+.large-targets input[type="radio"] {
+  min-height: 48px !important;
+  min-width: 48px !important;
+  padding: 12px 16px !important;
+}
+
+.large-targets .p-1 { padding: 8px !important; }
+.large-targets .p-2 { padding: 12px !important; }
+.large-targets .p-3 { padding: 16px !important; }
+.large-targets .p-4 { padding: 20px !important; }
+
+/* Reducir animaciones */
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.reduced-motion .animate-pulse,
+.reduced-motion .animate-spin,
+.reduced-motion .animate-bounce {
+  animation: none !important;
+}
+
+/* Mejorar focus para teclado */
+*:focus {
+  outline: 3px solid #0ea5e9 !important;
+  outline-offset: 2px !important;
+}
+
+/* Espaciado adicional para texto grande */
+.text-size-large .space-y-2 > * + * {
+  margin-top: 0.75rem !important;
+}
+
+.text-size-large .space-y-3 > * + * {
+  margin-top: 1rem !important;
+}
+
+.text-size-large .space-y-4 > * + * {
+  margin-top: 1.25rem !important;
+}
+
+.text-size-extra-large .space-y-2 > * + * {
+  margin-top: 1rem !important;
+}
+
+.text-size-extra-large .space-y-3 > * + * {
+  margin-top: 1.25rem !important;
+}
+
+.text-size-extra-large .space-y-4 > * + * {
+  margin-top: 1.5rem !important;
+}
+
+/* Iconos más grandes con texto grande */
+.text-size-large svg {
+  width: 1.25em !important;
+  height: 1.25em !important;
+}
+
+.text-size-extra-large svg {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+
+/* Mejorar contraste de colores suaves */
+.text-size-large .text-gray-400,
+.text-size-extra-large .text-gray-400 {
+  color: #6b7280 !important; /* gray-500 */
+}
+
+.text-size-large .text-gray-500,
+.text-size-extra-large .text-gray-500 {
+  color: #4b5563 !important; /* gray-600 */
+}
+
+/* Hacer los bordes más visibles */
+.text-size-large .border,
+.text-size-extra-large .border {
+  border-width: 2px !important;
+}
+
+/* Mejorar legibilidad de placeholders */
+.text-size-large input::placeholder,
+.text-size-large textarea::placeholder,
+.text-size-extra-large input::placeholder,
+.text-size-extra-large textarea::placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+}

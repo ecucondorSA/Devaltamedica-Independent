@@ -1,0 +1,44 @@
+# Gitpod Configuration for the Altamedica Monorepo (Optimized for Size)
+# This version uses a "Lean Pre-build" strategy to avoid hitting resource limits.
+
+image: gitpod/workspace-full
+
+tasks:
+  - name: Setup & Lean Pre-build
+    before:
+      # Enable corepack to manage pnpm
+      corepack enable
+      corepack prepare pnpm@latest --activate
+    # 'init' (pre-build) now only installs dependencies, which is the most time-consuming step.
+    # We removed 'turbo run build' to prevent exceeding disk space limits.
+    init: |
+      echo "Starting Lean Pre-build: Installing dependencies..."
+      pnpm install
+      echo "Pre-build complete. Dependencies are ready."
+    # 'command' is what runs when you open the workspace.
+    # The dev servers will start here. The initial compilation will be fast on Gitpod's hardware.
+    command: |
+      echo "Starting development servers..."
+      turbo run dev
+
+# Expose the ports used by the different applications
+ports:
+  - port: 3000 # Web App
+    onOpen: ignore
+  - port: 3001 # API Server
+    onOpen: ignore
+  - port: 3002 # Patients App
+    onOpen: open-preview
+  - port: 3003 # Doctors App
+    onOpen: ignore
+  - port: 3004 # Companies App
+    onOpen: ignore
+
+# Pre-install useful VS Code extensions
+vscode:
+  extensions:
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+    - bradlc.vscode-tailwindcss
+    - eamodio.gitlens
+    - github.copilot

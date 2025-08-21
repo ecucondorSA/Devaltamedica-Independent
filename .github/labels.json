@@ -1,0 +1,77 @@
+[
+  {
+    "name": "size/XS",
+    "color": "00FF00",
+    "description": "Cambios muy pequeños (<10 líneas)"
+  },
+  {
+    "name": "size/S",
+    "color": "40FF00",
+    "description": "Cambios pequeños (10-50 líneas)"
+  },
+  {
+    "name": "size/M",
+    "color": "FFFF00",
+    "description": "Cambios medianos (50-200 líneas)"
+  },
+  {
+    "name": "size/L",
+    "color": "FF8000",
+    "description": "Cambios grandes (200-500 líneas)"
+  },
+  {
+    "name": "size/XL",
+    "color": "FF0000",
+    "description": "Cambios muy grandes (>500 líneas)"
+  },
+  {
+    "name": "medical",
+    "color": "0052CC",
+    "description": "Funcionalidad médica"
+  },
+  {
+    "name": "hipaa",
+    "color": "7B68EE",
+    "description": "Relacionado con HIPAA compliance"
+  },
+  {
+    "name": "security",
+    "color": "D73A49",
+    "description": "Seguridad y autenticación"
+  },
+  {
+    "name": "performance",
+    "color": "F9D71C",
+    "description": "Optimización de rendimiento"
+  },
+  {
+    "name": "bug",
+    "color": "B60205",
+    "description": "Error o problema"
+  },
+  {
+    "name": "enhancement",
+    "color": "84B6EB",
+    "description": "Mejora o nueva funcionalidad"
+  },
+  {
+    "name": "documentation",
+    "color": "0075CA",
+    "description": "Documentación"
+  },
+  {
+    "name": "testing",
+    "color": "C5DEF5",
+    "description": "Tests y cobertura"
+  },
+  {
+    "name": "ci/cd",
+    "color": "BFD4F2",
+    "description": "Pipeline y automatización"
+  },
+  {
+    "name": "dependencies",
+    "color": "0366D6",
+    "description": "Actualización de dependencias"
+  }
+]

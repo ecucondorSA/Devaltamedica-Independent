@@ -1,0 +1,85 @@
+# 🚀 AltaMedica API Server - Guía de Desarrollo
+
+## 🏗️ Arquitectura del Servidor
+
+### 📁 Estructura de Directorios
+- **`src/app/`** - Lógica de aplicación y middleware
+- **`src/auth/`** - Autenticación y autorización
+- **`src/components/`** - Componentes del servidor
+- **`src/database/`** - Configuración de base de datos
+- **`src/monitoring/`** - Monitoreo y métricas
+
+### 🔐 Sistema de Autenticación
+- **JWT tokens** para sesiones de usuario
+- **Middleware de autorización** por roles
+- **Rate limiting** por IP y usuario
+- **Audit logging** para accesos médicos
+
+### 🗄️ Base de Datos
+- **Prisma ORM** para operaciones de BD
+- **PostgreSQL** como base principal
+- **Redis** para caché y sesiones
+- **Migrations** versionadas y documentadas
+
+## 📡 Endpoints Principales
+
+### 👥 Usuarios
+- `POST /api/auth/login` - Autenticación
+- `POST /api/auth/register` - Registro
+- `GET /api/users/profile` - Perfil del usuario
+- `PUT /api/users/profile` - Actualizar perfil
+
+### 🏥 Médicos
+- `GET /api/doctors` - Listar médicos
+- `GET /api/doctors/:id` - Obtener médico
+- `POST /api/doctors/availability` - Disponibilidad
+- `GET /api/doctors/:id/appointments` - Citas del médico
+
+### 👨‍⚕️ Pacientes
+- `GET /api/patients` - Listar pacientes
+- `GET /api/patients/:id` - Obtener paciente
+- `POST /api/appointments` - Crear cita
+- `GET /api/appointments/:id` - Obtener cita
+
+### 💼 Empresas
+- `GET /api/companies` - Listar empresas
+- `POST /api/companies` - Crear empresa
+- `GET /api/companies/:id/services` - Servicios de la empresa
+
+## 🔒 Seguridad y Compliance
+
+### HIPAA Compliance
+- **Encriptación AES-256** para datos médicos
+- **Logging de auditoría** para accesos
+- **Timeouts de sesión** automáticos
+- **Validación de permisos** por recurso
+
+### Middleware de Seguridad
+- **Helmet** para headers de seguridad
+- **CORS** configurado por dominio
+- **Sanitización** de inputs
+- **Validación** con esquemas (Zod)
+
+## 🧪 Testing
+
+### Tests Unitarios
+- **Vitest** como framework principal
+- **Mocks** para dependencias externas
+- **Cobertura** mínima del 85%
+
+### Tests de Integración
+- **Supertest** para testing de APIs
+- **Base de datos** de testing separada
+- **Cleanup** automático entre tests
+
+## 📊 Monitoreo
+
+### Métricas
+- **Prometheus** para métricas del sistema
+- **Grafana** para visualización
+- **Sentry** para error tracking
+- **Health checks** automáticos
+description:
+globs:
+alwaysApply: false
+---

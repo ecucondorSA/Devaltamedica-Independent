@@ -1,0 +1,23 @@
+# Placeholder para thumbnail: appointment-booking
+# Este archivo debe ser reemplazado por la imagen real
+# Formato: JPG
+# Resolución recomendada: 1280x720
+# Tamaño máximo: 500KB
+# Calidad: 85%
+
+# En producción, este archivo debe contener la imagen real
+# Para desarrollo, puede ser una imagen de prueba o un enlace a un CDN
+
+# Ejemplo de URL de CDN:
+# https://cdn.altamedica.com/thumbnails/appointment-booking.jpg
+
+# Para desarrollo local, puedes usar:
+# /images/video-thumbnails/appointment-booking.jpg
+
+# Nota: Las imágenes reales deben ser optimizadas para web
+# y comprimidas para reducir el tiempo de carga
+
+# Dimensiones recomendadas:
+# - Desktop: 1280x720
+# - Tablet: 960x540
+# - Mobile: 640x360

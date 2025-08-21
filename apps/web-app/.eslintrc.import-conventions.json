@@ -1,0 +1,56 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "@altamedica/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/no-relative-parent-imports": "error",
+    "import/prefer-default-export": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["../../../*"],
+            "message": "Use aliases (@/*) instead of deep relative imports"
+          },
+          {
+            "group": ["../../config/firebase"],
+            "message": "Use @/firebase alias instead"
+          },
+          {
+            "group": ["firebase/firestore"],
+            "message": "Import from @/firebase or @/lib/firestore-mock instead"
+          }
+        ]
+      }
+    ]
+  }
+}

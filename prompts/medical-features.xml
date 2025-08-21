@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GPT-5 Optimized Medical Features Development Prompt
+  AltaMedica Platform - Healthcare-Grade Development Standards
+  Version: 1.0.0
+  Last Updated: 2025-08-15
+-->
+
+<medical_development_context>
+  <system_overview>
+    AltaMedica es una plataforma médica empresarial con telemedicina WebRTC,
+    diagnósticos IA y compliance HIPAA estricto. Monorepo pnpm con 7 apps
+    especializadas cubriendo el flujo completo de salud.
+  </system_overview>
+
+  <reasoning_configuration>
+    <!-- Configuración óptima para features médicas críticas -->
+    <reasoning_effort>high</reasoning_effort>
+    <verbosity>low</verbosity>
+    <verbosity_override context="code_generation">high</verbosity_override>
+  </reasoning_configuration>
+
+  <context_gathering>
+    <goal>Obtener contexto médico completo antes de implementar</goal>
+    <method>
+      - Búsquedas paralelas en packages/@altamedica/*
+      - Verificar UnifiedAuthSystem, UnifiedNotificationSystem primero
+      - Leer esquemas Zod en @altamedica/types
+      - Cachear rutas encontradas, no repetir búsquedas
+      - Preferir archivos CLAUDE.md por aplicación
+    </method>
+    <early_stop_criteria>
+      - Puedes nombrar archivos exactos a modificar
+      - Encontraste el sistema unificado correspondiente
+      - Identificaste tipos/validaciones existentes
+    </early_stop_criteria>
+    <depth>
+      - Trace solo símbolos que modificarás directamente
+      - Evita expansión transitiva innecesaria
+      - Máximo 3 niveles de profundidad en imports
+    </depth>
+  </context_gathering>
+
+  <medical_persistence>
+    <!-- Control de autonomía para operaciones médicas -->
+    <emergency_mode>
+      - reasoning_effort: high
+      - No preguntar confirmaciones intermedias
+      - Actuar inmediatamente en situaciones críticas
+      - Documentar todas las decisiones para auditoría HIPAA
+      - Tool budget: ilimitado hasta resolución
+    </emergency_mode>
+    
+    <routine_operations>
+      - reasoning_effort: medium
+      - Tool budget: máximo 5 llamadas antes de resumen
+      - Confirmar antes de: modificar PHI, cambiar prescripciones
+      - Bias hacia completar la tarea sin intervención
+    </routine_operations>
+    
+    <sensitive_operations>
+      - reasoning_effort: high
+      - Siempre confirmar antes de: pagos, eliminación PHI, cambios dosis
+      - Tool budget: máximo 2 llamadas antes de confirmación
+      - Documentar razón médica para cada decisión
+    </sensitive_operations>
+  </medical_persistence>
+
+  <code_standards>
+    <architecture_rules>
+      - SIEMPRE usar sistemas unificados existentes
+      - NUNCA duplicar servicios (auth, notifications, marketplace)
+      - Frontend llama a api-server, nunca directamente a DB
+      - Tipos en @altamedica/types con validación Zod
+      - Hooks reutilizables en @altamedica/hooks
+      - UI components en @altamedica/ui
+    </architecture_rules>
+
+    <medical_safety>
+      - PHI SIEMPRE encriptado (AES-256-GCM)
+      - Audit logs obligatorios para operaciones médicas
+      - Doble validación para cálculos de dosis
+      - Tests unitarios obligatorios para funciones críticas
+      - Seguir estándares FHIR R4 para estructuras de datos
+      - Cumplimiento WCAG 2.2 AA para interfaces paciente
+    </medical_safety>
+
+    <implementation_flow>
+      1. Definir tipos en @altamedica/types
+      2. Crear endpoint en api-server con validación
+      3. Implementar hooks en @altamedica/api-client
+      4. Crear componentes UI en @altamedica/ui si son reutilizables
+      5. Integrar en aplicación específica
+      6. Agregar tests E2E para flujo completo
+      7. Actualizar documentación CLAUDE.md
+    </implementation_flow>
+
+    <forbidden_patterns>
+      - localStorage para tokens (usar httpOnly cookies)
+      - console.log con PHI (usar sistema de logging seguro)
+      - any types en código médico (siempre tipado estricto)
+      - Importaciones directas de firebase (usar wrappers)
+      - Crear nuevos servicios sin verificar UnifiedSystems
+    </forbidden_patterns>
+  </code_standards>
+
+  <tool_preambles>
+    <!-- Mensajes explicativos para mejor UX -->
+    <before_medical_operation>
+      Voy a implementar [FEATURE] siguiendo estándares médicos HIPAA.
+      Plan estructurado:
+      1. [PASO_1]
+      2. [PASO_2]
+      3. [PASO_3]
+      Comenzando implementación...
+    </before_medical_operation>
+    
+    <progress_update>
+      ✅ Completado: [TAREA_ANTERIOR]
+      🔄 Trabajando en: [TAREA_ACTUAL]
+      ⏭️ Siguiente: [PROXIMA_TAREA]
+    </progress_update>
+    
+    <completion_summary>
+      ✅ Feature médica implementada:
+      - [CAMBIO_1]
+      - [CAMBIO_2]
+      - [CAMBIO_3]
+      
+      Compliance verificado:
+      - ✅ HIPAA audit logs
+      - ✅ PHI encriptación
+      - ✅ Tests agregados
+    </completion_summary>
+  </tool_preambles>
+
+  <testing_requirements>
+    <unit_tests>
+      - Cobertura mínima: 85% para código médico
+      - Obligatorio para: cálculos, validaciones, transformaciones
+      - Framework: Vitest con @testing-library/react
+    </unit_tests>
+    
+    <integration_tests>
+      - Flujos completos paciente-doctor
+      - Verificación de permisos y roles
+      - Validación de audit trails
+    </integration_tests>
+    
+    <e2e_tests>
+      - Playwright para flujos críticos
+      - Incluir casos de error y recuperación
+      - Verificar accesibilidad WCAG 2.2 AA
+    </e2e_tests>
+  </testing_requirements>
+
+  <documentation>
+    <required_updates>
+      - CLAUDE.md de la app afectada
+      - README.md si es feature mayor
+      - Tipos JSDoc para funciones públicas
+      - Changelog con formato conventional commits
+    </required_updates>
+    
+    <code_comments>
+      - Solo para lógica médica compleja
+      - Referencias a estándares (FHIR, HL7)
+      - Warnings de seguridad PHI
+      - NO comentarios obvios o redundantes
+    </code_comments>
+  </documentation>
+</medical_development_context>

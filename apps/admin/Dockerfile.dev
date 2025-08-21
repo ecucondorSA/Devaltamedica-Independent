@@ -1,0 +1,36 @@
+﻿# AltaMedica - admin
+FROM node:22-alpine AS base
+
+RUN apk add --no-cache dumb-init curl bash git
+RUN addgroup -g 1001 -S altamedica && adduser -S altamedica -u 1001 -G altamedica
+RUN npm install -g pnpm@10.13.1
+
+WORKDIR /app
+RUN chown altamedica:altamedica /app
+USER altamedica
+
+FROM base AS development
+
+COPY --chown=altamedica:altamedica package.json pnpm-workspace.yaml ./
+COPY --chown=altamedica:altamedica pnpm-lock.yaml ./
+COPY --chown=altamedica:altamedica apps/admin/package.json ./apps/admin/
+COPY --chown=altamedica:altamedica packages/ ./packages/
+
+RUN pnpm install --frozen-lockfile
+
+COPY --chown=altamedica:altamedica apps/admin/ ./apps/admin/
+
+ENV NODE_ENV=development
+ENV PORT=3005
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV CHOKIDAR_USEPOLLING=true
+
+RUN mkdir -p logs uploads temp && chown -R altamedica:altamedica logs uploads temp
+
+EXPOSE 3005
+
+WORKDIR /app/apps/admin
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["pnpm", "dev"]
+

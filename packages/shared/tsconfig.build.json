@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "stripInternal": false,
+    "composite": false
+  },
+  "include": ["src/**/*", "src/services/logger.service.ts"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts", "**/__tests__/**/*"]
+}

@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "cwd": "C:\\Users\\Eduardo\\Documents\\devaltamedica",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "cwd": "C:\\Users\\Eduardo\\Documents\\devaltamedica",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

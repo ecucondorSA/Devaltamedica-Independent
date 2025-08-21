@@ -1,0 +1,257 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\playwright.config.ts",
+    "rootDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "platform": "AltaMedica Medical Platform",
+      "compliance": [
+        "HIPAA",
+        "SOC2",
+        "WCAG 2.2 AA"
+      ],
+      "medical_focus": true,
+      "emergency_testing": true,
+      "telemedicine_enabled": true
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "reports/html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports/test-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "reports/junit-results.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\utils\\medical-compliance-reporter.ts",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "firefox-desktop",
+        "name": "firefox-desktop",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "webkit-desktop",
+        "name": "webkit-desktop",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "platform": "AltaMedica Medical Platform",
+          "compliance": [
+            "HIPAA",
+            "SOC2",
+            "WCAG 2.2 AA"
+          ],
+          "medical_focus": true,
+          "emergency_testing": true,
+          "telemedicine_enabled": true
+        },
+        "id": "tablet-medical",
+        "name": "tablet-medical",
+        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/medical-workflows/**/*.spec.ts",
+          "**/compliance/**/*.spec.ts",
+          "**/performance/**/*.spec.ts",
+          "**/integration/**/*.spec.ts",
+          "**/critical-paths/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.2",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: API Server not healthy",
+      "stack": "Error: API Server not healthy\n    at globalSetup (C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts:21:13)",
+      "location": {
+        "file": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts",
+        "column": 13,
+        "line": 21
+      },
+      "snippet": "\u001b[90m   at \u001b[39m..\\config\\global-setup.ts:21\n\n\u001b[0m \u001b[90m 19 |\u001b[39m     \n \u001b[90m 20 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mhealth\u001b[33m.\u001b[39msuccess) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 21 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m'API Server not healthy'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 22 |\u001b[39m     }\n \u001b[90m 23 |\u001b[39m     \n \u001b[90m 24 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ API Server is healthy'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+    }
+  ],
+  "stats": {
+    "startTime": "2025-08-03T01:48:51.430Z",
+    "duration": 2319.235,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

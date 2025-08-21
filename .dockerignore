@@ -1,0 +1,143 @@
+# Global ignores to shrink Docker build context
+.git
+.github
+.vscode
+.idea
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/.cache
+**/.pnpm-store
+**/coverage
+**/playwright-report
+**/*.log
+logs
+tmp
+**/tmp
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore environment files; use Compose env instead
+*.env
+*.env.*
+
+# Ignore local build artifacts
+**/build
+**/out
+# ===== ROOT .dockerignore (Optimizado Option C) =====
+# Objetivo: minimizar contexto (antes ~1.7GB) sin romper builds TypeScript/Next.
+# Mantener archivos de configuración esenciales. Evitar excluir tsconfig / eslint / .md claves.
+
+# --- Node / Package Managers ---
+node_modules/
+**/node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Build artefacts ---
+.next/
+dist/
+build/
+out/
+coverage/
+.nyc_output/
+*.tsbuildinfo
+.turbo/
+**/.turbo/
+
+# --- Logs ---
+logs/
+**/logs/
+*.log
+*.log.*
+
+# --- Environment locals (permitir .env ejemplo pero no secretos locales) ---
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# --- Git ---
+.git/
+.gitignore
+.gitattributes
+
+# --- Tests / QA assets pesados ---
+**/cypress/videos/
+**/cypress/screenshots/
+**/cypress/fixtures/
+**/__tests__/
+**/test-results/
+
+# --- Temporal / Cache ---
+.tmp/
+tmp/
+temp/
+*.tmp
+.cache/
+.eslintcache
+
+# --- Documentación pesada opcional (permitimos README principal) ---
+# Si algún build requiere docs, comentar estas líneas.
+/docs/ARCHIVE/
+**/design-notes/
+
+# --- Scripts & tooling locales NO requeridos en runtime ---
+# (Mantener script de build referenciados si existieran; evitar copiar herramienta pesada)
+# Excluir solo scripts de desarrollo, mantener scripts de build
+**/scripts/dev/**
+**/scripts/test/**
+**/scripts/deploy/**
+**/scripts/ci/**
+# Mantener scripts de build como rename-esm.js
+**/tools/**
+!scripts/production/**
+
+# --- Datos grandes / multimedia ---
+public/videos/
+public/models/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.glb
+*.gltf
+*.fbx
+
+# --- Backups / Misc ---
+*.backup
+*.bak
+*.old
+*.orig
+
+# --- Certificados / claves ---
+*.pem
+certificates/
+
+# --- Monorepo específicos ---
+apps/*/.turbo/
+packages/*/.turbo/
+apps/*/node_modules/
+packages/*/node_modules/
+
+# --- Firebase / Functions node_modules pesados que dieron error ---
+apps/api-server/functions/node_modules/
+apps/*/functions/node_modules/
+
+# --- NO excluir: tsconfig*, *.md, package.json, pnpm-lock.yaml ---
+# (eran excluidos antes causando riesgo de fallo de compilación)
+
+# Fin.  Ver README sección "Docker Build Optimization" para detalles.

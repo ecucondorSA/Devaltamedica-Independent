@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain_context>
+  <reasoning_configuration>
+    <reasoning_effort>high</reasoning_effort>
+    <verbosity>medium</verbosity>
+    <tool_budget>unlimited</tool_budget>
+  </reasoning_configuration>
+  
+  <context_gathering>
+    <goal>Auditoría REAL de funcionalidad - NO teoría</goal>
+    <method>
+      - Probar APLICACIONES REALES, no solo leer código
+      - Identificar errores FUNCIONALES, no solo de estilo
+      - Priorizar lo que NO FUNCIONA sobre lo que está "bien documentado"
+      - Enfocarse en funcionalidad del usuario final
+    </method>
+    <early_stop>Cuando identifiques 3+ errores críticos que impiden el uso</early_stop>
+  </context_gathering>
+  
+  <implementation_patterns>
+    <audit_priority>
+      1. FUNCIONALIDAD BÁSICA - ¿Se puede usar la app?
+      2. BUILD SYSTEM - ¿Compila sin errores?
+      3. DEPENDENCIAS - ¿Se resuelven correctamente?
+      4. FEATURES - ¿Funcionan las características principales?
+      5. COMPLIANCE - Solo después de que todo lo anterior funcione
+    </audit_priority>
+    
+    <testing_approach>
+      - Ejecutar comandos reales (build, dev, test)
+      - Verificar errores en consola y logs
+      - Probar funcionalidades críticas del usuario
+      - Identificar bloqueos reales, no teóricos
+    </testing_approach>
+  </implementation_patterns>
+  
+  <tool_preambles>
+    <before_operation>
+      🎯 PLAN: [Diagnóstico] → [Reparación] → [Validación] → [Documentación]
+    </before_operation>
+    <progress_update>
+      ✅ Done: [Previous]
+      🔄 Current: [Now]
+      🚨 Critical: [Blockers found]
+    </progress_update>
+  </tool_preambles>
+  
+  <medical_persistence>
+    <emergency_mode>
+      reasoning_effort: high
+      confirmation: never
+      tool_budget: unlimited
+      priority: FUNCTIONALITY_OVER_COMPLIANCE
+    </emergency_mode>
+  </medical_persistence>
+  
+  <audit_checklist>
+    <critical_functionality>
+      - [ ] ¿La aplicación se levanta sin errores 500?
+      - [ ] ¿El sistema de autenticación funciona?
+      - [ ] ¿Se puede navegar entre rutas principales?
+      - [ ] ¿Los componentes se renderizan correctamente?
+      - [ ] ¿No hay errores de hooks en consola?
+    </critical_functionality>
+    
+    <build_system>
+      - [ ] ¿pnpm run build funciona en todas las apps?
+      - [ ] ¿No hay errores de TypeScript?
+      - [ ] ¿Los paquetes se compilan correctamente?
+      - [ ] ¿No hay warnings de configuración?
+      - [ ] ¿Los exports de package.json están correctos?
+    </build_system>
+    
+    <dependencies>
+      - [ ] ¿Todas las dependencias se resuelven?
+      - [ ] ¿No hay conflictos de versiones?
+      - [ ] ¿Los imports funcionan correctamente?
+      - [ ] ¿Los paquetes se pueden usar?
+      - [ ] ¿No hay errores de módulos?
+    </dependencies>
+  </audit_checklist>
+  
+  <response_format>
+    <gap_report>
+      {
+        "id": "GAP-REAL-XXX",
+        "dominio": "core_tecnico",
+        "titulo": "DESCRIPCIÓN DEL PROBLEMA REAL",
+        "prioridad": "P0-CRÍTICO",
+        "tipo": "bug_critico|build_system|dependencies",
+        "riesgo": "CRÍTICO",
+        "justificacion": "Por qué esto impide usar la plataforma",
+        "sintomas": ["Error específico 1", "Error específico 2"],
+        "causa_raiz": "Causa técnica identificada",
+        "aceptacion": ["Criterio 1", "Criterio 2"],
+        "tiempo_estimado": "X horas",
+        "impacto_usuario": "X% - Descripción del impacto"
+      }
+    </gap_report>
+    
+    <action_plan>
+      ## 🚨 PLAN DE ACCIÓN INMEDIATO
+      
+      ### PASO 1: DIAGNÓSTICO (X min)
+      - [ ] Verificar estado actual
+      - [ ] Identificar errores críticos
+      - [ ] Priorizar por impacto
+      
+      ### PASO 2: REPARACIÓN (X min)
+      - [ ] Corregir problema 1
+      - [ ] Corregir problema 2
+      - [ ] Validar funcionamiento
+      
+      ### PASO 3: VALIDACIÓN (X min)
+      - [ ] Testear funcionalidad
+      - [ ] Verificar que no hay regresiones
+      - [ ] Confirmar que funciona
+    </action_plan>
+  </response_format>
+  
+  <stop_conditions>
+    <success>
+      - Todas las aplicaciones funcionan sin errores críticos
+      - El sistema de build funciona correctamente
+      - Las dependencias se resuelven sin problemas
+      - Se puede usar la plataforma para su propósito principal
+    </success>
+    
+    <failure>
+      - Más de 5 errores críticos sin resolver
+      - Imposible hacer funcionar ninguna aplicación
+      - Sistema de build completamente corrupto
+      - Dependencias irresolubles
+    </failure>
+  </stop_conditions>
+  
+  <quality_standards>
+    <functional_priority>
+      - FUNCIONALIDAD > COMPLIANCE
+      - USABILIDAD > PERFECCIÓN
+      - FUNCIONAMIENTO > DOCUMENTACIÓN
+      - REAL > TEÓRICO
+    </functional_priority>
+    
+    <documentation_requirements>
+      - Actualizar auditoria-gaps-mvp.json con GAPs reales
+      - Documentar problemas funcionales encontrados
+      - Registrar tiempo real de reparación
+      - Mantener CLAUDE.md actualizado
+    </documentation_requirements>
+  </quality_standards>
+</domain_context>

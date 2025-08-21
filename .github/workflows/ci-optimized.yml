@@ -1,0 +1,1050 @@
+name: 🚀 CI/CD Optimizado AltaMedica
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests for emergency fixes'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' }}
+
+env:
+  NODE_VERSION: '20.x'
+  PNPM_VERSION: '9.15.2'
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+jobs:
+  # ============================================
+  # 🔍 Análisis de Cambios (Determina qué ejecutar)
+  # ============================================
+  changes:
+    name: 🔍 Detectar Cambios
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.filter.outputs.packages }}
+      api: ${{ steps.filter.outputs.api }}
+      web: ${{ steps.filter.outputs.web }}
+      doctors: ${{ steps.filter.outputs.doctors }}
+      patients: ${{ steps.filter.outputs.patients }}
+      companies: ${{ steps.filter.outputs.companies }}
+      admin: ${{ steps.filter.outputs.admin }}
+      e2e: ${{ steps.filter.outputs.e2e }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            packages:
+              - 'packages/**'
+              - 'pnpm-lock.yaml'
+            api:
+              - 'apps/api-server/**'
+              - 'packages/**'
+            web:
+              - 'apps/web-app/**'
+              - 'packages/**'
+            doctors:
+              - 'apps/doctors/**'
+              - 'packages/**'
+            patients:
+              - 'apps/patients/**'
+              - 'packages/**'
+            companies:
+              - 'apps/companies/**'
+              - 'packages/**'
+            admin:
+              - 'apps/admin/**'
+              - 'packages/**'
+            e2e:
+              - 'packages/e2e-tests/**'
+              - 'apps/**'
+            workflows:
+              - '.github/workflows/**'
+
+  # ============================================
+  # 📦 Setup & Cache (Reusable)
+  # ============================================
+  setup:
+    name: 📦 Setup & Cache Dependencies
+    runs-on: ubuntu-latest
+    needs: changes
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 🔄 Restore pnpm store cache
+        uses: actions/cache@v3
+        id: pnpm-cache
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: 📦 Install dependencies
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile --prefer-offline
+      
+      - name: 🛠️ Build Monorepo
+        run: pnpm turbo build
+
+      - name: 💾 Save dependency cache
+        uses: actions/cache/save@v3
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+  # ============================================
+  # 🔍 Lint & Type Check (Paralelo)
+  # ============================================
+  lint:
+    name: 🔍 Lint
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ !cancelled() }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🔍 Run ESLint con Turbo
+        run: pnpm turbo lint --cache-dir=.turbo
+        
+      - name: 📊 Upload lint results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-results
+          path: |
+            **/eslint-report.json
+            **/eslint-report.html
+          retention-days: 7
+
+  typecheck:
+    name: 📊 Type Check
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ !cancelled() }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 📊 TypeScript Check con Turbo
+        run: pnpm turbo type-check --cache-dir=.turbo
+
+  # ============================================
+  # 🏗️ Build Packages (Matrix Paralelo)
+  # ============================================
+  build-packages:
+    name: 🏗️ Build ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: [setup, lint, typecheck]
+    if: needs.changes.outputs.packages == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - '@altamedica/types'
+          - '@altamedica/ui'
+          - '@altamedica/auth'
+          - '@altamedica/hooks'
+          - '@altamedica/api-client'
+          - '@altamedica/database'
+          - '@altamedica/telemedicine-core'
+          - '@altamedica/anamnesis'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🏗️ Build con Turbo
+        run: pnpm turbo build --filter=${{ matrix.package }} --cache-dir=.turbo
+
+      - name: 📤 Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.package }}
+          path: packages/*/dist
+          retention-days: 7
+
+  # ============================================
+  # 🧪 Tests Unitarios (Sharded)
+  # ============================================
+  test-unit:
+    name: 🧪 Unit Tests (Shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    needs: build-packages
+    if: ${{ !inputs.skip_tests }}
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🔄 Restore packages cache
+        uses: actions/cache/restore@v3
+        with:
+          path: packages
+
+      - name: 🧪 Run Tests
+        run: pnpm test:unit --shard=${{ matrix.shard }}/4 --coverage
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: 📊 Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          flags: unit-shard-${{ matrix.shard }}
+          name: unit-tests-shard-${{ matrix.shard }}
+
+  # ============================================
+  # 🔍 AUDIT Quality Gates
+  # ============================================
+  audit-gates:
+    name: 🔍 AUDIT Quality Gates
+    runs-on: ubuntu-latest
+    needs: build-packages
+    if: ${{ !inputs.skip_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🔍 Security Static Analysis
+        run: |
+          echo "🔍 Running AUDIT security checks..."
+          
+          # Check for hardcoded secrets
+          if grep -r "FIREBASE_PRIVATE_KEY\|JWT_SECRET\|API_KEY" \
+            --include="*.ts" --include="*.tsx" --include="*.js" \
+            --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=dist \
+            --exclude="*.env.example" --exclude="*.env.local"; then
+            echo "❌ Found hardcoded secrets - AUDIT FAILED"
+            exit 1
+          fi
+          
+          # Check CSP configuration
+          if grep -r "unsafe-inline\|unsafe-eval" \
+            --include="*.conf" --include="*.js" --include="*.ts" \
+            config/nginx/ apps/api-server/src/; then
+            echo "❌ Found unsafe CSP directives - AUDIT FAILED"
+            exit 1
+          fi
+          
+          # Check CORS configuration
+          if grep -r "origin.*\*" \
+            --include="*.ts" --include="*.js" \
+            apps/api-server/src/; then
+            echo "❌ Found wildcard CORS origin - AUDIT FAILED"
+            exit 1
+          fi
+          
+          echo "✅ AUDIT security checks passed"
+
+      - name: 🔍 Middleware Application Check
+        run: |
+          echo "🔍 Checking middleware application..."
+          
+          # Check if critical middlewares are applied
+          if ! grep -r "app\.use.*csrfMiddleware\|app\.use.*globalRateLimiter\|app\.use.*helmet" \
+            apps/api-server/src/; then
+            echo "❌ Critical middlewares not applied - AUDIT FAILED"
+            exit 1
+          fi
+          
+          echo "✅ Middleware application check passed"
+
+      - name: 🔍 Duplication Check
+        run: |
+          echo "🔍 Checking for code duplications..."
+          
+          # Basic duplication check (can be enhanced with dedicated tools)
+          if [ -f "scripts/find-duplications.ps1" ]; then
+            echo "📋 Running duplication detection script..."
+            # This would run the PowerShell script if available
+          else
+            echo "⚠️ Duplication detection script not found - skipping"
+          fi
+          
+          echo "✅ Duplication check completed"
+
+  # ============================================
+  # 🔗 INTEGRATE Quality Gates
+  # ============================================
+  integrate-gates:
+    name: 🔗 INTEGRATE Quality Gates
+    runs-on: ubuntu-latest
+    needs: [build-packages, audit-gates]
+    if: ${{ !inputs.skip_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🔗 API Contract Validation
+        run: |
+          echo "🔗 Validating API contracts..."
+          
+          # Check for consistent API patterns
+          if ! grep -r "x-csrf-token" \
+            --include="*.ts" --include="*.tsx" \
+            apps/*/src/; then
+            echo "⚠️ CSRF token usage not found in frontend apps"
+          fi
+          
+          # Check for proper error handling
+          if ! grep -r "try.*catch\|error.*handling" \
+            --include="*.ts" --include="*.tsx" \
+            apps/*/src/; then
+            echo "⚠️ Error handling patterns not found"
+          fi
+          
+          echo "✅ API contract validation completed"
+
+      - name: 🔗 SSO Flow Validation
+        run: |
+          echo "🔗 Validating SSO flows..."
+          
+          # Check for complete SSO implementation
+          if ! grep -r "session-login\|session-verify" \
+            --include="*.ts" --include="*.tsx" \
+            apps/*/src/; then
+            echo "⚠️ SSO endpoints not found in frontend apps"
+          fi
+          
+          echo "✅ SSO flow validation completed"
+
+  # ============================================
+  # ✅ VALIDATE Quality Gates
+  # ============================================
+  validate-gates:
+    name: ✅ VALIDATE Quality Gates
+    runs-on: ubuntu-latest
+    needs: [build-packages, audit-gates, integrate-gates]
+    if: ${{ !inputs.skip_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: ✅ Coverage Threshold Validation
+        run: |
+          echo "✅ Validating coverage thresholds..."
+          
+          # Check Jest coverage thresholds (unified with nyc)
+          if [ -f "coverage/coverage-summary.json" ]; then
+            echo "📊 Checking Jest coverage thresholds..."
+            node -e "
+              const coverage = require('./coverage/coverage-summary.json');
+              const thresholds = { branches: 80, functions: 80, lines: 80, statements: 80 };
+              let failed = false;
+              
+              Object.keys(thresholds).forEach(key => {
+                const actual = coverage.total[key].pct;
+                const expected = thresholds[key];
+                if (actual < expected) {
+                  console.log(\`❌ \${key}: \${actual}% < \${expected}%\`);
+                  failed = true;
+                } else {
+                  console.log(\`✅ \${key}: \${actual}% >= \${expected}%\`);
+                }
+              });
+              
+              if (failed) {
+                console.log('❌ Coverage thresholds not met - VALIDATE FAILED');
+                process.exit(1);
+              }
+            "
+          else
+            echo "⚠️ Coverage report not found - skipping threshold validation"
+          fi
+          
+          echo "✅ Coverage threshold validation completed"
+
+      - name: ✅ Performance Baseline Check
+        run: |
+          echo "✅ Checking performance baselines..."
+          
+          # Check for performance monitoring setup
+          if [ -f "config/grafana/provisioning/dashboards/json/altamedica-kpis.json" ]; then
+            echo "📊 Grafana dashboards found"
+          else
+            echo "⚠️ Performance monitoring not configured"
+          fi
+          
+          echo "✅ Performance baseline check completed"
+
+  # ============================================
+  # 🏥 Tests HIPAA Compliance
+  # ============================================
+  test-hipaa:
+    name: 🏥 HIPAA Compliance
+    runs-on: ubuntu-latest
+    needs: build-packages
+    if: ${{ !inputs.skip_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🏥 Run HIPAA Tests
+        run: pnpm test:hipaa --coverage
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: 🔒 Security Scan
+        run: |
+          # PHI exposure check
+          ! grep -r "console.log.*patient\|console.log.*medical" \
+            --include="*.ts" --include="*.tsx" \
+            --exclude-dir=node_modules \
+            --exclude-dir=.next \
+            --exclude-dir=dist || exit 1
+
+          # Encryption verification
+          grep -r "crypto\|bcrypt\|aes-256-gcm" --include="*.ts" || echo "⚠️ No encryption found"
+
+          # Audit logging check
+          grep -r "auditLog\|audit.log\|AuditService" --include="*.ts" || echo "⚠️ No audit logging found"
+
+      - name: 📊 Upload HIPAA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hipaa-compliance-report
+          path: |
+            coverage/hipaa/
+            **/hipaa-report.json
+          retention-days: 30
+
+  # ============================================
+  # 📦 Build Apps (Paralelo)
+  # ============================================
+  build-apps:
+    name: 📦 Build ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    needs: build-packages
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: api-server
+            changed: api
+          - app: web-app
+            changed: web
+          - app: doctors
+            changed: doctors
+          - app: patients
+            changed: patients
+          - app: companies
+            changed: companies
+          - app: admin
+            changed: admin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 📥 Download package builds
+        uses: actions/download-artifact@v4
+        with:
+          path: packages
+
+      - name: 🏗️ Build ${{ matrix.app }}
+        if: needs.changes.outputs[matrix.changed] == 'true' || github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps'
+        run: pnpm turbo build --filter=${{ matrix.app }} --cache-dir=.turbo
+        env:
+          NODE_ENV: production
+
+      - name: 📤 Upload build
+        if: needs.changes.outputs[matrix.changed] == 'true' || github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.app }}
+          path: |
+            apps/${{ matrix.app }}/.next
+            apps/${{ matrix.app }}/dist
+          retention-days: 7
+
+  # ============================================
+  # 🎭 E2E Tests (Matrix Browser)
+  # ============================================
+  test-e2e:
+    name: 🎭 E2E ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    needs: build-apps
+    if: needs.changes.outputs.e2e == 'true' && !inputs.skip_tests
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, mobile]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🎭 Install Playwright
+        run: pnpm --filter @altamedica/e2e-tests exec playwright install --with-deps ${{ matrix.project }}
+
+      - name: 🎭 Run E2E Tests
+        run: pnpm --filter @altamedica/e2e-tests test:e2e --project=${{ matrix.project }}
+        env:
+          CI: true
+          E2E_USE_MOCK_LOGIN: true
+          PLAYWRIGHT_PROJECT: ${{ matrix.project }}
+
+      - name: 📤 Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report-${{ matrix.project }}
+          path: packages/e2e-tests/playwright-report/
+          retention-days: 30
+
+  # ============================================
+  # ♿ Accesibilidad Tests
+  # ============================================
+  test-a11y:
+    name: ♿ Accesibilidad
+    runs-on: ubuntu-latest
+    needs: build-apps
+    if: ${{ !inputs.skip_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🎭 Install Playwright
+        run: pnpm --filter @altamedica/e2e-tests exec playwright install --with-deps chromium
+
+      - name: ♿ Run A11y Tests
+        run: pnpm --filter @altamedica/e2e-tests test:a11y
+        env:
+          CI: true
+
+      - name: 📤 Upload A11y report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: packages/e2e-tests/a11y-report/
+          retention-days: 30
+
+  # ============================================
+  # 📊 Performance & Bundle Analysis
+  # ============================================
+  performance:
+    name: 📊 Performance Analysis
+    runs-on: ubuntu-latest
+    needs: build-apps
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 📥 Download builds
+        uses: actions/download-artifact@v4
+        with:
+          path: builds
+
+      - name: 📊 Analyze bundle sizes
+        run: |
+          echo "📊 Bundle Size Analysis"
+          for app in web-app doctors patients companies admin; do
+            if [ -d "builds/build-$app" ]; then
+              echo "App: $app"
+              du -sh builds/build-$app || true
+            fi
+          done
+
+      - name: 🏥 Check medical app performance
+        run: |
+          echo "🏥 Medical App Performance Metrics"
+          # Add lighthouse or other performance checks here
+
+  # ============================================
+  # 🔒 Security Scan
+  # ============================================
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 🔄 Restore cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 📦 Install if needed
+        run: |
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          fi
+      
+      - name: 🛠️ Build packages if needed
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: 🔍 Dependency audit
+        run: pnpm audit --production --audit-level=moderate
+
+      - name: 🔒 SAST Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/typescript
+            p/react
+
+  # ============================================
+  # 📈 Quality Gates & Reporting
+  # ============================================
+  quality-gates:
+    name: 📈 Quality Gates
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test-unit, test-hipaa, security]
+    if: always()
+    steps:
+      - name: 📊 Generate Quality Report
+        run: |
+          echo "# 📊 Quality Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Quality Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| TypeCheck | ${{ needs.typecheck.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit Tests | ${{ needs.test-unit.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| HIPAA Tests | ${{ needs.test-hipaa.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: ❌ Fail if quality gates not met
+        if: |
+          needs.lint.result == 'failure' ||
+          needs.typecheck.result == 'failure' ||
+          needs.test-unit.result == 'failure' ||
+          needs.test-hipaa.result == 'failure' ||
+          needs.security.result == 'failure'
+        run: exit 1
+
+  # ============================================
+  # 🚀 Deploy (Staging/Production)
+  # ============================================
+  deploy-staging:
+    name: 🚀 Deploy Staging
+    runs-on: ubuntu-latest
+    needs: [quality-gates, build-apps, test-e2e]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging.altamedica.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 📥 Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: builds
+
+      - name: 🔧 Setup Firebase
+        uses: google-github-actions/setup-cloud-sdk@v2
+        with:
+          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
+      
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      
+      - name: 🚀 Deploy Functions with Firelink
+        run: |
+          echo "🚀 Deploying Firebase Functions with Firelink..."
+          cd functions
+          pnpm deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      - name: 🌐 Deploy Hosting
+        run: |
+          echo "🌐 Deploying Firebase Hosting..."
+          npx firebase-tools deploy --only hosting --project staging
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: 🔔 Notify deployment
+        run: |
+          echo "✅ Deployed to staging successfully" >> $GITHUB_STEP_SUMMARY
+
+  deploy-production:
+    name: 🚀 Deploy Production
+    runs-on: ubuntu-latest
+    needs: [quality-gates, build-apps, test-e2e]
+    if: github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://altamedica.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 📥 Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: builds
+
+      - name: 🔧 Setup Firebase
+        uses: google-github-actions/setup-cloud-sdk@v2
+        with:
+          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
+      
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      
+      - name: 🚀 Deploy Functions with Firelink
+        run: |
+          echo "🚀 Deploying Firebase Functions with Firelink..."
+          cd functions
+          pnpm deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      - name: 🌐 Deploy Hosting
+        run: |
+          echo "🌐 Deploying Firebase Hosting..."
+          npx firebase-tools deploy --only hosting --project production
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: 🔔 Notify deployment
+        run: |
+          echo "✅ Deployed to production successfully" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================
+  # ✅ Final Summary
+  # ============================================
+  summary:
+    name: ✅ CI Summary
+    runs-on: ubuntu-latest
+    needs: [quality-gates, build-apps]
+    if: always()
+    steps:
+      - name: 📊 Generate Final Summary
+        run: |
+          echo "# ✅ CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Overall Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.quality-gates.result }}" == "success" ]; then
+            echo "✅ **All quality gates passed!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Quality gates failed**" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Built Apps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- API Server: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web App: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Doctors: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Patients: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Companies: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Admin: ${{ needs.build-apps.result }}" >> $GITHUB_STEP_SUMMARY

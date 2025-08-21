@@ -1,0 +1,98 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Companies App",
+      "type": "npm",
+      "script": "build",
+      "path": "apps/companies",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "detail": "Build the companies app for production",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Dev Companies App",
+      "type": "npm",
+      "script": "dev",
+      "path": "apps/companies",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Start companies app in development mode",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "Lint Companies App",
+      "type": "npm",
+      "script": "lint",
+      "path": "apps/companies",
+      "group": "test",
+      "problemMatcher": ["$eslint-stylish"],
+      "detail": "Run ESLint on companies app",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "TypeCheck Companies App",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["tsc", "--noEmit"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/companies"
+      },
+      "group": "test",
+      "problemMatcher": ["$tsc"],
+      "detail": "Check TypeScript types without emitting files",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "Clean & Build Companies",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["clean", "&&", "pnpm", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/companies"
+      },
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "detail": "Clean and rebuild companies app",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Docker Build Companies",
+      "type": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/apps/companies/Dockerfile",
+        "context": "${workspaceFolder}",
+        "tag": "altamedica-companies:latest"
+      },
+      "group": "build",
+      "detail": "Build Docker image for companies app"
+    }
+  ]
+}

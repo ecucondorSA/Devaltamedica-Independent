@@ -1,0 +1,55 @@
+# 🏥 AltaMedica - Guía de Estructura del Proyecto
+
+## 📁 Estructura Principal del Monorepo
+
+AltaMedica es un monorepo de telemedicina con la siguiente estructura:
+
+### 🚀 Aplicaciones Principales (`apps/`)
+- **`web-app/`** - Aplicación web principal para pacientes
+- **`api-server/`** - Servidor API backend con Express/Node.js
+- **`doctors/`** - Portal para médicos y profesionales de la salud
+- **`patients/` - Portal para pacientes
+- **`companies/`** - Portal B2B para empresas médicas
+- **`admin/`** - Panel administrativo
+- **`signaling-server/`** - Servidor WebRTC para videollamadas
+
+### 📦 Packages Compartidos (`packages/`)
+- **`auth/`** - Sistema de autenticación centralizada
+- **`database/`** - Configuración de base de datos y Prisma
+- **`api-client/`** - Cliente HTTP para APIs
+- **`ui/`** - Componentes de interfaz reutilizables
+- **`medical-components/`** - Componentes específicos para medicina
+
+### ⚙️ Configuración (`config/`)
+- **`base/`** - Configuraciones base de TypeScript
+- **`environments/`** - Configuraciones por entorno
+- **`nginx/`** - Configuración de proxy reverso
+- **`monitoring/`** - Configuración de Grafana y Prometheus
+
+## 🔧 Tecnologías Principales
+
+- **Frontend**: Next.js 15, React 19, TypeScript 5.8+
+- **Backend**: Node.js, Express, Prisma
+- **Base de Datos**: PostgreSQL, Redis
+- **Monorepo**: Turbo, pnpm
+- **Testing**: Vitest, Playwright, Cypress
+- **UI**: Tailwind CSS, Framer Motion
+- **Monitoreo**: Sentry, Grafana, Prometheus
+
+## 📚 Archivos de Documentación Clave
+
+- **`README.md`** - Documentación principal del proyecto
+- **`CLAUDE.md`** - Manual de operaciones para IA
+- **`docs/`** - Documentación técnica detallada
+- **`CHANGELOG.md`** - Historial de cambios
+
+## 🚨 Reglas Importantes
+
+
+2. **Siempre verificar la estructura antes de hacer cambios**
+3. **Usar los packages compartidos para evitar duplicación**
+4. **Mantener compliance HIPAA en todas las funcionalidades médicas**
+description:
+globs:
+alwaysApply: false
+---

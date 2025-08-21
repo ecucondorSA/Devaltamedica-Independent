@@ -1,0 +1,196 @@
+rules_version = '2';
+
+// 🏥 ALTAMEDICA PLATFORM - HIPAA COMPLIANT STORAGE SECURITY RULES
+// Reglas de seguridad para Firebase Storage - Archivos médicos y PHI
+// Última actualización: 2025-08-08
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ===== FUNCIONES DE UTILIDAD =====
+    
+    // Verificar autenticación
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Verificar rol
+    function hasRole(role) {
+      return isAuthenticated() && 
+             request.auth.token.role == role;
+    }
+    
+    // Verificar múltiples roles
+    function hasAnyRole(roles) {
+      return isAuthenticated() && 
+             request.auth.token.role in roles;
+    }
+    
+    // Verificar propiedad del archivo
+    function isOwner() {
+      return isAuthenticated() && 
+             request.auth.uid in resource.metadata.keys() &&
+             resource.metadata[request.auth.uid] == 'owner';
+    }
+    
+    // Verificar si es archivo médico válido
+    function isValidMedicalFile() {
+      return resource.contentType.matches('image/.*') ||
+             resource.contentType.matches('application/pdf') ||
+             resource.contentType.matches('text/plain') ||
+             resource.contentType == 'application/dicom'; // Medical imaging format
+    }
+    
+    // Verificar tamaño del archivo (máximo 50MB para archivos médicos)
+    function isValidFileSize() {
+      return resource.size <= 50 * 1024 * 1024;
+    }
+
+    // ===== 👥 PATIENT MEDICAL FILES =====
+    // Estructura: /patients/{patientId}/medical/{category}/{fileId}
+    match /patients/{patientId}/medical/{category}/{fileId} {
+      // Lectura: Solo el paciente, doctor asignado, o admin
+      allow read: if hasRole('ADMIN') ||
+                     request.auth.uid == patientId ||
+                     hasRole('DOCTOR'); // Verificación adicional en función
+      
+      // Escritura: Solo doctores y admins pueden subir archivos médicos
+      allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                      isValidMedicalFile() &&
+                      isValidFileSize() &&
+                      category.matches('^(xrays|prescriptions|reports|lab_results|images|documents)$');
+      
+      // Eliminación: Solo admins
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 📋 MEDICAL RECORDS ATTACHMENTS =====
+    // Estructura: /medical-records/{recordId}/attachments/{fileId}
+    match /medical-records/{recordId}/attachments/{fileId} {
+      allow read: if hasAnyRole(['DOCTOR', 'ADMIN']);
+      allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                      isValidMedicalFile() &&
+                      isValidFileSize();
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 💊 PRESCRIPTION IMAGES =====
+    // Estructura: /prescriptions/{prescriptionId}/images/{fileId}
+    match /prescriptions/{prescriptionId}/images/{fileId} {
+      allow read: if hasAnyRole(['DOCTOR', 'ADMIN', 'PATIENT']);
+      allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                      resource.contentType.matches('image/.*') &&
+                      isValidFileSize();
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 👨‍⚕️ DOCTOR PROFILES =====
+    // Estructura: /doctors/{doctorId}/profile/{fileType}
+    match /doctors/{doctorId}/profile/{fileType} {
+      allow read: if hasAnyRole(['DOCTOR', 'ADMIN', 'PATIENT', 'COMPANY']);
+      allow write: if hasRole('ADMIN') ||
+                      (request.auth.uid == doctorId && 
+                       fileType.matches('^(avatar|license|certificate)$') &&
+                       isValidFileSize());
+      allow delete: if hasRole('ADMIN') || request.auth.uid == doctorId;
+    }
+
+    // ===== 🏢 COMPANY DOCUMENTS =====
+    // Estructura: /companies/{companyId}/documents/{documentType}/{fileId}
+    match /companies/{companyId}/documents/{documentType}/{fileId} {
+      allow read: if hasRole('ADMIN') ||
+                     hasRole('COMPANY');
+      allow write: if hasRole('ADMIN') ||
+                      hasRole('COMPANY') &&
+                      documentType.matches('^(contracts|certificates|policies)$') &&
+                      isValidFileSize();
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 📸 PROFILE PICTURES =====
+    // Estructura: /profiles/{userId}/avatar
+    match /profiles/{userId}/avatar {
+      allow read: if true; // Avatares son públicos
+      allow write: if isAuthenticated() &&
+                      request.auth.uid == userId &&
+                      resource.contentType.matches('image/.*') &&
+                      resource.size <= 5 * 1024 * 1024; // 5MB max
+      allow delete: if hasRole('ADMIN') || request.auth.uid == userId;
+    }
+
+    // ===== 🩺 TELEMEDICINE RECORDINGS =====
+    // Estructura: /telemedicine/{sessionId}/recordings/{fileId}
+    match /telemedicine/{sessionId}/recordings/{fileId} {
+      // Grabaciones de telemedicina - máxima seguridad
+      allow read: if hasRole('ADMIN'); // Solo admins pueden leer grabaciones
+      allow write: if hasRole('ADMIN') ||
+                      hasRole('DOCTOR'); // Solo doctores pueden crear grabaciones
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 📊 MEDICAL REPORTS =====
+    // Estructura: /reports/{reportType}/{reportId}/{fileId}
+    match /reports/{reportType}/{reportId}/{fileId} {
+      allow read: if hasAnyRole(['DOCTOR', 'ADMIN']);
+      allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                      reportType.matches('^(diagnostics|analytics|compliance)$') &&
+                      isValidFileSize();
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 🔍 AUDIT DOCUMENTS =====
+    // Estructura: /audit/{auditId}/{fileId}
+    match /audit/{auditId}/{fileId} {
+      allow read: if hasRole('ADMIN'); // Solo administradores
+      allow write: if hasRole('ADMIN');
+      allow delete: if false; // Los documentos de auditoría nunca se eliminan
+    }
+
+    // ===== ⚕️ MEDICAL IMAGING (DICOM) =====
+    // Estructura: /imaging/{patientId}/{studyId}/{imageId}
+    match /imaging/{patientId}/{studyId}/{imageId} {
+      allow read: if hasRole('ADMIN') ||
+                     request.auth.uid == patientId ||
+                     hasRole('DOCTOR');
+      allow write: if hasAnyRole(['DOCTOR', 'ADMIN']) &&
+                      (resource.contentType == 'application/dicom' ||
+                       resource.contentType.matches('image/.*')) &&
+                      resource.size <= 100 * 1024 * 1024; // 100MB for medical imaging
+      allow delete: if hasRole('ADMIN');
+    }
+
+    // ===== 📄 TEMPORARY UPLOADS =====
+    // Estructura: /temp/{userId}/{fileId}
+    match /temp/{userId}/{fileId} {
+      // Archivos temporales - se limpian automáticamente
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && 
+                      request.auth.uid == userId &&
+                      isValidFileSize();
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ===== 🔒 ENCRYPTED BACKUPS =====
+    // Estructura: /backups/{backupId}/{fileId}
+    match /backups/{backupId}/{fileId} {
+      allow read: if hasRole('ADMIN');
+      allow write: if hasRole('ADMIN');
+      allow delete: if false; // Los backups nunca se eliminan
+    }
+
+    // ===== 🚫 DEFAULT DENY =====
+    // Cualquier otro archivo está denegado por defecto
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// 🔐 STORAGE SECURITY NOTES:
+// 1. Todos los archivos médicos requieren roles específicos
+// 2. Los archivos DICOM tienen límites de tamaño especiales (100MB)
+// 3. Las grabaciones de telemedicina solo las pueden leer administradores
+// 4. Los documentos de auditoría y backups son inmutables
+// 5. Los archivos temporales tienen TTL automático
+// 6. Avatares públicos pero con límite de tamaño
+// 7. Validación de tipos MIME para archivos médicos

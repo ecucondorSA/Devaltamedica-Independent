@@ -1,0 +1,558 @@
+{
+  "version": "1.0.0",
+  "taskGroups": [
+    {
+      "name": "🏥 AltaMedica Development",
+      "description": "Core development workflows for medical platform",
+      "tasks": [
+        {
+          "name": "🚀 Start Medical Stack",
+          "description": "Start API Server + Patients + Doctors + Web App",
+          "command": "pnpm dev:min",
+          "icon": "play",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "🔧 API Server Only",
+          "description": "Start the central API server",
+          "command": "pnpm --filter api-server dev",
+          "icon": "server",
+          "color": "#FF9800"
+        },
+        {
+          "name": "🏥 Doctors Portal",
+          "description": "Start doctors dashboard",
+          "command": "pnpm --filter doctors dev",
+          "icon": "person",
+          "color": "#2196F3"
+        },
+        {
+          "name": "👥 Patients Portal", 
+          "description": "Start patients dashboard",
+          "command": "pnpm --filter patients dev",
+          "icon": "heart",
+          "color": "#E91E63"
+        },
+        {
+          "name": "🏢 Companies Portal",
+          "description": "Start B2B companies portal",
+          "command": "pnpm --filter companies dev",
+          "icon": "organization",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "🌐 Web App Gateway",
+          "description": "Start main authentication gateway",
+          "command": "pnpm --filter web-app dev",
+          "icon": "globe",
+          "color": "#607D8B"
+        }
+      ]
+    },
+    {
+      "name": "🔄 Sequential Server Testing",
+      "description": "Sequential server startup with health validation and E2E testing",
+      "tasks": [
+        {
+          "name": "🚀 Full Medical Pipeline Test",
+          "description": "Complete sequential startup: API → Web → Patients → Doctors → E2E Tests",
+          "command": "powershell -NoProfile -File scripts/sequential-medical-pipeline.ps1",
+          "icon": "rocket",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "⚡ Quick Medical Stack",
+          "description": "Fast sequential startup with basic health checks",
+          "command": "powershell -NoProfile -Command \"$ErrorActionPreference='Stop'; Write-Host '🔥 Cleaning ports...'; ForEach ($p in 3001,3002,3003,3000) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }; Write-Host '🔧 Starting API Server...'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','api-server','dev'; Start-Sleep 15; Write-Host '🌐 Starting Web App...'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','web-app','dev'; Start-Sleep 10; Write-Host '👥 Starting Patients...'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','patients','dev'; Start-Sleep 10; Write-Host '🏥 Starting Doctors...'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','doctors','dev'; Write-Host '✅ All services started!'\"",
+          "icon": "zap",
+          "color": "#FF9800"
+        },
+        {
+          "name": "🏥 Medical Stack + E2E",
+          "description": "Start medical stack and run E2E telemedicine tests",
+          "command": "powershell -NoProfile -Command \"$ErrorActionPreference='Stop'; Write-Host '🔥 Cleaning ports...'; ForEach ($p in 3001,3002,3003,3000) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }; Write-Host '🔧 Starting API Server...'; Start-Job -ScriptBlock { pnpm --filter api-server dev }; function Wait-Url($u,$t){$s=[DateTime]::UtcNow; while((New-TimeSpan -Start $s).TotalSeconds -lt $t){ try{ (Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 3) | Out-Null; Write-Host \\\"✅ $u ready\\\"; return $true } catch { Write-Host \\\"⏳ Waiting for $u...\\\"; Start-Sleep -Seconds 3 } }; Write-Host \\\"❌ $u timeout\\\"; return $false }; if(Wait-Url 'http://localhost:3001/api/v1/health' 60){ Write-Host '🌐 Starting Web App...'; Start-Job -ScriptBlock { pnpm --filter web-app dev }; if(Wait-Url 'http://localhost:3000' 45){ Write-Host '👥 Starting Patients...'; Start-Job -ScriptBlock { pnpm --filter patients dev }; if(Wait-Url 'http://localhost:3003' 45){ Write-Host '🏥 Starting Doctors...'; Start-Job -ScriptBlock { pnpm --filter doctors dev }; if(Wait-Url 'http://localhost:3002' 45){ Write-Host '🎭 Running E2E Tests...'; $env:E2E_USE_MOCK_LOGIN='1'; pnpm --filter @altamedica/e2e-tests exec playwright test -g '@telemedicine' } else { Write-Host '❌ Doctors failed to start' } } else { Write-Host '❌ Patients failed to start' } } else { Write-Host '❌ Web App failed to start' } } else { Write-Host '❌ API Server failed to start' }\"",
+          "icon": "test-tube",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "🔍 Health Check All Services",
+          "description": "Validate all medical services are healthy",
+          "command": "powershell -NoProfile -Command \"$services = @(@{name='API Server'; url='http://localhost:3001/api/v1/health'; port=3001}, @{name='Web App'; url='http://localhost:3000'; port=3000}, @{name='Patients'; url='http://localhost:3003'; port=3003}, @{name='Doctors'; url='http://localhost:3002'; port=3002}); foreach($s in $services){ Write-Host \\\"🔍 Checking $($s.name)...\\\"; try{ $response = Invoke-WebRequest -Uri $s.url -UseBasicParsing -TimeoutSec 5; if($response.StatusCode -eq 200){ Write-Host \\\"✅ $($s.name) - Healthy (Port $($s.port))\\\" -ForegroundColor Green } else { Write-Host \\\"⚠️ $($s.name) - Status $($response.StatusCode)\\\" -ForegroundColor Yellow } }catch{ Write-Host \\\"❌ $($s.name) - Not responding (Port $($s.port))\\\" -ForegroundColor Red } }\"",
+          "icon": "pulse",
+          "color": "#2196F3"
+        },
+        {
+          "name": "⚡ Restart Failed Services",
+          "description": "Detect and restart any failed medical services",
+          "command": "powershell -NoProfile -Command \"$services = @(@{name='api-server'; port=3001; filter='api-server'}, @{name='web-app'; port=3000; filter='web-app'}, @{name='patients'; port=3003; filter='patients'}, @{name='doctors'; port=3002; filter='doctors'}); foreach($s in $services){ $conn = Get-NetTCPConnection -LocalPort $s.port -ErrorAction SilentlyContinue; if(-not $conn){ Write-Host \\\"🔄 Restarting $($s.name)...\\\"; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter',$s.filter,'dev'; Start-Sleep 5 } else { Write-Host \\\"✅ $($s.name) running on port $($s.port)\\\" } }\"",
+          "icon": "refresh",
+          "color": "#FF5722"
+        }
+      ]
+    },
+    {
+      "name": "🎭 Playwright E2E Testing",
+      "description": "Complete Playwright end-to-end testing workflows",
+      "tasks": [
+        {
+          "name": "🎭 E2E Telemedicine Tests",
+          "description": "Run WebRTC and telemedicine E2E tests",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=telemedicine -g '@telemedicine'\"",
+          "icon": "video",
+          "color": "#FF5722"
+        },
+        {
+          "name": "🎭 Multi-Area E2E Tests",
+          "description": "Comprehensive multi-app integration tests",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; $null = New-Item -ItemType Directory -Force -Path ./packages/e2e-tests/test-results; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=multi-area --reporter=list 2>&1 | Tee-Object -File packages/e2e-tests/test-results/multi-area-latest.md\"",
+          "icon": "layers",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "🚀 E2E Full Pipeline + Services",
+          "description": "Complete pipeline: start services + run E2E telemedicine",
+          "command": "powershell -NoProfile -Command \"$ErrorActionPreference='Stop'; ForEach ($p in 3002,3003,3004) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }; $env:PATH += ';' + $env:APPDATA + '\\\\npm'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','api-server','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','web-app','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','patients','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','doctors','dev'; function Wait-Url($u,$t){$s=[DateTime]::UtcNow; while((New-TimeSpan -Start $s).TotalSeconds -lt $t){ try{ (Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 3) | Out-Null; return $true } catch { Start-Sleep -Seconds 2 } }; return $false }; if(-not (Wait-Url 'http://localhost:3001/api/v1/health' 90)) { throw 'API no disponible' }; if(-not (Wait-Url 'http://localhost:3000' 120)) { throw 'Web App no disponible' }; if(-not (Wait-Url 'http://localhost:3003' 120)) { throw 'Patients no disponible' }; if(-not (Wait-Url 'http://localhost:3002' 120)) { throw 'Doctors no disponible' }; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=telemedicine -g '@telemedicine'\"",
+          "icon": "rocket",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "♿ Accessibility (A11y) Sweep",
+          "description": "WCAG 2.2 AA compliance check across all apps",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright test -g '@a11y'\"",
+          "icon": "accessibility",
+          "color": "#795548"
+        },
+        {
+          "name": "📱 Playwright Install Browsers",
+          "description": "Install and update Playwright browsers with dependencies",
+          "command": "powershell -NoProfile -File tools/ps/playwright-install.ps1",
+          "icon": "browser",
+          "color": "#607D8B"
+        },
+        {
+          "name": "🎥 Playwright with UI Mode",
+          "description": "Run Playwright tests in interactive UI mode",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright test --ui\"",
+          "icon": "desktop",
+          "color": "#FF9800"
+        }
+      ]
+    },
+    {
+      "name": "🧪 Medical Testing & QA",
+      "description": "Comprehensive testing suite for medical compliance",
+      "tasks": [
+        {
+          "name": "🏥 HIPAA Compliance Tests",
+          "description": "Medical data compliance validation",
+          "command": "pnpm test:hipaa",
+          "icon": "shield",
+          "color": "#F44336"
+        },
+        {
+          "name": "🧪 Unit Tests All",
+          "description": "Run all unit tests across workspace",
+          "command": "pnpm test",
+          "icon": "test-tube",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "🧪 Patient Services Tests",
+          "description": "Unit and integration tests for patient services",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/patient-services test\"",
+          "icon": "heart",
+          "color": "#E91E63"
+        },
+        {
+          "name": "📊 Coverage Report",
+          "description": "Generate comprehensive test coverage report",
+          "command": "pnpm test:coverage",
+          "icon": "graph",
+          "color": "#2196F3"
+        },
+        {
+          "name": "⚡ Quick Test Suite",
+          "description": "Fast unit tests without E2E",
+          "command": "pnpm test:unit --reporter=dot",
+          "icon": "zap",
+          "color": "#FFEB3B"
+        }
+      ]
+    },
+    {
+      "name": "🔨 Build & Deploy",
+      "description": "Build and deployment workflows",
+      "tasks": [
+        {
+          "name": "📦 Build All Packages",
+          "description": "Build all workspace packages",
+          "command": "pnpm build",
+          "icon": "package",
+          "color": "#3F51B5"
+        },
+        {
+          "name": "🔍 Lint & Fix",
+          "description": "Run ESLint with auto-fix",
+          "command": "pnpm lint:fix",
+          "icon": "check",
+          "color": "#009688"
+        },
+        {
+          "name": "🧹 Clean Build",
+          "description": "Clean all build artifacts",
+          "command": "pnpm clean",
+          "icon": "trash",
+          "color": "#757575"
+        },
+        {
+          "name": "📊 Type Check",
+          "description": "TypeScript type checking",
+          "command": "pnpm type-check",
+          "icon": "code",
+          "color": "#673AB7"
+        }
+      ]
+    },
+    {
+      "name": "🩺 Medical Workflows",
+      "description": "Specialized medical development tasks",
+      "tasks": [
+        {
+          "name": "🔥 Free Medical Ports",
+          "description": "Kill processes on ports 3001-3005",
+          "command": "powershell -NoProfile -Command \"ForEach ($p in 3001,3002,3003,3004,3005) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }\"",
+          "icon": "flame",
+          "color": "#FF5722"
+        },
+        {
+          "name": "📱 Install Playwright Browsers",
+          "description": "Install browsers for E2E testing",
+          "command": "powershell -NoProfile -File tools/ps/playwright-install.ps1",
+          "icon": "browser",
+          "color": "#795548"
+        },
+        {
+          "name": "🔐 Verify Auth System", 
+          "description": "Test SSO authentication flow",
+          "command": "node scripts/verify-auth-system.cjs",
+          "icon": "key",
+          "color": "#FF9800"
+        },
+        {
+          "name": "📋 Generate Medical Test Data",
+          "description": "Create test medical records (anonymized)",
+          "command": "node scripts/create-test-users.js",
+          "icon": "database",
+          "color": "#607D8B"
+        }
+      ]
+    },
+    {
+      "name": "🎯 Playwright Debug & Tools",
+      "description": "Playwright debugging and development tools",
+      "tasks": [
+        {
+          "name": "🐛 Playwright Debug Mode",
+          "description": "Run Playwright tests in debug mode with inspector",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; $env:PWDEBUG=1; pnpm --filter @altamedica/e2e-tests exec -- playwright test --debug\"",
+          "icon": "bug",
+          "color": "#FF5722"
+        },
+        {
+          "name": "📸 Playwright Generate Screenshots",
+          "description": "Update all visual comparison screenshots",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright test --update-snapshots\"",
+          "icon": "camera",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "📄 Playwright Show Report",
+          "description": "Open last Playwright HTML report",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright show-report\"",
+          "icon": "file",
+          "color": "#2196F3"
+        },
+        {
+          "name": "🔧 Playwright Doctor",
+          "description": "Diagnose Playwright installation issues",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright install --dry-run\"",
+          "icon": "stethoscope",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "🎬 Record New E2E Test",
+          "description": "Launch Playwright codegen to record new tests",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright codegen localhost:3003\"",
+          "icon": "record",
+          "color": "#FF9800"
+        },
+        {
+          "name": "📊 Playwright Trace Viewer",
+          "description": "Open trace viewer for failed tests",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/e2e-tests exec -- playwright show-trace\"",
+          "icon": "graph",
+          "color": "#607D8B"
+        }
+      ]
+    },
+    {
+      "name": "🚨 Emergency & Debug", 
+      "description": "Emergency troubleshooting and debugging",
+      "tasks": [
+        {
+          "name": "🚨 Emergency Stop All",
+          "description": "Stop all development servers immediately",
+          "command": "powershell -NoProfile -Command \"Get-Process -Name node,pnpm -ErrorAction SilentlyContinue | Stop-Process -Force\"",
+          "icon": "stop-circle",
+          "color": "#F44336"
+        },
+        {
+          "name": "🔍 Debug Port Conflicts",
+          "description": "Show what's running on medical ports",
+          "command": "powershell -NoProfile -Command \"ForEach ($p in 3001,3002,3003,3004,3005,8888) { Write-Host \\\"Port $p:\\\"; Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue | Select LocalAddress,LocalPort,State,OwningProcess }\"",
+          "icon": "search",
+          "color": "#FF9800"
+        },
+        {
+          "name": "🩹 Fix pnpm PATH",
+          "description": "Add pnpm to PATH for this session",
+          "command": "powershell -NoProfile -Command \"$env:PATH += ';C:\\\\Users\\\\Eduardo\\\\AppData\\\\Roaming\\\\npm'; pnpm --version\"",
+          "icon": "tools",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "📊 System Health Check",
+          "description": "Check all medical services health",
+          "command": "node tools/scripts/service-monitor.mjs",
+          "icon": "pulse",
+          "color": "#2196F3"
+        },
+        {
+          "name": "🧹 Clean E2E Artifacts",
+          "description": "Clean Playwright test results and artifacts",
+          "command": "powershell -NoProfile -Command \"Remove-Item -Recurse -Force -ErrorAction SilentlyContinue packages/e2e-tests/test-results, packages/e2e-tests/playwright-report\"",
+          "icon": "trash",
+          "color": "#757575"
+        }
+      ]
+    },
+    {
+      "name": "🔧 Dev Stack Autocuración",
+      "description": "Automated development stack healing and monitoring",
+      "tasks": [
+        {
+          "name": "🏥 Workspace Autocure (Quick)",
+          "description": "Auto-heal workspace services on startup (recommended)",
+          "command": "powershell -NoProfile -File scripts/workspace-autocure.ps1 -Quick -Background",
+          "icon": "zap",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "🔄 Full Stack Autocure",
+          "description": "Complete dev stack healing with monitoring",
+          "command": "powershell -NoProfile -File scripts/dev-stack-autocure.ps1",
+          "icon": "refresh",
+          "color": "#2196F3"
+        },
+        {
+          "name": "🎯 Force Stack Restart",
+          "description": "Force restart all services even if running",
+          "command": "powershell -NoProfile -File scripts/workspace-autocure.ps1 -Force",
+          "icon": "sync",
+          "color": "#FF9800"
+        },
+        {
+          "name": "👁️ Stack Monitor Mode",
+          "description": "Continuous monitoring with auto-restart",
+          "command": "powershell -NoProfile -File scripts/dev-stack-autocure.ps1 -WatchMode",
+          "icon": "eye",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "📊 Services Status",
+          "description": "Check current status of all dev services",
+          "command": "powershell -NoProfile -File scripts/workspace-autocure.ps1 status",
+          "icon": "pulse",
+          "color": "#607D8B"
+        },
+        {
+          "name": "🛑 Stop All Services",
+          "description": "Gracefully stop all development services",
+          "command": "powershell -NoProfile -File scripts/workspace-autocure.ps1 stop",
+          "icon": "stop",
+          "color": "#F44336"
+        },
+        {
+          "name": "🔥 Emergency Port Cleanup",
+          "description": "Force kill all processes on dev ports 3000-3004",
+          "command": "powershell -NoProfile -Command \"ForEach ($p in 3000,3001,3002,3003,3004) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Write-Host \\\"Killing PID $id on port $p\\\"; Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } else { Write-Host \\\"Port $p is free\\\" } }\"",
+          "icon": "flame",
+          "color": "#FF5722"
+        },
+        {
+          "name": "🩺 Health Check All",
+          "description": "Run comprehensive health checks on all services",
+          "command": "powershell -NoProfile -File scripts/dev-stack-autocure.ps1 -DryRun -Verbose",
+          "icon": "stethoscope",
+          "color": "#795548"
+        }
+      ]
+    },
+    {
+      "name": "🤖 AI Workflow Automation",
+      "description": "Automated workflows with file visualization and linting",
+      "tasks": [
+        {
+          "name": "🔍 PRE-Operation File Check",
+          "description": "Show current state BEFORE making changes (prevents duplication)",
+          "command": "powershell -NoProfile -File scripts/pre-operation-check.ps1 -Detailed",
+          "icon": "search",
+          "color": "#2196F3"
+        },
+        {
+          "name": "📋 Quick PRE-Check",
+          "description": "Fast overview before changes (no details)",
+          "command": "powershell -NoProfile -File scripts/pre-operation-check.ps1",
+          "icon": "list",
+          "color": "#607D8B"
+        },
+        {
+          "name": "🤖 Smart File + Lint Workflow",
+          "description": "Show files and auto-lint after development session",
+          "command": "powershell -NoProfile -File scripts/ai-workflow-automation.ps1 -Operation post_development -Verbose",
+          "icon": "robot",
+          "color": "#4CAF50"
+        },
+        {
+          "name": "📁 Auto Tree + Lint (Current Dir)",
+          "description": "Show directory tree and run smart lint",
+          "command": "powershell -NoProfile -File scripts/ai-workflow-automation.ps1 -Operation bulk_operation -Directory . -Verbose",
+          "icon": "file-directory",
+          "color": "#2196F3"
+        },
+        {
+          "name": "🔧 Quick Lint + File Check",
+          "description": "Fast lint with file visualization",
+          "command": "powershell -NoProfile -Command \"Write-Host '🔧 Running lint check...'; pnpm lint:fix; Write-Host '📁 Current directory:'; Get-ChildItem | Select-Object Name, Length, LastWriteTime | Format-Table\"",
+          "icon": "tools",
+          "color": "#FF9800"
+        },
+        {
+          "name": "📊 Project Health Check",
+          "description": "Full project analysis: files + lint + health",
+          "command": "powershell -NoProfile -Command \"Write-Host '🏥 AltaMedica Project Health Check' -ForegroundColor Cyan; Write-Host '=========================' -ForegroundColor Gray; Write-Host '📁 Project Structure:'; tree . /A | Select-Object -First 20; Write-Host '🔧 Running lint...'; pnpm lint:fix; Write-Host '📊 Package info:'; pnpm list --depth=0 | Select-Object -First 10\"",
+          "icon": "pulse",
+          "color": "#9C27B0"
+        },
+        {
+          "name": "🎯 Smart Package Lint",
+          "description": "Lint only changed packages with file preview",
+          "command": "powershell -NoProfile -Command \"$changed = git diff --name-only | Where-Object { $_ -match '^(apps|packages)/' } | ForEach-Object { ($_ -split '/')[0,1] -join '/' } | Select-Object -Unique; if ($changed) { Write-Host '🎯 Changed packages:' -ForegroundColor Cyan; $changed | ForEach-Object { Write-Host '  • $_' -ForegroundColor Yellow; pnpm --filter $_.Replace('apps/', '').Replace('packages/', '@altamedica/') lint:fix } } else { Write-Host '✅ No changes detected' -ForegroundColor Green }; Write-Host '📁 Current state:'; Get-ChildItem | Select-Object Name, LastWriteTime | Format-Table\"",
+          "icon": "target",
+          "color": "#FF5722"
+        },
+        {
+          "name": "📸 Snapshot Current State",
+          "description": "Capture current project state with metadata",
+          "command": "powershell -NoProfile -Command \"$timestamp = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'; Write-Host '📸 Capturing project snapshot: $timestamp' -ForegroundColor Cyan; $snapshot = @{}; $snapshot.timestamp = $timestamp; $snapshot.files = (Get-ChildItem -Recurse | Measure-Object).Count; $snapshot.size = [math]::Round((Get-ChildItem -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB, 2); Write-Host '📊 Snapshot data:'; Write-Host '  Files: $($snapshot.files)'; Write-Host '  Size: $($snapshot.size) MB'; Write-Host '  Time: $($snapshot.timestamp)'; Write-Host '🔧 Running final lint...'; pnpm lint:fix\"",
+          "icon": "camera",
+          "color": "#607D8B"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "defaultTerminal": "powershell",
+    "showTaskOutput": true,
+    "autoSaveOnRun": true,
+    "confirmBeforeRun": false,
+    "theme": "medical-dark",
+    "groupCollapsed": false
+  },
+  "shortcuts": [
+    {
+      "key": "ctrl+alt+m",
+      "task": "🚀 Start Medical Stack"
+    },
+    {
+      "key": "ctrl+alt+t", 
+      "task": "🎭 E2E Telemedicine Tests"
+    },
+    {
+      "key": "ctrl+alt+s",
+      "task": "🚨 Emergency Stop All"
+    },
+    {
+      "key": "ctrl+alt+e",
+      "task": "🚀 E2E Full Pipeline + Services"
+    },
+    {
+      "key": "ctrl+alt+a",
+      "task": "♿ Accessibility (A11y) Sweep"
+    },
+    {
+      "key": "ctrl+alt+u",
+      "task": "🎥 Playwright with UI Mode"
+    },
+    {
+      "key": "ctrl+alt+i",
+      "task": "📱 Playwright Install Browsers"
+    },
+    {
+      "key": "ctrl+alt+h",
+      "task": "🔍 Health Check All Services"
+    },
+    {
+      "key": "ctrl+alt+q",
+      "task": "⚡ Quick Medical Stack"
+    },
+    {
+      "key": "ctrl+alt+r",
+      "task": "🔄 Restart Failed Medical Services"
+    },
+    {
+      "key": "ctrl+alt+l",
+      "task": "🔧 Quick Lint + File Check"
+    },
+    {
+      "key": "ctrl+alt+w",
+      "task": "🤖 Smart File + Lint Workflow"
+    },
+    {
+      "key": "ctrl+alt+p",
+      "task": "📊 Project Health Check"
+    },
+    {
+      "key": "ctrl+alt+z",
+      "task": "🎯 Smart Package Lint"
+    },
+    {
+      "key": "ctrl+alt+b",
+      "task": "🔍 PRE-Operation File Check"
+    },
+    {
+      "key": "ctrl+alt+n",
+      "task": "📋 Quick PRE-Check"
+    },
+    {
+      "key": "ctrl+alt+c",
+      "task": "🏥 Workspace Autocure (Quick)"
+    },
+    {
+      "key": "ctrl+alt+f",
+      "task": "🎯 Force Stack Restart"
+    },
+    {
+      "key": "ctrl+alt+x",
+      "task": "🛑 Stop All Services"
+    },
+    {
+      "key": "ctrl+alt+v",
+      "task": "📊 Services Status"
+    },
+    {
+      "key": "ctrl+alt+k",
+      "task": "🔥 Emergency Port Cleanup"
+    }
+  ]
+}

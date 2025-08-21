@@ -1,0 +1,27 @@
+apiVersion: 1
+
+# Lista de datasources para insertar/actualizar automáticamente en la base de datos de Grafana
+datasources:
+  - name: AltaMedica TimescaleDB
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    database: altamedica
+    user: ${POSTGRES_USER}
+    secureJsonData:
+      password: ${POSTGRES_PASSWORD}
+    jsonData:
+      # Habilitar TimescaleDB para optimizaciones específicas
+      timescaledb: true
+      # Configuraciones de conexión
+      sslmode: disable
+      maxOpenConns: 10
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+      postgresVersion: 1500
+      # Configurar timezone
+      timezone: UTC
+    # Configuraciones adicionales
+    editable: true
+    isDefault: true
+    version: 1

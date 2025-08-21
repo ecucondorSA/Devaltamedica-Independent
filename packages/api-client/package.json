@@ -1,0 +1,47 @@
+{
+  "name": "@altamedica/api-client",
+  "version": "1.0.0",
+  "description": "Centralized API client for AltaMedica platform with type safety and error handling",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@altamedica/auth": "workspace:*",
+    "@altamedica/hooks": "workspace:*",
+    "@altamedica/types": "workspace:*",
+    "@tanstack/react-query": "^5.81.2",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "@types/react": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "react-hot-toast": "^2.4.1",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "module": "./dist/index.mjs",
+  "sideEffects": false
+}

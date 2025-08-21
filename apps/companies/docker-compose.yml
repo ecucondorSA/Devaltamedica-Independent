@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  companies-app:
+    build:
+      context: ../..
+      dockerfile: apps/companies/Dockerfile
+    container_name: altamedica-companies
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3004}
+      - NEXT_PUBLIC_FIREBASE_API_KEY=${NEXT_PUBLIC_FIREBASE_API_KEY}
+      - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+      - NEXT_PUBLIC_FIREBASE_PROJECT_ID=${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+      - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+      - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+      - NEXT_PUBLIC_FIREBASE_APP_ID=${NEXT_PUBLIC_FIREBASE_APP_ID}
+      - NEXT_PUBLIC_ENVIRONMENT=production
+      - NEXT_PUBLIC_APP_NAME=AltaMedica Companies
+      - NEXT_PUBLIC_FEATURES_MARKETPLACE=true
+      - NEXT_PUBLIC_FEATURES_BILLING=true
+      - NEXT_PUBLIC_FEATURES_COMPLIANCE=true
+      - NEXT_PUBLIC_FEATURES_ANALYTICS=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3004/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - altamedica-network
+    labels:
+      - "com.altamedica.app=companies"
+      - "com.altamedica.type=frontend"
+      - "com.altamedica.port=3004"
+      - "com.altamedica.description=B2B Marketplace and Enterprise Portal"
+
+networks:
+  altamedica-network:
+    external: true
+    name: altamedica-network

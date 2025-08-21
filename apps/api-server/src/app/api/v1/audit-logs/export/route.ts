@@ -1,0 +1,1 @@
+export { exportLogs as GET } from '../route';

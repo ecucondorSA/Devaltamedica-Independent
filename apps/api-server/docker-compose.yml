@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  api-server:
+    build:
+      context: ../..
+      dockerfile: apps/api-server/Dockerfile
+    container_name: altamedica-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      # Firebase Admin (usar secretos reales en staging/prod)
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      # Seguridad
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - ENCRYPTION_SECRET=${ENCRYPTION_SECRET}
+      - RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED:-true}
+      - AUDIT_LOGGING_ENABLED=${AUDIT_LOGGING_ENABLED:-true}
+      - RBAC_ENABLED=${RBAC_ENABLED:-true}
+      - PHI_ENCRYPTION_ENABLED=${PHI_ENCRYPTION_ENABLED:-true}
+      - AUDIT_HASH_CHAIN_ENABLED=${AUDIT_HASH_CHAIN_ENABLED:-true}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
+      - SIGNALING_SERVER_URL=${SIGNALING_SERVER_URL:-http://localhost:8888}
+    restart: unless-stopped
+

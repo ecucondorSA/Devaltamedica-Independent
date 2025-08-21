@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2025-08-14T01:59:56.325Z",
+  "summary": {
+    "totalFiles": 1915,
+    "totals": {
+      "lines": 430660,
+      "source": 331923,
+      "test": 54873,
+      "doc": 43864
+    },
+    "byArea": {
+      "other": {
+        "lines": 21187,
+        "files": 107,
+        "source": 4150,
+        "test": 5506,
+        "doc": 11531
+      },
+      "root": {
+        "lines": 13546,
+        "files": 48,
+        "source": 2499,
+        "test": 2689,
+        "doc": 8358
+      },
+      "app": {
+        "lines": 243667,
+        "files": 1057,
+        "source": 203849,
+        "test": 22334,
+        "doc": 17484
+      },
+      "package": {
+        "lines": 152260,
+        "files": 703,
+        "source": 121425,
+        "test": 24344,
+        "doc": 6491
+      }
+    }
+  },
+  "duplication": {
+    "repeatedLineHashes": 123631,
+    "totalLines": 430660,
+    "duplicationRatio": 0.2870733293085032
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --filter @altamedica/database build)",
+      "Bash(pnpm build:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(node:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(rm:*)",
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(tree:*)",
+      "Bash(powershell:*)",
+      "Bash(pnpm:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx:*)",
+      "Bash(curl:*)",
+      "Bash(copy Medical3DCanvas.tsx Medical3DCanvas.original.tsx)",
+      "Bash(cp:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm:*)",
+      "Bash(start \"\" \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\docs\\architecture\\MONITORING_DASHBOARD.html\")",
+      "Bash(dir:*)",
+      "Bash(pwsh:*)",
+      "Bash(bun:*)",
+      "Bash(where bun)",
+      "Bash(python3:*)",
+      "Bash(true)",
+      "Bash(grep:*)",
+      "Bash(timeout:*)",
+      "Bash(mv:*)",
+      "Bash(rg:*)",
+      "Bash(claude config show)",
+      "Bash(Get-ChildItem -Path \"packages\" -Recurse -Name \"tsconfig.tsbuildinfo\" -ErrorAction SilentlyContinue)",
+      "mcp__ide__getDiagnostics",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "C:\\c\\Users\\Eduardo\\Documents",
+      "C:\\mnt\\c\\Users\\Eduardo\\Documents"
+    ]
+  },
+  "outputStyle": "Learning"
+}

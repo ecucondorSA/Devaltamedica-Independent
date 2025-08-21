@@ -1,0 +1,221 @@
+# Esquema GraphQL para Sistema Médico ALTAMEDICA
+# Archivo: dataconnect/schema/schema.gql
+
+# ====================
+# TIPOS DE DATOS MÉDICOS
+# ====================
+
+# Información del Doctor
+type Doctor @table(name: "doctors") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  cedula_profesional: String! @unique
+  nombre: String!
+  apellidos: String!
+  especialidad: String!
+  telefono: String
+  email: String! @unique
+  estado_activo: Boolean! @default(value: true)
+  fecha_registro: Timestamp! @default(expr: "request.time")
+  clinica_id: UUID
+  
+  # Relaciones
+  clinica: Clinica @fk(references: "id")
+  citas: [Cita] @fk(references: "doctor_id")
+  pacientes: [Paciente] @fk(references: "doctor_id")
+  historial_medico: [HistorialMedico] @fk(references: "doctor_id")
+}
+
+# Información del Paciente
+type Paciente @table(name: "pacientes") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  numero_expediente: String! @unique
+  nombre: String!
+  apellidos: String!
+  fecha_nacimiento: Date!
+  genero: GeneroType!
+  telefono: String
+  email: String
+  direccion: String
+  contacto_emergencia: String
+  telefono_emergencia: String
+  alergias: [String]
+  enfermedades_cronicas: [String]
+  tipo_sangre: TipoSangreType
+  estado_activo: Boolean! @default(value: true)
+  fecha_registro: Timestamp! @default(expr: "request.time")
+  doctor_id: UUID!
+  
+  # Relaciones
+  doctor: Doctor! @fk(references: "id")
+  citas: [Cita] @fk(references: "paciente_id")
+  historial_medico: [HistorialMedico] @fk(references: "paciente_id")
+  recetas: [Receta] @fk(references: "paciente_id")
+}
+
+# Información de Clínicas
+type Clinica @table(name: "clinicas") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  nombre: String!
+  direccion: String!
+  telefono: String!
+  email: String!
+  horario_apertura: String!
+  horario_cierre: String!
+  especialidades: [String]
+  certificaciones: [String]
+  estado_activo: Boolean! @default(value: true)
+  fecha_registro: Timestamp! @default(expr: "request.time")
+  
+  # Relaciones
+  doctores: [Doctor] @fk(references: "clinica_id")
+  citas: [Cita] @fk(references: "clinica_id")
+}
+
+# Sistema de Citas Médicas
+type Cita @table(name: "citas") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  fecha_hora: Timestamp!
+  motivo: String!
+  estado: EstadoCitaType! @default(value: PROGRAMADA)
+  notas: String
+  duracion_minutos: Int! @default(value: 30)
+  tipo_consulta: TipoConsultaType!
+  costo: Float
+  pagado: Boolean! @default(value: false)
+  fecha_creacion: Timestamp! @default(expr: "request.time")
+  
+  # Claves foráneas
+  paciente_id: UUID!
+  doctor_id: UUID!
+  clinica_id: UUID!
+  
+  # Relaciones
+  paciente: Paciente! @fk(references: "id")
+  doctor: Doctor! @fk(references: "id")
+  clinica: Clinica! @fk(references: "id")
+  historial_medico: HistorialMedico @fk(references: "cita_id")
+}
+
+# Historial Médico Detallado
+type HistorialMedico @table(name: "historial_medico") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  fecha_consulta: Timestamp! @default(expr: "request.time")
+  motivo_consulta: String!
+  sintomas: [String]
+  diagnostico: String!
+  exploracion_fisica: String
+  signos_vitales: SignosVitales
+  examenes_solicitados: [String]
+  tratamiento: String
+  medicamentos_recetados: [String]
+  recomendaciones: String
+  proxima_cita: Date
+  observaciones: String
+  
+  # Claves foráneas
+  paciente_id: UUID!
+  doctor_id: UUID!
+  cita_id: UUID @unique
+  
+  # Relaciones
+  paciente: Paciente! @fk(references: "id")
+  doctor: Doctor! @fk(references: "id")
+  cita: Cita @fk(references: "id")
+  recetas: [Receta] @fk(references: "historial_id")
+}
+
+# Sistema de Recetas Médicas
+type Receta @table(name: "recetas") {
+  id: UUID! @default(expr: "uuidGenerateV4()")
+  numero_receta: String! @unique
+  fecha_emision: Timestamp! @default(expr: "request.time")
+  fecha_vencimiento: Date!
+  medicamentos: [Medicamento]
+  instrucciones_generales: String
+  estado: EstadoRecetaType! @default(value: ACTIVA)
+  
+  # Claves foráneas
+  paciente_id: UUID!
+  doctor_id: UUID!
+  historial_id: UUID
+  
+  # Relaciones
+  paciente: Paciente! @fk(references: "id")
+  doctor: Doctor! @fk(references: "id")
+  historial_medico: HistorialMedico @fk(references: "id")
+}
+
+# ====================
+# TIPOS PERSONALIZADOS
+# ====================
+
+# Signos Vitales
+type SignosVitales {
+  presion_arterial_sistolica: Int
+  presion_arterial_diastolica: Int
+  frecuencia_cardiaca: Int
+  temperatura: Float
+  frecuencia_respiratoria: Int
+  saturacion_oxigeno: Int
+  peso: Float
+  altura: Float
+  imc: Float
+}
+
+# Medicamento
+type Medicamento {
+  nombre: String!
+  dosis: String!
+  frecuencia: String!
+  duracion: String!
+  via_administracion: String!
+  instrucciones_especiales: String
+}
+
+# ====================
+# ENUMERACIONES
+# ====================
+
+enum GeneroType {
+  MASCULINO
+  FEMENINO
+  OTRO
+  PREFIERO_NO_DECIR
+}
+
+enum TipoSangreType {
+  A_POSITIVO
+  A_NEGATIVO
+  B_POSITIVO
+  B_NEGATIVO
+  AB_POSITIVO
+  AB_NEGATIVO
+  O_POSITIVO
+  O_NEGATIVO
+}
+
+enum EstadoCitaType {
+  PROGRAMADA
+  CONFIRMADA
+  EN_CURSO
+  COMPLETADA
+  CANCELADA
+  NO_ASISTIO
+  REPROGRAMADA
+}
+
+enum TipoConsultaType {
+  PRIMERA_VEZ
+  SEGUIMIENTO
+  URGENCIA
+  REVISION
+  ESPECIALIZADA
+  TELEMEDICINA
+}
+
+enum EstadoRecetaType {
+  ACTIVA
+  VENCIDA
+  CANCELADA
+  SURTIDA
+}

@@ -1,0 +1,141 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CompanyCard Component > should match snapshot 1`] = `
+<div
+  aria-label="Hospital Universitario - hospital"
+  class="company-card"
+  data-testid="company-card"
+  tabindex="0"
+>
+  <div
+    data-testid="company-logo-container"
+  >
+    <img
+      alt="Logo de Hospital Universitario"
+      data-testid="company-logo"
+      src="https://test.com/logo.png"
+    />
+  </div>
+  <div
+    data-testid="company-info"
+  >
+    <h3
+      data-testid="company-name"
+    >
+      Hospital Universitario
+    </h3>
+    <span
+      data-testid="company-type"
+    >
+      Hospital
+    </span>
+    <span
+      data-testid="verified-badge"
+    >
+      Verificado
+    </span>
+    <div
+      data-testid="company-address"
+    >
+      Barcelona
+      , 
+      Cataluña
+    </div>
+    <div
+      aria-label="Calificación: 4.5 de 5 estrellas"
+      data-testid="company-rating"
+    >
+      4.5
+    </div>
+    <div
+      data-testid="company-reviews"
+    >
+      150
+       reseñas
+    </div>
+    <div
+      data-testid="company-specialties"
+    >
+      <span>
+        Cardiología
+      </span>
+      <span>
+        Neurología
+      </span>
+    </div>
+    <div
+      data-testid="configuration-badges"
+    >
+      <span
+        data-testid="online-booking-badge"
+      >
+        Reserva Online
+      </span>
+      <span
+        data-testid="telehealth-badge"
+      >
+        Telemedicina
+      </span>
+      <span
+        data-testid="insurance-badge"
+      >
+        Acepta Seguros
+      </span>
+      <span
+        data-testid="emergency-badge"
+      >
+        Emergencias
+      </span>
+    </div>
+    <div
+      data-testid="business-hours-indicator"
+    >
+      <span
+        data-testid="closed-status"
+      >
+        Cerrado
+      </span>
+    </div>
+    <div
+      data-testid="language-list"
+    >
+      <span>
+        Español
+      </span>
+      <span>
+        Inglés
+      </span>
+      <span>
+        Catalán
+      </span>
+    </div>
+    <div
+      data-testid="staff-count"
+    >
+      150
+       profesionales
+    </div>
+    <div
+      data-testid="beds-count"
+    >
+      50
+       camas
+    </div>
+  </div>
+  <div
+    data-testid="company-actions"
+  >
+    <button
+      data-testid="view-company-details"
+    >
+      Ver Detalles
+    </button>
+    <button
+      aria-label="Reservar cita en Hospital Universitario"
+      data-testid="book-appointment"
+    >
+      Reservar Cita
+    </button>
+  </div>
+</div>
+`;

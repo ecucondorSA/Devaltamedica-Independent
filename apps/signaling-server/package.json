@@ -1,0 +1,70 @@
+{
+  "name": "@altamedica/signaling-server",
+  "version": "1.0.0",
+  "description": "WebRTC signaling server for Altamedica telemedicine platform",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src s",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "webrtc",
+    "signaling",
+    "telemedicine",
+    "socket.io"
+  ],
+  "author": "Altamedica",
+  "license": "MIT",
+  "dependencies": {
+    "@altamedica/auth": "workspace:*",
+    "@altamedica/firebase": "workspace:*",
+    "@altamedica/shared": "workspace:*",
+    "@altamedica/types": "workspace:*",
+    "@altamedica/utils": "workspace:*",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "firebase-admin": "^12.0.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "redis": "^4.7.0",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.0.5",
+    "winston": "^3.17.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/express-rate-limit": "^6.0.0",
+    "@types/ioredis": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^20.19.11",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
+    "eslint": "^9.20.0",
+    "tsx": "^4.19.2",
+    "typescript": "5.8.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "dist/index.js"
+    }
+  },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts"
+}

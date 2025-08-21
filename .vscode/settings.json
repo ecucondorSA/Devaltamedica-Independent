@@ -1,0 +1,131 @@
+{
+  // 🎯 Configuración optimizada para desarrollo de telemedicina
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  // 🧪 Formateador para notebooks (cuando aplique en celdas soportadas)
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  // 📄 Asegurar Markdown usa mismo formateador
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  // 🔍 TypeScript & JavaScript
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  
+  // 🧹 ESLint - Sin restricciones
+  "eslint.enable": true,
+  "eslint.workingDirectories": ["./apps/*", "./packages/*"],
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "**/packages/*/src/**",
+    "**/packages/*/dist/**"
+  ],
+  "javascript.preferences.autoImportFileExcludePatterns": [
+    "**/packages/*/src/**",
+    "**/packages/*/dist/**"
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.run": "onType",
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  
+  // 🎨 Prettier
+  "prettier.configPath": "./.prettierrc",
+  "prettier.ignorePath": "./.prettierignore",
+  
+  // 📁 Archivos - Reducir exclusiones
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
+  "files.associations": {
+    "*.env": "properties",
+    "*.md": "markdown",
+    "CLAUDE.md": "markdown"
+  },
+  
+  // 🔍 Búsqueda - Sin restricciones
+  "search.exclude": {
+    "**/.git": true
+  },
+  "search.followSymlinks": true,
+  "search.smartCase": true,
+  "search.useGlobalIgnoreFiles": false,
+  "search.useIgnoreFiles": false,
+  
+  // 🚀 Live Server para desarrollo
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.port": 3000,
+  
+  // 🎯 Específico para monorepo
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.suggest.autoImports": true,
+  
+  // 🧰 Extensiones recomendadas
+  "extensions.ignoreRecommendations": false,
+  
+  // 🎨 Tema y apariencia
+  "workbench.colorTheme": "Default Dark+",
+  "editor.fontFamily": "'Cascadia Code', 'Fira Code', Consolas, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  
+  // 🔧 Terminal - Sin restricciones
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.showWelcome": false,
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.allowChords": false,
+  "terminal.integrated.confirmOnExit": "never",
+  "terminal.integrated.confirmOnKill": "never",
+  "terminal.integrated.env.windows": {
+    "PATH": "${env:PATH};${env:APPDATA}\\npm;${workspaceFolder}\\node_modules\\.bin",
+    "PNPM_HOME": "${env:LOCALAPPDATA}\\pnpm"
+  },
+  
+  // 📦 PNPM Configuration
+  "npm.packageManager": "pnpm",
+  "npm.enableRunFromFolder": true,
+  "npm.scriptExplorerAction": "run",
+  
+  // 🚀 Git y paths sin restricciones
+  "git.enableCommitSigning": false,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "always",
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  
+  // 🎯 Security settings - habilitado todo
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.enabled": false,
+  
+  // 🔓 Extensions sin restricciones
+  "extensions.autoCheckUpdates": true,
+  "extensions.autoUpdate": true,
+  
+  // 💻 Performance optimization
+  "typescript.disableAutomaticTypeAcquisition": false,
+  
+  "typescript.suggest.includeCompletionsForModuleExports": true,
+  "typescript.suggest.includeAutomaticOptionalChainCompletions": true
+}

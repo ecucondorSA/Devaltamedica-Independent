@@ -1,0 +1,58 @@
+{
+  "name": "altamedica-e2e-testing",
+  "version": "1.0.0",
+  "description": "Comprehensive E2E testing suite for AltaMedica medical platform with HIPAA compliance, performance monitoring, and medical workflow validation",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:medical": "playwright test tests/medical-workflows",
+    "test:compliance": "playwright test tests/compliance", 
+    "test:performance": "playwright test tests/performance",
+    "test:critical": "playwright test tests/critical-paths",
+    "test:emergency": "playwright test tests/critical-paths/emergency-consultation.spec.ts",
+    "test:accessibility": "playwright test tests/compliance/wcag-accessibility.spec.ts",
+    "test:hipaa": "playwright test tests/compliance/hipaa-phi-protection.spec.ts",
+    "report": "playwright show-report",
+    "report:medical": "node utils/generate-medical-report.js",
+    "report:compliance": "node utils/generate-compliance-report.js",
+    "install:deps": "npm install && npx playwright install",
+    "setup": "npm run install:deps && npm run test:medical -- --reporter=list",
+    "ci": "npm run test -- --reporter=github",
+    "dev": "npm run test:ui"
+  },
+  "keywords": [
+    "medical",
+    "telemedicine", 
+    "hipaa",
+    "compliance",
+    "e2e-testing",
+    "playwright",
+    "healthcare",
+    "altamedica",
+    "webrtc",
+    "accessibility"
+  ],
+  "author": "AltaMedica AI Team (Gemini + Claude + Copilot)",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "winston": "^3.11.0",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edumarques/altamedica-e2e-testing"
+  }
+}

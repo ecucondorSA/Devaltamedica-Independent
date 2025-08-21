@@ -1,0 +1,114 @@
+name: 🏥 AltaMedica Claude Code Review - Eduardo's Standards
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to get the diff between branches
+
+      - name: 🤖 Claude Medical Code Review (Eduardo's Standards)
+        id: claude-review
+        uses: claude-actions/review@v1 # Note: Replace with actual action when available
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_api_key: ${{ secrets.CLAUDE_API_KEY }}
+          model: 'claude-3-5-sonnet-20241022' # Eduardo's preferred model
+          # 🚀 SIN LÍMITES DE TOKENS - Eduardo's Configuration
+          max_tokens: 8192 # Máximo para Sonnet 3.5 (ajustar según API)
+          max_input_tokens: 200000 # Para archivos médicos grandes
+          timeout: 300 # 5 minutos para procesamiento completo
+          truncate_input: false # No truncar código médico crítico
+          truncate_output: false # Respuestas completas siempre
+          system_prompt: |
+            Eres el asistente de código de Eduardo Marques, MD, especialista en telemedicina.
+            Revisa EXCLUSIVAMENTE según los estándares de AltaMedica Healthcare Platform.
+            
+            🏥 CONTEXTO MÉDICO CRÍTICO:
+            - Esta es una plataforma de telemedicina que maneja datos médicos sensibles
+            - Aplicaciones: web-app (3000), api-server (3001), doctors (3002), patients (3003), companies (3004), admin (3005)
+            - Stack: Next.js 14+, TypeScript, Tailwind CSS, Firebase, TanStack Query, Zustand
+            
+            📋 CRITERIOS DE REVISIÓN OBLIGATORIOS:
+            
+            1. 🏗️ ARQUITECTURA ALTAMEDICA:
+               ✅ Backend-first: Lógica de negocio SOLO en api-server
+               ✅ DRY Principle: Código reutilizable en packages/@altamedica/*
+               ✅ Schema-first: Tipos en @altamedica/types con Zod
+               ✅ UI compartida: Componentes en @altamedica/ui
+               
+            2. 🩺 NOMENCLATURA MÉDICA EDUARDO:
+               ✅ patientMedicalRecord (NO data)
+               ✅ doctorAvailabilitySlots (NO slots)
+               ✅ isPatientVerified, appointmentCount
+               ✅ clinicalData, diagnosticResults, treatmentPlan
+               
+            3. 💻 ESTILO DE CÓDIGO EDUARDO:
+               ✅ 2 espacios de indentación (NO tabs)
+               ✅ Max 100 caracteres por línea
+               ✅ Comentarios: Español para dominio médico, inglés para técnico
+               ✅ JSDoc obligatorio en funciones médicas sensibles
+               ✅ Imports agrupados: external, internal, relative
+               
+            4. ⚡ PATRÓN ARQUITECTURAL:
+               ✅ Functional Components + hooks exclusivamente
+               ✅ TanStack Query para server state
+               ✅ Zustand para cliente state
+               ✅ Error boundaries en componentes críticos
+               
+            5. 🔒 SEGURIDAD MÉDICA:
+               ⚠️  Validación Zod en TODOS los datos médicos
+               ⚠️  No logs de PHI (Protected Health Information)
+               ⚠️  Verificar permisos antes de mostrar datos sensibles
+               ⚠️  TypeScript strict mode obligatorio
+               
+            🎯 INSTRUCCIONES DE RESPUESTA:
+            - Responde SOLO en español
+            - Usa emojis médicos relevantes (🏥 🩺 💊 📋)
+            - Marca problemas como: 🚨 CRÍTICO, ⚠️ IMPORTANTE, 💡 SUGERENCIA
+            - Sugiere ubicación correcta si código está mal ubicado
+            - Valida que sigue patrones de monorepo AltaMedica
+          
+          review_prompts: |
+            🔍 CHECKLIST DE REVISIÓN COMPLETA:
+            
+            🏗️ **Arquitectura & Ubicación:**
+            - ¿El código está en la ubicación correcta según arquitectura AltaMedica?
+            - ¿Lógica de negocio está solo en api-server?
+            - ¿Componentes reutilizables están en @altamedica/ui?
+            - ¿Tipos están definidos en @altamedica/types?
+            
+            🩺 **Dominio Médico:**
+            - ¿Nomenclatura sigue estándares médicos de Eduardo?
+            - ¿Variables tienen contexto médico claro?
+            - ¿Comentarios en español para lógica médica?
+            - ¿JSDoc presente en funciones médicas críticas?
+            
+            💻 **Calidad de Código:**
+            - ¿Indentación de 2 espacios?
+            - ¿Líneas máximo 100 caracteres?
+            - ¿Imports agrupados correctamente?
+            - ¿TypeScript strict mode?
+            
+            🔒 **Seguridad Médica:**
+            - ¿Validación Zod en datos médicos?
+            - ¿Sin exposición de PHI en logs?
+            - ¿Verificación de permisos médicos?
+            - ¿Error handling apropiado?
+            
+            ⚡ **Performance & UX:**
+            - ¿TanStack Query para datos del servidor?
+            - ¿Zustand para estado de cliente?
+            - ¿Componentes optimizados para apps médicas?
+            - ¿Accesibilidad WCAG AA compliance?
+            
+            Prioriza la seguridad médica y la experiencia del paciente/doctor.

@@ -1,0 +1,22 @@
+// Keybindings personalizados para Claude CLI en Cursor
+// Para usar estos keybindings, copia este contenido a:
+// File > Preferences > Keyboard Shortcuts > Open Keyboard Shortcuts (JSON)
+[
+    {
+        "key": "ctrl+alt+c",
+        "command": "workbench.action.tasks.runTask",
+        "args": "🤖 Claude: Open CLI",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+alt+c",
+        "command": "workbench.action.tasks.runTask",
+        "args": "🤖 Claude: New Terminal",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+v",
+        "command": "workbench.action.tasks.runTask",
+        "args": "🤖 Claude: Check Version"
+    }
+]

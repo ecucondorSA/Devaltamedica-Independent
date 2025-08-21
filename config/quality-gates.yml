@@ -1,0 +1,119 @@
+# Quality Gates Configuration for AltaMedica Platform
+# This file defines thresholds and blocking criteria for CI/CD pipelines
+
+quality_gates:
+  # Coverage thresholds (unified across Jest and nyc)
+  coverage:
+    global:
+      branches: 80
+      functions: 80
+      lines: 80
+      statements: 80
+    medical:
+      branches: 90
+      functions: 90
+      lines: 90
+      statements: 90
+    hipaa:
+      branches: 95
+      functions: 95
+      lines: 95
+      statements: 95
+    api:
+      branches: 85
+      functions: 85
+      lines: 85
+      statements: 85
+
+  # Security gates (AUDIT)
+  security:
+    # Critical security checks that will block deployment
+    critical:
+      - no_hardcoded_secrets: true
+      - no_unsafe_csp: true
+      - no_wildcard_cors: true
+      - critical_middlewares_applied: true
+    
+    # Security checks that will warn but not block
+    warnings:
+      - encryption_implemented: true
+      - audit_logging_enabled: true
+      - rate_limiting_active: true
+
+  # Integration gates (INTEGRATE)
+  integration:
+    # API contract validation
+    api_contracts:
+      csrf_token_usage: 95  # Percentage of mutable operations with CSRF
+      error_handling_patterns: 90
+      sso_flow_complete: 100
+    
+    # Frontend integration
+    frontend:
+      consistent_error_handling: 90
+      api_client_usage: 95
+
+  # Validation gates (VALIDATE)
+  validation:
+    # E2E test requirements
+    e2e:
+      critical_flows_passed: 95
+      flakiness_rate: 2  # Maximum percentage
+    
+    # Performance baselines
+    performance:
+      lighthouse_desktop: 90
+      lighthouse_mobile: 85
+      api_latency_p95: 500  # milliseconds
+      error_rate_5xx: 0.5   # percentage
+
+  # Blocking criteria (any of these will prevent deployment)
+  blocking_criteria:
+    - coverage_threshold_not_met
+    - critical_security_violation
+    - e2e_critical_failure
+    - performance_regression
+
+  # Warning criteria (these will warn but not block)
+  warning_criteria:
+    - security_warning
+    - integration_warning
+    - performance_warning
+
+# Worktree-specific quality gates
+worktrees:
+  audit:
+    required_checks:
+      - security_static_analysis
+      - middleware_application_check
+      - duplication_detection
+    success_threshold: 90  # Percentage of checks that must pass
+    
+  integrate:
+    required_checks:
+      - api_contract_validation
+      - sso_flow_validation
+      - frontend_integration_check
+    success_threshold: 85
+    
+  validate:
+    required_checks:
+      - coverage_threshold_validation
+      - e2e_test_validation
+      - performance_baseline_check
+    success_threshold: 80
+
+# Reporting configuration
+reporting:
+  artifacts:
+    - coverage_reports
+    - security_scan_results
+    - e2e_test_reports
+    - performance_metrics
+  
+  retention_days: 30
+  
+  notifications:
+    slack: true
+    email: false
+    github_comment: true

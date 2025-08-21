@@ -1,0 +1,150 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies - Sin restricciones excesivas
+# ----------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.npm
+.pnpm-store/
+.pnpm-cache/
+
+# Build & Cache - Mantener archivos necesarios
+# ----------------------------------------------------------------
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+.eslintcache
+.cache/
+.parcel-cache/
+
+# Testing
+# ----------------------------------------------------------------
+coverage/
+*.lcov
+playwright-report/
+test-results/
+
+# Environment & Credentials
+# ----------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.mcp
+.env.super-mcp
+**/firebase-adminsdk-*.json
+**/serviceAccountKey.json
+mcp-config-local.json
+*.key
+*.pem
+
+# Logs & Runtime Data
+# ----------------------------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+*.log
+*.log.*
+pids
+*.pid
+*.pid.lock
+*.seed
+firebase-debug.log
+firestore-debug.log
+
+# Firebase
+**/firebase-debug.log
+*firebase-adminsdk*.json
+
+# Project-Specific Artifacts & Reports (DEVALTAMEDICA)
+# ----------------------------------------------------------------
+altamedica-alerts.json
+altamedica-notifications.log
+audit_report_*.json
+auth_deep_analysis.log
+auth_quick_check_*.txt
+diagnostico_altamedica_*.json
+medical-compliance-report.json
+CLAUDE.local.md
+
+# OS & System Files
+# ----------------------------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+.fseventsd
+.fuse_hidden*
+.nfs*
+
+# Windows reserved device filename phantom produced by tooling; cannot be added/removed normally
+nul
+
+# IDE Configuration - Permitir configuraciones útiles
+# ----------------------------------------------------------------
+# Solo ignorar archivos específicos de IDE
+.vscode/launch.json
+.vscode/c_cpp_properties.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary Files
+# ----------------------------------------------------------------
+*.tmp
+*.temp
+*.backup
+*.bak
+backups/
+.tmp/
+.temp/
+
+# Vercel
+# ----------------------------------------------------------------
+.vercel
+
+# TypeScript
+# ----------------------------------------------------------------
+# This file is generated on postinstall and should not be committed
+next-env.d.ts
+
+# Archivos temporales CI/CD
+*temp*
+*debug*
+audit-*.js
+fix-*.js
+setup-check.*
+cleanup-*.js
+
+# Test artifacts
+test-results/
+test-results-*/
+playwright-report*/
+e2e-results/
+
+# Cache files  
+**/.pnpm-cache/
+**/CUsersEduardo.pnpm-cache/
+**/node_modules/.cache/
+
+# Build artifacts
+dist/
+logs/github-actions/
+archive/data/
+
+# Environment files
+.env.local
+.env.*.local

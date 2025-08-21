@@ -1,0 +1,108 @@
+{
+  "name": "AltaMedica Symbolic Links Configuration",
+  "description": "Cross-platform symbolic links for the AltaMedica monorepo",
+  "version": "1.0.0",
+  "links": [
+    {
+      "target": "config/base/tsconfig.base.json",
+      "link": "apps/web-app/tsconfig.base.json",
+      "description": "Shared TypeScript base configuration for web-app",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "config/base/tsconfig.base.json", 
+      "link": "apps/api-server/tsconfig.base.json",
+      "description": "Shared TypeScript base configuration for api-server",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "config/base/tsconfig.base.json",
+      "link": "apps/doctors/tsconfig.base.json",
+      "description": "Shared TypeScript base configuration for doctors app",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "config/base/tsconfig.base.json",
+      "link": "apps/patients/tsconfig.base.json", 
+      "description": "Shared TypeScript base configuration for patients app",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "config/base/tsconfig.base.json",
+      "link": "apps/companies/tsconfig.base.json",
+      "description": "Shared TypeScript base configuration for companies app",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "config/base/tsconfig.base.json",
+      "link": "apps/admin/tsconfig.base.json",
+      "description": "Shared TypeScript base configuration for admin app",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "docs/guides",
+      "link": "apps/api-server/docs/shared-guides",
+      "description": "Shared documentation guides for API server",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "packages/@altamedica/ui/src/components",
+      "link": "apps/web-app/src/shared-components",
+      "description": "Shared UI components for web-app",
+      "options": {
+        "relative": true,
+        "force": false,
+        "createIfMissing": false
+      }
+    },
+    {
+      "target": "config/environments",
+      "link": "apps/api-server/environments",
+      "description": "Shared environment configurations",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    },
+    {
+      "target": "scripts",
+      "link": "tools/shared-scripts",
+      "description": "Shared build and deployment scripts",
+      "options": {
+        "relative": true,
+        "force": false
+      }
+    }
+  ],
+  "metadata": {
+    "created": "2025-08-12",
+    "author": "AltaMedica Platform",
+    "platform_compatibility": ["windows", "linux", "macos"],
+    "notes": [
+      "All links use relative paths for cross-platform compatibility",
+      "Links are created with force=false by default to prevent accidental overwrites",
+      "Run with --audit flag to verify existing symbolic links"
+    ]
+  }
+}

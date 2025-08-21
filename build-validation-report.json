@@ -1,0 +1,1006 @@
+{
+  "timestamp": "2025-08-21T00:56:39.347Z",
+  "stats": {
+    "totalPackages": 23,
+    "packagesWithDist": 30,
+    "packagesNeedingBuild": 0,
+    "appsWithIssues": 1
+  },
+  "packages": [
+    {
+      "name": "@altamedica/ai-agents",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\ai-agents",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/index.mjs",
+          "path": "./dist/index.mjs"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/alta-agent",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\alta-agent",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/components/index.d.ts",
+          "path": "./dist/components/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/services/index.d.ts",
+          "path": "./dist/services/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/types/index.d.ts",
+          "path": "./dist/types/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/anamnesis",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\anamnesis",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/index.mjs",
+          "path": "./dist/index.mjs"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/api-client",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\api-client",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/hooks/index.d.ts",
+          "path": "./dist/hooks/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/hooks/index.js",
+          "path": "./dist/hooks/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/hooks/index.js",
+          "path": "./dist/hooks/index.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/api-helpers",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\api-helpers",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/auth",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\auth",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/middleware/index.d.ts",
+          "path": "./dist/middleware/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/client.d.ts",
+          "path": "./dist/client.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/server.d.ts",
+          "path": "./dist/server.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/services/index.d.ts",
+          "path": "./dist/services/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/hooks/index.d.ts",
+          "path": "./dist/hooks/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/config-next",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\config-next",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/database",
+      "version": "2.0.0",
+      "type": "package",
+      "path": ".\\packages\\database",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/repositories/index.d.ts",
+          "path": "./dist/repositories/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/repositories/index.js",
+          "path": "./dist/repositories/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/repositories/index.js",
+          "path": "./dist/repositories/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/schemas/index.d.ts",
+          "path": "./dist/schemas/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/schemas/index.js",
+          "path": "./dist/schemas/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/schemas/index.js",
+          "path": "./dist/schemas/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/services/index.d.ts",
+          "path": "./dist/services/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/services/index.js",
+          "path": "./dist/services/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/services/index.js",
+          "path": "./dist/services/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/security/index.d.ts",
+          "path": "./dist/security/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/security/index.js",
+          "path": "./dist/security/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/security/index.js",
+          "path": "./dist/security/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/cache/index.d.ts",
+          "path": "./dist/cache/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/cache/index.js",
+          "path": "./dist/cache/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/cache/index.js",
+          "path": "./dist/cache/index.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/diagnostic-engine",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\diagnostic-engine",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": false,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/e2e-tests",
+      "version": "0.1.0",
+      "type": "package",
+      "path": ".\\packages\\e2e-tests",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_main",
+          "severity": "critical",
+          "message": "Main file not found: ./dist/index.js"
+        },
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/index.mjs",
+          "path": "./dist/index.mjs"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/index.js",
+          "path": "./dist/index.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/eslint-config",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\eslint-config",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/firebase",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\firebase",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/client-only.d.ts",
+          "path": "./dist/client-only.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/config-production.d.ts",
+          "path": "./dist/config-production.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/config.d.ts",
+          "path": "./dist/config.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/client.d.ts",
+          "path": "./dist/client.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/admin.d.ts",
+          "path": "./dist/admin.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/hooks",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\hooks",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/index.js",
+          "path": "./dist/esm/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/legacy.d.ts",
+          "path": "./dist/legacy.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/legacy.js",
+          "path": "./dist/esm/legacy.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/legacy.js",
+          "path": "./dist/legacy.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/medical/index.d.ts",
+          "path": "./dist/medical/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/medical/index.js",
+          "path": "./dist/esm/medical/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/medical/index.js",
+          "path": "./dist/medical/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/auth/index.d.ts",
+          "path": "./dist/auth/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/auth/index.js",
+          "path": "./dist/esm/auth/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/auth/index.js",
+          "path": "./dist/auth/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/api/index.d.ts",
+          "path": "./dist/api/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/api/index.js",
+          "path": "./dist/esm/api/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/api/index.js",
+          "path": "./dist/api/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/realtime/index.d.ts",
+          "path": "./dist/realtime/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/realtime/index.js",
+          "path": "./dist/esm/realtime/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/realtime/index.js",
+          "path": "./dist/realtime/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/ui/index.d.ts",
+          "path": "./dist/ui/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/ui/index.js",
+          "path": "./dist/esm/ui/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/ui/index.js",
+          "path": "./dist/ui/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/utils/index.d.ts",
+          "path": "./dist/utils/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/utils/index.js",
+          "path": "./dist/esm/utils/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/utils/index.js",
+          "path": "./dist/utils/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/performance/index.d.ts",
+          "path": "./dist/performance/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/performance/index.js",
+          "path": "./dist/esm/performance/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/performance/index.js",
+          "path": "./dist/performance/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/forms/index.d.ts",
+          "path": "./dist/forms/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/forms/index.js",
+          "path": "./dist/esm/forms/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/forms/index.js",
+          "path": "./dist/forms/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/composed/index.d.ts",
+          "path": "./dist/composed/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/esm/composed/index.js",
+          "path": "./dist/esm/composed/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/composed/index.js",
+          "path": "./dist/composed/index.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/maps",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\maps",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/medical",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\medical",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/patient-services",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\patient-services",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/index.mjs",
+          "path": "./dist/index.mjs"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/shared",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\shared",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_main",
+          "severity": "critical",
+          "message": "Main file not found: ./dist/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/index.mjs",
+          "path": "./dist/index.mjs"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/index.js",
+          "path": "./dist/index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "ESM file missing: ./dist/services/logger.service.mjs",
+          "path": "./dist/services/logger.service.mjs"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: ./dist/services/logger.service.js",
+          "path": "./dist/services/logger.service.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/tailwind-config",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\tailwind-config",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": false,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/telemedicine-core",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\telemedicine-core",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/types",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\types",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/typescript-config",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\typescript-config",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": false,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/ui",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\ui",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/utils",
+      "version": "1.0.0",
+      "type": "package",
+      "path": ".\\packages\\utils",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_types",
+          "severity": "critical",
+          "message": "Types file not found: ./dist/index.d.ts"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "Types file missing: ./dist/index.d.ts",
+          "path": "./dist/index.d.ts"
+        }
+      ],
+      "severity": "critical"
+    }
+  ],
+  "apps": [
+    {
+      "name": "@altamedica/admin",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\admin",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "api-server",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\api-server",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [
+        {
+          "type": "missing_main",
+          "severity": "critical",
+          "message": "Main file not found: index.js"
+        },
+        {
+          "type": "missing_file",
+          "severity": "critical",
+          "message": "CJS file missing: index.js",
+          "path": "index.js"
+        }
+      ],
+      "severity": "critical"
+    },
+    {
+      "name": "@altamedica/companies",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\companies",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/doctors",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\doctors",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/patients",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\patients",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/signaling-server",
+      "version": "1.0.0",
+      "type": "app",
+      "path": ".\\apps\\signaling-server",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    },
+    {
+      "name": "@altamedica/web-app",
+      "version": "0.1.0",
+      "type": "app",
+      "path": ".\\apps\\web-app",
+      "hasDist": true,
+      "hasSrc": true,
+      "hasTsConfig": true,
+      "issues": [],
+      "severity": "ok"
+    }
+  ],
+  "actionPlan": [
+    {
+      "priority": 2,
+      "action": "Fix export configurations",
+      "packages": [
+        "@altamedica/ai-agents",
+        "@altamedica/alta-agent",
+        "@altamedica/anamnesis",
+        "@altamedica/api-client",
+        "@altamedica/api-helpers",
+        "@altamedica/auth",
+        "@altamedica/database",
+        "@altamedica/diagnostic-engine",
+        "@altamedica/e2e-tests",
+        "@altamedica/firebase",
+        "@altamedica/hooks",
+        "@altamedica/maps",
+        "@altamedica/medical",
+        "@altamedica/patient-services",
+        "@altamedica/shared",
+        "@altamedica/telemedicine-core",
+        "@altamedica/ui",
+        "@altamedica/utils"
+      ],
+      "details": "Update package.json exports to point to existing files"
+    }
+  ]
+}

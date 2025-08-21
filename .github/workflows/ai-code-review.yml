@@ -1,0 +1,96 @@
+name: AI Code Review Agent
+
+on:
+  push:
+    paths:
+      - 'apps/web-app/**'
+      - 'packages/**'
+      - 'config/**'
+  pull_request:
+    paths:
+      - 'apps/web-app/**'
+      - 'packages/**'
+      - 'config/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ai-code-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.13.1
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Determine changed files
+        id: changes
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            apps/web-app/**
+            packages/**
+
+      - name: Quick Type Check + Lint (changed only)
+        if: steps.changes.outputs.any_changed == 'true'
+        run: |
+          echo "Changed files:\n${{ steps.changes.outputs.all_changed_files }}" | sed 's/ /\n/g'
+          node scripts/analyze-code.js --mode tsc --path "${{ steps.changes.outputs.all_changed_files }}" || true
+          node scripts/analyze-code.js --mode lint --path "${{ steps.changes.outputs.all_changed_files }}" || true
+
+      - name: Full Build Verification (web-app focus)
+        run: |
+          node scripts/analyze-code.js --mode all --path "apps/web-app"
+
+      - name: Upload diagnostic artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-diagnostic
+          path: |
+            scripts/CLAUDE-BEACON.md
+            scripts/CLAUDE-PROMPT.txt
+
+      - name: Hotspot Scan
+        run: |
+          node scripts/hotspot-scan.js --paths "${{ steps.changes.outputs.all_changed_files }}"
+
+      - name: Fail on critical hotspots (PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          node scripts/hotspot-scan.js --paths "${{ steps.changes.outputs.all_changed_files }}" --fail-on-critical
+
+      - name: Post Review Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'scripts/CLAUDE-BEACON.md';
+            const body = fs.existsSync(path) ? fs.readFileSync(path, 'utf8').slice(-6000) : 'No diagnostic beacon found.';
+            const hotspot = fs.existsSync('scripts/HOTSPOT-REPORT.md') ? fs.readFileSync('scripts/HOTSPOT-REPORT.md', 'utf8').slice(-6000) : '';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `🤖 AI Diagnostic (tail)\n\n${body}\n\n---\n\n🔎 Hotspots (tail)\n\n${hotspot}`
+            });
+

@@ -1,0 +1,96 @@
+{
+  "extends": "./tsconfig.base.json",
+  "references": [
+    {
+      "path": "packages/ai-agents"
+    },
+    {
+      "path": "packages/alta-agent"
+    },
+    {
+      "path": "packages/anamnesis"
+    },
+    {
+      "path": "packages/api-client"
+    },
+    {
+      "path": "packages/api-helpers"
+    },
+    {
+      "path": "packages/auth"
+    },
+    {
+      "path": "packages/config-next"
+    },
+    {
+      "path": "packages/database"
+    },
+    {
+      "path": "packages/diagnostic-engine"
+    },
+    {
+      "path": "packages/e2e-tests"
+    },
+    {
+      "path": "packages/eslint-config"
+    },
+    {
+      "path": "packages/firebase"
+    },
+    {
+      "path": "packages/hooks"
+    },
+    {
+      "path": "packages/maps"
+    },
+    {
+      "path": "packages/medical"
+    },
+    {
+      "path": "packages/patient-services"
+    },
+    {
+      "path": "packages/shared"
+    },
+    {
+      "path": "packages/tailwind-config"
+    },
+    {
+      "path": "packages/telemedicine-core"
+    },
+    {
+      "path": "packages/types"
+    },
+    {
+      "path": "packages/typescript-config"
+    },
+    {
+      "path": "packages/ui"
+    },
+    {
+      "path": "packages/utils"
+    },
+    {
+      "path": "apps/admin"
+    },
+    {
+      "path": "apps/api-server"
+    },
+    {
+      "path": "apps/companies"
+    },
+    {
+      "path": "apps/doctors"
+    },
+    {
+      "path": "apps/patients"
+    },
+    {
+      "path": "apps/web-app"
+    },
+    {
+      "path": "functions"
+    }
+  ],
+  "files": []
+}

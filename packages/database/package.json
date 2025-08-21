@@ -1,0 +1,56 @@
+{
+  "name": "@altamedica/database",
+  "version": "2.0.0",
+  "description": "AltaMedica unified database layer with Firebase/Firestore, HIPAA compliance, and medical data optimization",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
+    "prisma:generate": "prisma generate --schema=./schema.prisma",
+    "clean": "rimraf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@altamedica/firebase": "workspace:*",
+    "@prisma/client": "^6.1.0",
+    "firebase": "^10.7.1",
+    "firebase-admin": "^12.7.0",
+    "pg": "^8.11.3",
+    "redis": "^4.6.13",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@types/express-rate-limit": "^6.0.0",
+    "@types/ioredis": "^5.0.0",
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^20.19.11",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prisma": "^6.1.0",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3"
+  },
+  "peerDependencies": {
+    "@altamedica/shared": "workspace:*",
+    "@altamedica/types": "workspace:*"
+  },
+  "module": "./dist/index.mjs",
+  "sideEffects": false
+}

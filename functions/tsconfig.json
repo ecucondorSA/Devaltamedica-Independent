@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2020",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@altamedica/*": ["../packages/*/src"]
+    },
+    "declaration": true,
+    "declarationMap": true
+  },
+  "compileOnSave": true,
+  "include": ["src"],
+  "exclude": ["node_modules", "lib"],
+  "references": [
+    { "path": "../packages/types" },
+    { "path": "../packages/auth" },
+    { "path": "../packages/firebase" },
+    { "path": "../packages/shared" }
+  ]
+}

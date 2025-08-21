@@ -1,0 +1,41 @@
+# Excluir node_modules y archivos innecesarios
+node_modules/
+**/node_modules/
+.next/
+.env.local
+.env*.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.tsbuildinfo
+coverage/
+.nyc_output
+*.pid
+*.seed
+*.pid.lock
+.coverage
+.gradle
+build/
+dist/
+tmp/
+.tmp/
+*.tmp
+
+# Excluir funciones y archivos pesados
+functions/
+**/functions/
+**/functions/node_modules/
+**/functions/**/node_modules/
+
+# Excluir archivos de desarrollo
+.vscode/
+.idea/
+*.swp
+*~
+
+# Excluir archivos temporales
+.cache/
+.turbo/
+**/.turbo/

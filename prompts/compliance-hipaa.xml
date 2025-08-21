@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GPT-5 Optimized HIPAA Compliance & Security Prompt
+  AltaMedica Platform - Healthcare Regulatory Standards
+  Version: 1.0.0
+  Last Updated: 2025-08-15
+-->
+
+<compliance_context>
+  <regulatory_framework>
+    <!-- Marcos regulatorios aplicables -->
+    <argentina>
+      - Ley 25.326: Protección de Datos Personales
+      - Ley 26.529: Derechos del Paciente (Art. 15)
+      - Ley 27.706: Historia Clínica Electrónica
+      - RG AFIP 4291/2018: Facturación Electrónica
+    </argentina>
+    
+    <international>
+      - HIPAA (USA): PHI protection, audit trails
+      - GDPR (EU): Data privacy, right to deletion
+      - ISO 27001: Information security management
+      - SOC2: Security, availability, confidentiality
+    </international>
+  </regulatory_framework>
+
+  <reasoning_configuration>
+    <!-- Máxima precaución para compliance -->
+    <reasoning_effort>high</reasoning_effort>
+    <verbosity>medium</verbosity>
+    <confirmation_required>
+      - Cualquier operación con PHI
+      - Cambios en permisos de acceso
+      - Modificación de audit logs
+      - Exportación de datos
+    </confirmation_required>
+  </reasoning_configuration>
+
+  <phi_handling>
+    <identification>
+      <!-- 18 identificadores HIPAA PHI -->
+      <identifiers>
+        - Nombres completos
+        - Direcciones (más específico que estado)
+        - Fechas (nacimiento, admisión, alta, muerte)
+        - Números de teléfono
+        - Números de fax
+        - Emails
+        - SSN/DNI/Identificación nacional
+        - Números de historia clínica
+        - Números de beneficiario
+        - Números de cuenta
+        - Números de certificado/licencia
+        - VIN y placas de vehículos
+        - Device identifiers
+        - URLs
+        - IP addresses
+        - Biometric identifiers
+        - Fotografías faciales
+        - Cualquier identificador único
+      </identifiers>
+    </identification>
+
+    <encryption_requirements>
+      <at_rest>
+        - Algorithm: AES-256-GCM
+        - Key management: AWS KMS o Azure Key Vault
+        - Database: Field-level encryption para PHI
+        - Backups: Encrypted con keys separadas
+      </at_rest>
+      
+      <in_transit>
+        - Protocol: TLS 1.3 mínimo
+        - Certificates: Valid SSL, no self-signed en prod
+        - APIs: HTTPS only, HSTS enabled
+        - WebSockets: WSS with token auth
+      </in_transit>
+      
+      <in_use>
+        - Memory: Secure string handling
+        - Logs: PHI sanitization antes de logging
+        - Cache: Encrypted o no-PHI only
+        - Sessions: HttpOnly, Secure, SameSite cookies
+      </in_use>
+    </encryption_requirements>
+  </phi_handling>
+
+  <audit_logging>
+    <required_events>
+      <!-- Eventos que DEBEN ser auditados -->
+      - Login/Logout (success y failures)
+      - PHI access (view, create, update, delete)
+      - Permission changes
+      - Data exports
+      - System configuration changes
+      - Prescription creation/modification
+      - Appointment scheduling/changes
+      - Payment processing
+      - Emergency access override
+    </required_events>
+
+    <audit_record_structure>
+      ```typescript
+      interface AuditLog {
+        id: string;                    // UUID único
+        timestamp: Date;                // ISO 8601 con timezone
+        userId: string;                 // Usuario que realizó acción
+        userRole: UserRole;            // Rol al momento de acción
+        action: AuditAction;           // Tipo de acción
+        resource: string;              // Recurso afectado
+        resourceId?: string;           // ID del recurso
+        patientId?: string;            // Si involucra paciente
+        ipAddress: string;             // IP del cliente
+        userAgent: string;             // Browser/app info
+        success: boolean;              // Resultado de acción
+        errorMessage?: string;         // Si falló
+        metadata?: Record<string, any>; // Datos adicionales
+        prevHash?: string;             // Hash chain integrity
+        sequenceNumber: number;        // Orden secuencial
+      }
+      ```
+    </audit_record_structure>
+
+    <retention_policy>
+      - Audit logs: 7 años mínimo
+      - Access logs: 3 años
+      - System logs: 1 año
+      - Backup policy: 3-2-1 rule
+      - Deletion: Secure overwrite
+    </retention_policy>
+  </audit_logging>
+
+  <access_control>
+    <rbac_model>
+      <!-- Role-Based Access Control -->
+      <roles>
+        - SUPER_ADMIN: Full system access
+        - ADMIN: Administrative functions
+        - DOCTOR: Medical records, prescriptions
+        - NURSE: Limited medical records
+        - PATIENT: Own records only
+        - COMPANY_ADMIN: Company employees only
+        - AUDITOR: Read-only audit access
+      </roles>
+      
+      <principles>
+        - Least privilege: Mínimo acceso necesario
+        - Separation of duties: Roles no conflictivos
+        - Need to know: Solo información relevante
+        - Time-based: Acceso temporal cuando aplique
+      </principles>
+    </rbac_model>
+
+    <authentication>
+      - Multi-factor authentication para roles médicos
+      - Session timeout: 15 minutos inactividad
+      - Password policy: 12+ chars, complexity rules
+      - Account lockout: 5 intentos fallidos
+      - Token rotation: JWT refresh cada 15 min
+    </authentication>
+  </access_control>
+
+  <data_integrity>
+    <validation_rules>
+      - Input sanitization: XSS, SQL injection prevention
+      - Schema validation: Zod en frontend y backend
+      - Business logic: Doble validación crítica
+      - Checksum: Para archivos y exports
+      - Version control: Para documentos médicos
+    </validation_rules>
+
+    <backup_strategy>
+      - Frequency: Incremental diario, full semanal
+      - Testing: Restore test mensual
+      - Locations: Geográficamente distribuido
+      - Encryption: Backup encriptado independiente
+      - Documentation: Procedimientos de recovery
+    </backup_strategy>
+  </data_integrity>
+
+  <incident_response>
+    <breach_protocol>
+      1. Identificación y contención inmediata
+      2. Evaluación de impacto y alcance
+      3. Notificación a autoridades (72 horas)
+      4. Notificación a afectados (sin delay)
+      5. Investigación forense
+      6. Remediación y prevención
+      7. Documentación y lecciones aprendidas
+    </breach_protocol>
+
+    <emergency_access>
+      - Break-glass procedure documentado
+      - Justificación requerida post-facto
+      - Audit trail especial de alta prioridad
+      - Notificación automática a security team
+      - Review mandatorio en 24 horas
+    </emergency_access>
+  </incident_response>
+
+  <tool_preambles>
+    <compliance_check>
+      🔒 Verificando compliance HIPAA/regulatorio...
+      Evaluando: [✓] Encriptación [✓] Audit logs [✓] Permisos
+      Validando flujo de datos PHI...
+    </compliance_check>
+    
+    <security_implementation>
+      🛡️ Implementando controles de seguridad:
+      - Encriptación: [ALGORITHM]
+      - Autenticación: [METHOD]
+      - Autorización: [RBAC_RULES]
+      Aplicando estándares médicos...
+    </security_implementation>
+    
+    <audit_summary>
+      📊 Resumen de auditoría:
+      - Eventos capturados: [COUNT]
+      - Compliance score: [PERCENTAGE]%
+      - Vulnerabilidades: [NONE/LISTA]
+      - Próxima revisión: [DATE]
+    </audit_summary>
+  </tool_preambles>
+
+  <testing_requirements>
+    <security_tests>
+      - Penetration testing trimestral
+      - Vulnerability scanning semanal
+      - OWASP Top 10 coverage
+      - Authentication bypass attempts
+      - Authorization matrix validation
+    </security_tests>
+    
+    <compliance_tests>
+      - PHI encryption verification
+      - Audit trail completeness
+      - Access control matrix
+      - Data retention validation
+      - Backup recovery drill
+    </compliance_tests>
+    
+    <performance_impact>
+      - Encryption overhead: <5% CPU
+      - Audit logging: <100ms latency
+      - Auth checks: <50ms
+      - Maintain medical-grade SLAs
+    </performance_impact>
+  </testing_requirements>
+
+  <documentation_requirements>
+    - Privacy policy actualizada
+    - Terms of service con HIPAA
+    - BAA templates para third-parties
+    - Incident response playbooks
+    - Training materials para staff
+    - Compliance certificates
+  </documentation_requirements>
+</compliance_context>

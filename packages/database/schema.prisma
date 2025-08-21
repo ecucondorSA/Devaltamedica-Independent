@@ -1,0 +1,67 @@
+// Prisma schema para Altamedica
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TelemedicineStatus {
+  SCHEDULED
+  WAITING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum SenderType {
+  PATIENT
+  DOCTOR
+}
+
+model Patient {
+  id       String                @id @default(uuid())
+  sessions TelemedicineSession[] @relation("SessionPatient")
+}
+
+model Doctor {
+  id       String                @id @default(uuid())
+  sessions TelemedicineSession[] @relation("SessionDoctor")
+}
+
+model TelemedicineSession {
+  id           String             @id @default(uuid())
+  roomId       String
+  patientId    String
+  doctorId     String
+  status       TelemedicineStatus  @default(SCHEDULED)
+  scheduledAt  DateTime
+  startedAt    DateTime?
+  endedAt      DateTime?
+  duration     Int?
+  notes        String?
+  recordingUrl String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  patient      Patient             @relation("SessionPatient", fields: [patientId], references: [id])
+  doctor       Doctor              @relation("SessionDoctor", fields: [doctorId], references: [id])
+  chatMessages ChatMessage[]
+}
+
+model ChatMessage {
+  id         String   @id @default(uuid())
+  sessionId  String
+  senderId   String
+  senderType SenderType
+  message    String
+  createdAt  DateTime @default(now())
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}

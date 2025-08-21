@@ -1,0 +1,103 @@
+# 📦 AltaMedica Packages - Guía de Desarrollo
+
+## 🏗️ Arquitectura de Packages
+
+### 📁 Estructura de Packages
+
+#### **`packages/auth/`** - Autenticación Centralizada
+- **Propósito**: Sistema de autenticación compartido
+- **Funcionalidades**: JWT, roles, permisos, middleware
+- **Uso**: Importado por todas las apps frontend y backend
+
+#### **`packages/database/`** - Base de Datos Compartida
+- **Propósito**: Configuración y modelos de BD
+- **Funcionalidades**: Prisma schema, migrations, seeds
+- **Uso**: Todas las apps que necesiten acceso a BD
+
+#### **`packages/api-client/`** - Cliente HTTP
+- **Propósito**: Cliente HTTP tipado para APIs
+- **Funcionalidades**: Interceptors, error handling, tipos
+- **Uso**: Apps frontend para comunicarse con backend
+
+#### **`packages/ui/`** - Componentes de Interfaz
+- **Propósito**: Componentes UI reutilizables
+- **Funcionalidades**: Botones, formularios, modales, etc.
+- **Uso**: Todas las apps frontend
+
+#### **`packages/medical-components/`** - Componentes Médicos
+- **Propósito**: Componentes específicos para medicina
+- **Funcionalidades**: Calendarios médicos, formularios de salud
+- **Uso**: Apps de médicos y pacientes
+
+## 🔧 Desarrollo de Packages
+
+### 📦 Estructura de Package
+```
+packages/package-name/
+├── src/
+│   ├── index.ts          # Export principal
+│   ├── components/       # Componentes del package
+│   ├── utils/           # Utilidades
+│   └── types/           # Tipos TypeScript
+├── package.json          # Dependencias y scripts
+├── tsconfig.json         # Configuración TypeScript
+└── README.md            # Documentación
+```
+
+### 🔗 Dependencias entre Packages
+- **Evitar dependencias circulares**
+- **Usar peer dependencies** para React/Next.js
+- **Mantener versiones compatibles** entre packages
+- **Documentar dependencias** claramente
+
+### 📝 Exportación de APIs
+- **Exportar solo lo necesario** (no internals)
+- **Usar barrel exports** en index.ts
+- **Mantener compatibilidad** hacia atrás
+- **Versionar APIs** cuando sea necesario
+
+## 🧪 Testing de Packages
+
+### 🧪 Tests Unitarios
+- **Vitest** como test runner
+- **Cobertura mínima** del 90%
+- **Mocks** para dependencias externas
+- **Tests de integración** entre packages
+
+### 🧪 Tests de Integración
+- **Verificar compatibilidad** entre packages
+- **Tests de build** en monorepo
+- **Validación de tipos** TypeScript
+- **Tests de performance** para componentes críticos
+
+## 📚 Documentación
+
+### 📖 README.md
+- **Descripción clara** del propósito
+- **Ejemplos de uso** con código
+- **API reference** completa
+- **Changelog** de versiones
+
+### 📖 JSDoc
+- **Comentarios** para todas las funciones públicas
+- **Ejemplos** de uso en comentarios
+- **Tipos** documentados claramente
+- **Deprecation warnings** cuando sea necesario
+
+## 🚀 Build y Distribución
+
+### 🔨 Build Process
+- **TypeScript** compilation
+- **Bundling** con tsup/esbuild
+- **Tree shaking** para optimización
+- **Source maps** para debugging
+
+### 📦 Publicación
+- **Versionado semántico** (semver)
+- **Changelog** automático
+- **Tests** antes de publicación
+- **Verificación** de compatibilidad
+description:
+globs:
+alwaysApply: false
+---

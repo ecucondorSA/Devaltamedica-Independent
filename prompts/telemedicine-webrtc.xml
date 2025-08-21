@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GPT-5 Optimized Telemedicine & WebRTC Development Prompt
+  AltaMedica Platform - Real-time Medical Communications
+  Version: 1.0.0
+  Last Updated: 2025-08-15
+-->
+
+<telemedicine_context>
+  <system_architecture>
+    <!-- Stack técnico de telemedicina -->
+    <components>
+      - Signaling Server: Puerto 8888 (WebSocket)
+      - WebRTC: Videollamadas P2P con STUN/TURN
+      - Quality of Service: Monitoreo latencia/jitter/packet loss
+      - Unified Telemedicine Controller en api-server
+      - Hooks especializados: useTelemedicineUnified, useWebRTCPatientHybrid
+    </components>
+    
+    <performance_requirements>
+      - Latencia máxima: 100ms para señalización
+      - Video bitrate: 1.5-3 Mbps adaptativo
+      - Audio priority: Opus codec, 48kHz
+      - Reconexión automática en <3 segundos
+      - Fallback a TURN si P2P falla
+    </performance_requirements>
+  </system_architecture>
+
+  <reasoning_configuration>
+    <!-- Optimizado para operaciones real-time -->
+    <reasoning_effort>medium</reasoning_effort>
+    <verbosity>low</verbosity>
+    <tool_budget>
+      - Debugging WebRTC: ilimitado
+      - Setup inicial: máximo 10 herramientas
+      - Optimización: máximo 5 herramientas
+    </tool_budget>
+  </reasoning_configuration>
+
+  <context_gathering>
+    <priority_files>
+      - apps/signaling-server/src/*
+      - packages/telemedicine-core/*
+      - apps/api-server/src/telemedicine/*
+      - apps/doctors/src/hooks/useWebRTC*
+      - apps/patients/src/hooks/useTelemedicine*
+    </priority_files>
+    
+    <webrtc_checklist>
+      - [ ] Verificar servidor de señalización activo
+      - [ ] Confirmar configuración STUN/TURN
+      - [ ] Revisar permisos de cámara/micrófono
+      - [ ] Validar certificados SSL para producción
+      - [ ] Comprobar firewall/NAT traversal
+    </webrtc_checklist>
+  </context_gathering>
+
+  <implementation_patterns>
+    <connection_flow>
+      1. Autenticación JWT via UnifiedAuthSystem
+      2. Crear/unirse a room en signaling server
+      3. Intercambio SDP offer/answer
+      4. ICE candidates negotiation
+      5. Establecer DataChannel para metadata
+      6. Monitor QoS metrics continuamente
+      7. Graceful disconnect con cleanup
+    </connection_flow>
+
+    <error_handling>
+      <network_issues>
+        - Auto-retry con backoff exponencial
+        - Switchover STUN → TURN automático
+        - Preservar estado de sesión en reconexión
+        - Notificar degradación de calidad al usuario
+      </network_issues>
+      
+      <media_issues>
+        - Fallback audio-only si video falla
+        - Detección de dispositivos en tiempo real
+        - Permisos: re-prompt con instrucciones claras
+        - Echo cancellation y noise suppression
+      </media_issues>
+    </error_handling>
+
+    <qos_monitoring>
+      <!-- Sistema de monitoreo de calidad -->
+      <metrics>
+        - RTT (Round Trip Time): <150ms bueno, <300ms aceptable
+        - Jitter: <30ms bueno, <50ms aceptable
+        - Packet Loss: <1% bueno, <3% aceptable
+        - Bandwidth: mínimo 1Mbps up/down
+        - Video Resolution: adaptativo 480p-1080p
+        - Frame Rate: target 30fps, mínimo 15fps
+      </metrics>
+      
+      <alerts>
+        - Poor connection: notificación visual sutil
+        - Critical issues: modal con opciones
+        - Auto-ajuste calidad sin intervención
+        - Logging para análisis posterior
+      </alerts>
+    </qos_monitoring>
+  </implementation_patterns>
+
+  <code_structure>
+    <webrtc_hooks>
+      ```typescript
+      // Patrón estándar para hooks WebRTC
+      export function useWebRTCSession() {
+        const [connectionState, setConnectionState] = useState<RTCPeerConnectionState>('new');
+        const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+        const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+        const [stats, setStats] = useState<RTCStatsReport | null>(null);
+        
+        // Implementación con cleanup apropiado
+        useEffect(() => {
+          return () => {
+            // Cleanup crítico para evitar memory leaks
+            localStream?.getTracks().forEach(track => track.stop());
+            peerConnection?.close();
+          };
+        }, []);
+      }
+      ```
+    </webrtc_hooks>
+
+    <signaling_protocol>
+      ```typescript
+      // Mensajes de señalización estándar
+      interface SignalingMessage {
+        type: 'offer' | 'answer' | 'ice-candidate' | 'join' | 'leave';
+        roomId: string;
+        userId: string;
+        payload: RTCSessionDescriptionInit | RTCIceCandidateInit;
+        metadata?: {
+          userName?: string;
+          role?: 'doctor' | 'patient';
+          sessionType?: 'consultation' | 'emergency';
+        };
+      }
+      ```
+    </signaling_protocol>
+  </code_structure>
+
+  <tool_preambles>
+    <webrtc_setup>
+      🎥 Configurando sesión de telemedicina WebRTC...
+      Verificando: [✓] Señalización [✓] STUN/TURN [✓] Permisos
+      Estableciendo conexión peer-to-peer segura...
+    </webrtc_setup>
+    
+    <debugging_webrtc>
+      🔍 Diagnosticando problema WebRTC:
+      - Estado de conexión: [STATE]
+      - ICE gathering: [ICE_STATE]  
+      - Señalización: [SIGNALING_STATE]
+      Aplicando solución...
+    </debugging_webrtc>
+    
+    <optimization_complete>
+      ⚡ Optimización WebRTC completada:
+      - Latencia reducida: [BEFORE]ms → [AFTER]ms
+      - Calidad mejorada: [IMPROVEMENT]
+      - Estabilidad: [METRIC]
+    </optimization_complete>
+  </tool_preambles>
+
+  <testing_requirements>
+    <unit_tests>
+      - Mock RTCPeerConnection para tests
+      - Verificar state machines de conexión
+      - Validar transformación de SDP
+      - Test reconnection logic
+    </unit_tests>
+    
+    <integration_tests>
+      - Flujo completo doctor-patient
+      - Simulación de pérdida de red
+      - Cambio de dispositivos mid-call
+      - Multi-party calls (si aplica)
+    </integration_tests>
+    
+    <performance_tests>
+      - Medir latencia señalización
+      - Benchmark establecimiento conexión
+      - Stress test con múltiples peers
+      - Memory leak detection
+    </performance_tests>
+  </testing_requirements>
+
+  <production_checklist>
+    - [ ] TURN server configurado y testeado
+    - [ ] SSL certificates válidos
+    - [ ] Rate limiting en signaling server
+    - [ ] Grabación de sesiones (si requerido)
+    - [ ] Fallback para navegadores legacy
+    - [ ] Mobile optimizations aplicadas
+    - [ ] Analytics y monitoring activos
+  </production_checklist>
+</telemedicine_context>

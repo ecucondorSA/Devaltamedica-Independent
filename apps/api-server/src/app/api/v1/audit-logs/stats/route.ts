@@ -1,0 +1,1 @@
+export { getStats as GET } from '../route';

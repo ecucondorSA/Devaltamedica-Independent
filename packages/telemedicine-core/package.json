@@ -1,0 +1,38 @@
+{
+  "name": "@altamedica/telemedicine-core",
+  "version": "1.0.0",
+  "description": "AltaMedica telemedicine-core package",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^18.2.0",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "@altamedica/shared": "workspace:*",
+    "react": "^18.2.0 || ^19.0.0",
+    "zod": "^3.25.67"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0"
+  },
+  "sideEffects": false
+}

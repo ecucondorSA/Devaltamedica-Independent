@@ -1,0 +1,151 @@
+# Tracker de milestones e issues para AltaMedica
+# Usa owners con handles de GitHub válidos. Las fechas son ISO (YYYY-MM-DD).
+
+repo:
+  owner: ECUCONDORSASBIC
+  name: DEVALTA
+
+labels:
+  - name: area:api-server
+    color: 1f6feb
+    description: Backend central (apps/api-server)
+  - name: area:patients
+    color: 0e8a16
+    description: Patients App
+  - name: area:doctors
+    color: b60205
+    description: Doctors App
+  - name: area:companies
+    color: d93f0b
+    description: Companies App (Marketplace + Mapas)
+  - name: area:admin
+    color: 5319e7
+    description: Admin App
+  - name: area:web-app
+    color: fbca04
+    description: Web pública
+  - name: pkg:types
+    color: 0052cc
+    description: @altamedica/types
+  - name: pkg:ui
+    color: c5def5
+    description: @altamedica/ui
+  - name: security
+    color: d73a4a
+    description: Seguridad/HIPAA
+  - name: performance
+    color: 5319e7
+    description: Performance/optimización
+  - name: e2e
+    color: 0366d6
+    description: E2E y QA
+
+milestones:
+  - title: M0 – Kickoff y Setup
+    due_on: 2025-08-15
+    description: Alineación, riesgos, CI/CD base, convenciones.
+  - title: M1 – Fundaciones Técnicas
+    due_on: 2025-08-29
+    description: Contratos/types, auth flow base, pipelines y providers.
+  - title: M2 – Funcionalidad Núcleo
+    due_on: 2025-09-26
+    description: API + Patients/Doctors/Companies/Admin/Web MVP navegable.
+  - title: M3 – Integraciones, Seguridad y Performance
+    due_on: 2025-10-10
+    description: Hardening, performance y observabilidad.
+  - title: M4 – QA Integral
+    due_on: 2025-10-17
+    description: E2E completos, accesibilidad, cross-browser.
+  - title: M5 – UAT
+    due_on: 2025-10-24
+    description: UAT con stakeholders y fixes P0/P1.
+  - title: M6 – Piloto
+    due_on: 2025-10-31
+    description: Piloto canario y monitoreo intensivo.
+  - title: M7 – Go-live
+    due_on: 2025-11-07
+    description: Code freeze, checklist final y despliegue.
+
+issues:
+  # M1 – Fundaciones Técnicas
+  - title: "Auth flow end-to-end con cookies HttpOnly/Secure"
+    milestone: M1 – Fundaciones Técnicas
+    labels: [area:api-server, security]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Implementar flujo Firebase idToken → apps/api-server (/api/v1/auth/*) → seteo de cookies HttpOnly/Secure.
+      - Código: apps/api-server/src/routes/auth/
+      - Validación: packages/types/
+      - Front: apps/*/src/app/layout.tsx con AuthProvider
+  - title: "Actualizar @altamedica/types con Zod para contratos actuales"
+    milestone: M1 – Fundaciones Técnicas
+    labels: [pkg:types]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Alinear Zod schemas con endpoints vigentes del api-server y publicar versión.
+      - Código: packages/types/
+      - Afecta: packages/api-client/, hooks generados.
+  - title: "QueryProvider + Hook generator en apps/*"
+    milestone: M1 – Fundaciones Técnicas
+    labels: [area:patients, area:doctors, area:companies, area:admin, area:web-app]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Asegurar QueryProvider y AuthProvider en layout de cada app, y ejecutar tools/python/frontend_hook_generator.py.
+      - Código: apps/*/src/app/layout.tsx
+      - Script: tools/python/frontend_hook_generator.py
+
+  # M2 – Funcionalidad Núcleo
+  - title: "Patients – Telemedicina base (video y estado)"
+    milestone: M2 – Funcionalidad Núcleo
+    labels: [area:patients]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Construir flujo de videollamada base.
+      - Código: apps/patients/src/components/telemedicine/patientvideocall.tsx
+  - title: "Doctors – Sala de espera y agenda"
+    milestone: M2 – Funcionalidad Núcleo
+    labels: [area:doctors]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Implementar agenda y sala de espera con estados en tiempo real.
+      - Código: apps/doctors/src/
+  - title: "Companies – Marketplace con mapa SSR-safe"
+    milestone: M2 – Funcionalidad Núcleo
+    labels: [area:companies, performance]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Mapas con react-leaflet con dynamic ssr:false, íconos e invalidateSize por evento.
+      - Código: apps/companies/src/components/MarketplaceMap.tsx y apps/companies/src/app/marketplace/page.tsx
+
+  # M3 – Integraciones, Seguridad y Performance
+  - title: "Hardening de seguridad (CORS, rate limiting, RBAC)"
+    milestone: M3 – Integraciones, Seguridad y Performance
+    labels: [area:api-server, security]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Configurar CORS estricto, rate limiting y RBAC basado en roles.
+      - Código: apps/api-server/src/
+  - title: "Performance y análisis de bundles (apps/*)"
+    milestone: M3 – Integraciones, Seguridad y Performance
+    labels: [performance]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Medir y optimizar bundles: split dinámico, imágenes, headers.
+      - Código: apps/web-app/analyze-bundle.js, apps/*/next.config.js
+
+  # M4 – QA Integral
+  - title: "E2E smoke críticos + accesibilidad"
+    milestone: M4 – QA Integral
+    labels: [e2e]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      E2E de login, consulta telemedicina y compra marketplace; axe para accesibilidad.
+      - Código: packages/e2e-tests/ o apps/*/e2e/
+
+  # M7 – Go-live
+  - title: "Go-live checklist y runbook"
+    milestone: M7 – Go-live
+    labels: [area:api-server, area:patients, area:doctors, area:companies, area:admin, area:web-app]
+    owners: ["ECUCONDORSASBIC"]
+    body: |
+      Code freeze, backups, dominios/SSL/CORS, alertas, war-room y comunicación.

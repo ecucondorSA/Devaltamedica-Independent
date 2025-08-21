@@ -1,0 +1,96 @@
+{
+  "name": "AltaMedica - Telemedicina",
+  "short_name": "AltaMedica",
+  "description": "Plataforma completa de telemedicina para pacientes y doctores",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["medical", "health", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/altamedica-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nueva Cita",
+      "short_name": "Cita",
+      "description": "Agendar una nueva cita médica",
+      "url": "/appointments/new"
+    },
+    {
+      "name": "Telemedicina",
+      "short_name": "Video",
+      "description": "Iniciar sesión de telemedicina",
+      "url": "/telemedicine"
+    },
+    {
+      "name": "Mis Recetas",
+      "short_name": "Recetas",
+      "description": "Ver mis recetas médicas",
+      "url": "/prescriptions"
+    },
+    {
+      "name": "Resultados de Laboratorio",
+      "short_name": "Labs",
+      "description": "Ver resultados de laboratorio",
+      "url": "/lab-results"
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+altamedica",
+      "url": "/?protocol=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/upload",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png", ".gif"],
+        "application/pdf": [".pdf"],
+        "text/*": [".txt", ".md"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", "application/pdf", "text/*"]
+        }
+      ]
+    }
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate"
+} 

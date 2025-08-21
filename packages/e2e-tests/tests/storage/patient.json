@@ -1,0 +1,15 @@
+{
+  "cookies": [
+    {
+      "name": "altamedica_auth_token",
+      "value": "mock-jwt-patient-patient-123",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1755011226,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

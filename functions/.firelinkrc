@@ -1,0 +1,10 @@
+{
+  "outDir": "./lib",
+  "autoFix": true,
+  "excludeDeps": [
+    "firebase-admin",
+    "firebase-functions"
+  ],
+  "preserveSymlinks": true,
+  "verbose": false
+}

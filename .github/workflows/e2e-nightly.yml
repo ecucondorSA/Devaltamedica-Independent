@@ -1,0 +1,113 @@
+name: 🌙 Nightly E2E
+
+on:
+  schedule:
+    # Ejecuta a las 06:00 UTC diariamente (ajusta según zona horaria deseada)
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+env:
+  NODE_VERSION: '20.x'
+  PNPM_VERSION: '9.15.2'
+  # Forzamos mock login para flujos SSO
+  E2E_USE_MOCK_LOGIN: '1'
+
+jobs:
+  e2e-nightly:
+    name: 🎭 Nightly E2E (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, mobile]
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🏗️ Build packages
+        run: pnpm -r --filter "./packages/*" build
+
+      - name: 🏗️ Build Next apps (web-app, patients, doctors)
+        run: |
+          pnpm --filter web-app build
+          pnpm --filter patients build
+          pnpm --filter doctors build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001
+          NEXT_PUBLIC_SSO_URL: http://localhost:3000
+
+      - name: 🚀 Start API (dev) in background
+        run: |
+          nohup pnpm --filter api-server dev > api-server.log 2>&1 &
+          echo $! > api.pid
+
+      - name: 🚀 Start Next apps in background
+        run: |
+          nohup pnpm --filter web-app start -- --port 3000 > web-app.log 2>&1 &
+          nohup pnpm --filter doctors start -- --port 3002 > doctors.log 2>&1 &
+          nohup pnpm --filter patients start -- --port 3003 > patients.log 2>&1 &
+
+      - name: ⏱️ Wait for services
+        run: |
+          npx wait-on http://localhost:3001/api/v1/health \
+                       http://localhost:3000 \
+                       http://localhost:3002/api/health \
+                       http://localhost:3003/api/health
+
+      - name: 🎭 Install Playwright browsers
+        run: pnpm --filter @altamedica/e2e-tests exec playwright install --with-deps ${{ matrix.project }}
+
+      - name: 🎭 Run Nightly E2E (${{ matrix.project }})
+        run: pnpm --filter @altamedica/e2e-tests exec -- playwright test --project=${{ matrix.project }}
+        env:
+          CI: true
+          WEB_BASE_URL: http://localhost:3000
+          PATIENTS_BASE_URL: http://localhost:3003
+          DOCTORS_BASE_URL: http://localhost:3002
+          API_BASE_URL: http://localhost:3001
+          E2E_USE_MOCK_LOGIN: ${{ env.E2E_USE_MOCK_LOGIN }}
+
+      - name: 📤 Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-playwright-report-${{ matrix.project }}
+          path: packages/e2e-tests/playwright-report/
+          retention-days: 14
+
+      - name: 📤 Upload raw test-results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-test-results-${{ matrix.project }}
+          path: packages/e2e-tests/test-results/
+          retention-days: 14
+
+      - name: 📤 Upload service logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-service-logs-${{ matrix.project }}
+          path: |
+            api-server.log
+            web-app.log
+            doctors.log
+            patients.log
+          retention-days: 7

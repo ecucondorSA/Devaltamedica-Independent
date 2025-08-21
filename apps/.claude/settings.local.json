@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:all:*)",
+      "Bash(npm install:*)",
+      "Bash(rm:*)",
+      "Bash(pnpm install:*)",
+      "Bash(docker:*)",
+      "Bash(curl:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(sed:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill:*)",
+      "Bash(node fix-packages.js)",
+      "Bash(node:*)",
+      "Bash(del srcindex.ts)",
+      "Bash(pnpm build:*)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "C:\\mnt\\c\\Users\\Eduardo\\Documents",
+      "C:\\Users\\Eduardo\\Documents\\devaltamedica\\packages\\ui",
+      "C:\\Users\\Eduardo\\Documents\\devaltamedica\\packages\\types"
+    ]
+  }
+}

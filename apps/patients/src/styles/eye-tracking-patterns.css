@@ -1,0 +1,323 @@
+/* Eye-Tracking Pattern Optimized CSS */
+/* Based on F-Pattern, Z-Pattern, and Gutenberg Diagram principles */
+
+:root {
+  /* Default eye-tracking optimized spacing */
+  --et-sections: 24;
+  --et-gutters: 16px;
+  --et-margins: 32px;
+  --et-content-padding: 24px;
+  --et-element-spacing: 16px;
+  
+  /* Derived values */
+  --et-section-width: calc(100% / var(--et-sections));
+  --et-half-gutter: calc(var(--et-gutters) / 2);
+  --et-double-spacing: calc(var(--et-element-spacing) * 2);
+  --et-triple-spacing: calc(var(--et-element-spacing) * 3);
+  
+  /* Eye-tracking zone priorities */
+  --et-primary-attention: #3b82f6;
+  --et-secondary-attention: #10b981;
+  --et-tertiary-attention: #6b7280;
+  
+  /* Visual hierarchy weights */
+  --et-primary-weight: 700;
+  --et-secondary-weight: 600;
+  --et-tertiary-weight: 500;
+}
+
+/* Base container classes */
+.et-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--et-margins);
+  position: relative;
+}
+
+.et-grid {
+  display: grid;
+  gap: var(--et-gutters);
+  grid-template-columns: repeat(var(--et-sections), 1fr);
+}
+
+/* F-Pattern Specific Layouts */
+.et-f-pattern {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+  grid-template-columns: 240px 1fr 280px;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--et-gutters);
+  min-height: 100vh;
+}
+
+.et-f-header {
+  grid-area: header;
+  padding: var(--et-element-spacing) var(--et-content-padding);
+  /* Primary horizontal scan zone */
+  background: linear-gradient(90deg, var(--et-primary-attention)08 0%, transparent 60%);
+}
+
+.et-f-sidebar {
+  grid-area: sidebar;
+  padding: var(--et-content-padding);
+  /* Vertical scan zone - critical for F-pattern */
+  border-right: 2px solid var(--et-primary-attention)15;
+}
+
+.et-f-main {
+  grid-area: main;
+  padding: var(--et-content-padding);
+  /* Secondary horizontal scan positioning */
+  position: relative;
+}
+
+.et-f-main::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 40%;
+  height: 2px;
+  background: var(--et-secondary-attention)20;
+  pointer-events: none;
+}
+
+.et-f-aside {
+  grid-area: aside;
+  padding: var(--et-content-padding);
+}
+
+.et-f-footer {
+  grid-area: footer;
+  padding: var(--et-element-spacing) var(--et-content-padding);
+}
+
+/* Z-Pattern Specific Layouts */
+.et-z-pattern {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.et-z-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--et-element-spacing) var(--et-content-padding);
+  /* Z-pattern top line */
+  background: linear-gradient(90deg, var(--et-primary-attention)12 0%, transparent 30%, transparent 70%, var(--et-secondary-attention)12 100%);
+}
+
+.et-z-hero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--et-content-padding) * 3) var(--et-content-padding);
+  /* Central focus area for Z-pattern */
+  position: relative;
+  background: radial-gradient(ellipse at center, var(--et-primary-attention)08 0%, transparent 70%);
+}
+
+.et-z-cta-zone {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  min-width: 200px;
+  /* Terminal area for Z-pattern */
+  background: var(--et-primary-attention)05;
+  border-radius: 8px;
+  padding: var(--et-element-spacing);
+}
+
+/* Gutenberg Diagram Layout */
+.et-gutenberg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--et-gutters);
+  min-height: 100vh;
+}
+
+.et-g-primary {
+  /* Primary Optical Area - Top Left */
+  background: var(--et-primary-attention)08;
+  padding: var(--et-content-padding);
+  border: 2px solid var(--et-primary-attention)20;
+}
+
+.et-g-strong-fallow {
+  /* Strong Fallow Area - Top Right */
+  background: var(--et-secondary-attention)05;
+  padding: var(--et-content-padding);
+}
+
+.et-g-weak-fallow {
+  /* Weak Fallow Area - Bottom Left */
+  background: var(--et-tertiary-attention)05;
+  padding: var(--et-content-padding);
+}
+
+.et-g-terminal {
+  /* Terminal Area - Bottom Right */
+  background: var(--et-secondary-attention)08;
+  padding: var(--et-content-padding);
+  border: 2px solid var(--et-secondary-attention)20;
+}
+
+/* Content hierarchy utilities */
+.et-primary-content {
+  font-weight: var(--et-primary-weight);
+  color: var(--et-primary-attention);
+  margin-bottom: var(--et-element-spacing);
+  /* Ensure primary content gets attention */
+  position: relative;
+  z-index: 10;
+}
+
+.et-secondary-content {
+  font-weight: var(--et-secondary-weight);
+  color: var(--et-secondary-attention);
+  margin-bottom: calc(var(--et-element-spacing) * 0.75);
+}
+
+.et-tertiary-content {
+  font-weight: var(--et-tertiary-weight);
+  color: var(--et-tertiary-attention);
+  margin-bottom: calc(var(--et-element-spacing) * 0.5);
+}
+
+/* Whitespace management utilities */
+.et-section {
+  padding: var(--et-content-padding) 0;
+}
+
+.et-section + .et-section {
+  margin-top: var(--et-double-spacing);
+}
+
+.et-card {
+  padding: var(--et-content-padding);
+  margin-bottom: var(--et-element-spacing);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.et-spacing-xs { margin: calc(var(--et-element-spacing) * 0.25); }
+.et-spacing-sm { margin: calc(var(--et-element-spacing) * 0.5); }
+.et-spacing-md { margin: var(--et-element-spacing); }
+.et-spacing-lg { margin: var(--et-double-spacing); }
+.et-spacing-xl { margin: var(--et-triple-spacing); }
+
+/* Responsive eye-tracking optimizations */
+@media (max-width: 768px) {
+  :root {
+    --et-sections: 12;
+    --et-gutters: 12px;
+    --et-margins: 16px;
+    --et-content-padding: 16px;
+    --et-element-spacing: 12px;
+  }
+  
+  .et-f-pattern {
+    grid-template-areas: 
+      "header"
+      "main"
+      "sidebar"
+      "aside"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+  
+  /* Mobile F-pattern adjustments */
+  .et-f-main::before {
+    display: none; /* Remove desktop-only visual guides */
+  }
+  
+  .et-z-header {
+    flex-direction: column;
+    gap: var(--et-element-spacing);
+  }
+  
+  .et-z-cta-zone {
+    position: static;
+    margin-top: var(--et-double-spacing);
+  }
+  
+  .et-gutenberg {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --et-sections: 8;
+    --et-gutters: 8px;
+    --et-margins: 12px;
+    --et-content-padding: 12px;
+    --et-element-spacing: 8px;
+  }
+}
+
+/* Debug mode styles */
+.et-debug-mode {
+  position: relative;
+}
+
+.et-debug-zone {
+  position: absolute;
+  pointer-events: none;
+  border: 2px dashed;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 9999;
+}
+
+.et-debug-zone--primary {
+  border-color: var(--et-primary-attention);
+  background-color: var(--et-primary-attention)10;
+  color: var(--et-primary-attention);
+}
+
+.et-debug-zone--secondary {
+  border-color: var(--et-secondary-attention);
+  background-color: var(--et-secondary-attention)10;
+  color: var(--et-secondary-attention);
+}
+
+.et-debug-zone--tertiary {
+  border-color: var(--et-tertiary-attention);
+  background-color: var(--et-tertiary-attention)10;
+  color: var(--et-tertiary-attention);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .et-debug-zone {
+    animation: none;
+  }
+  
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-high-contrast: high) {
+  :root {
+    --et-primary-attention: #0000ff;
+    --et-secondary-attention: #008000;
+    --et-tertiary-attention: #000000;
+  }
+}

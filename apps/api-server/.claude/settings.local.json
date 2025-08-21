@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "Bash(docker build:*)",
+      "Bash(dir)",
+      "Bash(ls)",
+      "Bash(ls:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(pnpm install:*)",
+      "Bash(curl:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm run:*)",
+      "Bash(find:*)",
+      "Bash(./node_modules/.bin/next:*)",
+      "Bash(rm:*)",
+      "Bash(npx turbo:*)",
+      "Bash(npx next:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(npx eslint:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm add:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(powershell:*)",
+      "Bash(cross-env:*)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\web-app",
+      "C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\doctors"
+    ]
+  }
+}

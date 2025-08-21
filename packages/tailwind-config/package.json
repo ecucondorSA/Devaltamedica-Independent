@@ -1,0 +1,42 @@
+{
+  "name": "@altamedica/tailwind-config",
+  "version": "1.0.0",
+  "description": "AltaMedica tailwind-config package - Unified Tailwind and PostCSS configuration",
+  "type": "module",
+  "main": "base.config.js",
+  "exports": {
+    ".": "./base.config.js",
+    "./base": "./base.config.js",
+    "./theme": "./altamedica-theme.js",
+    "./postcss": "./postcss.config.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "postcss": "^8.4.32",
+    "postcss-import": "^15.1.0",
+    "postcss-nesting": "^12.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "rimraf": "^5.0.0",
+    "tailwindcss": "^3.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "5.8.3"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.3.0"
+  },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts"
+}

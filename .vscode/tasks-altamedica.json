@@ -1,0 +1,321 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "🚀 Dev: All Apps (AltaMedica)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["dev:all"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🌐 Dev: Core (Web + API)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["dev:core"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🏥 Dev: Medical (Doctors + Patients)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["dev:medical"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🧪 Test: E2E All (AltaMedica)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:e2e"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📹 Test: WebRTC Telemedicina",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:webrtc"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "♿ Test: Accessibility",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:accessibility"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔧 Lint: Fix All (AltaMedica)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["lint:fix"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔍 Type Check: All (AltaMedica)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["type-check:all"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🐳 Docker: Up All (AltaMedica)",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": ["up", "-d"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🏥 Docker: Medical Stack",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": ["up", "-d", "api-server", "doctors-app", "patients-app"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "💚 Health: API Server",
+			"type": "shell",
+			"command": "curl",
+			"args": ["http://localhost:3001/api/health"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📈 Status: All Services",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["monitor:once"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🧹 Clean: All + Reinstall",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["clean:all"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔍 Workspace: Status",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["workspace:status"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔐 Diagnose: SSO",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["diagnose:sso"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🌐 Diagnose: API",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["diagnose:api"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🏗️ Build: All Apps",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["build"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📦 Build: Packages Only",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["build:packages"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🎭 E2E: Multi-Area Testing",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["multi:medical-journey"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🎭 E2E: Telemedicina Suite",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:telemed"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🎭 E2E: Companies Suite",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:companies"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔒 Security: HIPAA Compliance Check",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:hipaa"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "⚡ Performance: Lighthouse CI",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:performance"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📊 Coverage: Generate Reports",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["test:coverage"],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔄 Pre-Operation Check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/pre-operation-check.ps1",
+				"-Detailed"
+			],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🤖 AI Workflow: Post-Development",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/ai-workflow-automation.ps1",
+				"-Operation",
+				"post_development",
+				"-Verbose"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔧 Fix: SSO Dependencies",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["fix:sso-deps"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🔧 Fix: NPM Issues",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["fix:npm"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📋 Utils: Generate Login URLs",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["util:gen-login-urls"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "📹 Utils: Install Video System",
+			"type": "shell",
+			"command": "pnpm",
+			"args": ["util:install-video"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared"
+			}
+		}
+	]
+}

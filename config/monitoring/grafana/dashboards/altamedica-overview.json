@@ -1,0 +1,37 @@
+{
+  "id": null,
+  "title": "Altamedica Overview",
+  "tags": ["altamedica"],
+  "timezone": "browser",
+  "schemaVersion": 30,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "API Server Uptime",
+      "targets": [
+        {
+          "expr": "up{job='api-server'}",
+          "legendFormat": "API Server",
+          "refId": "A"
+        }
+      ],
+      "datasource": "Prometheus",
+      "id": 1
+    },
+    {
+      "type": "graph",
+      "title": "Errores por Servicio",
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total{status=~'5..'}[5m])) by (job)",
+          "legendFormat": "{{job}}",
+          "refId": "B"
+        }
+      ],
+      "datasource": "Prometheus",
+      "id": 2
+    }
+  ]
+} 

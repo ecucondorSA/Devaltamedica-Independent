@@ -1,0 +1,272 @@
+# Consultas para Gestión de Doctores
+# Archivo: dataconnect/connectors/doctors/queries.gql
+
+# ====================
+# CONSULTAS DE DOCTORES
+# ====================
+
+# Obtener todos los doctores activos
+query GetAllDoctors {
+  doctors(where: { estado_activo: { eq: true } }, orderBy: { apellidos: ASC }) {
+    id
+    cedula_profesional
+    nombre
+    apellidos
+    especialidad
+    telefono
+    email
+    clinica {
+      nombre
+      direccion
+    }
+    fecha_registro
+  }
+}
+
+# Obtener doctor por ID
+query GetDoctorById($doctorId: UUID!) {
+  doctor(id: $doctorId) {
+    id
+    cedula_profesional
+    nombre
+    apellidos
+    especialidad
+    telefono
+    email
+    estado_activo
+    fecha_registro
+    clinica {
+      id
+      nombre
+      direccion
+      telefono
+      email
+    }
+    citas(where: { fecha_hora: { gte: "now()" } }, orderBy: { fecha_hora: ASC }, limit: 10) {
+      id
+      fecha_hora
+      motivo
+      estado
+      paciente {
+        nombre
+        apellidos
+        telefono
+      }
+    }
+  }
+}
+
+# Buscar doctores por especialidad
+query GetDoctorsByEspecialidad($especialidad: String!) {
+  doctors(where: { especialidad: { eq: $especialidad }, estado_activo: { eq: true } }) {
+    id
+    nombre
+    apellidos
+    especialidad
+    telefono
+    email
+    clinica {
+      nombre
+      direccion
+    }
+  }
+}
+
+# Obtener estadísticas del doctor
+query GetDoctorStats($doctorId: UUID!) {
+  doctor(id: $doctorId) {
+    id
+    nombre
+    apellidos
+    citas_aggregate {
+      count
+    }
+    pacientes_aggregate {
+      count
+    }
+  }
+}
+
+# ====================
+# CONSULTAS DE PACIENTES
+# ====================
+
+# Obtener pacientes del doctor
+query GetDoctorPacientes($doctorId: UUID!, $limit: Int = 50, $offset: Int = 0) {
+  pacientes(
+    where: { doctor_id: { eq: $doctorId }, estado_activo: { eq: true } }
+    orderBy: { apellidos: ASC }
+    limit: $limit
+    offset: $offset
+  ) {
+    id
+    numero_expediente
+    nombre
+    apellidos
+    fecha_nacimiento
+    genero
+    telefono
+    email
+    alergias
+    enfermedades_cronicas
+    tipo_sangre
+    fecha_registro
+  }
+}
+
+# Buscar paciente por expediente
+query GetPacienteByExpediente($numeroExpediente: String!) {
+  pacientes(where: { numero_expediente: { eq: $numeroExpediente } }) {
+    id
+    numero_expediente
+    nombre
+    apellidos
+    fecha_nacimiento
+    genero
+    telefono
+    email
+    direccion
+    contacto_emergencia
+    telefono_emergencia
+    alergias
+    enfermedades_cronicas
+    tipo_sangre
+    doctor {
+      nombre
+      apellidos
+      especialidad
+    }
+  }
+}
+
+# ====================
+# CONSULTAS DE CITAS
+# ====================
+
+# Obtener citas del día para un doctor
+query GetCitasDelDia($doctorId: UUID!, $fecha: Date!) {
+  citas(
+    where: {
+      doctor_id: { eq: $doctorId }
+      fecha_hora: { gte: $fecha, lt: "date_add($fecha, INTERVAL 1 DAY)" }
+    }
+    orderBy: { fecha_hora: ASC }
+  ) {
+    id
+    fecha_hora
+    motivo
+    estado
+    tipo_consulta
+    duracion_minutos
+    notas
+    paciente {
+      id
+      nombre
+      apellidos
+      telefono
+      numero_expediente
+    }
+    clinica {
+      nombre
+      direccion
+    }
+  }
+}
+
+# Obtener próximas citas
+query GetProximasCitas($doctorId: UUID!, $limit: Int = 20) {
+  citas(
+    where: {
+      doctor_id: { eq: $doctorId }
+      fecha_hora: { gte: "now()" }
+      estado: { in: [PROGRAMADA, CONFIRMADA] }
+    }
+    orderBy: { fecha_hora: ASC }
+    limit: $limit
+  ) {
+    id
+    fecha_hora
+    motivo
+    estado
+    tipo_consulta
+    paciente {
+      nombre
+      apellidos
+      telefono
+      numero_expediente
+    }
+  }
+}
+
+# ====================
+# CONSULTAS DE HISTORIAL MÉDICO
+# ====================
+
+# Obtener historial médico de un paciente
+query GetHistorialMedico($pacienteId: UUID!, $limit: Int = 20) {
+  historial_medico(
+    where: { paciente_id: { eq: $pacienteId } }
+    orderBy: { fecha_consulta: DESC }
+    limit: $limit
+  ) {
+    id
+    fecha_consulta
+    motivo_consulta
+    sintomas
+    diagnostico
+    exploracion_fisica
+    signos_vitales {
+      presion_arterial_sistolica
+      presion_arterial_diastolica
+      frecuencia_cardiaca
+      temperatura
+      peso
+      altura
+      imc
+    }
+    examenes_solicitados
+    tratamiento
+    medicamentos_recetados
+    recomendaciones
+    observaciones
+    doctor {
+      nombre
+      apellidos
+      especialidad
+    }
+    cita {
+      fecha_hora
+      tipo_consulta
+    }
+  }
+}
+
+# Búsqueda avanzada de pacientes
+query BuscarPacientes(
+  $searchTerm: String!
+  $doctorId: UUID!
+  $limit: Int = 20
+) {
+  pacientes(
+    where: {
+      doctor_id: { eq: $doctorId }
+      estado_activo: { eq: true }
+      or: [
+        { nombre: { contains: $searchTerm } }
+        { apellidos: { contains: $searchTerm } }
+        { numero_expediente: { contains: $searchTerm } }
+        { telefono: { contains: $searchTerm } }
+      ]
+    }
+    orderBy: { apellidos: ASC }
+    limit: $limit
+  ) {
+    id
+    numero_expediente
+    nombre
+    apellidos
+    fecha_nacimiento
+    telefono
+    email
+  }
+}

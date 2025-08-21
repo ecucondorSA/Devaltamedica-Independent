@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(./build-docker.sh:*)",
+      "Bash(Remove-Item \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\patients\\src\\components\\telemedicine\\ChatPanel.tsx\")",
+      "Bash(Remove-Item \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\patients\\src\\components\\telemedicine\\IntegratedVideoCall.tsx\")",
+      "Bash(Remove-Item \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\patients\\src\\components\\telemedicine\\PatientTelemedicineCall.tsx\")",
+      "Bash(Remove-Item \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\patients\\src\\components\\telemedicine\\PatientVideoCall.tsx\")",
+      "Bash(Remove-Item \"C:\\Users\\Eduardo\\Documents\\devaltamedica\\apps\\patients\\src\\components\\telemedicine\\PatientVideoCallProxy.tsx\")",
+      "Bash(rm:*)",
+      "Bash(pnpm lint:*)"
+    ],
+    "deny": []
+  }
+}

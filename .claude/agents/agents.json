@@ -1,0 +1,170 @@
+{
+  "agents": [
+    {
+      "name": "Medical AI Specialist",
+      "description": "🧠 Experto en IA Médica, Diagnóstico Asistido y NLP Médico",
+      "system_prompt_file": "medical-ai-specialist.md",
+      "capabilities": [
+        "TensorFlow.js para diagnóstico médico",
+        "NLP Médico y análisis de síntomas", 
+        "Análisis de riesgo cardiovascular",
+        "Compliance HIPAA automático",
+        "Modelos predictivos de salud"
+      ],
+      "use_cases": [
+        "Análisis automático de síntomas",
+        "Predicción de riesgo médico",
+        "Anonimización de datos médicos",
+        "Validación de compliance HIPAA"
+      ],
+      "tools": [
+        "packages/ai-medical-core",
+        "medical-nlp-engine", 
+        "tensorflow-medical-models",
+        "symptom-analysis-toolkit"
+      ],
+      "priority": "critical",
+      "availability": "24/7",
+      "specialization": "medical_ai"
+    },
+    {
+      "name": "HIPAA Compliance Guardian", 
+      "description": "🔒 Guardián de Seguridad Médica y Compliance Regulatorio",
+      "system_prompt_file": "hipaa-compliance-guardian.md",
+      "capabilities": [
+        "HIPAA compliance total",
+        "Protección de PHI (datos médicos)",
+        "Auditoría médica completa", 
+        "Encriptación de datos sensibles",
+        "Gestión de permisos médicos"
+      ],
+      "use_cases": [
+        "Validación de compliance en código médico",
+        "Auditoría de accesos a datos médicos",
+        "Detección automática de PHI",
+        "Investigación de incidentes de seguridad"
+      ],
+      "tools": [
+        "hipaa-audit-logger",
+        "phi-detection-engine",
+        "encryption-medical-toolkit", 
+        "access-control-medical"
+      ],
+      "priority": "critical",
+      "availability": "24/7/365",
+      "specialization": "security_compliance"
+    },
+    {
+      "name": "WebRTC Telemedicine Expert",
+      "description": "📡 Especialista en Videollamadas Médicas y Comunicación en Tiempo Real", 
+      "system_prompt_file": "webrtc-telemedicine-expert.md",
+      "capabilities": [
+        "WebRTC médico optimizado",
+        "Calidad HD para diagnóstico visual",
+        "Latencia ultra-baja <100ms",
+        "Estabilidad 99.9% para emergencias",
+        "Bandwidth optimization inteligente"
+      ],
+      "use_cases": [
+        "Optimización de videollamadas médicas",
+        "Configuración de emergencias médicas", 
+        "Diagnóstico de problemas de conexión",
+        "Implementación de grabación médica"
+      ],
+      "tools": [
+        "mediasoup",
+        "medical-webrtc-optimizer",
+        "bandwidth-medical-analyzer",
+        "latency-emergency-monitor"
+      ],
+      "priority": "high",
+      "availability": "24/7",
+      "specialization": "webrtc_telemedicine"
+    },
+    {
+      "name": "Medical QA Specialist",
+      "description": "🧪 Especialista en Testing y Calidad de Software Médico",
+      "system_prompt_file": "medical-qa-specialist.md", 
+      "capabilities": [
+        "Testing de aplicaciones médicas críticas",
+        "Safety-critical testing",
+        "WCAG medical accessibility",
+        "Performance testing médico",
+        "Security testing HIPAA"
+      ],
+      "use_cases": [
+        "Testing de funcionalidades médicas críticas",
+        "Validación de compliance HIPAA",
+        "Testing de performance bajo cargas médicas",
+        "Validación de accessibility médica"
+      ],
+      "tools": [
+        "jest-medical",
+        "cypress-healthcare", 
+        "owasp-zap-medical",
+        "axe-core-medical"
+      ],
+      "priority": "high",
+      "availability": "business_hours",
+      "specialization": "medical_qa"
+    },
+    {
+      "name": "Medical Data Analyst", 
+      "description": "📊 Especialista en Analytics Médico y Business Intelligence Sanitario",
+      "system_prompt_file": "medical-data-analyst.md",
+      "capabilities": [
+        "Medical analytics y KPIs",
+        "Clinical intelligence",
+        "Predictive healthcare models",
+        "Population health analysis", 
+        "Healthcare performance metrics"
+      ],
+      "use_cases": [
+        "Análisis de datos médicos complejos",
+        "Desarrollo de modelos predictivos",
+        "Creación de dashboards médicos",
+        "Optimización de procesos clínicos"
+      ],
+      "tools": [
+        "medical-data-warehouse",
+        "fhir-analytics-engine",
+        "tensorflow-medical",
+        "medical-dashboards"
+      ],
+      "priority": "medium",
+      "availability": "business_hours", 
+      "specialization": "medical_analytics"
+    }
+  ],
+  "metadata": {
+    "version": "2.0",
+    "created": "2025-01-26",
+    "project": "AltaMedica Telemedicine Platform",
+    "compliance": ["HIPAA", "SOC2", "ISO27001"],
+    "total_agents": 5,
+    "critical_agents": 2,
+    "high_priority_agents": 2,
+    "medium_priority_agents": 1
+  },
+  "agent_categories": {
+    "medical_ai": ["Medical AI Specialist"],
+    "security_compliance": ["HIPAA Compliance Guardian"], 
+    "webrtc_telemedicine": ["WebRTC Telemedicine Expert"],
+    "medical_qa": ["Medical QA Specialist"],
+    "medical_analytics": ["Medical Data Analyst"]
+  },
+  "usage_guidelines": {
+    "critical_scenarios": [
+      "Cualquier operación que involucre datos médicos (PHI)",
+      "Emergencias médicas y videollamadas críticas",
+      "Validación de compliance HIPAA",
+      "Testing de funcionalidades médicas antes de producción"
+    ],
+    "escalation_triggers": [
+      "Acceso no autorizado a PHI detectado",
+      "Fallas en videollamadas de emergencia", 
+      "Vulnerabilidades de seguridad en datos médicos",
+      "Fallos en sistemas críticos de pacientes"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+# Configuración Firebase Data Connect para ALTAMEDICA
+# Archivo: dataconnect/dataconnect.yaml
+
+specVersion: v1alpha
+
+serviceId: altamedica-dataconnect
+
+location: us-central1
+
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "altamedica_production"
+      cloudSql:
+        instanceId: "altamedic-20f69:us-central1:altamedica-db"
+
+connectorDirs: ["./connectors"]
+
+# Configuración de desarrollo
+emulatorConfig:
+  postgresql:
+    database: "altamedica_dev"
+    schemaValidation: COMPATIBLE_ONLY

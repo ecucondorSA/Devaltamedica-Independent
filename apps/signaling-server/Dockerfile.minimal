@@ -1,0 +1,85 @@
+# Ultra-minimal Dockerfile for Signaling Server
+# Target size: <100MB with all dependencies
+# Optimized for fast builds and minimal attack surface
+
+# ========================================
+# Stage 1: Build Stage
+# ========================================
+FROM node:22-alpine AS builder
+
+# Install build tools for native modules
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /build
+
+# Copy package files
+COPY apps/signaling-server/package.json ./
+COPY apps/signaling-server/tsconfig.json ./
+
+# Install ALL dependencies (including dev) for building
+RUN npm install
+
+# Copy source code
+COPY apps/signaling-server/src ./src
+
+# Build TypeScript to JavaScript
+RUN npm run build || npx tsc
+
+# ========================================
+# Stage 2: Production Dependencies
+# ========================================
+FROM node:22-alpine AS prod-deps
+
+WORKDIR /app
+
+# Copy package.json
+COPY apps/signaling-server/package.json ./
+
+# Install ONLY production dependencies
+# Skip optional dependencies and scripts for faster install
+RUN npm install --production --no-optional --no-audit --no-fund --no-save
+
+# ========================================
+# Stage 3: Final Runtime Image
+# ========================================
+FROM node:22-alpine
+
+# Add tini for proper process management (only 30KB)
+RUN apk add --no-cache tini
+
+# Create non-root user
+RUN addgroup -g 1001 nodejs && \
+    adduser -S nodejs -u 1001 -G nodejs
+
+WORKDIR /app
+
+# Copy production dependencies
+COPY --from=prod-deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+
+# Copy compiled JavaScript (not TypeScript)
+COPY --from=builder --chown=nodejs:nodejs /build/dist ./dist
+
+# Copy minimal package.json (for npm scripts if needed)
+COPY --chown=nodejs:nodejs apps/signaling-server/package.json ./
+
+# Switch to non-root user
+USER nodejs
+
+# Expose WebRTC signaling port
+EXPOSE 8888
+
+# Environment defaults
+ENV NODE_ENV=production \
+    PORT=8888 \
+    LOG_LEVEL=info \
+    NODE_OPTIONS="--max-old-space-size=256"
+
+# Health check - minimal overhead
+HEALTHCHECK --interval=30s --timeout=2s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8888/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
+
+# Use tini to handle signals properly
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Direct node execution (no npm overhead)
+CMD ["node", "dist/index.js"]

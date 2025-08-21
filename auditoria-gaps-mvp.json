@@ -1,0 +1,372 @@
+{
+  "catalogo_features": {
+    "pacientes": [
+      "Autenticación y registro de usuarios",
+      "Gestión de perfil personal y de salud",
+      "Búsqueda y filtrado de doctores",
+      "Agendamiento y cancelación de citas",
+      "Historial de citas y consultas",
+      "Acceso a la sesión de telemedicina (video/chat)",
+      "Visualización de historial médico electrónico (HME)",
+      "Sistema de notificaciones y recordatorios"
+    ],
+    "doctores": [
+      "Autenticación y perfil profesional",
+      "Gestión de calendario y disponibilidad",
+      "Dashboard de citas agendadas",
+      "Acceso a la sesión de telemedicina",
+      "Actualización del HME del paciente post-consulta",
+      "Búsqueda de pacientes bajo su cuidado"
+    ],
+    "empresas": [
+      "Registro y perfil de la compañía",
+      "Gestión de empleados (pacientes) afiliados",
+      "Dashboard de facturación y suscripciones",
+      "Visualización de reportes de salud agregados y anonimizados"
+    ],
+    "admin": [
+      "Dashboard de administración central",
+      "Gestión de usuarios (pacientes, doctores, empresas, admins)",
+      "Configuración de parámetros de la plataforma",
+      "Visualización de analíticas de uso del sistema",
+      "Gestión de contenidos (ej. FAQs, T&C)"
+    ],
+    "core_tecnico": [
+      "Arquitectura de microservicios/monorepo",
+      "Integración y despliegue continuo (CI/CD)",
+      "Gestión de base de datos y migraciones"
+    ],
+    "compliance": [
+      "Gestión de consentimientos (Términos, Privacidad)",
+      "Cifrado de datos en tránsito y en reposo",
+      "Controles de acceso basados en roles para PHI"
+    ],
+    "observabilidad": [
+      "Sistema de logging centralizado",
+      "Monitoreo de rendimiento de aplicaciones (APM)",
+      "Seguimiento y reporte de errores"
+    ],
+    "telemedicina": [
+      "Sesiones de video 1-a-1 seguras vía WebRTC",
+      "Chat de texto durante la consulta",
+      "Funcionalidad de compartir pantalla"
+    ],
+    "ia_medica": [
+      "Integración de motor de diagnóstico como soporte al doctor",
+      "Sugerencia de diagnóstico preliminar basada en síntomas"
+    ],
+    "marketplace": [
+      "Listado de planes y servicios para empresas (B2B)",
+      "Gestión de suscripciones y ciclo de vida"
+    ],
+    "seguridad": [
+      "Control de Acceso Basado en Roles (RBAC)",
+      "Autenticación segura de usuarios",
+      "Políticas de contraseñas robustas"
+    ]
+  },
+  "gaps_detectados": [
+    {
+      "id": "GAP-REAL-001",
+      "dominio": "core_tecnico",
+      "titulo": "SISTEMA DE AUTENTICACIÓN COMPLETAMENTE ROTO - ERROR 500 EN TODAS LAS RUTAS",
+      "prioridad": "P0-CRÍTICO",
+      "tipo": "bug_critico",
+      "riesgo": "CRÍTICO",
+      "justificacion": "La aplicación web-app NO FUNCIONA. Error 500 en todas las rutas principales debido a fallo en el sistema de autenticación. Es imposible usar la plataforma.",
+      "sintomas": [
+        "Error 500 en ruta principal /",
+        "Error 500 en /api/font-css",
+        "Error 500 en /manifest.json",
+        "Error 500 en /Video_Listo_.mp4",
+        "TypeError: Cannot read properties of null (reading 'useContext')",
+        "Warning: Invalid hook call en AuthProvider"
+      ],
+      "causa_raiz": "Hook useAuth mal implementado con importación condicional de useRouter que falla",
+      "aceptacion": [
+        "La aplicación web-app se levanta sin errores 500",
+        "El sistema de autenticación funciona correctamente",
+        "Las rutas principales responden con 200 OK",
+        "No hay errores de hooks en la consola",
+        "El AuthProvider funciona sin errores de contexto"
+      ],
+      "tiempo_estimado": "2-3 horas",
+      "impacto_usuario": "100% - Usuarios no pueden acceder a la plataforma"
+    },
+    {
+      "id": "GAP-REAL-002",
+      "dominio": "core_tecnico",
+      "titulo": "SISTEMA DE BUILD COMPLETAMENTE ROTO - IMPOSIBLE COMPILAR APLICACIONES",
+      "prioridad": "P0-CRÍTICO",
+      "tipo": "build_system",
+      "riesgo": "CRÍTICO",
+      "justificacion": "Ninguna aplicación puede compilarse. El sistema de build está corrupto con errores de configuración, dependencias y exports.",
+      "sintomas": [
+        "Error de compilación en web-app: 'use client' directive faltante",
+        "Error de compilación en doctors: DTS build falla",
+        "Error de compilación en firebase: TypeScript incremental error",
+        "Warnings masivos de package.json exports mal configurados",
+        "Imports de React hooks en componentes server-side"
+      ],
+      "causa_raiz": "Configuración de tsup corrupta, exports de package.json mal ordenados, falta de 'use client' directives",
+      "aceptacion": [
+        "Todas las aplicaciones compilan sin errores",
+        "El build system funciona correctamente",
+        "No hay warnings de configuración",
+        "Los exports de package.json están correctamente ordenados",
+        "Los componentes tienen las directivas 'use client' apropiadas"
+      ],
+      "tiempo_estimado": "4-6 horas",
+      "impacto_usuario": "100% - No se puede desplegar ni desarrollar"
+    },
+    {
+      "id": "GAP-REAL-003",
+      "dominio": "core_tecnico",
+      "titulo": "CONFIGURACIÓN DE PAQUETES COMPLETAMENTE CORRUPTA",
+      "prioridad": "P0-CRÍTICO",
+      "tipo": "package_config",
+      "riesgo": "CRÍTICO",
+      "justificacion": "Los package.json de todos los paquetes tienen configuración de exports corrupta que impide el funcionamiento correcto.",
+      "sintomas": [
+        "Warnings masivos: 'types' condition will never be used",
+        "Exports mal ordenados en package.json",
+        "Imports fallan debido a configuración incorrecta",
+        "Dependencias no se resuelven correctamente",
+        "Builds fallan por configuración corrupta"
+      ],
+      "causa_raiz": "Orden incorrecto de exports en package.json, configuración de tsup mal configurada",
+      "aceptacion": [
+        "Todos los package.json tienen exports correctamente ordenados",
+        "No hay warnings de configuración",
+        "Los imports funcionan correctamente",
+        "Las dependencias se resuelven sin problemas",
+        "Los builds son exitosos"
+      ],
+      "tiempo_estimado": "3-4 horas",
+      "impacto_usuario": "100% - Sistema de paquetes inutilizable"
+    },
+    {
+      "id": "GAP-REAL-004",
+      "dominio": "core_tecnico",
+      "titulo": "SISTEMA DE TYPESCRIPT CORRUPTO - ERRORES DE COMPILACIÓN MASIVOS",
+      "prioridad": "P0-CRÍTICO",
+      "tipo": "typescript_config",
+      "riesgo": "CRÍTICO",
+      "justificacion": "El sistema de TypeScript está corrupto con errores de configuración incremental y builds fallidos.",
+      "sintomas": [
+        "Error TS5074: Option '--incremental' can only be specified using tsconfig",
+        "Builds de DTS fallan sistemáticamente",
+        "Configuración de TypeScript corrupta",
+        "Imposible generar tipos correctamente",
+        "Compilación falla en todos los paquetes"
+      ],
+      "causa_raiz": "Configuración de tsconfig.json corrupta, opciones de incremental mal configuradas",
+      "aceptacion": [
+        "TypeScript compila sin errores",
+        "Los tipos se generan correctamente",
+        "No hay errores de configuración incremental",
+        "Los builds de DTS son exitosos",
+        "La configuración de TypeScript es válida"
+      ],
+      "tiempo_estimado": "2-3 horas",
+      "impacto_usuario": "100% - No se puede desarrollar con TypeScript"
+    },
+    {
+      "id": "GAP-REAL-005",
+      "dominio": "core_tecnico",
+      "titulo": "SISTEMA DE DEPENDENCIAS COMPLETAMENTE ROTO",
+      "prioridad": "P0-CRÍTICO",
+      "tipo": "dependencies",
+      "riesgo": "CRÍTICO",
+      "justificacion": "El sistema de dependencias está completamente roto con conflictos de versiones, imports fallidos y paquetes corruptos.",
+      "sintomas": [
+        "Imports de React hooks fallan",
+        "Dependencias no se resuelven correctamente",
+        "Conflictos de versiones entre paquetes",
+        "Paquetes no se pueden importar",
+        "Sistema de módulos corrupto"
+      ],
+      "causa_raiz": "Dependencias mal configuradas, conflictos de versiones, imports incorrectos",
+      "aceptacion": [
+        "Todas las dependencias se resuelven correctamente",
+        "Los imports funcionan sin errores",
+        "No hay conflictos de versiones",
+        "Los paquetes se pueden importar correctamente",
+        "El sistema de módulos funciona"
+      ],
+      "tiempo_estimado": "3-4 horas",
+      "impacto_usuario": "100% - Sistema de dependencias inutilizable"
+    },
+    {
+      "id": "GAP-001",
+      "dominio": "compliance",
+      "titulo": "Implementación de Pista de Auditoría Inmutable para Acceso a PHI",
+      "prioridad": "P1",
+      "tipo": "compliance",
+      "riesgo": "alto",
+      "justificacion": "Requisito no negociable de HIPAA para rastrear cada acceso a Información de Salud Protegida (PHI), esencial para auditorías y respuesta a incidentes.",
+      "aceptacion": [
+        "Se registra cada vista, creación, modificación o eliminación de datos PHI.",
+        "La pista de auditoría incluye quién, qué, cuándo y desde dónde se accedió al dato.",
+        "Los logs de auditoría son inmutables y se almacenan de forma segura.",
+        "Un administrador puede buscar, filtrar y exportar los registros de auditoría."
+      ]
+    },
+    {
+      "id": "GAP-002",
+      "dominio": "seguridad",
+      "titulo": "Habilitación de Autenticación de Múltiples Factores (MFA)",
+      "prioridad": "P1",
+      "tipo": "hardening",
+      "riesgo": "alto",
+      "justificacion": "Protege las cuentas de alto privilegio (doctores, administradores) contra el acceso no autorizado, reduciendo drásticamente el riesgo de compromiso de credenciales.",
+      "aceptacion": [
+        "Los usuarios pueden habilitar MFA a través de una aplicación de autenticación (TOTP).",
+        "Se puede hacer cumplir la obligatoriedad de MFA para roles específicos (admin, doctor).",
+        "El flujo de login se integra correctamente con el paso de verificación de MFA."
+      ]
+    },
+    {
+      "id": "GAP-003",
+      "dominio": "compliance",
+      "titulo": "Gestión de Acuerdos de Asociado de Negocios (BAA)",
+      "prioridad": "P1",
+      "tipo": "compliance",
+      "riesgo": "alto",
+      "justificacion": "Requisito legal bajo HIPAA para formalizar la relación y responsabilidades con clientes empresariales (las 'compañías') que manejan PHI.",
+      "aceptacion": [
+        "El flujo de onboarding para empresas incluye la aceptación obligatoria de un BAA.",
+        "Los acuerdos firmados/aceptados se almacenan de forma segura y son accesibles.",
+        "El sistema registra la versión del BAA aceptada por cada empresa."
+      ]
+    },
+    {
+      "id": "GAP-004",
+      "dominio": "doctores",
+      "titulo": "Sistema de Prescripción Electrónica (e-Rx)",
+      "prioridad": "P2",
+      "tipo": "feature",
+      "riesgo": "alto",
+      "justificacion": "Una plataforma de telemedicina sin capacidad de emitir recetas tiene una utilidad muy limitada. Es una funcionalidad central del flujo de trabajo médico.",
+      "aceptacion": [
+        "Los doctores pueden buscar medicamentos en un vademécum actualizado.",
+        "Se puede generar una prescripción electrónica con firma digital.",
+        "La prescripción se puede enviar de forma segura a la farmacia elegida por el paciente.",
+        "La prescripción emitida se registra en el historial médico del paciente."
+      ]
+    },
+    {
+      "id": "GAP-005",
+      "dominio": "core_tecnico",
+      "titulo": "Definición e Implementación de Plan de Respaldo y Recuperación ante Desastres (DRP)",
+      "prioridad": "P2",
+      "tipo": "hardening",
+      "riesgo": "alto",
+      "justificacion": "Asegura la continuidad del negocio y la integridad de los datos médicos críticos en caso de un fallo catastrófico del sistema o la base de datos.",
+      "aceptacion": [
+        "Existen respaldos automáticos y periódicos de las bases de datos críticas (Firestore, etc.).",
+        "Hay un procedimiento documentado para restaurar el servicio desde un respaldo.",
+        "El procedimiento de restauración se ha probado y validado al menos una vez."
+      ]
+    },
+    {
+      "id": "GAP-006",
+      "dominio": "marketplace",
+      "titulo": "Módulo de Facturación y Pagos",
+      "prioridad": "P2",
+      "tipo": "feature",
+      "riesgo": "medio",
+      "justificacion": "Funcionalidad clave para la monetización del servicio B2B, permitiendo a las empresas pagar por sus suscripciones y gestionar sus facturas.",
+      "aceptacion": [
+        "Integración con una pasarela de pagos (ej. Stripe, PayPal).",
+        "Las empresas pueden introducir y gestionar sus métodos de pago.",
+        "El sistema genera facturas automáticamente basadas en el plan de suscripción.",
+        "Los administradores pueden ver el estado de los pagos y gestionar las suscripciones."
+      ]
+    },
+    {
+      "id": "GAP-007",
+      "dominio": "pacientes",
+      "titulo": "Funcionalidad de Portabilidad de Datos del Paciente",
+      "prioridad": "P2",
+      "tipo": "feature",
+      "riesgo": "medio",
+      "justificacion": "Cumple con el derecho del paciente de acceder y obtener una copia de su información médica, un pilar de HIPAA y otras regulaciones de privacidad.",
+      "aceptacion": [
+        "El paciente puede solicitar la exportación de su historial médico completo desde su perfil.",
+        "El historial se genera en un formato estándar y legible (ej. PDF o JSON estructurado).",
+        "La exportación incluye datos de perfil, citas, notas médicas y resultados."
+      ]
+    },
+    {
+      "id": "GAP-008",
+      "dominio": "ia_medica",
+      "titulo": "Monitoreo de Rendimiento y Feedback del Modelo de IA",
+      "prioridad": "P2",
+      "tipo": "observability",
+      "riesgo": "medio",
+      "justificacion": "Es crucial para garantizar la seguridad y eficacia del motor de IA, permitiendo detectar sesgos, derivas en la precisión y mejorar el modelo continuamente.",
+      "aceptacion": [
+        "Los doctores pueden calificar o corregir las sugerencias de la IA.",
+        "Se recolectan métricas de rendimiento del modelo (ej. precisión, confianza).",
+        "Existe un dashboard para que el equipo técnico revise el rendimiento de la IA."
+      ]
+    },
+    {
+      "id": "GAP-009",
+      "dominio": "observabilidad",
+      "titulo": "Monitoreo de Calidad de Sesión de Telemedicina en Tiempo Real",
+      "prioridad": "P3",
+      "tipo": "observability",
+      "riesgo": "medio",
+      "justificacion": "Permite al equipo de soporte identificar y diagnosticar proactivamente problemas de conectividad durante las videollamadas, mejorando la experiencia del usuario.",
+      "aceptacion": [
+        "Se recolectan métricas clave de WebRTC (pérdida de paquetes, latencia, jitter) por sesión.",
+        "Un dashboard muestra la calidad de las llamadas en tiempo real e histórico.",
+        "Se pueden configurar alertas para degradaciones significativas del servicio."
+      ]
+    },
+    {
+      "id": "GAP-010",
+      "dominio": "core_tecnico",
+      "titulo": "Soporte para Internacionalización (i18n) y Localización (l10n)",
+      "prioridad": "P3",
+      "tipo": "refactor",
+      "riesgo": "bajo",
+      "justificacion": "Prepara la plataforma para una futura expansión a otros mercados e idiomas, evitando un refactor costoso y complejo en el futuro.",
+      "aceptacion": [
+        "Las cadenas de texto de la interfaz de usuario se extraen a archivos de recursos.",
+        "Se implementa un framework para cambiar de idioma en el frontend.",
+        "El formato de fechas, números y monedas se adapta a la configuración regional."
+      ]
+    }
+  ],
+  "backlog_ordenado": [
+    "GAP-REAL-001",
+    "GAP-REAL-002",
+    "GAP-REAL-003",
+    "GAP-REAL-004",
+    "GAP-REAL-005",
+    "GAP-001",
+    "GAP-002",
+    "GAP-003",
+    "GAP-004",
+    "GAP-005",
+    "GAP-006",
+    "GAP-007",
+    "GAP-008",
+    "GAP-009",
+    "GAP-010"
+  ],
+  "resumen_estado_actual": {
+    "estado_general": "CRÍTICO - SISTEMA COMPLETAMENTE INUTILIZABLE",
+    "apps_funcionando": "0/8",
+    "packages_funcionando": "0/25",
+    "build_system": "ROTO",
+    "autenticacion": "ROTA",
+    "dependencias": "ROTAS",
+    "typescript": "CORRUPTO",
+    "tiempo_estimado_reparacion": "12-20 horas",
+    "prioridad_inmediata": "REPARAR FUNCIONALIDAD BÁSICA ANTES DE HIPAA"
+  }
+}

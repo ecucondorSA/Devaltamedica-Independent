@@ -1,0 +1,217 @@
+{
+  "timestamp": "2025-08-21T00:54:45.373Z",
+  "summary": {
+    "total": 30,
+    "valid": 11,
+    "withIssues": 19
+  },
+  "issues": [
+    {
+      "name": "@altamedica/ai-agents",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing import file: ./dist/index.mjs",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/alta-agent",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/components/index.d.ts",
+        "Missing types file: ./dist/services/index.d.ts",
+        "Missing types file: ./dist/types/index.d.ts",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/anamnesis",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing import file: ./dist/index.mjs",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/api-client",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/hooks/index.d.ts",
+        "Missing import file: ./dist/hooks/index.js",
+        "Missing require file: ./dist/hooks/index.js",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/api-helpers",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/auth",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/middleware/index.d.ts",
+        "Missing types file: ./dist/client.d.ts",
+        "Missing types file: ./dist/server.d.ts",
+        "Missing types file: ./dist/services/index.d.ts",
+        "Missing types file: ./dist/hooks/index.d.ts",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/database",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/repositories/index.d.ts",
+        "Missing import file: ./dist/repositories/index.js",
+        "Missing require file: ./dist/repositories/index.js",
+        "Missing types file: ./dist/schemas/index.d.ts",
+        "Missing import file: ./dist/schemas/index.js",
+        "Missing require file: ./dist/schemas/index.js",
+        "Missing types file: ./dist/services/index.d.ts",
+        "Missing import file: ./dist/services/index.js",
+        "Missing require file: ./dist/services/index.js",
+        "Missing types file: ./dist/security/index.d.ts",
+        "Missing import file: ./dist/security/index.js",
+        "Missing require file: ./dist/security/index.js",
+        "Missing types file: ./dist/cache/index.d.ts",
+        "Missing import file: ./dist/cache/index.js",
+        "Missing require file: ./dist/cache/index.js",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/diagnostic-engine",
+      "problems": ["Missing types file: ./dist/index.d.ts", "Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "@altamedica/e2e-tests",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing import file: ./dist/index.mjs",
+        "Missing require file: ./dist/index.js",
+        "Missing main file: ./dist/index.js",
+        "Missing module file: ./dist/index.mjs",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/firebase",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/client-only.d.ts",
+        "Missing types file: ./dist/config-production.d.ts",
+        "Missing types file: ./dist/config.d.ts",
+        "Missing types file: ./dist/client.d.ts",
+        "Missing types file: ./dist/admin.d.ts",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/hooks",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing import file: ./dist/esm/index.js",
+        "Missing types file: ./dist/legacy.d.ts",
+        "Missing import file: ./dist/esm/legacy.js",
+        "Missing require file: ./dist/legacy.js",
+        "Missing types file: ./dist/medical/index.d.ts",
+        "Missing import file: ./dist/esm/medical/index.js",
+        "Missing require file: ./dist/medical/index.js",
+        "Missing types file: ./dist/auth/index.d.ts",
+        "Missing import file: ./dist/esm/auth/index.js",
+        "Missing require file: ./dist/auth/index.js",
+        "Missing types file: ./dist/api/index.d.ts",
+        "Missing import file: ./dist/esm/api/index.js",
+        "Missing require file: ./dist/api/index.js",
+        "Missing types file: ./dist/realtime/index.d.ts",
+        "Missing import file: ./dist/esm/realtime/index.js",
+        "Missing require file: ./dist/realtime/index.js",
+        "Missing types file: ./dist/ui/index.d.ts",
+        "Missing import file: ./dist/esm/ui/index.js",
+        "Missing require file: ./dist/ui/index.js",
+        "Missing types file: ./dist/utils/index.d.ts",
+        "Missing import file: ./dist/esm/utils/index.js",
+        "Missing require file: ./dist/utils/index.js",
+        "Missing types file: ./dist/performance/index.d.ts",
+        "Missing import file: ./dist/esm/performance/index.js",
+        "Missing require file: ./dist/performance/index.js",
+        "Missing types file: ./dist/forms/index.d.ts",
+        "Missing import file: ./dist/esm/forms/index.js",
+        "Missing require file: ./dist/forms/index.js",
+        "Missing types file: ./dist/composed/index.d.ts",
+        "Missing import file: ./dist/esm/composed/index.js",
+        "Missing require file: ./dist/composed/index.js",
+        "Missing module file: ./dist/esm/index.js",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/maps",
+      "problems": ["Missing types file: ./dist/index.d.ts", "Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "@altamedica/medical",
+      "problems": ["Missing types file: ./dist/index.d.ts", "Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "@altamedica/patient-services",
+      "problems": ["Missing import file: ./dist/index.mjs", "Missing module file: ./dist/index.mjs"]
+    },
+    {
+      "name": "@altamedica/telemedicine-core",
+      "problems": ["Missing types file: ./dist/index.d.ts", "Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "@altamedica/types",
+      "problems": [
+        "Missing types file: ./dist/index.d.ts",
+        "Missing types file: ./dist/core/index.d.ts",
+        "Missing types file: ./dist/medical/index.d.ts",
+        "Missing types file: ./dist/medical/patient/index.d.ts",
+        "Missing types file: ./dist/medical/doctor/index.d.ts",
+        "Missing types file: ./dist/medical/clinical/index.d.ts",
+        "Missing types file: ./dist/api/index.d.ts",
+        "Missing types file: ./dist/security/index.d.ts",
+        "Missing types file: ./dist/validators/index.d.ts",
+        "Missing types file: ./dist/guards/index.d.ts",
+        "Missing types file: ./dist/ai/index.d.ts",
+        "Missing types file: ./dist/utils/index.d.ts",
+        "Missing types file: ./dist/index.d.ts"
+      ]
+    },
+    {
+      "name": "@altamedica/ui",
+      "problems": ["Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "@altamedica/utils",
+      "problems": ["Missing types file: ./dist/index.d.ts", "Missing types file: ./dist/index.d.ts"]
+    },
+    {
+      "name": "api-server",
+      "problems": ["Missing require file: index.js", "Missing main file: index.js"]
+    }
+  ],
+  "validPackages": [
+    "@altamedica/config-next",
+    "@altamedica/eslint-config",
+    "@altamedica/shared",
+    "@altamedica/tailwind-config",
+    "@altamedica/typescript-config",
+    "@altamedica/admin",
+    "@altamedica/companies",
+    "@altamedica/doctors",
+    "@altamedica/patients",
+    "@altamedica/signaling-server",
+    "@altamedica/web-app"
+  ]
+}

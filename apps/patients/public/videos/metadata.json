@@ -1,0 +1,64 @@
+{
+  "videos": [
+    {
+      "id": "portal-guide",
+      "title": "Cómo usar tu portal de paciente",
+      "duration": "3:45",
+      "category": "salud",
+      "videoUrl": "/videos/portal-guide.mp4",
+      "thumbnailUrl": "/images/video-thumbnails/portal-guide.jpg",
+      "description": "Video explicativo sobre cómo usar tu portal de paciente",
+      "isFavorite": false,
+      "views": 0,
+      "createdAt": "2025-07-20T04:14:11.248Z",
+      "updatedAt": "2025-07-20T04:14:11.260Z"
+    },
+    {
+      "id": "appointment-booking",
+      "title": "Agendar citas médicas online",
+      "duration": "2:30",
+      "category": "citas",
+      "videoUrl": "/videos/appointment-booking.mp4",
+      "thumbnailUrl": "/images/video-thumbnails/appointment-booking.jpg",
+      "description": "Video explicativo sobre agendar citas médicas online",
+      "isFavorite": false,
+      "views": 0,
+      "createdAt": "2025-07-20T04:14:11.260Z",
+      "updatedAt": "2025-07-20T04:14:11.260Z"
+    },
+    {
+      "id": "telemedicine-guide",
+      "title": "Tu primera consulta de telemedicina",
+      "duration": "4:15",
+      "category": "telemedicina",
+      "videoUrl": "/videos/telemedicine-guide.mp4",
+      "thumbnailUrl": "/images/video-thumbnails/telemedicine-guide.jpg",
+      "description": "Video explicativo sobre tu primera consulta de telemedicina",
+      "isFavorite": false,
+      "views": 0,
+      "createdAt": "2025-07-20T04:14:11.260Z",
+      "updatedAt": "2025-07-20T04:14:11.260Z"
+    },
+    {
+      "id": "medical-history",
+      "title": "Entendiendo tu historial médico",
+      "duration": "3:20",
+      "category": "historial",
+      "videoUrl": "/videos/medical-history.mp4",
+      "thumbnailUrl": "/images/video-thumbnails/medical-history.jpg",
+      "description": "Video explicativo sobre entendiendo tu historial médico",
+      "isFavorite": false,
+      "views": 0,
+      "createdAt": "2025-07-20T04:14:11.260Z",
+      "updatedAt": "2025-07-20T04:14:11.260Z"
+    }
+  ],
+  "totalVideos": 4,
+  "categories": [
+    "salud",
+    "citas",
+    "telemedicina",
+    "historial"
+  ],
+  "lastUpdated": "2025-07-20T04:14:11.260Z"
+}

@@ -1,0 +1,957 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "� Free Ports (3002/3003/3004)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"ForEach ($p in 3002,3003,3004) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 GPT-5 Medical Session",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-session.ps1",
+				"-Profile",
+				"medical",
+				"-ReasoningEffort",
+				"high",
+				"-ShowMetrics"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🎥 GPT-5 Telemedicine Session",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-session.ps1",
+				"-Profile",
+				"telemedicine",
+				"-UseResponsesAPI",
+				"-ShowMetrics"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🔒 GPT-5 Compliance Session",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-session.ps1",
+				"-Profile",
+				"compliance",
+				"-ReasoningEffort",
+				"high",
+				"-Verbosity",
+				"medium"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🧪 GPT-5 Testing Session",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-session.ps1",
+				"-Profile",
+				"testing",
+				"-EnableMetaprompting"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🔄 GPT-5 Metaprompt Optimizer",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-metaprompt.ps1",
+				"-PromptFile",
+				"medical-features.xml",
+				"-OptimizeFor",
+				"all",
+				"-Interactive"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "⚡ GPT-5 Quick Session (General)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"${workspaceFolder}/scripts/gpt5-session.ps1",
+				"-Profile",
+				"general",
+				"-ReasoningEffort",
+				"medium"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🔧 Ejecutar API Server",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"api-server",
+				"dev"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "build",
+			"presentation": {
+				"panel": "new"
+			}
+		},
+		{
+			"label": "🏥 Ejecutar Doctors App",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"doctors",
+				"dev"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "build",
+			"presentation": {
+				"panel": "new"
+			}
+		},
+		{
+			"label": "� Ejecutar Patients App",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"patients",
+				"dev"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "new",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "👥 Patients (next dev 3013)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\npm'; Set-Location apps/patients; npx next dev --port 3013"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "� Ejecutar Web App",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"web-app",
+				"dev"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"panel": "new"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "�🎭 Playwright: Install Browsers",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"tools/ps/playwright-install.ps1"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🎭 Playwright: Multi-Area → file",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\npm'; $null = New-Item -ItemType Directory -Force -Path ./packages/e2e-tests/test-results; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=multi-area --reporter=list 2>&1 | Tee-Object -File packages/e2e-tests/test-results/multi-area-latest.md"
+			],
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "🎭 E2E Telemedicina",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\npm'; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=telemedicine -g '@telemedicine'"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "♿ A11y Sweep",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"@altamedica/e2e-tests",
+				"exec",
+				"--",
+				"playwright",
+				"test",
+				"-g",
+				"@a11y"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "test",
+			"presentation": {
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "� Linter Fix",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"lint:fix"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "build"
+		},
+		{
+			"label": "� Build All",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "build"
+		},
+		{
+			"label": "🧪 Ejecutar Tests",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"test"
+			],
+			"options": {
+				"env": {
+					"PATH": "${env:PATH};${env:APPDATA}\\npm"
+				}
+			},
+			"group": "test",
+			"presentation": {
+				"panel": "new"
+			}
+		},
+		{
+			"label": "� Lint Companies",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"--filter",
+				"companies",
+				"lint"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🧪 Test patient-services (unit/integration)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\npm'; pnpm --filter @altamedica/patient-services test"
+			],
+			"group": "test"
+		},
+		{
+			"label": "🧪 Test patient-services (unit/integration)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\\\npm'; pnpm --filter @altamedica/patient-services test"
+			],
+			"group": "test"
+		},
+		{
+			"label": "✅ Fix Playwright Install (PS-safe)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"tools/ps/playwright-install.ps1"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🎭 Playwright: Install Browsers (fixed quoting)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:Path = \"$env:Path;$env:APPDATA\\\\npm\"; Set-Location packages/e2e-tests; pnpm exec playwright install --with-deps"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🚀 E2E Telemedicina (Full Pipeline)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"${env:ALTA_PS_PIPELINE:-}$ErrorActionPreference='Stop'; ForEach ($p in 3002,3003,3004) { $ids = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue | Select -Expand OwningProcess -Unique; if ($ids) { foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue } } }; $env:PATH += ';' + $env:APPDATA + '\\npm'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','api-server','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','web-app','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','patients','dev'; Start-Process -WindowStyle Minimized -FilePath 'pnpm' -ArgumentList '--filter','doctors','dev'; function Wait-Url($u,$t){$s=[DateTime]::UtcNow; while((New-TimeSpan -Start $s).TotalSeconds -lt $t){ try{ (Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 3) | Out-Null; return $true } catch { Start-Sleep -Seconds 2 } }; return $false }; if(-not (Wait-Url 'http://localhost:3001/api/v1/health' 90)) { throw 'API no disponible' }; if(-not (Wait-Url 'http://localhost:3000' 120)) { throw 'Web App no disponible' }; if(-not (Wait-Url 'http://localhost:3003' 120)) { throw 'Patients no disponible' }; if(-not (Wait-Url 'http://localhost:3002' 120)) { throw 'Doctors no disponible' }; $env:E2E_USE_MOCK_LOGIN='1'; pnpm -w --filter @altamedica/e2e-tests exec -- playwright test -c packages/e2e-tests/playwright.config.ts --project=telemedicine -g '@telemedicine'"
+			],
+			"group": "test",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🎭 Playwright: Install Browsers (fixed quoting)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$npm = Join-Path $env:APPDATA 'npm'; $env:Path = \"$env:Path;$npm\"; Set-Location packages/e2e-tests; pnpm exec playwright install --with-deps"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🎭 Playwright: Install Browsers (fixed quoting)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"tools/ps/playwright-install.ps1"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🚀 Sequential Medical Pipeline (Full)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/sequential-medical-pipeline.ps1",
+				"-RunE2E"
+			],
+			"group": "test",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "⚡ Quick Medical Stack (No E2E)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/sequential-medical-pipeline.ps1"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🔍 Medical Health Check (Detailed)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/health-check-medical.ps1",
+				"-Detailed"
+			],
+			"group": "test"
+		},
+		{
+			"label": "🔄 Restart Failed Medical Services",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/health-check-medical.ps1",
+				"-Detailed",
+				"-RestartFailed"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🤖 AI: Auto List + Lint",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/post-code-workflow.ps1"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🔍 AI: PRE-Operation Check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/pre-operation-check.ps1",
+				"-Detailed"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "📋 AI: Quick PRE-Check (No Details)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/pre-operation-check.ps1"
+			],
+			"group": "build"
+		},
+		{
+			"label": "🚀 AI: Complete Development Session",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Write-Host '🤖 AI: Finalizing development session...' -ForegroundColor Magenta; Write-Host '=================================' -ForegroundColor Gray; Write-Host '📁 Final project state:' -ForegroundColor Cyan; tree . /A | Select-Object -First 25; Write-Host '🔧 Running final lint pass...' -ForegroundColor Cyan; pnpm lint:fix; Write-Host '📊 Final health check...' -ForegroundColor Cyan; pnpm --filter @altamedica/e2e-tests exec playwright install --quiet; Write-Host '✅ Development session completed!' -ForegroundColor Green"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🏥 Workspace Autocure (Startup)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/workspace-autocure.ps1",
+				"-Quick",
+				"-Background"
+			],
+			"group": "build",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🔄 Dev Stack Full Autocure",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/dev-stack-autocure.ps1"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🎯 Force Stack Restart",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/workspace-autocure.ps1",
+				"-Force"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "📊 Dev Services Status",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/workspace-autocure.ps1",
+				"status"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🛑 Stop All Dev Services",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/workspace-autocure.ps1",
+				"stop"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "👁️ Stack Monitor Mode",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/dev-stack-autocure.ps1",
+				"-WatchMode"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🔩 Build Hooks Only",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:PATH += ';' + $env:APPDATA + '\\npm'; pnpm --filter @altamedica/hooks build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "🔩 Build Hooks Only",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:Path = \"$env:Path;$env:APPDATA\\npm\"; pnpm --filter @altamedica/hooks build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "🤖 Gemini: Interactive Mode",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/gemini-automation-simple.ps1",
+				"interactive"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "🏥 Gemini: Medical Assistant",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/gemini-automation-simple.ps1",
+				"medical-assistant"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "👁️ Gemini: Code Review Mode",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/gemini-automation-simple.ps1",
+				"code-review"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "🏗️ Gemini: Architecture Analysis",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/gemini-automation-simple.ps1",
+				"architecture"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "⚡ Gemini: Quick Query",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$prompt = Read-Host 'Enter your question'; if ($prompt) { .\\scripts\\gemini-quick.ps1 $prompt }"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "🩺 Gemini: Medical Query",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$prompt = Read-Host 'Enter medical/HIPAA question'; if ($prompt) { .\\scripts\\gemini-quick.ps1 $prompt -Medical -Save }"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "💻 Gemini: Code Question",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$prompt = Read-Host 'Enter code/technical question'; if ($prompt) { .\\scripts\\gemini-quick.ps1 $prompt -Code -Save }"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"focus": true
+			}
+		},
+		{
+			"label": "📊 Gemini: Status & Help",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/gemini-automation-simple.ps1",
+				"status"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "🤖 Claude: Open CLI",
+			"type": "shell",
+			"command": "claude",
+			"args": ["--model","sonnet"],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true,
+				"echo": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: Open CLI (opus v4)",
+			"type": "shell",
+			"command": "claude",
+			"args": ["--model","opus"],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true,
+				"echo": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: Logged Session (transcript)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-File",
+				"scripts/claude-session.ps1",
+				"session"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: Quick Ask (logged, v4 smart)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$p = Read-Host 'Pregunta'; if ($p) { .\\scripts\\claude-ask.ps1 -Markdown -Prompt $p }"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 GPT-5: Prompt Ask (composed specs)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$p = Read-Host 'Pregunta (GPT-5 styled)'; if ($p) { .\\scripts\\ai-prompt-ask.ps1 -Markdown -Prompt $p }"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: Interactive Mode",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"claude"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "always",
+				"focus": true
+			},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: New Terminal",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-NoExit",
+				"-Command",
+				"Write-Host '🤖 Claude CLI Ready!' -ForegroundColor Cyan; Write-Host 'Type `claude` to start' -ForegroundColor Yellow; Write-Host ''"
+			],
+			"group": "build",
+			"presentation": {
+				"panel": "new",
+				"reveal": "always",
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🤖 Claude: Check Version",
+			"type": "shell",
+			"command": "claude",
+			"args": ["--version"],
+			"group": "build",
+			"presentation": {
+				"panel": "shared",
+				"reveal": "always",
+				"echo": true
+			},
+			"problemMatcher": []
+		}
+	]
+}

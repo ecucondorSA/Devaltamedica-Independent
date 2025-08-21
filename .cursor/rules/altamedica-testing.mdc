@@ -1,0 +1,172 @@
+# 🧪 AltaMedica Testing - Guía Completa
+
+## 🎯 Estrategia de Testing
+
+### 🏗️ Pirámide de Testing
+- **70% Tests Unitarios** - Lógica de negocio y componentes
+- **20% Tests de Integración** - APIs y servicios
+- **10% Tests E2E** - Flujos críticos del usuario
+
+### 🎯 Cobertura Objetivos
+- **Cobertura mínima**: 80% para código crítico
+- **Cobertura objetivo**: 90% para packages compartidos
+- **Cobertura crítica**: 95% para funcionalidades médicas
+
+## 🧪 Tipos de Tests
+
+### 🧪 Tests Unitarios
+- **Framework**: Vitest
+- **Scope**: Funciones individuales, componentes
+- **Mocks**: Dependencias externas, APIs
+- **Ejecución**: Rápida (< 100ms por test)
+
+### 🧪 Tests de Integración
+- **Framework**: Vitest + Supertest
+- **Scope**: APIs, servicios, base de datos
+- **Base de datos**: Testing DB separada
+- **Cleanup**: Automático entre tests
+
+### 🧪 Tests E2E
+- **Framework**: Playwright (principal), Cypress
+- **Scope**: Flujos completos de usuario
+- **Browser**: Chrome, Firefox, Safari
+- **Performance**: Métricas de Core Web Vitals
+
+### 🧪 Tests Especializados
+- **Tests HIPAA**: Compliance y seguridad
+- **Tests de Accesibilidad**: WCAG 2.1 AA
+- **Tests de Performance**: Lighthouse, Web Vitals
+- **Tests de Seguridad**: OWASP Top 10
+
+## 🛠️ Configuración de Testing
+
+### ⚙️ Vitest (Unit + Integration)
+```typescript
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      thresholds: {
+        global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80
+        }
+      }
+    }
+  }
+})
+```
+
+### ⚙️ Playwright (E2E)
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  testDir: './e2e',
+  use: {
+    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure'
+  },
+  projects: [
+    { name: 'Chrome', use: { browserName: 'chromium' } },
+    { name: 'Firefox', use: { browserName: 'firefox' } },
+    { name: 'Safari', use: { browserName: 'webkit' } }
+  ]
+})
+```
+
+## 📝 Patrones de Testing
+
+### 🧪 Testing de Componentes React
+```typescript
+// Component.test.tsx
+import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { Component } from './Component'
+
+describe('Component', () => {
+  it('should render correctly', () => {
+    render(<Component />)
+    expect(screen.getByText('Hello')).toBeInTheDocument()
+  })
+})
+```
+
+### 🧪 Testing de APIs
+```typescript
+// api.test.ts
+import request from 'supertest'
+import { app } from '../src/app'
+import { describe, it, expect } from 'vitest'
+
+describe('API Endpoints', () => {
+  it('GET /api/health should return 200', async () => {
+    const response = await request(app).get('/api/health')
+    expect(response.status).toBe(200)
+  })
+})
+```
+
+### 🧪 Testing de Base de Datos
+```typescript
+// database.test.ts
+import { PrismaClient } from '@prisma/client'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+
+const prisma = new PrismaClient()
+
+describe('Database Operations', () => {
+  beforeEach(async () => {
+    // Setup test data
+  })
+
+  afterEach(async () => {
+    // Cleanup test data
+  })
+
+  it('should create user', async () => {
+    const user = await prisma.user.create({
+      data: { email: 'test@example.com' }
+    })
+    expect(user.email).toBe('test@example.com')
+  })
+})
+```
+
+## 🚀 CI/CD Integration
+
+### 🔄 GitHub Actions
+- **Tests unitarios** en cada PR
+- **Tests de integración** en merge a develop
+- **Tests E2E** en deploy a staging
+- **Tests completos** en deploy a production
+
+### 📊 Reportes
+- **Coverage reports** con Codecov
+- **Test results** en GitHub Actions
+- **Performance metrics** con Lighthouse CI
+- **Security scans** con CodeQL
+
+## 🎯 Testing de Funcionalidades Médicas
+
+### 🏥 Compliance HIPAA
+- **Encriptación** de datos sensibles
+- **Audit logging** de accesos
+- **Timeouts** de sesión
+- **Validación** de permisos
+
+### 🧬 Datos Médicos
+- **Anonimización** en tests
+- **Mock data** realista pero seguro
+- **Validación** de esquemas médicos
+- **Tests de edge cases** críticos
+description:
+globs:
+alwaysApply: false
+---

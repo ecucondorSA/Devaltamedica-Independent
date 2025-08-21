@@ -1,0 +1,13 @@
+@echo off
+echo Fixing Tailwind CSS setup...
+
+echo Step 1: Installing dependencies...
+call pnpm install
+
+echo Step 2: Clearing Next.js cache...
+rmdir /s /q .next 2>nul
+
+echo Step 3: Starting development server...
+call pnpm dev
+
+echo Done!

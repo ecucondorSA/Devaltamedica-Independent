@@ -1,0 +1,59 @@
+{
+    "name": "ALTAMEDICA - Portal Médico Inteligente",
+    "short_name": "AltaMedica",
+    "description": "Plataforma médica digital con telemedicina 24/7, historia clínica digital y especialistas certificados",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#ffffff",
+    "theme_color": "#06b6d4",
+    "lang": "es-AR",
+    "dir": "ltr",
+    "categories": ["medical", "health", "lifestyle"],
+    "icons": [
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/home.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg",
+            "label": "Página principal"
+        },
+        {
+            "src": "/screenshots/telemedicine.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg",
+            "label": "Videollamada médica"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Nueva Consulta",
+            "short_name": "Consulta",
+            "description": "Iniciar una consulta médica online",
+            "url": "/consulta",
+            "icons": [{ "src": "/icons/consultation.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Mi Historial",
+            "short_name": "Historial",
+            "description": "Ver mi historia clínica",
+            "url": "/historial",
+            "icons": [{ "src": "/icons/history.png", "sizes": "96x96" }]
+        }
+    ],
+    "prefer_related_applications": false
+}
