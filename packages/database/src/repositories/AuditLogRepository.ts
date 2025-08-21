@@ -591,20 +591,20 @@ export class AuditLogRepository implements IAuditLogRepository {
       for (const log of logs) {
         // 1. Verificar que timestamps sean secuenciales
         if (previousTimestamp && log.timestamp < previousTimestamp) {
-          logger.warn(`Integrity violation: timestamp out of order for log ${log.id}`);
+          logger.warn(`Integrity violation: timestamp out of order for log ${log.id}`, { logId: log.id });
           isIntegrityValid = false;
         }
 
         // 2. Verificar campos obligatorios según Ley 26.529
         if (!log.actorId || !log.timestamp || !log.action) {
-          logger.warn(`Integrity violation: missing required fields in log ${log.id}`);
+          logger.warn(`Integrity violation: missing required fields in log ${log.id}`, { logId: log.id });
           isIntegrityValid = false;
         }
 
         // 3. Verificar que logs médicos tengan patientId
         const medicalResources = ['patient', 'medical_record', 'appointment', 'prescription', 'lab_result', 'telemedicine_session'];
         if (medicalResources.includes(log.resource) && !log.patientId) {
-          logger.warn(`Integrity violation: medical log ${log.id} missing patientId`);
+          logger.warn(`Integrity violation: medical log ${log.id} missing patientId`, { logId: log.id });
           isIntegrityValid = false;
         }
 
