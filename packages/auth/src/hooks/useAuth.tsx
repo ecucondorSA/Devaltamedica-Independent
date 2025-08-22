@@ -10,7 +10,13 @@ import { useRouter as useNextRouter } from 'next/navigation';
 // Import UserRole from types package
 import { UserRole } from '@altamedica/types';
 import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { AuthState, LoginCredentials, RegisterData, User, getAuthService } from '../services/AuthService';
+import {
+  AuthState,
+  LoginCredentials,
+  RegisterData,
+  User,
+  getAuthService,
+} from '../services/AuthService';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
@@ -33,14 +39,14 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 // Rutas por rol - Redirecciones corregidas por aplicación
 const ROLE_ROUTES: Record<UserRole, string> = {
   [UserRole.ADMIN]: 'http://localhost:3005', // Admin app (puerto 3005)
   [UserRole.DOCTOR]: 'http://localhost:3002', // Doctors app (puerto 3002)
   [UserRole.PATIENT]: 'http://localhost:3003', // Patients app (puerto 3003)
-  [UserRole.COMPANY]: 'http://localhost:3004' // Companies app (puerto 3004)
+  [UserRole.COMPANY]: 'http://localhost:3004', // Companies app (puerto 3004)
 };
 
 // Ruta por defecto para roles desconocidos o undefined
@@ -51,32 +57,34 @@ const DEFAULT_ROUTE = 'http://localhost:3000';
  */
 const getRoleRoute = (role: string | UserRole | undefined): string => {
   if (!role) {
-    logger.warn(`[AuthProvider] Sin rol definido. Redirigiendo a web-app por defecto.`);
+    logger.warn(`[AuthProvider] Sin rol definido. Redirigiendo a web-app por defecto.`, null);
     return DEFAULT_ROUTE;
   }
 
   // Intentar encontrar la ruta exacta primero
   if (ROLE_ROUTES[role as UserRole]) {
     const route = ROLE_ROUTES[role as UserRole];
-    logger.info(`[AuthProvider] Redirigiendo ${role} a: ${route}`);
+    logger.info(`[AuthProvider] Redirigiendo ${role} a: ${route}`, { role, route });
     return route;
   }
 
   // Mapeo de roles legacy que pueden existir por inconsistencias previas
   const legacyRoleMappings: Record<string, string> = {
     'company-admin': 'http://localhost:3004', // Mapear a companies app
-    'company_admin': 'http://localhost:3004',
-    'nurse': 'http://localhost:3002',         // Los nurses van a doctors app
-    'staff': 'http://localhost:3002',         // Staff médico va a doctors app
+    company_admin: 'http://localhost:3004',
+    nurse: 'http://localhost:3002', // Los nurses van a doctors app
+    staff: 'http://localhost:3002', // Staff médico va a doctors app
   };
 
   if (legacyRoleMappings[role.toLowerCase()]) {
     const route = legacyRoleMappings[role.toLowerCase()];
-    logger.warn(`[AuthProvider] Mapeando rol legacy "${role}" a: ${route}`);
+    logger.warn(`[AuthProvider] Mapeando rol legacy "${role}" a: ${route}`, { role, route });
     return route;
   }
 
-  logger.warn(`[AuthProvider] Rol desconocido: "${role}". Redirigiendo a web-app por defecto.`);
+  logger.warn(`[AuthProvider] Rol desconocido: "${role}". Redirigiendo a web-app por defecto.`, {
+    role,
+  });
   return DEFAULT_ROUTE;
 };
 
@@ -89,7 +97,7 @@ interface AuthContextValue extends AuthState {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
-  
+
   // Helpers
   hasRole: (role: UserRole) => boolean;
   hasAnyRole: (roles: UserRole[]) => boolean;
@@ -100,7 +108,7 @@ interface AuthContextValue extends AuthState {
   canAccessTelemedicine: () => boolean;
   hasCompletedProfile: () => boolean;
   checkSession: () => Promise<boolean>;
-  
+
   // Métodos de navegación
   redirectToRole: () => void;
   redirectToLogin: () => void;
@@ -122,16 +130,16 @@ export function AuthProvider({
   redirectOnLogin = true,
   redirectOnLogout = true,
   loginPath = '/login',
-  protectedPaths = []
+  protectedPaths = [],
 }: AuthProviderProps) {
   const router = useNextRouter();
   const authService = getAuthService();
-  
+
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
     isLoading: true,
-    error: null
+    error: null,
   });
 
   // Cargar usuario inicial
@@ -143,14 +151,14 @@ export function AuthProvider({
           user,
           isAuthenticated: !!user,
           isLoading: false,
-          error: null
+          error: null,
         });
       } catch (error) {
         setAuthState({
           user: null,
           isAuthenticated: false,
           isLoading: false,
-          error: 'Error loading user'
+          error: 'Error loading user',
         });
       }
     };
@@ -163,7 +171,7 @@ export function AuthProvider({
         user,
         isAuthenticated: !!user,
         isLoading: false,
-        error: null
+        error: null,
       });
     });
 
@@ -174,8 +182,8 @@ export function AuthProvider({
   useEffect(() => {
     if (!authState.isLoading && protectedPaths.length > 0) {
       const currentPath = window.location.pathname;
-      const isProtected = protectedPaths.some(path => currentPath.startsWith(path));
-      
+      const isProtected = protectedPaths.some((path) => currentPath.startsWith(path));
+
       if (isProtected && !authState.isAuthenticated) {
         const path = loginPath || '/login';
         router?.push(path);
@@ -184,52 +192,55 @@ export function AuthProvider({
   }, [authState.isLoading, authState.isAuthenticated, protectedPaths, loginPath, router]);
 
   // Métodos de autenticación
-  const login = useCallback(async (credentials: LoginCredentials) => {
-    setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
-    try {
-      const user = await authService.login(credentials);
-      
-      setAuthState({
-        user,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null
-      });
-      
-      if (redirectOnLogin && user.role) {
-        const route = getRoleRoute(user.role);
-        // Si es una URL externa (diferente aplicación), usar window.location
-        if (route.startsWith('http')) {
-          window.location.href = route;
-        } else {
-          router?.push(route);
+  const login = useCallback(
+    async (credentials: LoginCredentials) => {
+      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      try {
+        const user = await authService.login(credentials);
+
+        setAuthState({
+          user,
+          isAuthenticated: true,
+          isLoading: false,
+          error: null,
+        });
+
+        if (redirectOnLogin && user.role) {
+          const route = getRoleRoute(user.role);
+          // Si es una URL externa (diferente aplicación), usar window.location
+          if (route.startsWith('http')) {
+            window.location.href = route;
+          } else {
+            router?.push(route);
+          }
         }
+      } catch (error: any) {
+        setAuthState({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: error.message,
+        });
+        throw error;
       }
-    } catch (error: any) {
-      setAuthState({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: error.message
-      });
-      throw error;
-    }
-  }, [authService, redirectOnLogin, router]);
+    },
+    [authService, redirectOnLogin, router],
+  );
 
   const loginWithGoogle = useCallback(async () => {
-    setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
+    setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+
     try {
       const user = await authService.loginWithGoogle();
-      
+
       setAuthState({
         user,
         isAuthenticated: true,
         isLoading: false,
-        error: null
+        error: null,
       });
-      
+
       if (redirectOnLogin && user.role) {
         const route = getRoleRoute(user.role);
         // Si es una URL externa (diferente aplicación), usar window.location
@@ -244,112 +255,124 @@ export function AuthProvider({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
   }, [authService, redirectOnLogin, router]);
 
-  const signUp = useCallback(async (data: RegisterData) => { // Renombrado de register a signUp
-    setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
-    try {
-      const user = await authService.signUp(data); // Llamar a signUp en el servicio
-      
-      setAuthState({
-        user,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null
-      });
-      
-      if (redirectOnLogin && user.role) {
-        const route = getRoleRoute(user.role);
-        // Si es una URL externa (diferente aplicación), usar window.location
-        if (route.startsWith('http')) {
-          window.location.href = route;
-        } else {
-          router?.push(route);
+  const signUp = useCallback(
+    async (data: RegisterData) => {
+      // Renombrado de register a signUp
+      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      try {
+        const user = await authService.signUp(data); // Llamar a signUp en el servicio
+
+        setAuthState({
+          user,
+          isAuthenticated: true,
+          isLoading: false,
+          error: null,
+        });
+
+        if (redirectOnLogin && user.role) {
+          const route = getRoleRoute(user.role);
+          // Si es una URL externa (diferente aplicación), usar window.location
+          if (route.startsWith('http')) {
+            window.location.href = route;
+          } else {
+            router?.push(route);
+          }
         }
+      } catch (error: any) {
+        setAuthState({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: error.message,
+        });
+        throw error;
       }
-    } catch (error: any) {
-      setAuthState({
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: error.message
-      });
-      throw error;
-    }
-  }, [authService, redirectOnLogin, router]);
+    },
+    [authService, redirectOnLogin, router],
+  );
 
   const logout = useCallback(async () => {
-    setAuthState(prev => ({ ...prev, isLoading: true }));
-    
+    setAuthState((prev) => ({ ...prev, isLoading: true }));
+
     try {
       await authService.logout();
-      
+
       setAuthState({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        error: null
+        error: null,
       });
-      
+
       if (redirectOnLogout) {
         router?.push('/');
       }
     } catch (error: any) {
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error.message
+        error: error.message,
       }));
       throw error;
     }
   }, [authService, redirectOnLogout, router]);
 
-  const resetPassword = useCallback(async (email: string) => {
-    try {
+  const resetPassword = useCallback(
+    async (email: string) => {
       await authService.resetPassword(email);
-    } catch (error: any) {
-      throw error;
-    }
-  }, [authService]);
+    },
+    [authService],
+  );
 
-  const updateProfile = useCallback(async (updates: Partial<User>) => {
-    if (!authState.user) {
-      throw new Error('No user logged in');
-    }
-    
-    setAuthState(prev => ({ ...prev, isLoading: true }));
-    
-    try {
-      await authService.updateUserProfile(authState.user.id, updates);
-      
-      setAuthState(prev => ({
-        ...prev,
-        user: prev.user ? { ...prev.user, ...updates } : null,
-        isLoading: false
-      }));
-    } catch (error: any) {
-      setAuthState(prev => ({
-        ...prev,
-        isLoading: false,
-        error: error.message
-      }));
-      throw error;
-    }
-  }, [authService, authState.user]);
+  const updateProfile = useCallback(
+    async (updates: Partial<User>) => {
+      if (!authState.user) {
+        throw new Error('No user logged in');
+      }
+
+      setAuthState((prev) => ({ ...prev, isLoading: true }));
+
+      try {
+        await authService.updateUserProfile(authState.user.id, updates);
+
+        setAuthState((prev) => ({
+          ...prev,
+          user: prev.user ? { ...prev.user, ...updates } : null,
+          isLoading: false,
+        }));
+      } catch (error: any) {
+        setAuthState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: error.message,
+        }));
+        throw error;
+      }
+    },
+    [authService, authState.user],
+  );
 
   // Helpers
-  const hasRole = useCallback((role: UserRole): boolean => {
-    return authState.user?.role === role;
-  }, [authState.user]);
+  const hasRole = useCallback(
+    (role: UserRole): boolean => {
+      return authState.user?.role === role;
+    },
+    [authState.user],
+  );
 
-  const hasAnyRole = useCallback((roles: UserRole[]): boolean => {
-    return !!authState.user && roles.includes(authState.user.role);
-  }, [authState.user]);
+  const hasAnyRole = useCallback(
+    (roles: UserRole[]): boolean => {
+      return !!authState.user && roles.includes(authState.user.role);
+    },
+    [authState.user],
+  );
 
   const isDoctor = useCallback(() => hasRole(UserRole.DOCTOR), [hasRole]);
   const isPatient = useCallback(() => hasRole(UserRole.PATIENT), [hasRole]);
@@ -359,9 +382,11 @@ export function AuthProvider({
   }, [hasRole]);
 
   const canAccessTelemedicine = useCallback(() => {
-    return authState.isAuthenticated && 
-           authState.user?.profileComplete === true &&
-           authState.user?.emailVerified === true;
+    return (
+      authState.isAuthenticated &&
+      authState.user?.profileComplete === true &&
+      authState.user?.emailVerified === true
+    );
   }, [authState]);
 
   const hasCompletedProfile = useCallback(() => {
@@ -378,13 +403,13 @@ export function AuthProvider({
 
       // Intentar obtener el usuario actual del servicio
       const user = await authService.getCurrentUser();
-      
+
       if (user) {
         setAuthState({
           user,
           isAuthenticated: true,
           isLoading: false,
-          error: null
+          error: null,
         });
         return true;
       }
@@ -432,24 +457,20 @@ export function AuthProvider({
     hasCompletedProfile,
     checkSession,
     redirectToRole,
-    redirectToLogin
+    redirectToLogin,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // Hook principal
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
-  
+
   if (!context) {
     throw new Error('useAuth must be used within AuthProvider');
   }
-  
+
   return context;
 }
 
@@ -457,7 +478,7 @@ export function useAuth(): AuthContextValue {
 export function useProtectedRoute(allowedRoles?: UserRole[]) {
   const { isAuthenticated, isLoading, user, redirectToLogin } = useAuth();
   const router = useNextRouter();
-  
+
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
@@ -467,30 +488,34 @@ export function useProtectedRoute(allowedRoles?: UserRole[]) {
       }
     }
   }, [isAuthenticated, isLoading, user, allowedRoles, redirectToLogin, router]);
-  
-  return { isAuthenticated, isLoading, hasAccess: !allowedRoles || (user && allowedRoles.includes(user.role)) };
+
+  return {
+    isAuthenticated,
+    isLoading,
+    hasAccess: !allowedRoles || (user && allowedRoles.includes(user.role)),
+  };
 }
 
 // Hook para requerir autenticación
 export function useRequireAuth() {
   const { isAuthenticated, isLoading, redirectToLogin } = useAuth();
-  
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       redirectToLogin();
     }
   }, [isAuthenticated, isLoading, redirectToLogin]);
-  
+
   return { isAuthenticated, isLoading };
 }
 
 // Hook para roles específicos
 export function useRole(requiredRole: any): any {
   const { user, hasRole } = useAuth();
-  
+
   return {
     hasRequiredRole: hasRole(requiredRole),
-    currentRole: user?.role || null
+    currentRole: user?.role || null,
   };
 }
 
