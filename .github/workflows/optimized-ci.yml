@@ -1,0 +1,64 @@
+name: 🚀 Optimized CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  optimize-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.13.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies (cached)
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Cache Turbo builds
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      - name: Build (incremental)
+        run: pnpm build:fast
+
+      - name: Test (changed files only)
+        run: pnpm test:changed
+
+      - name: Lint (staged files)
+        run: pnpm lint:staged
+
+      - name: Performance Analysis
+        run: |
+          node scripts/analyze-code.js --mode=structure --path=apps/web-app
+          node scripts/hotspot-scan.js --paths=apps/web-app/package.json
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-optimization-report
+          path: |
+            scripts/HOTSPOT-REPORT.md
+            .turbo/cache/
