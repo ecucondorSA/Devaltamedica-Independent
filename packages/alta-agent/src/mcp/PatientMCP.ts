@@ -3,6 +3,7 @@
  * Puerto 3003 - Portal de pacientes grado empresarial
  */
 
+import { logger } from '../logger.js';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const patientsConfig: MCPConfig = {
@@ -377,29 +378,7 @@ export default function AnamnesisGame() {
 import { useEmergency } from '@/hooks/useEmergency';
 import { EmergencyButton } from '@altamedica/ui';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 export default function EmergencySystem() {
   const {
     location,

@@ -1,5 +1,60 @@
 # 📦 Packages - Ecosistema de Componentes Compartidos AltaMedica
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO DE PACKAGES
+
+### ✅ Script Start (Types Package)
+```javascript
+import { z } from 'zod';
+```
+
+### ✅ Medical Schemas Pattern
+```javascript
+export const PatientSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().email(),
+  dateOfBirth: z.string().datetime(),
+  medicalRecordNumber: z.string().min(1)
+});
+
+export const AppointmentSchema = z.object({
+  id: z.string().uuid(),
+  patientId: z.string().uuid(),
+  doctorId: z.string().uuid(),
+  startTime: z.string().datetime(),
+  duration: z.number().min(15).max(180),
+  type: z.enum(['consultation', 'follow-up', 'emergency'])
+});
+```
+
+### ✅ API Response Schema
+```javascript
+export const APIResponseSchema = z.object({
+  success: z.boolean(),
+  data: z.unknown().optional(),
+  error: z.string().optional(),
+  timestamp: z.string().datetime()
+});
+```
+
+### ✅ Validate Medical Data
+```javascript
+const validateMedicalData = (data, schema) => {
+  try {
+    const validated = schema.parse(data);
+    return { valid: true, data: validated };
+  } catch (error) {
+    return { 
+      valid: false, 
+      errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+    };
+  }
+};
+```
+
+---
+
 **Directorio**: Biblioteca central de 26 paquetes compartidos  
 **Propósito**: Funcionalidad reutilizable para todas las aplicaciones  
 **Estado**: 🟢 PRODUCCIÓN (9.0/10)  

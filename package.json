@@ -26,8 +26,8 @@
     "format": "prettier --write \"***.{ts,tsx,md,json}\"",
     "audit": "pnpm audit --production",
     "audit:fix": "pnpm audit --fix",
-    "deps:check": "pnpm outdated -r",
-    "deps:update": "pnpm update -r",
+    "deps:check": "pnpm audit --audit-level=moderate",
+    "deps:update": "pnpm update --recursive --latest",
     "ci:setup": "pnpm install --frozen-lockfile",
     "ci:validate": "pnpm lint && pnpm type-check && pnpm test:unit",
     "ci:build": "pnpm build:packages && pnpm build:apps",
@@ -51,7 +51,12 @@
     "firebase:deploy:admin": "echo 'Hosting de admin migrado a Vercel'",
     "firebase:deploy:web": "echo 'Hosting de web migrado a Vercel'",
     "firebase:emulator": "firebase emulators:start",
-    "predeploy": "pnpm build:apps"
+    "predeploy": "pnpm build:apps",
+    "build:fast": "turbo build --cache-dir=.turbo --parallel",
+    "build:incremental": "tsc --build --incremental",
+    "test:changed": "turbo test --filter=[HEAD^1]",
+    "lint:staged": "lint-staged",
+    "cache:clean": "turbo prune && pnpm store prune"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
@@ -112,6 +117,30 @@
         "@babel/core",
         "webpack"
       ]
+    }
+  },
+  "turbo": {
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**"
+        ],
+        "cache": true
+      },
+      "test": {
+        "dependsOn": [
+          "^build"
+        ],
+        "cache": true,
+        "inputs": [
+          "src/**/*.{ts,tsx}",
+          "test/**/*.{ts,tsx}"
+        ]
+      }
     }
   }
 }

@@ -3,6 +3,7 @@
  * Este es el punto de entrada principal para consultar sobre cualquier parte del sistema
  */
 
+import { logger } from '../logger.js';
 import { WebMCP, webMCP } from './WebMCP';
 import { PatientMCP, patientMCP } from './PatientMCP';
 import { DoctorMCP, doctorMCP } from './DoctorMCP';
@@ -10,29 +11,7 @@ import { APIMCP, apiMCP } from './APIMCP';
 import { CompaniesMCP, companiesMCP } from './CompaniesMCP';
 import { PackageExpertAgent, packageExpert } from '../PackageExpertAgent';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 export interface MCPSystem {
   name: string;
   agent: any;

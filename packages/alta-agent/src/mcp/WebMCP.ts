@@ -3,6 +3,7 @@
  * Puerto 3000 - Gateway público de AltaMedica
  */
 
+import { logger } from '../logger.js';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const webAppConfig: MCPConfig = {
@@ -327,29 +328,7 @@ export default function Demo3D() {
 // Mapa interactivo con Leaflet
 import dynamic from 'next/dynamic';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 const MarketplaceMap = dynamic(
   () => import('@/components/marketplace/MarketplaceMap'),
   { ssr: false }

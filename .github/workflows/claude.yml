@@ -32,7 +32,7 @@ jobs:
           mode: "tag"
           timeout_minutes: 20
           model: "claude-3-opus-20240229"
-          base_branch: "auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps"
+          base_branch: "main"
           branch_prefix: "claude/fix-"
           
           # Custom instructions with AltaMedica context and dependency expertise

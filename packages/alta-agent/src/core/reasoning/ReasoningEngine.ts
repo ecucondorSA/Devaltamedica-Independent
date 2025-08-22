@@ -45,6 +45,8 @@ export enum UrgencyLevel {
   EMERGENCY = 'emergency',
   URGENT = 'urgent',
   SEMI_URGENT = 'semi-urgent',
+  NON_URGENT = 'non-urgent',
+  PREVENTIVE = 'preventive'
 }
 
 export class ReasoningEngine {

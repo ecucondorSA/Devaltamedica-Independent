@@ -4,6 +4,7 @@
  * Desarrollada por Dr. Eduardo Marques (Medicina-UBA)
  */
 
+import { logger } from '../logger.js';
 import type { Anamnesis as Medical } from '@altamedica/types/medical';
 import { EventEmitter } from 'events';
 import OpenAI from 'openai';
@@ -17,29 +18,7 @@ import type {
 } from '../types/alta.types';
 import { ALTA_PROMPTS, DEFAULT_ALTA_CONFIG } from '../types/alta.types';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 // TODO: Mover SECCIONES_ANAMNESIS a @altamedica/types o crear un paquete separado
 // Stub temporal para permitir el build
 const SECCIONES_ANAMNESIS = {
@@ -438,6 +417,9 @@ export class AltaAgent extends EventEmitter {
       happy: 'smile',
       focused: 'lean_forward',
       urgent: 'alert',
+      friendly: 'smile',
+      caring: 'nod',
+      supportive: 'idle'
     };
 
     return animationMap[emotion] || 'idle';
