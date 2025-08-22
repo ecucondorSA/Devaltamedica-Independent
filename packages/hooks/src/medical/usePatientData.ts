@@ -4,15 +4,15 @@
  * @description Hook que consolida todos los datos del paciente desde múltiples endpoints
  */
 
-import { useQuery, useQueries, UseQueryResult } from '@tanstack/react-query';
-import type { 
-  Patient, 
-  VitalSigns, 
-  Medication, 
-  Appointment, 
-  LabResult, 
-  MedicalHistory 
+import type {
+    Appointment,
+    LabResult,
+    MedicalHistory,
+    Medication,
+    Patient,
+    VitalSigns
 } from '@altamedica/types';
+import { useQueries } from '@tanstack/react-query';
 import { MEDICAL_QUERY_KEYS } from './queryKeys';
 
 // Simple API client wrapper
@@ -26,6 +26,12 @@ const apiClient = {
     return response.json();
   }
 };
+
+// Compatibility wrapper: many files call `getApiClient()` helper.
+// Provide a tiny wrapper to return the local apiClient so existing callsites keep working.
+function getApiClient() {
+  return apiClient;
+}
 
 export interface PatientDataResult {
   patient: Patient | null;

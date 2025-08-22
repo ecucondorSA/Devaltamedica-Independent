@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  MutationCache,
-  QueryCache,
-  QueryClient,
-  QueryClientConfig,
-  QueryClientProvider,
+    MutationCache,
+    QueryCache,
+    QueryClient,
+    QueryClientConfig,
+    QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
 // TODO: Re-enable when dependency is properly installed
@@ -54,6 +54,9 @@ export interface QueryProviderProps {
 
   // Callbacks
   onRateLimitError?: (retryAfter: number) => void;
+  // Global error callbacks
+  onError?: (error: unknown, query?: any) => void;
+  onMutationError?: (error: unknown) => void;
 }
 
 // Configuraciones predefinidas por tipo de aplicación
@@ -95,14 +98,16 @@ const createRetryFunction = (
   onRateLimitError?: (retryAfter: number) => void,
 ) => {
   return (failureCount: number, error: unknown) => {
+    const err: any = error as any;
+
     // No reintentar en errores de autenticación/autorización
-    if (error?.status === 401 || error?.status === 403) {
+    if (err?.status === 401 || err?.status === 403) {
       return false;
     }
 
     // Manejo especial para rate limiting
-    if (enableRateLimitHandling && error?.status === 429) {
-      const retryAfter = error?.retryAfter || 60;
+    if (enableRateLimitHandling && err?.status === 429) {
+      const retryAfter = err?.retryAfter || 60;
       onRateLimitError?.(retryAfter);
       return false;
     }
@@ -191,7 +196,7 @@ export function QueryProvider({
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {enableDevTools && <ReactQueryDevtools initialIsOpen={false} />}
+  {/* DevTools disabled in this build to avoid adding optional dependency during packaging */}
     </QueryClientProvider>
   );
 }

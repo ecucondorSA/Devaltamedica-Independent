@@ -4,7 +4,7 @@
  * @description Colección completa de hooks de debounce para diferentes casos de uso
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // ==========================================
 // TIPOS Y INTERFACES
@@ -107,7 +107,7 @@ export function useDebounceCallback<T extends (...args: any[]) => any>(
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCallTimeRef = useRef<number>(0);
   const lastInvokeTimeRef = useRef<number>(0);
-  const argsRef = useRef<Parameters<T>>();
+  const argsRef = useRef<Parameters<T> | undefined>(undefined);
 
   const invokeFunction = useCallback(() => {
     if (argsRef.current) {

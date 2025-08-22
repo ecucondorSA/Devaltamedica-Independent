@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { serverConfig } from '../config/server.config.js';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // TODO: Definir este tipo en @altamedica/types
 interface User {
   id: string;

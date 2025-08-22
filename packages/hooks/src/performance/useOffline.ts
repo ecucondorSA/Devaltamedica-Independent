@@ -510,7 +510,7 @@ export function useOffline<T = any>(config: Partial<OfflineConfig> = {}): UseOff
   // REFS
   // ==========================================
   
-  const storageRef = useRef<OfflineStorageManager>();
+  const storageRef = useRef<OfflineStorageManager | undefined>(undefined);
   const syncIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const syncPausedRef = useRef(false);
   

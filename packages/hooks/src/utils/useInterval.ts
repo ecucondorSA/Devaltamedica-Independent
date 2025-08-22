@@ -86,7 +86,7 @@ export function useInterval(
     onResume
   } = options;
 
-  const savedCallback = useRef<() => void>();
+  const savedCallback = useRef<() => void>(() => {});
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isPausedRef = useRef(false);
 
