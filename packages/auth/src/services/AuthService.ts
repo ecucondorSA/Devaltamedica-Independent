@@ -41,7 +41,7 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 // TODO: Definir UserRole en @altamedica/types
 // Stub temporal para permitir el build
@@ -329,7 +329,9 @@ export class AuthService {
           method: 'POST',
           credentials: 'include',
         });
-      } catch {}
+      } catch {
+        // Ignore logout errors
+      }
     } catch (error: any) {
       throw this.handleAuthError(error);
     }
@@ -378,7 +380,7 @@ export class AuthService {
       };
 
       await setDoc(doc(this.db, 'users', user.uid), newUser);
-      logger.info(`[AuthService] ⚡ Usuario ADMIN creado: ${userData.email}`);
+      logger.info(`[AuthService] ⚡ Usuario ADMIN creado: ${userData.email}`, undefined);
       return newUser;
     } catch (error: any) {
       logger.error('[AuthService] Error creando admin:', error);
@@ -568,7 +570,9 @@ export class AuthService {
       };
       try {
         fallback.token = await firebaseUser.getIdToken(false);
-      } catch {}
+      } catch {
+        // Ignore logout errors
+      }
       return fallback;
     }
   }

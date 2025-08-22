@@ -46,16 +46,10 @@ export { useTelemedicineUI } from './useTelemedicineUI';
 export { useAccessibility } from './useAccessibility';
 
 // Hooks de debugging CSS (migrado desde companies app)
-export { useCSSDebugger } from './useCSSDebugger';
+// export { useCSSDebugger } from './useCSSDebugger';
 
 // Tipos principales
-export type {
-  DisclosureState,
-  ModalOptions,
-  ToastOptions,
-  ThemeMode,
-  Breakpoint
-} from './types';
+export type { DisclosureState, ModalOptions, ToastOptions, ThemeMode, Breakpoint } from './types';
 
 // Constantes y utilidades
 export { BREAKPOINTS, THEME_COLORS, ANIMATION_DURATION } from './constants';
