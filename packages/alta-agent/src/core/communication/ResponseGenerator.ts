@@ -17,11 +17,14 @@ export enum ResponseTone {
   PROFESSIONAL = 'professional',
   EMPATHETIC = 'empathetic',
   EDUCATIONAL = 'educational',
+  URGENT = 'urgent',
+  REASSURING = 'reassuring'
 }
 
 export enum ComplexityLevel {
   SIMPLE = 'simple',
   MODERATE = 'moderate',
+  TECHNICAL = 'technical'
 }
 
 export interface MedicalResponse {

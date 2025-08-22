@@ -12,7 +12,7 @@ import { z } from 'zod';
 export type AltaState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'analyzing' | 'alert';
 
 // Emociones del avatar
-export type AltaEmotion = 'neutral' | 'empathetic' | 'concerned' | 'happy' | 'focused' | 'urgent';
+export type AltaEmotion = 'neutral' | 'empathetic' | 'concerned' | 'happy' | 'focused' | 'urgent' | 'friendly' | 'caring' | 'supportive';
 
 // Configuración de Alta
 export interface AltaConfig {

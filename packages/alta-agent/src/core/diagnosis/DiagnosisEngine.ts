@@ -17,6 +17,9 @@ export enum DiagnosticPhase {
   INITIAL = 'initial',
   CHIEF_COMPLAINT = 'chief_complaint',
   SYMPTOM_EXPLORATION = 'symptom_exploration',
+  MEDICAL_HISTORY = 'medical_history',
+  ANALYSIS = 'analysis',
+  COMPLETED = 'completed'
 }
 
 export interface CollectedData {
