@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@altamedica/*": ["./packages/*/src", "./packages/*/dist"]
+      // Priorizar artefactos compilados en packages/*/dist para evitar que tsc incluya
+      // directamente los sources de los paquetes (evita TS6059 durante builds de apps).
+      "@altamedica/*": ["./packages/*/dist", "./packages/*/src"]
     },
     "types": ["node"],
     "noUncheckedIndexedAccess": false,

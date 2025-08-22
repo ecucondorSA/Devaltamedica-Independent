@@ -4,10 +4,10 @@
  * P1 Security: Structured error responses with request tracking
  */
 
-import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
+import { NextFunction, Request, Response } from 'express';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface ErrorWithStatus extends Error {
   status?: number;
   code?: string;
@@ -29,10 +29,10 @@ export const errorHandler = (
 ): void => {
   // Generate or use existing request ID
   const requestId = (req as any).requestId || crypto.randomUUID();
-  
+
   // Determine status code
   const status = err.status || 500;
-  
+
   // Log error with full context
   const errorContext = {
     requestId,
@@ -51,7 +51,7 @@ export const errorHandler = (
     },
     user: (req as any).user?.uid || 'anonymous'
   };
-  
+
   // Log based on severity
   if (status >= 500) {
     logger.error('[ERROR] Server Error:', errorContext);
@@ -60,19 +60,19 @@ export const errorHandler = (
   } else {
     logger.info('[INFO] Error:', errorContext);
   }
-  
+
   // Prepare response based on environment
   let responseBody: any = {
     error: true,
     requestId,
     timestamp: new Date().toISOString()
   };
-  
+
   if (process.env.NODE_ENV === 'production') {
     // Production: minimal information
     responseBody.message = getProductionMessage(status);
     responseBody.status = status;
-    
+
     // Add retry information for rate limiting
     if (status === 429 && res.getHeader('Retry-After')) {
       responseBody.retryAfter = res.getHeader('Retry-After');
@@ -87,11 +87,11 @@ export const errorHandler = (
     responseBody.path = req.path;
     responseBody.method = req.method;
   }
-  
+
   // Set security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Request-ID', requestId);
-  
+
   // Send response
   res.status(status).json(responseBody);
 };
@@ -115,7 +115,7 @@ function getProductionMessage(status: number): string {
     503: 'Service Unavailable - The service is temporarily unavailable',
     504: 'Gateway Timeout - The upstream server did not respond in time'
   };
-  
+
   return messages[status] || `Error ${status}`;
 }
 
@@ -137,7 +137,7 @@ export class AppError extends Error {
   public readonly code: string;
   public readonly details?: any;
   public readonly isOperational: boolean;
-  
+
   constructor(
     message: string,
     status: number = 500,
@@ -149,7 +149,7 @@ export class AppError extends Error {
     this.code = code;
     this.details = details;
     this.isOperational = true;
-    
+
     // Capture stack trace
     Error.captureStackTrace(this, this.constructor);
   }
@@ -161,22 +161,22 @@ export class AppError extends Error {
 export const errors = {
   badRequest: (message: string = 'Bad Request', details?: any) =>
     new AppError(message, 400, 'BAD_REQUEST', details),
-    
+
   unauthorized: (message: string = 'Unauthorized') =>
     new AppError(message, 401, 'UNAUTHORIZED'),
-    
+
   forbidden: (message: string = 'Forbidden') =>
     new AppError(message, 403, 'FORBIDDEN'),
-    
+
   notFound: (resource: string = 'Resource') =>
     new AppError(`${resource} not found`, 404, 'NOT_FOUND'),
-    
+
   conflict: (message: string = 'Conflict') =>
     new AppError(message, 409, 'CONFLICT'),
-    
+
   validationError: (details: any) =>
     new AppError('Validation failed', 422, 'VALIDATION_ERROR', details),
-    
+
   tooManyRequests: (retryAfter?: number) =>
     new AppError(
       'Too many requests',
@@ -184,10 +184,10 @@ export const errors = {
       'RATE_LIMIT_EXCEEDED',
       { retryAfter }
     ),
-    
+
   internalError: (message: string = 'Internal server error') =>
     new AppError(message, 500, 'INTERNAL_ERROR'),
-    
+
   serviceUnavailable: (message: string = 'Service temporarily unavailable') =>
     new AppError(message, 503, 'SERVICE_UNAVAILABLE')
 };
@@ -208,6 +208,6 @@ export const formatZodError = (error: any): AppError => {
     field: e.path.join('.'),
     message: e.message
   }));
-  
+
   return errors.validationError(details);
 };

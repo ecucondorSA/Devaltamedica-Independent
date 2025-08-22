@@ -1,3 +1,16 @@
+export type Doctor = {
+  id: string;
+  name?: string;
+  specialty?: string;
+  rating?: number;
+};
+
+export type Hospital = {
+  id: string;
+  name: string;
+};
+
+export default {};
 /**
  * @fileoverview Punto de entrada simplificado para @altamedica/types
  * @module @altamedica/types

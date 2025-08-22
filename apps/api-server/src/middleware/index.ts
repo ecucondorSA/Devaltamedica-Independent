@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { initializeSecurityMiddlewares } from './security.middleware';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Middleware simple de placeholder
 const simpleAuth = (req: Request, res: Response, next: NextFunction) => {
   // TODO: Implement proper auth
@@ -67,9 +67,9 @@ export const initializeMiddlewares = (app: any, encryptionKey: string) => {
   // Seguridad de producción (CORS, rate limit, headers, audit)
   try {
     initializeSecurityMiddlewares(app);
-    logger.info('✅ Middlewares de seguridad inicializados correctamente');
+    logger.info('Middlewares de seguridad inicializados correctamente');
   } catch (err) {
-    logger.error('🚨 Error inicializando middlewares de seguridad', err);
+    logger.error('Error inicializando middlewares de seguridad', undefined, err);
     throw err;
   }
 };

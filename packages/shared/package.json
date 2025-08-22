@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./services/logger.service": {
+      "types": "./dist/services/logger.service.d.ts",
+      "import": "./dist/services/logger.service.mjs",
+      "require": "./dist/services/logger.service.js"
     }
   },
   "files": [

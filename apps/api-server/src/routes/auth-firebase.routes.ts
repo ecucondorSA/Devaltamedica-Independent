@@ -1,12 +1,12 @@
 import { Router, type Request, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { getAuth } from 'firebase-admin/auth';
-import { AUTH_COOKIES } from '../constants/auth-cookies';
-import { issueCsrfToken } from '../middleware/csrf.middleware';
 import { ROLE_REDIRECT_URLS } from '../config/auth-config';
+import { AUTH_COOKIES } from '../constants/auth-cookies';
 import { getFirestoreAdmin } from '../lib/firebase-admin';
+import { issueCsrfToken } from '../middleware/csrf.middleware';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 const router = Router();
 
 const loginLimiter = rateLimit({
@@ -46,7 +46,7 @@ router.post('/session-login', loginLimiter as any, async (req: Request, res: Res
 
     return res.status(200).json({ success: true, csrfToken });
   } catch (error: any) {
-    logger.error('[Auth] session-login error:', undefined, error);
+    logger.error('[Auth] session-login error', undefined, error);
     return res.status(401).json({ success: false, error: 'INVALID_ID_TOKEN' });
   }
 });

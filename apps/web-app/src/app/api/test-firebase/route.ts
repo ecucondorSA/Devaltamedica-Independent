@@ -41,7 +41,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    logger.error('Firebase test error:', error);
+    logger.error('Firebase test error:', undefined, error);
     return NextResponse.json(
       {
         success: false,

@@ -114,7 +114,8 @@ export async function middleware(request: NextRequest) {
     
     return response;
   } catch (error) {
-    logger.error('Session verification failed:', error);
+    // Pasar el error como "data" para evitar conflicto de tipos en el segundo parámetro
+    logger.error('Session verification failed:', undefined, error);
     return redirectToLogin(request);
   }
 }
@@ -155,7 +156,7 @@ async function checkRoleRedirect(request: NextRequest, role: string): Promise<Ne
   
   if (!isAllowed && pathname !== '/') {
     // Redirect al dashboard apropiado para su rol
-    const dashboardUrl = getDashboardUrl(role);
+  const dashboardUrl = getDashboardUrl(role as any);
     if (dashboardUrl) {
       return NextResponse.redirect(new URL(dashboardUrl, request.url));
     }

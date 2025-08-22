@@ -355,7 +355,7 @@ app.use('/api/general', applyEndpointConfig('general'));
 // P1 Security: Import error handler
 import { errorHandler, notFoundHandler } from './middleware/error-handler';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 404 handler - must be before error handler
 app.use('*', notFoundHandler);
 

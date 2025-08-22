@@ -3,18 +3,19 @@
  * Eliminado completamente el flujo SSO/JWT - Solo cookies HttpOnly
  */
 
-import { getAuth, DecodedIdToken } from 'firebase-admin/auth';
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { adminDb, getAuthAdmin } from '../lib/firebase-admin';
-import { AUTH_COOKIES } from '../constants/auth-cookies';
-import { logger } from '@altamedica/shared/services/logger.service';
-import { AuthContext,
+import {
   AuthResult,
   AuthToken,
   UserRole,
   normalizeUserRole
- } from '@altamedica/auth';;
+} from '@altamedica/auth';
+import { logger } from '@altamedica/shared';
+import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { AUTH_COOKIES } from '../constants/auth-cookies';
+import { adminDb, getAuthAdmin } from '../lib/firebase-admin';
+;
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -47,9 +48,9 @@ const MFA_REQUIRED_ROLES: UserRole[] = ['ADMIN', 'DOCTOR'];
 // ROUTE PERMISSIONS CONFIGURATION
 // ============================================================================
 
-export const routePermissions: Record<string, { 
-  roles?: UserRole[]; 
-  permissions?: string[]; 
+export const routePermissions: Record<string, {
+  roles?: UserRole[];
+  permissions?: string[];
   public?: boolean;
   allowAnyAuthenticated?: boolean;
 }> = {
@@ -57,31 +58,31 @@ export const routePermissions: Record<string, {
   '/api/health': { public: true },
   '/api/v1/auth/session-login': { public: true },
   '/api/v1/auth/register': { public: true },
-  
+
   // Authenticated routes (any role)
   '/api/v1/auth/session-logout': { allowAnyAuthenticated: true },
   '/api/v1/auth/session-verify': { allowAnyAuthenticated: true },
   '/api/v1/auth/me': { allowAnyAuthenticated: true },
-  
+
   // Admin routes
   '/api/v1/admin': { roles: [UserRole.ADMIN] },
   '/api/v1/users': { roles: [UserRole.ADMIN], permissions: ['users:manage'] },
   '/api/v1/settings': { roles: [UserRole.ADMIN] },
-  
+
   // Doctor routes
   '/api/v1/doctors': { roles: [UserRole.DOCTOR, UserRole.ADMIN] },
   '/api/v1/appointments/doctor': { roles: [UserRole.DOCTOR] },
   '/api/v1/prescriptions': { roles: [UserRole.DOCTOR], permissions: ['prescriptions:write'] },
-  
+
   // Patient routes
   '/api/v1/patients': { roles: [UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN] },
   '/api/v1/appointments/patient': { roles: [UserRole.PATIENT] },
   '/api/v1/medical-records': { roles: [UserRole.PATIENT, UserRole.DOCTOR], permissions: ['medical:read'] },
-  
+
   // Company routes
   '/api/v1/companies': { roles: [UserRole.COMPANY, UserRole.ADMIN] },
   '/api/v1/marketplace': { roles: [UserRole.COMPANY, UserRole.DOCTOR] },
-  
+
   // Telemedicine routes
   '/api/v1/telemedicine': { roles: [UserRole.PATIENT, UserRole.DOCTOR] },
   '/api/v1/webrtc': { roles: [UserRole.PATIENT, UserRole.DOCTOR] }
@@ -94,7 +95,7 @@ export const routePermissions: Record<string, {
 export class UnifiedAuthService {
   private static readonly usersCollection = 'users';
   private static readonly sessionCollection = 'sessions';
-  
+
   /**
    * Verifica una cookie de sesión de Firebase
    */
@@ -118,16 +119,16 @@ export class UnifiedAuthService {
         logger.error('Database not initialized');
         return null;
       }
-      
+
       const userDoc = await adminDb.collection(this.usersCollection).doc(userId).get();
-      
+
       if (!userDoc.exists) {
         logger.error('User not found in database');
         return null;
       }
 
       const userData = userDoc.data()!;
-      
+
       // Verificar si el usuario está activo
       if (!userData.isActive) {
         logger.error('User is not active');
@@ -171,10 +172,10 @@ export class UnifiedAuthService {
           error: 'Firebase Admin no inicializado'
         };
       }
-      
+
       // Revocar todos los refresh tokens del usuario
       await authAdmin.revokeRefreshTokens(userId);
-      
+
       // Registrar el logout en la base de datos
       if (adminDb) {
         await adminDb.collection('audit_logs').add({
@@ -184,7 +185,7 @@ export class UnifiedAuthService {
           type: 'auth'
         });
       }
-      
+
       return { success: true };
     } catch (error) {
       logger.error('Logout error:', undefined, error);
@@ -212,14 +213,14 @@ export async function UnifiedAuth(
   try {
     // Obtener la cookie de sesión
     const sessionCookie = request.cookies.get(AUTH_COOKIES.session)?.value;
-    
+
     if (!sessionCookie) {
       return {
         success: false,
         error: 'No hay sesión activa',
         response: NextResponse.json(
           { success: false, error: 'UNAUTHORIZED' },
-          { 
+          {
             status: 401,
             headers: {
               'X-Auth-Error': 'NO_SESSION',
@@ -232,14 +233,14 @@ export async function UnifiedAuth(
 
     // Verificar la cookie de sesión con Firebase
     const decodedToken = await UnifiedAuthService.verifySessionCookie(sessionCookie);
-    
+
     if (!decodedToken) {
       return {
         success: false,
         error: 'Sesión inválida o expirada',
         response: NextResponse.json(
           { success: false, error: 'INVALID_SESSION' },
-          { 
+          {
             status: 401,
             headers: {
               'X-Auth-Error': 'INVALID_SESSION',
@@ -252,14 +253,14 @@ export async function UnifiedAuth(
 
     // Obtener el perfil completo del usuario
     const user = await UnifiedAuthService.getUserProfile(decodedToken.uid);
-    
+
     if (!user) {
       return {
         success: false,
         error: 'Usuario no encontrado o inactivo',
         response: NextResponse.json(
           { success: false, error: 'USER_NOT_FOUND' },
-          { 
+          {
             status: 404,
             headers: {
               'X-Auth-Error': 'USER_NOT_FOUND'
@@ -273,19 +274,19 @@ export async function UnifiedAuth(
     if (MFA_REQUIRED_ROLES.includes(user.role)) {
       const userDoc = await adminDb?.collection('users').doc(user.userId).get();
       const userData = userDoc?.data();
-      
+
       if (!userData?.mfaEnabled) {
         logger.warn(`⚠️ MFA requerido pero no habilitado para usuario ${user.userId} con rol ${user.role}`);
         return {
           success: false,
           error: 'MFA requerido para este rol',
           response: NextResponse.json(
-            { 
-              success: false, 
+            {
+              success: false,
               error: 'MFA_REQUIRED',
               message: 'La autenticación de dos factores es obligatoria para roles administrativos y médicos'
             },
-            { 
+            {
               status: 403,
               headers: {
                 'X-Auth-Error': 'MFA_REQUIRED',
@@ -305,13 +306,13 @@ export async function UnifiedAuth(
           success: false,
           error: 'Rol insuficiente',
           response: NextResponse.json(
-            { 
-              success: false, 
+            {
+              success: false,
               error: 'INSUFFICIENT_ROLE',
               required: rolesArray,
               current: user.role
             },
-            { 
+            {
               status: 403,
               headers: {
                 'X-Auth-Error': 'INSUFFICIENT_ROLE',
@@ -329,19 +330,19 @@ export async function UnifiedAuth(
       const hasAllPermissions = requiredPermissions.every(
         permission => user.permissions?.includes(permission)
       );
-      
+
       if (!hasAllPermissions) {
         return {
           success: false,
           error: 'Permisos insuficientes',
           response: NextResponse.json(
-            { 
-              success: false, 
+            {
+              success: false,
               error: 'INSUFFICIENT_PERMISSIONS',
               required: requiredPermissions,
               current: user.permissions
             },
-            { 
+            {
               status: 403,
               headers: {
                 'X-Auth-Error': 'INSUFFICIENT_PERMISSIONS',
@@ -387,7 +388,7 @@ export async function UnifiedAuth(
       error: 'Error interno del servidor',
       response: NextResponse.json(
         { success: false, error: 'INTERNAL_ERROR' },
-        { 
+        {
           status: 500,
           headers: {
             'X-Auth-Error': 'INTERNAL_ERROR'
@@ -463,4 +464,4 @@ export function withRole(
 
 // Re-export types
 export { UserRole } from '@altamedica/types';
-export type { AuthToken, AuthContext, AuthResult } from '@altamedica/types';
+export type { AuthContext, AuthResult, AuthToken } from '@altamedica/types';

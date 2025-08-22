@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from 'express';
-import rateLimit from 'express-rate-limit';
+import { logger } from '@altamedica/shared';
 import cors from 'cors';
+import { NextFunction, Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { logger } from '@altamedica/shared/services/logger.service';
-import { 
-  corsConfig, 
-  rateLimitConfig, 
-  apiRateLimits, 
-  securityHeaders,
+import {
+  apiRateLimits,
+  corsConfig,
   env,
-  validateSecurityConfig 
+  rateLimitConfig,
+  securityHeaders,
+  validateSecurityConfig
 } from '../config/production-security';
 
 /**
@@ -140,11 +140,11 @@ export const sanitizeRequest = (req: Request, res: Response, next: NextFunction)
   }
 
   // Limit request body size for non-file uploads
-  if (req.headers['content-type'] && 
-      !req.headers['content-type'].includes('multipart/form-data')) {
+  if (req.headers['content-type'] &&
+    !req.headers['content-type'].includes('multipart/form-data')) {
     const maxSize = 1024 * 1024; // 1MB
     let size = 0;
-    
+
     req.on('data', (chunk) => {
       size += chunk.length;
       if (size > maxSize) {
