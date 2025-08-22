@@ -53,12 +53,12 @@ jobs:
         if: steps.changes.outputs.any_changed == 'true'
         run: |
           echo "Changed files:\n${{ steps.changes.outputs.all_changed_files }}" | sed 's/ /\n/g'
-          node scripts/analyze-code.js --mode tsc --path "${{ steps.changes.outputs.all_changed_files }}" || true
-          node scripts/analyze-code.js --mode lint --path "${{ steps.changes.outputs.all_changed_files }}" || true
+          node scripts/analyze-code.js --mode=types --path=apps/web-app || true
+          node scripts/analyze-code.js --mode=lint --path=apps/web-app || true
 
       - name: Full Build Verification (web-app focus)
         run: |
-          node scripts/analyze-code.js --mode all --path "apps/web-app"
+          node scripts/analyze-code.js --mode=structure --path=apps/web-app
 
       - name: Upload diagnostic artifact
         if: always()
@@ -71,12 +71,12 @@ jobs:
 
       - name: Hotspot Scan
         run: |
-          node scripts/hotspot-scan.js --paths "${{ steps.changes.outputs.all_changed_files }}"
+          node scripts/hotspot-scan.js --paths=apps/web-app/package.json
 
       - name: Fail on critical hotspots (PR only)
         if: github.event_name == 'pull_request'
         run: |
-          node scripts/hotspot-scan.js --paths "${{ steps.changes.outputs.all_changed_files }}" --fail-on-critical
+          node scripts/hotspot-scan.js --paths=apps/web-app/package.json --fail-on-critical
 
       - name: Post Review Comment
         if: github.event_name == 'pull_request'

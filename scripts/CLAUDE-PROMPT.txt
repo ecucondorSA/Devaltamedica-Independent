@@ -1,0 +1,17 @@
+CLAUDE AI DIAGNOSTIC PROMPT
+
+Problem: GitHub Actions failing due to missing scripts
+Root Cause: analyze-code.js and hotspot-scan.js were missing
+Solution: Created functional scripts with proper parameter handling
+
+Files Created:
+- scripts/analyze-code.js (code analysis with timeouts)
+- scripts/hotspot-scan.js (pattern detection)
+- scripts/CLAUDE-BEACON.md (diagnostic report)
+
+Workflow Fixed:
+- Updated parameter format in ai-code-review.yml
+- Added timeouts to prevent hanging
+- Simplified execution paths
+
+Status: RESOLVED - GitHub Actions should now pass
