@@ -1,67 +1,66 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { 
-  Settings, 
-  Globe, 
-  Bell, 
-  Shield, 
-  Database, 
-  Mail,
-  Save,
-  RefreshCw
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Input } from '@altamedica/ui'
-import { useToast } from '@/hooks/use-toast'
+import { useState } from 'react';
+import { Settings, Globe, Bell, Shield, Database, Mail, Save, RefreshCw } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Button,
+  Input,
+} from '@altamedica/ui';
+import { useToast } from '../../hooks/use-toast';
 
 interface SystemSettings {
   general: {
-    siteName: string
-    siteUrl: string
-    adminEmail: string
-    timeZone: string
-    language: string
-  }
+    siteName: string;
+    siteUrl: string;
+    adminEmail: string;
+    timeZone: string;
+    language: string;
+  };
   email: {
-    smtpHost: string
-    smtpPort: string
-    smtpUser: string
-    smtpPassword: string
-    fromEmail: string
-    fromName: string
-  }
+    smtpHost: string;
+    smtpPort: string;
+    smtpUser: string;
+    smtpPassword: string;
+    fromEmail: string;
+    fromName: string;
+  };
   security: {
-    sessionTimeout: number
-    maxLoginAttempts: number
-    passwordMinLength: number
-    require2FA: boolean
-    allowedIPs: string
-  }
+    sessionTimeout: number;
+    maxLoginAttempts: number;
+    passwordMinLength: number;
+    require2FA: boolean;
+    allowedIPs: string;
+  };
   notifications: {
-    emailNotifications: boolean
-    smsNotifications: boolean
-    pushNotifications: boolean
-    adminAlerts: boolean
-  }
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+    pushNotifications: boolean;
+    adminAlerts: boolean;
+  };
   database: {
-    backupFrequency: string
-    retentionDays: number
-    autoCleanup: boolean
-  }
+    backupFrequency: string;
+    retentionDays: number;
+    autoCleanup: boolean;
+  };
 }
 
 export default function SettingsPage() {
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState('general')
-  
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('general');
+
   const [settings, setSettings] = useState<SystemSettings>({
     general: {
       siteName: 'AltaMedica Admin',
       siteUrl: 'https://admin.altamedica.com',
       adminEmail: 'admin@altamedica.com',
       timeZone: 'America/Mexico_City',
-      language: 'es'
+      language: 'es',
     },
     email: {
       smtpHost: 'smtp.gmail.com',
@@ -69,76 +68,74 @@ export default function SettingsPage() {
       smtpUser: 'noreply@altamedica.com',
       smtpPassword: '********',
       fromEmail: 'noreply@altamedica.com',
-      fromName: 'AltaMedica'
+      fromName: 'AltaMedica',
     },
     security: {
       sessionTimeout: 30,
       maxLoginAttempts: 5,
       passwordMinLength: 8,
       require2FA: true,
-      allowedIPs: ''
+      allowedIPs: '',
     },
     notifications: {
       emailNotifications: true,
       smsNotifications: false,
       pushNotifications: true,
-      adminAlerts: true
+      adminAlerts: true,
     },
     database: {
       backupFrequency: 'daily',
       retentionDays: 30,
-      autoCleanup: true
-    }
-  })
+      autoCleanup: true,
+    },
+  });
 
   const handleSave = async () => {
-    setLoading(true)
-    
+    setLoading(true);
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       toast({
         title: 'Success',
-        description: 'Settings saved successfully'
-      })
+        description: 'Settings saved successfully',
+      });
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to save settings',
-        variant: 'destructive'
-      })
+        variant: 'destructive',
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const updateSettings = (category: keyof SystemSettings, field: string, value: any) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
       [category]: {
         ...prev[category],
-        [field]: value
-      }
-    }))
-  }
+        [field]: value,
+      },
+    }));
+  };
 
   const tabs = [
     { id: 'general', label: 'General', icon: Globe },
     { id: 'email', label: 'Email', icon: Mail },
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'database', label: 'Database', icon: Database }
-  ]
+    { id: 'database', label: 'Database', icon: Database },
+  ];
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
-          <p className="text-muted-foreground">
-            Configure global system settings and preferences
-          </p>
+          <p className="text-muted-foreground">Configure global system settings and preferences</p>
         </div>
         <Button onClick={handleSave} disabled={loading}>
           <Save className="mr-2 h-4 w-4" />
@@ -149,24 +146,25 @@ export default function SettingsPage() {
       {/* Tab Navigation */}
       <div className="border-b">
         <nav className="-mb-px flex space-x-8">
-          {tabs.map(tab => {
-            const Icon = tab.icon
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
                   flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm
-                  ${activeTab === tab.id 
-                    ? 'border-blue-500 text-blue-600' 
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ${
+                    activeTab === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }
                 `}
               >
                 <Icon className="h-4 w-4" />
                 <span>{tab.label}</span>
               </button>
-            )
+            );
           })}
         </nav>
       </div>
@@ -176,9 +174,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>General Settings</CardTitle>
-            <CardDescription>
-              Basic configuration for the admin panel
-            </CardDescription>
+            <CardDescription>Basic configuration for the admin panel</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -228,9 +224,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Email Configuration</CardTitle>
-            <CardDescription>
-              SMTP settings for sending system emails
-            </CardDescription>
+            <CardDescription>SMTP settings for sending system emails</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -294,9 +288,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Security Settings</CardTitle>
-            <CardDescription>
-              Configure security policies and access controls
-            </CardDescription>
+            <CardDescription>Configure security policies and access controls</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -305,7 +297,9 @@ export default function SettingsPage() {
                 <Input
                   type="number"
                   value={settings.security.sessionTimeout}
-                  onChange={(e) => updateSettings('security', 'sessionTimeout', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateSettings('security', 'sessionTimeout', parseInt(e.target.value))
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -313,7 +307,9 @@ export default function SettingsPage() {
                 <Input
                   type="number"
                   value={settings.security.maxLoginAttempts}
-                  onChange={(e) => updateSettings('security', 'maxLoginAttempts', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateSettings('security', 'maxLoginAttempts', parseInt(e.target.value))
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -321,7 +317,9 @@ export default function SettingsPage() {
                 <Input
                   type="number"
                   value={settings.security.passwordMinLength}
-                  onChange={(e) => updateSettings('security', 'passwordMinLength', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateSettings('security', 'passwordMinLength', parseInt(e.target.value))
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -354,9 +352,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Notification Preferences</CardTitle>
-            <CardDescription>
-              Configure how and when to send notifications
-            </CardDescription>
+            <CardDescription>Configure how and when to send notifications</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
@@ -364,7 +360,9 @@ export default function SettingsPage() {
                 <input
                   type="checkbox"
                   checked={settings.notifications.emailNotifications}
-                  onChange={(e) => updateSettings('notifications', 'emailNotifications', e.target.checked)}
+                  onChange={(e) =>
+                    updateSettings('notifications', 'emailNotifications', e.target.checked)
+                  }
                   className="rounded"
                 />
                 <span className="text-sm font-medium">Email Notifications</span>
@@ -373,7 +371,9 @@ export default function SettingsPage() {
                 <input
                   type="checkbox"
                   checked={settings.notifications.smsNotifications}
-                  onChange={(e) => updateSettings('notifications', 'smsNotifications', e.target.checked)}
+                  onChange={(e) =>
+                    updateSettings('notifications', 'smsNotifications', e.target.checked)
+                  }
                   className="rounded"
                 />
                 <span className="text-sm font-medium">SMS Notifications</span>
@@ -382,7 +382,9 @@ export default function SettingsPage() {
                 <input
                   type="checkbox"
                   checked={settings.notifications.pushNotifications}
-                  onChange={(e) => updateSettings('notifications', 'pushNotifications', e.target.checked)}
+                  onChange={(e) =>
+                    updateSettings('notifications', 'pushNotifications', e.target.checked)
+                  }
                   className="rounded"
                 />
                 <span className="text-sm font-medium">Push Notifications</span>
@@ -406,9 +408,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Database Management</CardTitle>
-            <CardDescription>
-              Configure database backup and maintenance settings
-            </CardDescription>
+            <CardDescription>Configure database backup and maintenance settings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -430,7 +430,9 @@ export default function SettingsPage() {
                 <Input
                   type="number"
                   value={settings.database.retentionDays}
-                  onChange={(e) => updateSettings('database', 'retentionDays', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateSettings('database', 'retentionDays', parseInt(e.target.value))
+                  }
                 />
               </div>
             </div>
@@ -458,5 +460,5 @@ export default function SettingsPage() {
         </Card>
       )}
     </div>
-  )
+  );
 }

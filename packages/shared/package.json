@@ -14,15 +14,15 @@
     },
     "./services/logger.service": {
       "types": "./dist/services/logger.service.d.ts",
-      "import": "./dist/services/logger.service.mjs",
-      "require": "./dist/services/logger.service.js"
+      "import": "./dist/services/logger.service.js",
+      "require": "./dist/services/logger.service.cjs"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts src/services/logger.service.ts --format cjs --format esm --dts --clean --silent",
     "dev": "tsup src/index.ts --format=esm --watch",
     "clean": "rimraf dist",
     "type-check": "tsc --noEmit"

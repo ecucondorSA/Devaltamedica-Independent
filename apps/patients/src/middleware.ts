@@ -1,4 +1,7 @@
-import { AUTH_COOKIES as AUTH_COOKIES_IMPORTED, LEGACY_AUTH_COOKIES as LEGACY_AUTH_COOKIES_IMPORTED } from '@altamedica/auth';
+import {
+  AUTH_COOKIES as AUTH_COOKIES_IMPORTED,
+  LEGACY_AUTH_COOKIES as LEGACY_AUTH_COOKIES_IMPORTED,
+} from '@altamedica/auth';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -22,19 +25,19 @@ const PROFILE_REQUIRED_PATHS = [
 ];
 
 // Rutas de API que no requieren autenticación
-const PUBLIC_API_PATHS = [
-  '/api/health',
-  '/api/public',
-];
+const PUBLIC_API_PATHS = ['/api/health', '/api/public'];
 
-// Middleware de autenticación SSO para Patients App
-// Debe ser async para permitir el uso de await (verificación remota con API Server)
+// Middleware de autenticación Firebase Auth con cookies HttpOnly
+// Verificación segura con API Server
 export async function middleware(request: NextRequest) {
   // Fallback defensivo si el paquete de auth aún no expone constantes
-  const AUTH_COOKIES = AUTH_COOKIES_IMPORTED ?? { token: 'altamedica_token', refresh: 'altamedica_refresh' } as const;
-  const LEGACY_AUTH_COOKIES = LEGACY_AUTH_COOKIES_IMPORTED ?? { token: 'auth-token', refresh: 'refresh-token' } as const;
+  const AUTH_COOKIES =
+    AUTH_COOKIES_IMPORTED ??
+    ({ token: 'altamedica_token', refresh: 'altamedica_refresh' } as const);
+  const LEGACY_AUTH_COOKIES =
+    LEGACY_AUTH_COOKIES_IMPORTED ?? ({ token: 'auth-token', refresh: 'refresh-token' } as const);
   const { pathname } = request.nextUrl;
-  
+
   // Permitir acceso a archivos estáticos y recursos
   if (
     pathname.startsWith('/_next') ||
@@ -46,19 +49,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 🔐 NUEVO SISTEMA SSO - Verificar cookies httpOnly (nombres estandarizados con fallback)
+  // 🔐 SISTEMA FIREBASE AUTH - Verificar cookies httpOnly (nombres estandarizados con fallback)
   const authToken =
-    request.cookies.get(AUTH_COOKIES.token) ??
-    request.cookies.get(LEGACY_AUTH_COOKIES.token);
+    request.cookies.get(AUTH_COOKIES.token) ?? request.cookies.get(LEGACY_AUTH_COOKIES.token);
   const refreshToken =
-    request.cookies.get(AUTH_COOKIES.refresh) ??
-    request.cookies.get(LEGACY_AUTH_COOKIES.refresh);
-  
+    request.cookies.get(AUTH_COOKIES.refresh) ?? request.cookies.get(LEGACY_AUTH_COOKIES.refresh);
+
   // No podemos leer el contenido de las cookies httpOnly desde el cliente
   // Necesitamos verificar con el servidor
   let user = null;
   let isAuthenticated = false;
-  
+
   // Si hay cookies de auth, verificar con el servidor
   if (authToken || refreshToken) {
     try {
@@ -67,12 +68,12 @@ export async function middleware(request: NextRequest) {
       const verifyResponse = await fetch(`${apiUrl}/api/v1/auth/verify`, {
         method: 'GET',
         headers: {
-          'Cookie': request.headers.get('cookie') || ''
+          Cookie: request.headers.get('cookie') || '',
         },
         // Agregar timeout para evitar bloqueos
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
       });
-      
+
       if (verifyResponse.ok) {
         const data = await verifyResponse.json();
         user = data.user;
@@ -91,9 +92,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // Verificar si es una ruta pública
-  const isPublicPath = PUBLIC_PATHS.some(path => pathname === path || pathname.startsWith(`${path}/`));
-  const isPublicAPI = PUBLIC_API_PATHS.some(path => pathname.startsWith(path));
-  
+  const isPublicPath = PUBLIC_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
+  const isPublicAPI = PUBLIC_API_PATHS.some((path) => pathname.startsWith(path));
+
   if (isPublicPath || isPublicAPI) {
     // Si el usuario está autenticado y trata de acceder a login/register, redirigir a dashboard
     if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
@@ -102,22 +105,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Si no está autenticado, redirigir al login central SSO
+  // Si no está autenticado, redirigir al login Firebase Auth
   if (!isAuthenticated) {
-    // Redirigir al gateway de autenticación centralizado
+    // Redirigir al login Firebase Auth centralizado
     const webAppUrl = process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3000';
     const patientsUrl = process.env.NEXT_PUBLIC_PATIENTS_URL || 'http://localhost:3003';
-    const ssoLoginUrl = new URL(`${webAppUrl}/auth/login`);
+    const loginUrl = new URL(`${webAppUrl}/auth/login`);
     // Guardar la URL original para redirigir después del login
-    ssoLoginUrl.searchParams.set('redirect', `${patientsUrl}${pathname}`);
-    return NextResponse.redirect(ssoLoginUrl);
+    loginUrl.searchParams.set('redirect', `${patientsUrl}${pathname}`);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Verificar rol de paciente
   if (user && user.role !== 'patient') {
     // Si no es un paciente, redirigir a la app correcta
     const roleRedirectMap: Record<string, string> = {
-      'doctor': 'http://localhost:3002',
+      doctor: 'http://localhost:3002',
       'company-admin': 'http://localhost:3004',
       'platform-admin': 'http://localhost:3005',
     };
@@ -126,13 +129,13 @@ export async function middleware(request: NextRequest) {
     if (redirectUrl) {
       return NextResponse.redirect(redirectUrl);
     }
-    
+
     // Si el rol no está mapeado, redirigir a login
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // Verificar si el perfil está completo para rutas que lo requieren
-  const requiresProfile = PROFILE_REQUIRED_PATHS.some(path => pathname.startsWith(path));
+  const requiresProfile = PROFILE_REQUIRED_PATHS.some((path) => pathname.startsWith(path));
   if (requiresProfile && user && !user.profileComplete) {
     // Si el perfil no está completo, redirigir a onboarding
     if (pathname !== '/onboarding') {
@@ -142,7 +145,7 @@ export async function middleware(request: NextRequest) {
 
   // Agregar headers de seguridad
   const response = NextResponse.next();
-  
+
   // Headers de seguridad HIPAA
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -150,9 +153,9 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.mercadopago.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' http://localhost:3001 ws://localhost:8888 https://api.mercadopago.com;"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.mercadopago.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' http://localhost:3001 ws://localhost:8888 https://api.mercadopago.com;",
   );
-  
+
   // Header para indicar que es una app médica con datos sensibles
   response.headers.set('X-Medical-App', 'true');
   response.headers.set('X-HIPAA-Compliant', 'true');

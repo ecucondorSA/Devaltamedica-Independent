@@ -1,8 +1,8 @@
 'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
-import { api } from '@/lib/api-client-jwt';
-import { useAuth  } from '@altamedica/auth';;
+import { api } from '../../lib/api-client-jwt';
+import { useAuth } from '@altamedica/auth';
 import { usePatientData } from '@altamedica/hooks';
 import {
   Activity,

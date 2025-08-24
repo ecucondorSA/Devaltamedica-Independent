@@ -1,8 +1,8 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import { CompanyLayoutProvider } from '@/components/layout/CompanyLayoutProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
-import { AuthProvider } from '@altamedica/auth/client';
-import '@altamedica/firebase/client-only'; // Initialize Firebase Client
+import { AuthProvider } from '@altamedica/auth';
+// import '@altamedica/firebase/client-only'; // Initialize Firebase Client
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';

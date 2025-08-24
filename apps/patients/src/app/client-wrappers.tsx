@@ -6,11 +6,10 @@
  */
 
 import { EmergencyBanner } from '@altamedica/ui';
-import NotificationsCard from '@/components/notifications/NotificationsMVP';
+import NotificationsCard from '../components/notifications/NotificationsMVP';
 import { useState, useEffect } from 'react';
 import { useEmergencyBanner } from '../hooks/useEmergency';
 import { emergencyService } from '../services/emergency-service';
-
 
 /**
  * Wrapper para EmergencyBanner usando el sistema unificado de emergencias
@@ -28,7 +27,7 @@ export function EmergencyBannerWrapper() {
           message: 'Sistema de emergencias médicas activo y funcionando',
           actions: [],
           autoHide: true,
-          autoHideDelay: 10000
+          autoHideDelay: 10000,
         });
       }, 2000);
 

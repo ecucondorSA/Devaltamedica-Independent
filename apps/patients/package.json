@@ -30,6 +30,7 @@
     "@altamedica/anamnesis": "workspace:*",
     "@altamedica/api-client": "workspace:*",
     "@altamedica/auth": "workspace:*",
+    "@altamedica/config-next": "workspace:*",
     "@altamedica/firebase": "workspace:*",
     "@altamedica/hooks": "workspace:*",
     "@altamedica/shared": "workspace:*",

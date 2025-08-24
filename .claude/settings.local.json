@@ -50,7 +50,8 @@
       "Bash(fi)",
       "Bash(done)",
       "Bash(npx tsup:*)",
-      "Bash(firebase login:ci:*)"
+      "Bash(firebase login:ci:*)",
+      "Bash(npx next build:*)"
     ],
     "deny": [],
     "ask": [],

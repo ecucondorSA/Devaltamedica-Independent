@@ -25,7 +25,7 @@ export const errorHandler = (
   err: ErrorWithStatus,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   // Generate or use existing request ID
   const requestId = (req as any).requestId || crypto.randomUUID();
@@ -47,25 +47,25 @@ export const errorHandler = (
       message: err.message,
       code: err.code,
       status,
-      stack: err.stack
+      stack: err.stack,
     },
-    user: (req as any).user?.uid || 'anonymous'
+    user: (req as any).user?.uid || 'anonymous',
   };
 
   // Log based on severity
   if (status >= 500) {
-    logger.error('[ERROR] Server Error:', errorContext);
+    logger.error('[ERROR] Server Error:', JSON.stringify(errorContext));
   } else if (status >= 400) {
-    logger.warn('[WARNING] Client Error:', errorContext);
+    logger.warn('[WARNING] Client Error:', JSON.stringify(errorContext));
   } else {
-    logger.info('[INFO] Error:', errorContext);
+    logger.info('[INFO] Error:', JSON.stringify(errorContext));
   }
 
   // Prepare response based on environment
   let responseBody: any = {
     error: true,
     requestId,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   if (process.env.NODE_ENV === 'production') {
@@ -113,7 +113,7 @@ function getProductionMessage(status: number): string {
     500: 'Internal Server Error - Something went wrong on our side',
     502: 'Bad Gateway - Invalid response from upstream server',
     503: 'Service Unavailable - The service is temporarily unavailable',
-    504: 'Gateway Timeout - The upstream server did not respond in time'
+    504: 'Gateway Timeout - The upstream server did not respond in time',
   };
 
   return messages[status] || `Error ${status}`;
@@ -142,7 +142,7 @@ export class AppError extends Error {
     message: string,
     status: number = 500,
     code: string = 'INTERNAL_ERROR',
-    details?: any
+    details?: any,
   ) {
     super(message);
     this.status = status;
@@ -162,34 +162,26 @@ export const errors = {
   badRequest: (message: string = 'Bad Request', details?: any) =>
     new AppError(message, 400, 'BAD_REQUEST', details),
 
-  unauthorized: (message: string = 'Unauthorized') =>
-    new AppError(message, 401, 'UNAUTHORIZED'),
+  unauthorized: (message: string = 'Unauthorized') => new AppError(message, 401, 'UNAUTHORIZED'),
 
-  forbidden: (message: string = 'Forbidden') =>
-    new AppError(message, 403, 'FORBIDDEN'),
+  forbidden: (message: string = 'Forbidden') => new AppError(message, 403, 'FORBIDDEN'),
 
   notFound: (resource: string = 'Resource') =>
     new AppError(`${resource} not found`, 404, 'NOT_FOUND'),
 
-  conflict: (message: string = 'Conflict') =>
-    new AppError(message, 409, 'CONFLICT'),
+  conflict: (message: string = 'Conflict') => new AppError(message, 409, 'CONFLICT'),
 
   validationError: (details: any) =>
     new AppError('Validation failed', 422, 'VALIDATION_ERROR', details),
 
   tooManyRequests: (retryAfter?: number) =>
-    new AppError(
-      'Too many requests',
-      429,
-      'RATE_LIMIT_EXCEEDED',
-      { retryAfter }
-    ),
+    new AppError('Too many requests', 429, 'RATE_LIMIT_EXCEEDED', { retryAfter }),
 
   internalError: (message: string = 'Internal server error') =>
     new AppError(message, 500, 'INTERNAL_ERROR'),
 
   serviceUnavailable: (message: string = 'Service temporarily unavailable') =>
-    new AppError(message, 503, 'SERVICE_UNAVAILABLE')
+    new AppError(message, 503, 'SERVICE_UNAVAILABLE'),
 };
 
 /**
@@ -206,7 +198,7 @@ export const notFoundHandler = (req: Request, res: Response, next: NextFunction)
 export const formatZodError = (error: any): AppError => {
   const details = error.errors?.map((e: any) => ({
     field: e.path.join('.'),
-    message: e.message
+    message: e.message,
   }));
 
   return errors.validationError(details);
