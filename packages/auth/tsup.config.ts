@@ -10,5 +10,9 @@ export default defineConfig({
   treeshake: true,
   external: ['react', 'react-dom', 'next'],
   noExternal: [],
-  tsconfig: './tsconfig.json'
+  tsconfig: './tsconfig.json',
+  // Preserve 'use client' directive
+  banner: {
+    js: `"use client";`,
+  },
 });

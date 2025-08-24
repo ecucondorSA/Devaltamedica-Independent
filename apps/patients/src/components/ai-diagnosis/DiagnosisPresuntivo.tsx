@@ -1,13 +1,22 @@
-"use client";
+'use client';
 
-import { useDiagnosisQuickAnalysis } from '@/hooks/ai/useDiagnosisQuickAnalysis';
-import { useDiagnosisRestrictions } from '@/hooks/ai/useDiagnosisRestrictions';
+import { useDiagnosisQuickAnalysis } from '../../hooks/ai/useDiagnosisQuickAnalysis.stub';
+import { useDiagnosisRestrictions } from '../../hooks/ai/useDiagnosisRestrictions.stub';
 import { ButtonCorporate } from '@altamedica/ui';
-import { Activity, Brain, Calendar, CheckCircle, ChevronRight, Clock, Info, Shield } from 'lucide-react';
+import {
+  Activity,
+  Brain,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  Info,
+  Shield,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type DiagnosisRestriction = ReturnType<typeof useDiagnosisRestrictions>["data"];
+type DiagnosisRestriction = ReturnType<typeof useDiagnosisRestrictions>['data'];
 
 interface QuickSymptom {
   id: string;
@@ -34,7 +43,7 @@ export default function DiagnosisPresuntivo() {
   const [isClient, setIsClient] = useState(false);
 
   const restrictionsQuery = useDiagnosisRestrictions(undefined);
-  
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -49,15 +58,24 @@ export default function DiagnosisPresuntivo() {
         totalDiagnosesCount: r.totalDiagnosesCount,
         lastDiagnosisDate: r.lastDiagnosisDate,
       });
-    } else if ((restrictionsQuery.status === 'error' || restrictionsQuery.status === 'pending') && isClient) {
+    } else if (
+      (restrictionsQuery.status === 'error' || restrictionsQuery.status === 'pending') &&
+      isClient
+    ) {
       const lastDate = localStorage.getItem('lastDiagnosisDate');
       const count = parseInt(localStorage.getItem('diagnosisCount') || '0');
       if (lastDate) {
-        const daysSince = Math.floor((Date.now() - new Date(lastDate).getTime()) / (1000 * 60 * 60 * 24));
+        const daysSince = Math.floor(
+          (Date.now() - new Date(lastDate).getTime()) / (1000 * 60 * 60 * 24),
+        );
         const canUse = daysSince >= 10;
         setRestriction({
           canUse,
-          nextAvailableDate: canUse ? undefined : new Date(new Date(lastDate).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          nextAvailableDate: canUse
+            ? undefined
+            : new Date(
+                new Date(lastDate).getTime() + 10 * 24 * 60 * 60 * 1000,
+              ).toLocaleDateString(),
           daysRemaining: canUse ? 0 : 10 - daysSince,
           totalDiagnosesCount: count,
           lastDiagnosisDate: lastDate || undefined,
@@ -89,7 +107,9 @@ export default function DiagnosisPresuntivo() {
   }
 
   const toggleSymptom = (symptomId: string) => {
-    setSelectedSymptoms((prev) => (prev.includes(symptomId) ? prev.filter((id) => id !== symptomId) : [...prev, symptomId]));
+    setSelectedSymptoms((prev) =>
+      prev.includes(symptomId) ? prev.filter((id) => id !== symptomId) : [...prev, symptomId],
+    );
   };
 
   const handleQuickAnalysis = async () => {
@@ -116,10 +136,16 @@ export default function DiagnosisPresuntivo() {
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-bold text-gray-900">Diagnóstico presuntivo</h3>
-            <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Análisis rápido de síntomas</p>
+            <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">
+              Análisis rápido de síntomas
+            </p>
           </div>
         </div>
-        <button onClick={() => setShowDataUsageInfo(!showDataUsageInfo)} className="p-1 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Información de uso de datos">
+        <button
+          onClick={() => setShowDataUsageInfo(!showDataUsageInfo)}
+          className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Información de uso de datos"
+        >
           <Info className="w-5 h-5 text-gray-400" />
         </button>
       </div>
@@ -136,12 +162,13 @@ export default function DiagnosisPresuntivo() {
         </div>
       )}
 
-  {/* Aviso de orientación general */}
+      {/* Aviso de orientación general */}
       <div className="mb-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
         <div className="flex items-start space-x-2">
           <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
           <p className="text-xs sm:text-sm text-blue-800">
-    No esperes a que empeore: los datos indican que, en promedio, los hombres tienden a retrasar las consultas; ante dudas o síntomas persistentes, busca atención médica.
+            No esperes a que empeore: los datos indican que, en promedio, los hombres tienden a
+            retrasar las consultas; ante dudas o síntomas persistentes, busca atención médica.
           </p>
         </div>
       </div>
@@ -151,7 +178,9 @@ export default function DiagnosisPresuntivo() {
           <div className="flex items-center space-x-2">
             <Clock className="w-5 h-5 text-amber-600" />
             <div className="text-sm">
-              <p className="font-medium text-amber-800">Próximo diagnóstico disponible en {restriction.daysRemaining} días</p>
+              <p className="font-medium text-amber-800">
+                Próximo diagnóstico disponible en {restriction.daysRemaining} días
+              </p>
               <p className="text-xs text-amber-700">Límite: 1 diagnóstico cada 10 días</p>
             </div>
           </div>
@@ -227,7 +256,11 @@ export default function DiagnosisPresuntivo() {
           )}
         </ButtonCorporate>
 
-        <ButtonCorporate variant="ghost" className="w-full" onClick={() => router.push('/ai-diagnosis')}>
+        <ButtonCorporate
+          variant="ghost"
+          className="w-full"
+          onClick={() => router.push('/ai-diagnosis')}
+        >
           <span className="flex items-center justify-center text-sm">
             Análisis completo con IA
             <ChevronRight className="w-4 h-4 ml-1" />

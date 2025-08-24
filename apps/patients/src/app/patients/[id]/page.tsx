@@ -1,27 +1,18 @@
-"use client";
+'use client';
 import { Button, Card, Input } from '@altamedica/ui';
-import React from "react";
-import { useRouter } from "next/navigation";
+import React, { use } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePatient } from '../../../hooks/usePatients';
 import PatientDetailCard from '../../../components/patients/PatientDetailCard';
 
-export default function PatientDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+export default function PatientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const { patient, loading, error } = usePatient(id);
   const router = useRouter();
 
-  if (loading)
-    return <div className="text-center py-12">Cargando paciente...</div>;
+  if (loading) return <div className="text-center py-12">Cargando paciente...</div>;
   if (error || !patient)
-    return (
-      <div className="text-center text-red-600 py-12">
-        Paciente no encontrado
-      </div>
-    );
+    return <div className="text-center text-red-600 py-12">Paciente no encontrado</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -33,9 +24,7 @@ export default function PatientDetailPage({
         <div className="flex flex-wrap gap-4 mt-6">
           <button
             className="btn-primary"
-            onClick={() =>
-              router.push(`/medical-history?patientId=${patient.id}`)
-            }
+            onClick={() => router.push(`/medical-history?patientId=${patient.id}`)}
           >
             Ver historial médico
           </button>
@@ -47,9 +36,7 @@ export default function PatientDetailPage({
           </button>
           <button
             className="btn-secondary"
-            onClick={() =>
-              router.push(`/prescriptions?patientId=${patient.id}`)
-            }
+            onClick={() => router.push(`/prescriptions?patientId=${patient.id}`)}
           >
             Ver prescripciones
           </button>

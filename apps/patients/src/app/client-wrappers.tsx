@@ -10,6 +10,7 @@ import NotificationsCard from '../components/notifications/NotificationsMVP';
 import { useState, useEffect } from 'react';
 import { useEmergencyBanner } from '../hooks/useEmergency';
 import { emergencyService } from '../services/emergency-service';
+import { AuthProvider as AuthProviderClient } from '@altamedica/auth';
 
 /**
  * Wrapper para EmergencyBanner usando el sistema unificado de emergencias
@@ -62,3 +63,10 @@ export default function ClientSidebarWidgets() {
  * Re-export individual para uso específico
  */
 export { NotificationsCard as ClientNotifications };
+
+/**
+ * Wrapper para AuthProvider que necesita 'use client'
+ */
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return <AuthProviderClient>{children}</AuthProviderClient>;
+}

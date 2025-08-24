@@ -14,6 +14,13 @@
       "@altamedica/shared": ["../../packages/shared/src"],
       "@altamedica/api-client": ["../../packages/api-client/src"],
       "@altamedica/marketplace-hooks": ["../../packages/marketplace-hooks/src"]
-    }
-  }
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"]
 }

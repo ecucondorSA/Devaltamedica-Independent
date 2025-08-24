@@ -25,6 +25,9 @@ export {
 // ==================== MEDICAL COMPONENTS (NEW) ====================
 export * from './components/medical';
 
+// ==================== EMERGENCY COMPONENTS (NEW) ====================
+export * from './components/emergency';
+
 // ==================== FORMS COMPONENTS (NEW) ====================
 export * from './components/forms';
 
@@ -36,6 +39,9 @@ export * from './components/ai';
 
 // ==================== DASHBOARD COMPONENTS (NEW) ====================
 export * from './components/dashboard';
+
+// ==================== ONBOARDING COMPONENTS (NEW) ====================
+export { EnhancedPatientOnboarding } from './components/onboarding/EnhancedPatientOnboarding';
 
 // ==================== 3D COMPONENTS (NEW) ====================
 export * from './components/3d';

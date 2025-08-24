@@ -13,7 +13,8 @@ export {
 } from './LoginMedicalForm';
 
 // 🪝 Hooks de autenticación
-export { useAuth } from '@altamedica/auth/client';
+// Temporalmente exportamos desde el index principal
+export { useAuth } from '@altamedica/auth';
 export { useLoginForm } from '../../hooks/useLoginForm';
 
 // 📝 Tipos y interfaces

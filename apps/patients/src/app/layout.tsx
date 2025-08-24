@@ -30,10 +30,8 @@ export const viewport = {
   themeColor: '#3b82f6',
 };
 
-// AuthProvider con JWT desde contexto local
-import { AuthProvider } from '@altamedica/auth/client';
 // Wrapper cliente unificado para renderizar widgets CSR dentro del layout (Server Component)
-import ClientSidebarWidgets, { EmergencyBannerWrapper } from './client-wrappers';
+import ClientSidebarWidgets, { EmergencyBannerWrapper, AuthProvider } from './client-wrappers';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -3,12 +3,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
-  'plugin:react/recommended',
+    'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-  require.resolve('eslint-config-prettier'),
-  'plugin:prettier/recommended'
+    require.resolve('eslint-config-prettier'),
+    'plugin:prettier/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,7 +22,7 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
-  'react',
+    'react',
     'jsx-a11y',
     'import',
     'prettier'
@@ -40,11 +40,8 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        project: [
-          './tsconfig.json',
-          './packages/*/tsconfig.json',
-          './apps/*/tsconfig.json'
-        ]
+        // Resolver desde el proyecto que ejecuta ESLint
+        project: ['./tsconfig.json']
       }
     }
   },
@@ -56,13 +53,13 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-misused-promises': 'error',
-    
+
     // React
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    
+
     // Import
     'import/order': [
       'error',
@@ -106,7 +103,7 @@ module.exports = {
         ]
       }
     ],
-    
+
     // General
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',
@@ -115,7 +112,7 @@ module.exports = {
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-template': 'error',
-    
+
     // Medical/Security specific
     'no-eval': 'error',
     'no-implied-eval': 'error',
@@ -126,12 +123,9 @@ module.exports = {
       files: ['**/*.ts', '**/*.tsx'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: [
-          './tsconfig.json',
-          './packages/*/tsconfig.json',
-          './apps/*/tsconfig.json'
-        ],
-        tsconfigRootDir: __dirname,
+        // Usar el tsconfig del proyecto actual (app/paquete)
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: process.cwd(),
       },
       rules: {}
     },

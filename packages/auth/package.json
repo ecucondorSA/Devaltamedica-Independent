@@ -2,7 +2,6 @@
   "name": "@altamedica/auth",
   "version": "1.0.0",
   "description": "Paquete centralizado de autenticación para AltaMedica",
-  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -15,7 +14,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent && node scripts/add-use-client.cjs",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist",

@@ -1,3 +1,5 @@
+'use client';
+
 // @altamedica/auth - Paquete centralizado de autenticación consolidado
 // IMPORTANTE: Este archivo ahora incluye toda la funcionalidad unificada
 
@@ -5,7 +7,12 @@ export const authVersion = '1.1.0';
 
 // ============== SERVICIOS ==============
 // Servicio de autenticación consolidado (migrado desde auth-service)
-export { AuthService, PublicUserRole, getAuthService, type User as AuthUser } from './services/AuthService';
+export {
+  AuthService,
+  PublicUserRole,
+  getAuthService,
+  type User as AuthUser,
+} from './services/AuthService';
 // Re-export de UserRole desde types para evitar dependencia cruzada
 export { UserRole } from '@altamedica/types';
 
@@ -22,7 +29,7 @@ export {
   useAuth,
   useProtectedRoute,
   useRequireAuth,
-  useRole
+  useRole,
 } from './hooks/useAuth';
 
 // ============== LEGACY EXPORTS ==============
@@ -52,7 +59,7 @@ export {
   ProtectedRoute,
   PublicRoute,
   RouteGuard,
-  type AuthGuardProps
+  type AuthGuardProps,
 } from './components';
 
 // ============= MFA UTILITIES (GAP-002-T1) =============

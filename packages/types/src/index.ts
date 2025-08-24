@@ -1,9 +1,6 @@
-export type Doctor = {
-  id: string;
-  name?: string;
-  specialty?: string;
-  rating?: number;
-};
+// ==================== COMMON TYPES ====================
+export type { Doctor, User } from './common';
+// Location se exporta más abajo para evitar duplicación
 
 export type Hospital = {
   id: string;
@@ -19,6 +16,8 @@ export default {};
 
 // ==================== CORE TYPES ====================
 export * from './core';
+// Exportar solo Location desde common para evitar conflictos
+export type { Location } from './common';
 
 // ==================== AUTH TYPES (exports explícitos para evitar conflictos) ====================
 export type {

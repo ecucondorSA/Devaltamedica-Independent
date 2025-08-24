@@ -1,0 +1,59 @@
+version: '3.8'
+
+# Development-specific overrides
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        NODE_ENV: development
+    volumes:
+      # Hot reload for all source code
+      - ./apps:/app/apps:delegated
+      - ./packages:/app/packages:delegated
+      - ./config:/app/config:delegated
+      - ./scripts:/app/scripts:delegated
+      - ./tests:/app/tests:delegated
+      # Exclude node_modules to use container's version
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/apps/api/node_modules
+      - /app/apps/admin/node_modules
+      # pnpm cache
+      - pnpm_store:/app/.pnpm-store
+    environment:
+      NODE_ENV: development
+      DEBUG: 'altamedica:*'
+      CHOKIDAR_USEPOLLING: 'true'
+      WATCHPACK_POLLING: 'true'
+    command: pnpm run dev:all
+    stdin_open: true
+    tty: true
+
+  # Development database with sample data
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: altamedica_dev
+      POSTGRES_PASSWORD: dev123
+      POSTGRES_DB: altamedica_dev
+
+  # Redis with debugging
+  redis:
+    command: redis-server --appendonly yes --loglevel debug
+
+  # Mailhog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: altamedica-mailhog
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - altamedica-network
+
+volumes:
+  pnpm_store:
+    driver: local

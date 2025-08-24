@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card';
-import { Button } from '../button';
-import { Input } from '../input';
-import { Label } from '../label';
-import { Alert, AlertDescription } from '../alert';
 import {
-  Shield,
-  Smartphone,
-  QrCode,
-  Copy,
-  Check,
   AlertCircle,
-  Loader2,
-  Key,
+  Check,
+  Copy,
   Download,
   Eye,
   EyeOff,
+  Key,
+  Loader2,
+  Shield,
+  Smartphone,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Alert, AlertDescription } from '../alert';
+import { Button } from '../Button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../Card';
+import { Input } from '../Input';
+import { Label } from '../label';
 
 /**
  * Componente de configuración MFA

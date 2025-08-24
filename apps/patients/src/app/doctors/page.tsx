@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
 import {
-    ArrowLeft,
-    Award,
-    Brain,
-    Calendar,
-    Clock,
-    Eye,
-    Filter,
-    Heart,
-    MapPin,
-    Phone,
-    Search,
-    Star,
-    Stethoscope,
-    User,
-    Video,
-} from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+  ArrowLeft,
+  Award,
+  Brain,
+  Calendar,
+  Clock,
+  Eye,
+  Filter,
+  Heart,
+  MapPin,
+  Phone,
+  Search,
+  Star,
+  Stethoscope,
+  User,
+  Video,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import { ButtonCorporate, CardCorporate, LoadingSpinner } from '@altamedica/ui';
 import { CardContentCorporate } from '../../components/ui';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 
 // Interfaces TypeScript
 import { Doctor } from '@altamedica/types';
@@ -33,17 +33,17 @@ interface Filters {
   location: string;
   availableToday: boolean;
   telemedicineOnly: boolean;
-  sortBy: "rating" | "experience" | "fee" | "availability";
+  sortBy: 'rating' | 'experience' | 'fee' | 'availability';
 }
 
 const SPECIALTIES = [
-  { id: "all", name: "Todas las especialidades", icon: Stethoscope },
-  { id: "cardiology", name: "Cardiología", icon: Heart },
-  { id: "neurology", name: "Neurología", icon: Brain },
-  { id: "ophthalmology", name: "Oftalmología", icon: Eye },
-  { id: "general", name: "Medicina General", icon: Stethoscope },
-  { id: "pediatrics", name: "Pediatría", icon: User },
-  { id: "dermatology", name: "Dermatología", icon: User },
+  { id: 'all', name: 'Todas las especialidades', icon: Stethoscope },
+  { id: 'cardiology', name: 'Cardiología', icon: Heart },
+  { id: 'neurology', name: 'Neurología', icon: Brain },
+  { id: 'ophthalmology', name: 'Oftalmología', icon: Eye },
+  { id: 'general', name: 'Medicina General', icon: Stethoscope },
+  { id: 'pediatrics', name: 'Pediatría', icon: User },
+  { id: 'dermatology', name: 'Dermatología', icon: User },
 ];
 
 export default function DoctorsDirectoryPage() {
@@ -56,12 +56,12 @@ export default function DoctorsDirectoryPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState<Filters>({
-    search: "",
-    specialty: "all",
-    location: "",
+    search: '',
+    specialty: 'all',
+    location: '',
     availableToday: false,
     telemedicineOnly: false,
-    sortBy: "rating",
+    sortBy: 'rating',
   });
 
   // Cargar doctores
@@ -92,23 +92,23 @@ export default function DoctorsDirectoryPage() {
         rating: Math.random() * 2 + 3, // 3-5 stars
         reviewsCount: Math.floor(Math.random() * 200) + 10,
         experience: `${Math.floor(Math.random() * 20) + 5} años de experiencia`,
-        qualifications: ["Certificación en " + doctor.specialty, "Medicina General"],
-        location: doctor.location || "Ciudad de México",
+        qualifications: ['Certificación en ' + doctor.specialty, 'Medicina General'],
+        location: doctor.location || 'Ciudad de México',
         consultationFee: Math.floor(Math.random() * 1000) + 500,
         availability: {
           today: Math.random() > 0.5,
-          nextAvailable: "Mañana a las 10:00 AM",
-          schedule: ["Lunes-Viernes 9:00-17:00", "Sábados 9:00-13:00"],
+          nextAvailable: 'Mañana a las 10:00 AM',
+          schedule: ['Lunes-Viernes 9:00-17:00', 'Sábados 9:00-13:00'],
         },
         services: {
           inPerson: true,
           telemedicine: Math.random() > 0.3,
           emergency: Math.random() > 0.7,
         },
-        languages: ["Español", "Inglés"],
+        languages: ['Español', 'Inglés'],
         bio: `Especialista en ${doctor.specialty} con amplia experiencia en el diagnóstico y tratamiento de pacientes.`,
-        hospitalAffiliations: ["Hospital General", "Clínica Especializada"],
-        specialtyCategory: doctor.specialty?.toLowerCase() || "general",
+        hospitalAffiliations: ['Hospital General', 'Clínica Especializada'],
+        specialtyCategory: doctor.specialty?.toLowerCase() || 'general',
       }));
 
       setDoctors(doctorsWithDetails);
@@ -123,17 +123,25 @@ export default function DoctorsDirectoryPage() {
   const filteredDoctors = useMemo(() => {
     const filtered = doctors.filter((doctor) => {
       // Búsqueda por nombre
-      if (filters.search && !`${doctor.firstName} ${doctor.lastName}`.toLowerCase().includes(filters.search.toLowerCase())) {
+      if (
+        filters.search &&
+        !`${doctor.firstName} ${doctor.lastName}`
+          .toLowerCase()
+          .includes(filters.search.toLowerCase())
+      ) {
         return false;
       }
 
       // Filtro por especialidad
-      if (filters.specialty !== "all" && doctor.specialtyCategory !== filters.specialty) {
+      if (filters.specialty !== 'all' && doctor.specialtyCategory !== filters.specialty) {
         return false;
       }
 
       // Filtro por ubicación
-      if (filters.location && !doctor.location.toLowerCase().includes(filters.location.toLowerCase())) {
+      if (
+        filters.location &&
+        !doctor.location.toLowerCase().includes(filters.location.toLowerCase())
+      ) {
         return false;
       }
 
@@ -153,13 +161,13 @@ export default function DoctorsDirectoryPage() {
     // Ordenar
     filtered.sort((a, b) => {
       switch (filters.sortBy) {
-        case "rating":
+        case 'rating':
           return b.rating - a.rating;
-        case "experience":
+        case 'experience':
           return parseInt(b.experience) - parseInt(a.experience);
-        case "fee":
+        case 'fee':
           return a.consultationFee - b.consultationFee;
-        case "availability":
+        case 'availability':
           return a.availability.today === b.availability.today ? 0 : a.availability.today ? -1 : 1;
         default:
           return 0;
@@ -170,7 +178,7 @@ export default function DoctorsDirectoryPage() {
   }, [doctors, filters]);
 
   const getSpecialtyIcon = (specialty: string) => {
-    const specialtyData = SPECIALTIES.find(s => s.id === specialty);
+    const specialtyData = SPECIALTIES.find((s) => s.id === specialty);
     const IconComponent = specialtyData?.icon || Stethoscope;
     return <IconComponent className="w-5 h-5" />;
   };
@@ -200,15 +208,11 @@ export default function DoctorsDirectoryPage() {
                 </ButtonCorporate>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Directorio de Doctores
-                </h1>
-                <p className="text-gray-600">
-                  Encuentra el especialista perfecto para ti
-                </p>
+                <h1 className="text-2xl font-bold text-gray-900">Directorio de Doctores</h1>
+                <p className="text-gray-600">Encuentra el especialista perfecto para ti</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <ButtonCorporate
                 variant="ghost"
@@ -246,8 +250,8 @@ export default function DoctorsDirectoryPage() {
                 onClick={() => setFilters({ ...filters, specialty: specialty.id })}
                 className={`flex flex-col items-center p-4 rounded-lg border transition-all ${
                   filters.specialty === specialty.id
-                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                 }`}
               >
                 <specialty.icon className="w-6 h-6 mb-2" />
@@ -296,7 +300,9 @@ export default function DoctorsDirectoryPage() {
                         type="checkbox"
                         className="mr-2"
                         checked={filters.availableToday}
-                        onChange={(e) => setFilters({ ...filters, availableToday: e.target.checked })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, availableToday: e.target.checked })
+                        }
                       />
                       <span className="text-sm">Disponible hoy</span>
                     </label>
@@ -306,7 +312,9 @@ export default function DoctorsDirectoryPage() {
                         type="checkbox"
                         className="mr-2"
                         checked={filters.telemedicineOnly}
-                        onChange={(e) => setFilters({ ...filters, telemedicineOnly: e.target.checked })}
+                        onChange={(e) =>
+                          setFilters({ ...filters, telemedicineOnly: e.target.checked })
+                        }
                       />
                       <span className="text-sm">Solo telemedicina</span>
                     </label>
@@ -326,13 +334,19 @@ export default function DoctorsDirectoryPage() {
           <>
             <div className="mb-6 flex items-center justify-between">
               <p className="text-gray-600">
-                {filteredDoctors.length} doctor{filteredDoctors.length !== 1 ? 'es' : ''} encontrado{filteredDoctors.length !== 1 ? 's' : ''}
+                {filteredDoctors.length} doctor{filteredDoctors.length !== 1 ? 'es' : ''} encontrado
+                {filteredDoctors.length !== 1 ? 's' : ''}
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredDoctors.map((doctor) => (
-                <CardCorporate key={doctor.id} variant="default" size="lg" className="hover:shadow-lg transition-shadow">
+                <CardCorporate
+                  key={doctor.id}
+                  variant="default"
+                  size="lg"
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardContentCorporate className="p-6">
                     {/* Header del Doctor */}
                     <div className="flex items-start space-x-4 mb-4">
@@ -460,12 +474,16 @@ export default function DoctorsDirectoryPage() {
                         >
                           Ver Perfil
                         </ButtonCorporate>
-                        
+
                         {doctor.services.telemedicine && (
                           <ButtonCorporate
                             variant="ghost"
                             size="sm"
-                            onClick={() => router.push(`/appointments/new?doctorId=${doctor.id}&type=telemedicine`)}
+                            onClick={() =>
+                              router.push(
+                                `/appointments/new?doctorId=${doctor.id}&type=telemedicine`,
+                              )
+                            }
                           >
                             <Video className="w-4 h-4 mr-1" />
                             Video
@@ -486,14 +504,16 @@ export default function DoctorsDirectoryPage() {
                 </p>
                 <ButtonCorporate
                   variant="ghost"
-                  onClick={() => setFilters({
-                    search: "",
-                    specialty: "all",
-                    location: "",
-                    availableToday: false,
-                    telemedicineOnly: false,
-                    sortBy: "rating",
-                  })}
+                  onClick={() =>
+                    setFilters({
+                      search: '',
+                      specialty: 'all',
+                      location: '',
+                      availableToday: false,
+                      telemedicineOnly: false,
+                      sortBy: 'rating',
+                    })
+                  }
                 >
                   Limpiar filtros
                 </ButtonCorporate>
@@ -504,3 +524,4 @@ export default function DoctorsDirectoryPage() {
       </div>
     </div>
   );
+}
