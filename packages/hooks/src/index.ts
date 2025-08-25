@@ -84,6 +84,11 @@ export * from './forms';
 export * from './providers';
 
 // ==========================================
+// 🔎 HOOKS DE AUDITORÍA
+// ==========================================
+export * from './audit/useAuditLogs';
+
+// ==========================================
 // 🕰️ LEGACY (Compatibilidad temporal pacientes)
 // ==========================================
 export * from './legacy';

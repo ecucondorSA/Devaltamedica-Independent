@@ -19,11 +19,34 @@ export interface AuditLogStats {
   lastUpdate: Date;
   topActions: Array<{ action: string; count: number }>;
   topUsers: Array<{ userId: string; count: number }>;
+  totalEvents: number;
+  uniqueActors: number;
+  recentActivity: Array<{ hour: string; count: number }>;
 }
 
-export const useAuditLogs = () => {
+export interface UseAuditLogsOptions {
+  pageSize?: number;
+  enabled?: boolean;
+}
+
+export const useAuditLogs = (options: UseAuditLogsOptions = {}) => {
+  const { pageSize = 50, enabled = true } = options;
+
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [filters, setFilters] = useState({});
+
+  // Sync loading states
+  const syncLoading = (value: boolean) => {
+    setLoading(value);
+    setIsLoading(value);
+    setStatsLoading(value);
+  };
   const [stats, setStats] = useState<AuditLogStats>({
     totalLogs: 0,
     criticalCount: 0,
@@ -32,6 +55,9 @@ export const useAuditLogs = () => {
     lastUpdate: new Date(),
     topActions: [],
     topUsers: [],
+    totalEvents: 0,
+    uniqueActors: 0,
+    recentActivity: [],
   });
 
   const calculateStats = (logsData: AuditLog[]): AuditLogStats => {
@@ -58,6 +84,13 @@ export const useAuditLogs = () => {
       .slice(0, 5)
       .map(([userId, count]) => ({ userId, count }));
 
+    // Generate mock recent activity (last 24 hours)
+    const recentActivity = Array.from({ length: 24 }, (_, i) => {
+      const hour = new Date(Date.now() - (23 - i) * 60 * 60 * 1000).toISOString();
+      const count = Math.floor(Math.random() * 50) + (i > 18 ? 10 : 0); // More activity in recent hours
+      return { hour, count };
+    });
+
     return {
       totalLogs: logsData.length,
       criticalCount: critical,
@@ -66,11 +99,16 @@ export const useAuditLogs = () => {
       lastUpdate: new Date(),
       topActions,
       topUsers,
+      totalEvents: logsData.length,
+      uniqueActors: Object.keys(userCounts).length,
+      recentActivity,
     };
   };
 
   const fetchLogs = async () => {
-    setLoading(true);
+    if (!enabled) return;
+
+    syncLoading(true);
     try {
       // Mock data for development - replace with real API call
       const mockLogs: AuditLog[] = [
@@ -109,6 +147,8 @@ export const useAuditLogs = () => {
       console.log('Fetching audit logs...');
       setLogs(mockLogs);
       setStats(calculateStats(mockLogs));
+      setTotal(mockLogs.length + Math.floor(Math.random() * 1000)); // Mock total
+      setHasMore(mockLogs.length >= pageSize);
     } catch (error) {
       console.error('Error fetching audit logs:', error);
       setLogs([]);
@@ -120,20 +160,79 @@ export const useAuditLogs = () => {
         lastUpdate: new Date(),
         topActions: [],
         topUsers: [],
+        totalEvents: 0,
+        uniqueActors: 0,
+        recentActivity: [],
       });
     } finally {
-      setLoading(false);
+      syncLoading(false);
+    }
+  };
+
+  const applyFilters = (newFilters: any) => {
+    setFilters(newFilters);
+    fetchLogs(); // Re-fetch with new filters
+  };
+
+  const clearFilters = () => {
+    setFilters({});
+    fetchLogs();
+  };
+
+  const loadMore = async () => {
+    if (!hasMore || isLoading) return;
+
+    // Mock load more functionality
+    setIsLoading(true);
+    setTimeout(() => {
+      setHasMore(false); // Mock: no more pages
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  const exportLogs = async () => {
+    setExportLoading(true);
+    try {
+      // Mock CSV export
+      const csv = logs
+        .map(
+          (log) =>
+            `${log.timestamp},${log.action},${log.userId},${log.resource},${log.level},${log.details}`,
+        )
+        .join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setExportLoading(false);
     }
   };
 
   useEffect(() => {
     fetchLogs();
-  }, []);
+  }, [enabled]);
 
   return {
     logs,
     loading,
+    isLoading,
     stats,
+    statsLoading,
+    filters,
+    applyFilters,
+    clearFilters,
+    exportLogs,
+    exportLoading,
+    hasMore,
+    loadMore,
+    total,
     refetch: fetchLogs,
     calculateStats,
   };
