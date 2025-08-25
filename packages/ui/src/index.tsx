@@ -49,6 +49,49 @@ export * from './components/3d';
 // ==================== TABLE COMPONENTS (NEW) ====================
 export * from './components/table/Table';
 
+// ==================== MISSING ROOT COMPONENTS - CRITICAL FIXES ====================
+// Dialog components (CRITICAL - used by companies app and others)
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';
+
+// Switch component (used by settings)
+export { Switch } from './switch';
+
+// Tooltip components (used across apps)
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';
+
+// DataTable component (used by admin app)
+export { DataTable } from './data-table';
+
+// Calendar component (used by appointments)
+export { Calendar } from './calendar';
+
+// ==================== WEBRTC COMPONENTS - TELEMEDICINE ====================
+// Critical for video calling functionality
+export * from './components/webrtc';
+
+// ==================== BILLING COMPONENTS ====================
+// Payment processing components
+export * from './components/billing';
+
+// ==================== AUDIT COMPONENTS ====================
+// Admin audit functionality
+export * from './components/audit';
+
+// ==================== FEEDBACK COMPONENTS ====================
+// Error handling and loading states
+export * from './components/feedback';
+
 // ==================== AUTH COMPONENTS (NEW) ====================
 // TODO: Auth UI components (LoginForm, ProtectedRoute) pendientes de implementación real
 // export { LoginForm } from './components/auth/LoginForm';
