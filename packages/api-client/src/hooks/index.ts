@@ -96,7 +96,7 @@ export {
 } from './usePatients';
 
 // prescriptions are provided by the centralized hooks package (stable d.ts available)
-export { usePrescriptions, usePrescription } from '@altamedica/hooks/medical/usePrescriptions';
+export { usePrescriptions, usePrescription } from '@altamedica/hooks';
 
 export {
 	useTelemedicineSessions,

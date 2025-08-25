@@ -1,19 +1,42 @@
 // ==================== API TYPES ====================
 
 import {
-  User,
-  UserRole,
-  SearchFilters,
-  DateRange,
-  AppointmentType,
   AppointmentStatus,
+  AppointmentType,
+  DateRange,
   Medication,
-  MedicalRecordType,
-  Priority,
-  LabTestResult,
-  FileUpload,
-  AnalyticsData,
+  SearchFilters,
+  User,
 } from './base';
+
+// Importar UserRole desde auth/roles para evitar conflictos
+import { UserRole } from '../auth/roles';
+
+// Definir tipos faltantes localmente para evitar errores de importación
+export type Priority = 'low' | 'medium' | 'high' | 'urgent';
+export type MedicalRecordType = 'consultation' | 'prescription' | 'lab_result' | 'imaging' | 'procedure' | 'note';
+export type LabTestResult = {
+  testName: string;
+  value: string | number;
+  unit?: string;
+  referenceRange?: string;
+  isAbnormal?: boolean;
+};
+export type FileUpload = {
+  id: string;
+  filename: string;
+  size: number;
+  type: string;
+  url: string;
+  uploadedAt: string;
+};
+export type AnalyticsData = {
+  totalAppointments: number;
+  totalPatients: number;
+  totalRevenue: number;
+  averageRating: number;
+  topSpecialties: string[];
+};
 
 export interface ApiRequestConfig {
   headers?: Record<string, string>;

@@ -2,6 +2,8 @@
 // NOTA: Este es el tipo User unificado para resolver conflictos
 // Compatible con apps/admin y todas las apps
 
+import { UserRole } from '../auth/roles';
+
 export interface BaseEntity {
   id: string;
   createdAt: string;
@@ -36,7 +38,7 @@ export interface User extends BaseEntity {
   lastLoginAt?: Date;
 }
 
-export type UserRole = 'admin' | 'doctor' | 'patient' | 'staff';
+// Removido: export type UserRole = 'admin' | 'doctor' | 'patient' | 'staff'; - ahora importado desde auth/roles
 
 // Export tambien como 'name' para compatibilidad
 export type UserWithName = User & {

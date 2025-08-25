@@ -2,7 +2,7 @@
  * 🚀 OPTIMISTIC UPDATES - APPOINTMENTS
  * Mejora la UX con actualizaciones instantáneas
  */
-import { useMutation, useQueryClient } from '@altamedica/hooks/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getApiClient } from '../../client';
 import { API_ENDPOINTS } from '../../endpoints';
 import { toast } from 'react-hot-toast'; // Asumiendo que se usa para notificaciones

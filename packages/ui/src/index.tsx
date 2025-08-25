@@ -108,6 +108,9 @@ export { Input } from './input';
 // Popover components
 export { Popover, PopoverContent, PopoverTrigger } from './popover';
 
+// DropdownMenu components
+export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './dropdown-menu';
+
 // Select components
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 

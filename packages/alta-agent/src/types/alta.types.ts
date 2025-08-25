@@ -5,7 +5,7 @@
  * Tipos y definiciones para el sistema Alta
  */
 
-import type { Anamnesis as Medical } from '@altamedica/types/medical';
+import type { Anamnesis as Medical } from '@altamedica/types';
 import { z } from 'zod';
 
 // Estados de Alta

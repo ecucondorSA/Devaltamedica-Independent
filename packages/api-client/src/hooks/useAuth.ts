@@ -3,7 +3,7 @@
  * Hooks para autenticación y gestión de usuario
  */
 
-import { useMutation, useTanstackQuery as useQuery, useQueryClient } from '@altamedica/hooks/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getApiClient } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
 import { TokenResponse } from '../types';

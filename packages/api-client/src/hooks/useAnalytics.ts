@@ -3,7 +3,7 @@
  * Hooks para gestión de análisis y métricas
  */
 
-import { useTanstackQuery as useQuery, useMutation } from '@altamedica/hooks/api';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { getApiClient } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
 import { z } from 'zod';

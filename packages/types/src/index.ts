@@ -1,5 +1,6 @@
 // ==================== COMMON TYPES ====================
-export { User, UserRole, UserWithName, userToNameFormat, normalizeUser } from './types/base';
+export type { User, UserWithName } from './types/base';
+export { userToNameFormat, normalizeUser } from './types/base';
 // Location se exporta más abajo para evitar duplicación
 
 export type Hospital = {
@@ -36,8 +37,9 @@ export {
   isPatientRole,
   normalizeUserRole,
   Roles,
-  UserRole,
+  UserRole, // Solo exportar UserRole desde auth/roles
 } from './auth/roles';
+// Removido: export type { UserRole } from './auth/roles'; - ya exportado arriba
 
 // ==================== MEDICAL DOMAIN ====================
 export * from './medical';
@@ -48,7 +50,7 @@ export {
   MedicationSearchSchema,
   UpdateMedicationSchema,
 } from './medical/medication.types';
-export type { DosageForm, MedicationCategory, MedicationSearch } from './medical/medication.types';
+export type { DosageForm, MedicationCategory, MedicationSearch, MedicationProfile } from './medical/medication.types';
 
 // ==================== TYPE ALIASES FOR BACKWARD COMPATIBILITY ====================
 // These re-exports provide compatibility for hooks that expect specific named exports

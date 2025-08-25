@@ -6,10 +6,12 @@ export interface MetricCardProps {
   title: string;
   value: string | number;
   description?: string;
+  subtitle?: string;
   icon?: React.ReactNode;
   trend?: {
     value: number;
     isPositive: boolean;
+    direction?: 'up' | 'down' | 'neutral';
   };
   className?: string;
 }
@@ -18,6 +20,7 @@ export function MetricCard({
   title,
   value,
   description,
+  subtitle,
   icon,
   trend,
   className
@@ -25,7 +28,10 @@ export function MetricCard({
   return (
     <Card className={cn('', className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <div>
+          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+          {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+        </div>
         {icon && <div className="h-4 w-4 text-muted-foreground">{icon}</div>}
       </CardHeader>
       <CardContent>

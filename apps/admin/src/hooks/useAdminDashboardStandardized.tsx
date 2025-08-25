@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 
 // Importar componentes estandarizados
-import { StatsGrid } from '@altamedica/ui/components/dashboard';
+import { StatsGrid } from '@altamedica/ui';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 // ============================================================================

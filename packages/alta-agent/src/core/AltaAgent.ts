@@ -4,10 +4,10 @@
  * Desarrollada por Dr. Eduardo Marques (Medicina-UBA)
  */
 
-import { logger } from '../logger.js';
-import type { Anamnesis as Medical } from '@altamedica/types/medical';
+import type { Anamnesis as Medical } from '@altamedica/types';
 import { EventEmitter } from 'events';
 import OpenAI from 'openai';
+import { logger } from '../logger.js';
 import type {
   AltaConfig,
   AltaConversationContext,

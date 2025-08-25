@@ -29,8 +29,8 @@ export const useRealTimeUpdates = ({
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   
   const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const latencyTestRef = useRef<{ start: number; timeout: NodeJS.Timeout } | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latencyTestRef = useRef<{ start: number; timeout: ReturnType<typeof setTimeout> } | null>(null);
 
   const measureLatency = useCallback(() => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;

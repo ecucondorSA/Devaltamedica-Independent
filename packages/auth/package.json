@@ -10,11 +10,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js"
     }
   },
   "private": true,
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent && node scripts/add-use-client.cjs",
+    "build": "tsup",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist",
