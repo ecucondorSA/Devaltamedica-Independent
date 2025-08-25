@@ -2,18 +2,18 @@
   "name": "@altamedica/ui",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
-  "build": "tsup src/index.tsx --format cjs --format esm --clean --silent",
+    "build": "tsup --config tsup.config.ts",
     "dev": "tsup src/index.tsx --format=esm --watch",
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist",
@@ -24,6 +24,9 @@
     "@altamedica/shared": "workspace:*",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
+    "@stripe/stripe-js": "^4.1.0",
+    "@stripe/react-stripe-js": "^2.7.3",
     "@tanstack/react-table": "^8.10.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",

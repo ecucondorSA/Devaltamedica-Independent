@@ -29,11 +29,11 @@ export interface ConnectionRecoveryProps {
 }
 
 const RECOVERY_STEPS: RecoveryStep[] = [
-  { id: 'check-network', label: 'Verificando conexión de red' },
-  { id: 'check-signaling', label: 'Conectando con servidor de señalización' },
-  { id: 'check-ice', label: 'Estableciendo candidatos ICE' },
-  { id: 'establish-connection', label: 'Restableciendo conexión peer-to-peer' },
-  { id: 'verify-media', label: 'Verificando streams de audio/video' }
+  { id: 'check-network', label: 'Verificando conexión de red', status: 'pending' },
+  { id: 'check-signaling', label: 'Conectando con servidor de señalización', status: 'pending' },
+  { id: 'check-ice', label: 'Estableciendo candidatos ICE', status: 'pending' },
+  { id: 'establish-connection', label: 'Restableciendo conexión peer-to-peer', status: 'pending' },
+  { id: 'verify-media', label: 'Verificando streams de audio/video', status: 'pending' },
 ];
 
 export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
@@ -42,11 +42,11 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
   maxAttempts = 3,
   onManualReconnect,
   onCancelRecovery,
-  className
+  className,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [steps, setSteps] = useState<RecoveryStep[]>(
-    RECOVERY_STEPS.map(step => ({ ...step, status: 'pending' }))
+    RECOVERY_STEPS.map((step) => ({ ...step, status: 'pending' })),
   );
   const [recoveryProgress, setRecoveryProgress] = useState(0);
 
@@ -55,7 +55,7 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
       // Reset cuando no está recuperando
       setCurrentStep(0);
       setRecoveryProgress(0);
-      setSteps(RECOVERY_STEPS.map(step => ({ ...step, status: 'pending' })));
+      setSteps(RECOVERY_STEPS.map((step) => ({ ...step, status: 'pending' })));
       return;
     }
 
@@ -70,11 +70,12 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
       }
 
       // Marcar paso actual como en ejecución
-      setSteps(prev => prev.map((step, idx) => ({
-        ...step,
-        status: idx === stepIndex ? 'running' : 
-                idx < stepIndex ? 'success' : 'pending'
-      })));
+      setSteps((prev) =>
+        prev.map((step, idx) => ({
+          ...step,
+          status: idx === stepIndex ? 'running' : idx < stepIndex ? 'success' : 'pending',
+        })),
+      );
 
       setCurrentStep(stepIndex);
       setRecoveryProgress((stepIndex / totalSteps) * 100);
@@ -82,11 +83,13 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
       // Simular éxito/fallo del paso (90% éxito)
       setTimeout(() => {
         const success = Math.random() > 0.1;
-        
-        setSteps(prev => prev.map((step, idx) => ({
-          ...step,
-          status: idx === stepIndex ? (success ? 'success' : 'failed') : step.status
-        })));
+
+        setSteps((prev) =>
+          prev.map((step, idx) => ({
+            ...step,
+            status: idx === stepIndex ? (success ? 'success' : 'failed') : step.status,
+          })),
+        );
 
         if (success) {
           // Continuar con el siguiente paso
@@ -100,21 +103,17 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
 
     // Iniciar proceso de recuperación
     processStep(0);
-
   }, [isRecovering, recoveryAttempt]);
 
-  const hasFailedSteps = steps.some(step => step.status === 'failed');
-  const allStepsComplete = steps.every(step => step.status === 'success');
+  const hasFailedSteps = steps.some((step) => step.status === 'failed');
+  const allStepsComplete = steps.every((step) => step.status === 'success');
 
   if (!isRecovering && !hasFailedSteps && !allStepsComplete) {
     return null;
   }
 
   return (
-    <Card 
-      data-testid="connection-recovery"
-      className={cn('p-4 max-w-md', className)}
-    >
+    <Card data-testid="connection-recovery" className={cn('p-4 max-w-md', className)}>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -127,12 +126,14 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
               <Wifi className="w-5 h-5 text-green-600" />
             )}
             <h3 className="font-semibold">
-              {isRecovering ? 'Recuperando conexión' : 
-               hasFailedSteps ? 'Recuperación fallida' : 
-               'Conexión recuperada'}
+              {isRecovering
+                ? 'Recuperando conexión'
+                : hasFailedSteps
+                  ? 'Recuperación fallida'
+                  : 'Conexión recuperada'}
             </h3>
           </div>
-          
+
           {isRecovering && (
             <span className="text-sm text-gray-600">
               Intento {recoveryAttempt}/{maxAttempts}
@@ -142,23 +143,19 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
 
         {/* Progress bar */}
         {isRecovering && (
-          <Progress 
-            value={recoveryProgress} 
-            className="h-2"
-            data-testid="recovery-progress"
-          />
+          <Progress value={recoveryProgress} className="h-2" data-testid="recovery-progress" />
         )}
 
         {/* Recovery steps */}
         <div className="space-y-2">
           {steps.map((step, index) => (
-            <div 
+            <div
               key={step.id}
               className={cn(
                 'flex items-center gap-3 p-2 rounded-lg transition-colors',
                 step.status === 'running' && 'bg-blue-50',
                 step.status === 'success' && 'bg-green-50',
-                step.status === 'failed' && 'bg-red-50'
+                step.status === 'failed' && 'bg-red-50',
               )}
             >
               {/* Step icon */}
@@ -169,22 +166,20 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
                 {step.status === 'running' && (
                   <div className="w-5 h-5 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
                 )}
-                {step.status === 'success' && (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                )}
-                {step.status === 'failed' && (
-                  <XCircle className="w-5 h-5 text-red-600" />
-                )}
+                {step.status === 'success' && <CheckCircle className="w-5 h-5 text-green-600" />}
+                {step.status === 'failed' && <XCircle className="w-5 h-5 text-red-600" />}
               </div>
 
               {/* Step label */}
-              <span className={cn(
-                'text-sm',
-                step.status === 'pending' && 'text-gray-500',
-                step.status === 'running' && 'text-blue-700 font-medium',
-                step.status === 'success' && 'text-green-700',
-                step.status === 'failed' && 'text-red-700'
-              )}>
+              <span
+                className={cn(
+                  'text-sm',
+                  step.status === 'pending' && 'text-gray-500',
+                  step.status === 'running' && 'text-blue-700 font-medium',
+                  step.status === 'success' && 'text-green-700',
+                  step.status === 'failed' && 'text-red-700',
+                )}
+              >
                 {step.label}
               </span>
             </div>
@@ -196,7 +191,7 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
           <Alert variant="destructive">
             <AlertTitle>No se pudo recuperar la conexión</AlertTitle>
             <AlertDescription>
-              {recoveryAttempt >= maxAttempts 
+              {recoveryAttempt >= maxAttempts
                 ? 'Se alcanzó el número máximo de intentos de reconexión.'
                 : 'Hubo un error durante el proceso de recuperación.'}
             </AlertDescription>
@@ -204,16 +199,14 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
         )}
 
         {allStepsComplete && (
-          <Alert 
-            variant="default" 
+          <Alert
+            variant="default"
             className="border-green-200 bg-green-50"
             data-testid="connection-restored"
           >
             <CheckCircle className="w-4 h-4 text-green-600" />
             <AlertTitle>Conexión restablecida</AlertTitle>
-            <AlertDescription>
-              La videollamada se ha recuperado exitosamente.
-            </AlertDescription>
+            <AlertDescription>La videollamada se ha recuperado exitosamente.</AlertDescription>
           </Alert>
         )}
 
@@ -231,14 +224,9 @@ export const ConnectionRecovery: React.FC<ConnectionRecoveryProps> = ({
               Reintentar manualmente
             </Button>
           )}
-          
+
           {isRecovering && onCancelRecovery && (
-            <Button
-              onClick={onCancelRecovery}
-              variant="outline"
-              size="sm"
-              className="flex-1"
-            >
+            <Button onClick={onCancelRecovery} variant="outline" size="sm" className="flex-1">
               Cancelar
             </Button>
           )}

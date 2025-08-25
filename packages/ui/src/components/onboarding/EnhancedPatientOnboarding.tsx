@@ -19,10 +19,11 @@ export const EnhancedPatientOnboarding: React.FC<EnhancedPatientOnboardingProps>
   return (
     <div className="max-w-2xl mx-auto p-6">
       <CardCorporate variant="default" size="md" className="shadow">
-        <CardHeaderCorporate className="p-6">
-          <h2 className="text-xl font-semibold">Onboarding de Paciente</h2>
-          <p className="text-sm text-gray-600">Completa tu información básica para empezar</p>
-        </CardHeaderCorporate>
+        <CardHeaderCorporate
+          title="Onboarding de Paciente"
+          subtitle="Completa tu información básica para empezar"
+          className="p-6"
+        />
         <CardContentCorporate className="p-6">
           <div className="space-y-4">
             <div>

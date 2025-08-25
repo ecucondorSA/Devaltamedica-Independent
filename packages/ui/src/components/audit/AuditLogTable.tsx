@@ -2,12 +2,11 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '../Button';
-import { Calendar } from '../calendar';
+import { Calendar } from '../../calendar';
 import { Input } from '../Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table/Table';
-// Popover no existe en esta lib; omitir si no está en uso
-// import { Popover, PopoverContent, PopoverTrigger } from '../popover';
+import { Popover, PopoverContent, PopoverTrigger } from '../../popover';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CalendarIcon, ChevronDown, ChevronUp, Download, Filter, Loader2 } from 'lucide-react';
@@ -350,11 +349,11 @@ export const AuditLogTable: React.FC<AuditLogTableProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={tempFilters.startDate || undefined}
-                    onSelect={(date) => setTempFilters({ ...tempFilters, startDate: date || null })}
-                  />
+                  <div className="p-3">
+                    <p className="text-sm text-gray-600">
+                      Selector de fecha - Funcionalidad pendiente
+                    </p>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>
@@ -371,11 +370,11 @@ export const AuditLogTable: React.FC<AuditLogTableProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={tempFilters.endDate || undefined}
-                    onSelect={(date) => setTempFilters({ ...tempFilters, endDate: date || null })}
-                  />
+                  <div className="p-3">
+                    <p className="text-sm text-gray-600">
+                      Selector de fecha - Funcionalidad pendiente
+                    </p>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>

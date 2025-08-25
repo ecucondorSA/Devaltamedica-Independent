@@ -5,21 +5,33 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { 
-  Heart, Activity, Thermometer, Wind, 
-  TrendingUp, TrendingDown, AlertCircle, 
-  ZoomIn, ZoomOut, Download, Maximize2
+import {
+  Heart,
+  Activity,
+  Thermometer,
+  Wind,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle,
+  ZoomIn,
+  ZoomOut,
+  Download,
+  Maximize2,
 } from 'lucide-react';
 import { ButtonCorporate } from '../corporate/ButtonCorporate';
-import { CardCorporate, CardHeaderCorporate, CardContentCorporate } from '../corporate/CardCorporate';
+import {
+  CardCorporate,
+  CardHeaderCorporate,
+  CardContentCorporate,
+} from '../corporate/CardCorporate';
 import { StatusBadge } from '../medical/StatusBadge';
 import { colors } from '../../theme/colors';
 
 // 📊 TIPOS DE MÉTRICAS
-export type VitalSignMetric = 
-  | 'heartRate' 
-  | 'bloodPressure' 
-  | 'temperature' 
+export type VitalSignMetric =
+  | 'heartRate'
+  | 'bloodPressure'
+  | 'temperature'
   | 'oxygenSaturation'
   | 'respiratoryRate';
 
@@ -51,21 +63,24 @@ export interface VitalSignsChartProps {
 }
 
 // 🏥 CONFIGURACIÓN DE MÉTRICAS
-const METRIC_CONFIG: Record<VitalSignMetric, {
-  label: string;
-  icon: React.ElementType;
-  color: string;
-  unit: string;
-  normalRange: { min: number; max: number };
-  criticalRange: { min: number; max: number };
-}> = {
+const METRIC_CONFIG: Record<
+  VitalSignMetric,
+  {
+    label: string;
+    icon: React.ElementType;
+    color: string;
+    unit: string;
+    normalRange: { min: number; max: number };
+    criticalRange: { min: number; max: number };
+  }
+> = {
   heartRate: {
     label: 'Frecuencia Cardíaca',
     icon: Heart,
     color: colors.medical.emergency,
     unit: 'bpm',
     normalRange: { min: 60, max: 100 },
-    criticalRange: { min: 40, max: 150 }
+    criticalRange: { min: 40, max: 150 },
   },
   bloodPressure: {
     label: 'Presión Arterial',
@@ -73,7 +88,7 @@ const METRIC_CONFIG: Record<VitalSignMetric, {
     color: colors.primary[500],
     unit: 'mmHg',
     normalRange: { min: 90, max: 120 }, // Sistólica
-    criticalRange: { min: 70, max: 180 }
+    criticalRange: { min: 70, max: 180 },
   },
   temperature: {
     label: 'Temperatura',
@@ -81,7 +96,7 @@ const METRIC_CONFIG: Record<VitalSignMetric, {
     color: colors.medical.warning,
     unit: '°C',
     normalRange: { min: 36.1, max: 37.2 },
-    criticalRange: { min: 35, max: 40 }
+    criticalRange: { min: 35, max: 40 },
   },
   oxygenSaturation: {
     label: 'Saturación O₂',
@@ -89,7 +104,7 @@ const METRIC_CONFIG: Record<VitalSignMetric, {
     color: colors.secondary[500],
     unit: '%',
     normalRange: { min: 95, max: 100 },
-    criticalRange: { min: 85, max: 100 }
+    criticalRange: { min: 85, max: 100 },
   },
   respiratoryRate: {
     label: 'Frecuencia Respiratoria',
@@ -97,8 +112,8 @@ const METRIC_CONFIG: Record<VitalSignMetric, {
     color: colors.special.therapy,
     unit: 'rpm',
     normalRange: { min: 12, max: 20 },
-    criticalRange: { min: 8, max: 30 }
-  }
+    criticalRange: { min: 8, max: 30 },
+  },
 };
 
 // 📊 COMPONENTE PRINCIPAL
@@ -115,14 +130,18 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   updateInterval = 5000,
   patientAge,
   className = '',
-  onAlertTriggered
+  onAlertTriggered,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedMetrics, setSelectedMetrics] = useState<Set<VitalSignMetric>>(new Set(metrics));
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeAlerts, setActiveAlerts] = useState<Record<VitalSignMetric, boolean>>({} as any);
-  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; data: VitalSignDataPoint } | null>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    x: number;
+    y: number;
+    data: VitalSignDataPoint;
+  } | null>(null);
 
   // 🔄 FILTRAR DATOS SEGÚN RANGO DE TIEMPO
   const filteredData = useMemo(() => {
@@ -132,35 +151,39 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
       '6h': 6 * 60 * 60 * 1000,
       '24h': 24 * 60 * 60 * 1000,
       '7d': 7 * 24 * 60 * 60 * 1000,
-      '30d': 30 * 24 * 60 * 60 * 1000
+      '30d': 30 * 24 * 60 * 60 * 1000,
     };
-    
+
     const cutoff = now.getTime() - rangeMap[timeRange];
-    return data.filter(point => point.timestamp.getTime() >= cutoff);
+    return data.filter((point) => point.timestamp.getTime() >= cutoff);
   }, [data, timeRange]);
 
   // 📈 CALCULAR TENDENCIAS
   const calculateTrend = (metric: VitalSignMetric): 'up' | 'down' | 'stable' => {
     if (filteredData.length < 2) return 'stable';
-    
+
     const recentData = filteredData.slice(-10);
     const values = recentData
-      .map(point => {
+      .map((point) => {
         if (metric === 'bloodPressure') {
           return point.bloodPressure?.systolic;
         }
         return point[metric];
       })
-      .filter(val => val !== undefined) as number[];
-    
+      .filter((val) => val !== undefined) as number[];
+
     if (values.length < 2) return 'stable';
-    
-    const avgFirst = values.slice(0, Math.floor(values.length / 2)).reduce((a, b) => a + b, 0) / Math.floor(values.length / 2);
-    const avgSecond = values.slice(Math.floor(values.length / 2)).reduce((a, b) => a + b, 0) / (values.length - Math.floor(values.length / 2));
-    
+
+    const avgFirst =
+      values.slice(0, Math.floor(values.length / 2)).reduce((a, b) => a + b, 0) /
+      Math.floor(values.length / 2);
+    const avgSecond =
+      values.slice(Math.floor(values.length / 2)).reduce((a, b) => a + b, 0) /
+      (values.length - Math.floor(values.length / 2));
+
     const difference = avgSecond - avgFirst;
     const percentChange = (difference / avgFirst) * 100;
-    
+
     if (Math.abs(percentChange) < 5) return 'stable';
     return percentChange > 0 ? 'up' : 'down';
   };
@@ -168,30 +191,30 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   // 🚨 VERIFICAR ALERTAS
   const checkAlerts = () => {
     if (!showAlerts || filteredData.length === 0) return;
-    
+
     const latestData = filteredData[filteredData.length - 1];
     const newAlerts: Record<VitalSignMetric, boolean> = {} as any;
-    
-    selectedMetrics.forEach(metric => {
+
+    selectedMetrics.forEach((metric) => {
       const config = METRIC_CONFIG[metric];
       let value: number | undefined;
-      
+
       if (metric === 'bloodPressure') {
         value = latestData.bloodPressure?.systolic;
       } else {
         value = latestData[metric];
       }
-      
+
       if (value !== undefined) {
         const isOutOfRange = value < config.normalRange.min || value > config.normalRange.max;
         newAlerts[metric] = isOutOfRange;
-        
+
         if (isOutOfRange && onAlertTriggered) {
           onAlertTriggered(metric, value);
         }
       }
     });
-    
+
     setActiveAlerts(newAlerts);
   };
 
@@ -199,39 +222,39 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   const drawChart = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     // Configurar dimensiones
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * window.devicePixelRatio;
     canvas.height = rect.height * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    
+
     // Limpiar canvas
     ctx.clearRect(0, 0, rect.width, rect.height);
-    
+
     // Configuración de márgenes
     const margin = { top: 40, right: 60, bottom: 60, left: 70 };
     const chartWidth = rect.width - margin.left - margin.right;
     const chartHeight = rect.height - margin.top - margin.bottom;
-    
+
     // Dibujar fondo con gradiente
     const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
     gradient.addColorStop(0, colors.backgrounds.secondary);
     gradient.addColorStop(1, colors.backgrounds.primary);
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, rect.width, rect.height);
-    
+
     // Configurar área de gráfico
     ctx.save();
     ctx.translate(margin.left, margin.top);
-    
+
     // Dibujar cuadrícula
     ctx.strokeStyle = colors.gray[200];
     ctx.lineWidth = 0.5;
-    
+
     // Líneas horizontales
     for (let i = 0; i <= 5; i++) {
       const y = (chartHeight / 5) * i;
@@ -240,7 +263,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
       ctx.lineTo(chartWidth, y);
       ctx.stroke();
     }
-    
+
     // Líneas verticales
     for (let i = 0; i <= 8; i++) {
       const x = (chartWidth / 8) * i;
@@ -249,53 +272,53 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
       ctx.lineTo(x, chartHeight);
       ctx.stroke();
     }
-    
+
     // Dibujar rangos normales si está habilitado
     if (showNormalRanges) {
-      selectedMetrics.forEach(metric => {
+      selectedMetrics.forEach((metric) => {
         const config = METRIC_CONFIG[metric];
         const { normalRange, criticalRange } = config;
-        
+
         // Normalizar valores para el gráfico
         const yMin = (1 - normalRange.min / criticalRange.max) * chartHeight;
         const yMax = (1 - normalRange.max / criticalRange.max) * chartHeight;
-        
+
         // Área de rango normal
         ctx.fillStyle = colors.alpha.primary10;
         ctx.fillRect(0, yMax, chartWidth, yMin - yMax);
       });
     }
-    
+
     // Dibujar líneas de datos
-    selectedMetrics.forEach(metric => {
+    selectedMetrics.forEach((metric) => {
       const config = METRIC_CONFIG[metric];
-      
+
       ctx.strokeStyle = config.color;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      
+
       let firstPoint = true;
-      
+
       filteredData.forEach((point, index) => {
         const x = (index / (filteredData.length - 1)) * chartWidth * zoomLevel;
         let value: number | undefined;
-        
+
         if (metric === 'bloodPressure') {
           value = point.bloodPressure?.systolic;
         } else {
           value = point[metric];
         }
-        
+
         if (value !== undefined) {
           const y = (1 - value / config.criticalRange.max) * chartHeight;
-          
+
           if (firstPoint) {
             ctx.moveTo(x, y);
             firstPoint = false;
           } else {
             ctx.lineTo(x, y);
           }
-          
+
           // Dibujar punto
           ctx.save();
           ctx.fillStyle = config.color;
@@ -305,35 +328,35 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
           ctx.restore();
         }
       });
-      
+
       ctx.stroke();
     });
-    
+
     // Dibujar etiquetas del eje Y
     ctx.fillStyle = colors.text.secondary;
     ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto';
     ctx.textAlign = 'right';
-    
+
     selectedMetrics.forEach((metric, idx) => {
       const config = METRIC_CONFIG[metric];
-      const y = 20 + idx * 20;
-      
+      const y = 20 + Number(idx) * 20;
+
       ctx.fillStyle = config.color;
       ctx.fillText(`${config.label} (${config.unit})`, -10, y);
     });
-    
+
     // Dibujar etiquetas del eje X (tiempo)
     ctx.textAlign = 'center';
     ctx.fillStyle = colors.text.secondary;
-    
+
     const timeLabels = getTimeLabels(filteredData, timeRange);
     timeLabels.forEach((label, index) => {
       const x = (index / (timeLabels.length - 1)) * chartWidth;
       ctx.fillText(label, x, chartHeight + 20);
     });
-    
+
     ctx.restore();
-    
+
     // Dibujar información del punto hover
     if (hoveredPoint) {
       drawTooltip(ctx, hoveredPoint, rect);
@@ -343,43 +366,45 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   // 🏷️ OBTENER ETIQUETAS DE TIEMPO
   const getTimeLabels = (data: VitalSignDataPoint[], range: string): string[] => {
     if (data.length === 0) return [];
-    
+
     const formatMap = {
-      '1h': (date: Date) => date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
-      '6h': (date: Date) => date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+      '1h': (date: Date) =>
+        date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+      '6h': (date: Date) =>
+        date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
       '24h': (date: Date) => date.toLocaleTimeString('es-AR', { hour: '2-digit' }),
       '7d': (date: Date) => date.toLocaleDateString('es-AR', { weekday: 'short' }),
-      '30d': (date: Date) => date.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })
+      '30d': (date: Date) => date.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }),
     };
-    
+
     const formatter = formatMap[range] || formatMap['24h'];
     const labels: string[] = [];
     const labelCount = 8;
-    
+
     for (let i = 0; i < labelCount; i++) {
       const index = Math.floor((i / (labelCount - 1)) * (data.length - 1));
       labels.push(formatter(data[index].timestamp));
     }
-    
+
     return labels;
   };
 
   // 📍 DIBUJAR TOOLTIP
   const drawTooltip = (
-    ctx: CanvasRenderingContext2D, 
+    ctx: CanvasRenderingContext2D,
     point: { x: number; y: number; data: VitalSignDataPoint },
-    rect: DOMRect
+    rect: DOMRect,
   ) => {
     const padding = 10;
     const lineHeight = 20;
     const metrics = Array.from(selectedMetrics);
     const width = 200;
     const height = padding * 2 + (metrics.length + 1) * lineHeight;
-    
+
     // Posición del tooltip
     let x = point.x + 10;
     let y = point.y - height / 2;
-    
+
     // Ajustar si se sale de los límites
     if (x + width > rect.width) {
       x = point.x - width - 10;
@@ -390,46 +415,46 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
     if (y + height > rect.height) {
       y = rect.height - height - padding;
     }
-    
+
     // Fondo del tooltip
     ctx.fillStyle = colors.alpha.white90;
     ctx.strokeStyle = colors.gray[300];
     ctx.lineWidth = 1;
-    
+
     ctx.beginPath();
     ctx.roundRect(x, y, width, height, 8);
     ctx.fill();
     ctx.stroke();
-    
+
     // Contenido del tooltip
     ctx.fillStyle = colors.text.primary;
     ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto';
     ctx.textAlign = 'left';
-    
+
     // Fecha y hora
     ctx.fillText(
       point.data.timestamp.toLocaleString('es-AR'),
       x + padding,
-      y + padding + lineHeight
+      y + padding + lineHeight,
     );
-    
+
     // Valores de métricas
     metrics.forEach((metric, index) => {
       const config = METRIC_CONFIG[metric];
       let value: string;
-      
+
       if (metric === 'bloodPressure' && point.data.bloodPressure) {
         value = `${point.data.bloodPressure.systolic}/${point.data.bloodPressure.diastolic}`;
       } else {
         const val = point.data[metric];
         value = val !== undefined ? `${val}` : 'N/A';
       }
-      
+
       ctx.fillStyle = config.color;
       ctx.fillText(
         `${config.label}: ${value} ${config.unit}`,
         x + padding,
-        y + padding + (index + 2) * lineHeight
+        y + padding + (index + 2) * lineHeight,
       );
     });
   };
@@ -438,23 +463,23 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    
+
     // Buscar punto más cercano
     const margin = { left: 70, right: 60, top: 40, bottom: 60 };
     const chartWidth = rect.width - margin.left - margin.right;
     const relativeX = (x - margin.left) / chartWidth;
-    
+
     const dataIndex = Math.round(relativeX * (filteredData.length - 1));
-    
+
     if (dataIndex >= 0 && dataIndex < filteredData.length) {
       setHoveredPoint({
         x,
         y,
-        data: filteredData[dataIndex]
+        data: filteredData[dataIndex],
       });
     } else {
       setHoveredPoint(null);
@@ -465,23 +490,23 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   const exportData = () => {
     const csvContent = [
       // Headers
-      ['Timestamp', ...Array.from(selectedMetrics).map(m => METRIC_CONFIG[m].label)].join(','),
+      ['Timestamp', ...Array.from(selectedMetrics).map((m) => METRIC_CONFIG[m].label)].join(','),
       // Data
-      ...filteredData.map(point => {
+      ...filteredData.map((point) => {
         const values = [point.timestamp.toISOString()];
-        
-        selectedMetrics.forEach(metric => {
+
+        selectedMetrics.forEach((metric) => {
           if (metric === 'bloodPressure' && point.bloodPressure) {
             values.push(`${point.bloodPressure.systolic}/${point.bloodPressure.diastolic}`);
           } else {
             values.push(String(point[metric] || ''));
           }
         });
-        
+
         return values.join(',');
-      })
+      }),
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -498,7 +523,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
         drawChart();
         checkAlerts();
       }, updateInterval);
-      
+
       return () => clearInterval(interval);
     }
   }, [realTime, updateInterval]);
@@ -519,23 +544,26 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
   // 📊 CALCULAR ESTADÍSTICAS ACTUALES
   const currentStats = useMemo(() => {
     if (filteredData.length === 0) return null;
-    
+
     const latest = filteredData[filteredData.length - 1];
-    const stats: Record<VitalSignMetric, {
-      value: number | string;
-      status: 'normal' | 'warning' | 'critical';
-      trend: 'up' | 'down' | 'stable';
-    }> = {} as any;
-    
-    selectedMetrics.forEach(metric => {
+    const stats: Record<
+      VitalSignMetric,
+      {
+        value: number | string;
+        status: 'normal' | 'warning' | 'critical';
+        trend: 'up' | 'down' | 'stable';
+      }
+    > = {} as any;
+
+    selectedMetrics.forEach((metric) => {
       const config = METRIC_CONFIG[metric];
       let value: number | string = 'N/A';
       let status: 'normal' | 'warning' | 'critical' = 'normal';
-      
+
       if (metric === 'bloodPressure' && latest.bloodPressure) {
         value = `${latest.bloodPressure.systolic}/${latest.bloodPressure.diastolic}`;
         const sys = latest.bloodPressure.systolic;
-        
+
         if (sys < config.normalRange.min || sys > config.normalRange.max) {
           status = 'warning';
         }
@@ -545,7 +573,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
       } else if (latest[metric] !== undefined) {
         value = latest[metric] as number;
         const numValue = value as number;
-        
+
         if (numValue < config.normalRange.min || numValue > config.normalRange.max) {
           status = 'warning';
         }
@@ -553,20 +581,20 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
           status = 'critical';
         }
       }
-      
+
       stats[metric] = {
         value,
         status,
-        trend: calculateTrend(metric)
+        trend: calculateTrend(metric),
       };
     });
-    
+
     return stats;
   }, [filteredData, selectedMetrics]);
 
   return (
-    <CardCorporate 
-      variant="default" 
+    <CardCorporate
+      variant="default"
       className={`${isFullscreen ? 'fixed inset-0 z-50' : ''} ${className}`}
       medical={true}
     >
@@ -579,7 +607,9 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
             {/* Selector de rango de tiempo */}
             <select
               value={timeRange}
-              onChange={(e) => {/* Implementar cambio de rango */}}
+              onChange={(e) => {
+                /* Implementar cambio de rango */
+              }}
               className="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             >
               <option value="1h">1 hora</option>
@@ -588,7 +618,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
               <option value="7d">7 días</option>
               <option value="30d">30 días</option>
             </select>
-            
+
             {/* Controles de zoom */}
             {enableZoom && (
               <>
@@ -607,7 +637,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
                 />
               </>
             )}
-            
+
             {/* Botones de acción */}
             {enableExport && (
               <ButtonCorporate
@@ -631,19 +661,20 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
         {/* Resumen de métricas actuales */}
         {currentStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {Array.from(selectedMetrics).map(metric => {
+            {Array.from(selectedMetrics).map((metric) => {
               const config = METRIC_CONFIG[metric];
               const stat = currentStats[metric];
               const Icon = config.icon;
-              
+
               return (
                 <div
                   key={metric}
                   className={`
                     p-4 rounded-lg border-2 transition-all
-                    ${activeAlerts[metric] 
-                      ? 'border-red-500 bg-red-50 animate-pulse' 
-                      : 'border-gray-200 bg-gray-50'
+                    ${
+                      activeAlerts[metric]
+                        ? 'border-red-500 bg-red-50 animate-pulse'
+                        : 'border-gray-200 bg-gray-50'
                     }
                   `}
                 >
@@ -653,7 +684,9 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
                       <div className="flex items-center gap-1">
                         {stat.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-600" />}
                         {stat.trend === 'down' && <TrendingDown className="w-4 h-4 text-red-600" />}
-                        {stat.trend === 'stable' && <div className="w-4 h-4 bg-gray-400 rounded-full" />}
+                        {stat.trend === 'stable' && (
+                          <div className="w-4 h-4 bg-gray-400 rounded-full" />
+                        )}
                       </div>
                     )}
                   </div>
@@ -681,7 +714,7 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setHoveredPoint(null)}
           />
-          
+
           {/* Overlay de tiempo real */}
           {realTime && (
             <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
@@ -694,19 +727,20 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
         {/* Leyenda y controles de métricas */}
         <div className="mt-6 flex flex-wrap items-center gap-4">
           <div className="text-sm text-gray-600">Métricas:</div>
-          {metrics.map(metric => {
+          {metrics.map((metric) => {
             const config = METRIC_CONFIG[metric];
             const Icon = config.icon;
             const isSelected = selectedMetrics.has(metric);
-            
+
             return (
               <label
                 key={metric}
                 className={`
                   flex items-center gap-2 px-3 py-1 rounded-lg cursor-pointer transition-all
-                  ${isSelected 
-                    ? 'bg-primary-100 text-primary-700' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ${
+                    isSelected
+                      ? 'bg-primary-100 text-primary-700'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }
                 `}
               >
@@ -732,25 +766,27 @@ export const VitalSignsChart: React.FC<VitalSignsChartProps> = ({
         </div>
 
         {/* Alertas activas */}
-        {showAlerts && Object.keys(activeAlerts).some(key => activeAlerts[key as VitalSignMetric]) && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-2 text-red-800 mb-2">
-              <AlertCircle className="w-5 h-5" />
-              <span className="font-medium">Alertas Activas</span>
+        {showAlerts &&
+          Object.keys(activeAlerts).some((key) => activeAlerts[key as VitalSignMetric]) && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center gap-2 text-red-800 mb-2">
+                <AlertCircle className="w-5 h-5" />
+                <span className="font-medium">Alertas Activas</span>
+              </div>
+              <div className="space-y-1">
+                {Object.entries(activeAlerts).map(([metric, isActive]) => {
+                  if (!isActive) return null;
+                  const config = METRIC_CONFIG[metric as VitalSignMetric];
+                  return (
+                    <div key={metric} className="text-sm text-red-700">
+                      • {config.label} fuera del rango normal ({config.normalRange.min}-
+                      {config.normalRange.max} {config.unit})
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="space-y-1">
-              {Object.entries(activeAlerts).map(([metric, isActive]) => {
-                if (!isActive) return null;
-                const config = METRIC_CONFIG[metric as VitalSignMetric];
-                return (
-                  <div key={metric} className="text-sm text-red-700">
-                    • {config.label} fuera del rango normal ({config.normalRange.min}-{config.normalRange.max} {config.unit})
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+          )}
       </CardContentCorporate>
     </CardCorporate>
   );

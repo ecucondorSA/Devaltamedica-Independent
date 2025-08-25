@@ -170,7 +170,7 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes progress {
           from {
             width: 100%;

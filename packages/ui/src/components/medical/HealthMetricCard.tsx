@@ -11,26 +11,26 @@ import { CardCorporate, CardContentCorporate } from '../corporate/CardCorporate'
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (message, data?) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message, data?) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message, data?) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message, data?) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 // 📊 TIPOS MÉDICOS ESPECÍFICOS
 export type HealthStatus = 'normal' | 'warning' | 'critical' | 'excellent';
@@ -74,16 +74,16 @@ const HEALTH_STATUS_CONFIG = {
     icon: 'text-green-600',
     badge: 'bg-green-100 text-green-800',
     pulse: '',
-    label: 'Normal'
+    label: 'Normal',
   },
   warning: {
     bg: 'bg-yellow-50',
-    border: 'border-yellow-200', 
+    border: 'border-yellow-200',
     text: 'text-yellow-800',
     icon: 'text-yellow-600',
     badge: 'bg-yellow-100 text-yellow-800',
     pulse: 'animate-pulse',
-    label: 'Atención'
+    label: 'Atención',
   },
   critical: {
     bg: 'bg-red-50',
@@ -92,7 +92,7 @@ const HEALTH_STATUS_CONFIG = {
     icon: 'text-red-600',
     badge: 'bg-red-100 text-red-800',
     pulse: 'animate-pulse',
-    label: 'Crítico'
+    label: 'Crítico',
   },
   excellent: {
     bg: 'bg-blue-50',
@@ -101,15 +101,15 @@ const HEALTH_STATUS_CONFIG = {
     icon: 'text-blue-600',
     badge: 'bg-blue-100 text-blue-800',
     pulse: '',
-    label: 'Excelente'
-  }
+    label: 'Excelente',
+  },
 };
 
 // 📈 ICONOS DE TENDENCIAS MÉDICAS
 const TREND_ICONS = {
   up: <TrendingUp className="w-4 h-4 text-green-600" />,
   down: <TrendingDown className="w-4 h-4 text-red-600" />,
-  stable: <Minus className="w-4 h-4 text-gray-600" />
+  stable: <Minus className="w-4 h-4 text-gray-600" />,
 };
 
 // 🚨 CONFIGURACIÓN DE PRIORIDADES MÉDICAS
@@ -117,7 +117,7 @@ const PRIORITY_CONFIG = {
   low: { ring: '', shadow: '' },
   medium: { ring: 'ring-2 ring-yellow-200', shadow: 'shadow-yellow-100' },
   high: { ring: 'ring-2 ring-orange-200', shadow: 'shadow-orange-100' },
-  critical: { ring: 'ring-2 ring-red-200', shadow: 'shadow-red-100' }
+  critical: { ring: 'ring-2 ring-red-200', shadow: 'shadow-red-100' },
 };
 
 // 🏥 COMPONENTE PRINCIPAL HEALTH METRIC CARD
@@ -134,7 +134,7 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
   className = '',
   emergency = false,
   normalRange,
-  priority = 'medium'
+  priority = 'medium',
 }) => {
   // 🛡️ VALIDACIONES MÉDICAS ROBUSTAS
   if (!title || (value !== 0 && !value)) {
@@ -144,11 +144,9 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
 
   const statusConfig = HEALTH_STATUS_CONFIG[status];
   const priorityConfig = PRIORITY_CONFIG[priority];
-  
+
   // 🚨 ANIMACIONES DE EMERGENCIA MÉDICA
-  const emergencyClasses = emergency 
-    ? 'animate-pulse border-red-500' 
-    : '';
+  const emergencyClasses = emergency ? 'animate-pulse border-red-500' : '';
 
   // 🎯 CLASES DINÁMICAS SEGÚN ESTADO MÉDICO
   const cardClasses = `
@@ -159,11 +157,13 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
     ${emergencyClasses}
     ${status === 'critical' ? statusConfig.pulse : ''}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   return (
     <CardCorporate
-      variant={emergency ? "emergency" : "medical"}
+      variant={emergency ? 'emergency' : 'medical'}
       size="md"
       className={cardClasses}
       onClick={onClick}
@@ -173,14 +173,12 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
         {/* 🔝 HEADER CON ICONO Y ESTADO */}
         <div className="flex items-center justify-between mb-4">
           <div className={`p-3 rounded-xl ${statusConfig.icon} bg-white bg-opacity-50 relative`}>
-            <div className="w-6 h-6">
-              {icon}
-            </div>
+            <div className="w-6 h-6">{icon}</div>
             {emergency && (
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
             )}
           </div>
-          
+
           {/* 📊 TENDENCIA Y BADGE DE ESTADO */}
           <div className="flex items-center space-x-2">
             {trend && TREND_ICONS[trend]}
@@ -192,18 +190,10 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
 
         {/* 📋 INFORMACIÓN PRINCIPAL */}
         <div className="mb-2">
-          <h3 className="text-sm font-medium text-gray-600 mb-1">
-            {title}
-          </h3>
+          <h3 className="text-sm font-medium text-gray-600 mb-1">{title}</h3>
           <div className="flex items-baseline space-x-1">
-            <span className={`text-2xl font-bold ${statusConfig.text}`}>
-              {value}
-            </span>
-            {unit && (
-              <span className="text-sm text-gray-500 font-medium">
-                {unit}
-              </span>
-            )}
+            <span className={`text-2xl font-bold ${statusConfig.text}`}>{value}</span>
+            {unit && <span className="text-sm text-gray-500 font-medium">{unit}</span>}
           </div>
         </div>
 
@@ -217,11 +207,7 @@ export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({
         )}
 
         {/* 📝 DESCRIPCIÓN MÉDICA */}
-        {description && (
-          <p className="text-sm text-gray-600 mb-3 leading-relaxed">
-            {description}
-          </p>
-        )}
+        {description && <p className="text-sm text-gray-600 mb-3 leading-relaxed">{description}</p>}
 
         {/* 🚨 INDICADOR DE EMERGENCIA */}
         {emergency && (

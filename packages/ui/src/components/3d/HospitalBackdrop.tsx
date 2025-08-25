@@ -11,7 +11,7 @@ export interface HospitalBackdropProps {
   useOptimized?: boolean;
 }
 
-export function HospitalBackdrop({ _useSVG = true, _useOptimized = true }: HospitalBackdropProps) {
+export function HospitalBackdrop({ useSVG = true, useOptimized = true }: HospitalBackdropProps) {
   // TODO: Re-enable when dependencies are properly installed
   return (
     <div className="hospital-backdrop-placeholder">
