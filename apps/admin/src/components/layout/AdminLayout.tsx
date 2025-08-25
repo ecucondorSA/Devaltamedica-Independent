@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 import { cn } from '@altamedica/utils';
 import {
   Activity,
