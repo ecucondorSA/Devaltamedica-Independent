@@ -10,7 +10,7 @@ import { Loader2 } from 'lucide-react';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (message, data?) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
@@ -29,23 +29,24 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 // 📝 TIPOS ROBUSTOS PARA BUTTON CORPORATIVO
-export type ButtonVariant = 
-  | 'primary' 
-  | 'secondary' 
-  | 'outline' 
-  | 'ghost' 
-  | 'danger' 
-  | 'success' 
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'ghost'
+  | 'danger'
+  | 'success'
   | 'warning'
   | 'medical'
   | 'emergency';
 
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export interface ButtonCorporateProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
+export interface ButtonCorporateProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -73,64 +74,66 @@ const BUTTON_VARIANTS = {
     hover: 'hover:bg-secondary-altamedica hover:border-secondary-altamedica',
     active: 'active:bg-primary-altamedica active:scale-95',
     disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed',
-    gradient: 'bg-gradient-cta-altamedica'
+    gradient: 'bg-gradient-cta-altamedica',
   },
   secondary: {
     base: 'bg-white text-primary-altamedica border-primary-altamedica',
     hover: 'hover:bg-gradient-primary-altamedica hover:text-secondary-altamedica',
     active: 'active:bg-primary-altamedica active:text-white active:scale-95',
-    disabled: 'disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed',
-    gradient: 'bg-white hover:bg-gradient-primary-altamedica'
+    disabled:
+      'disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed',
+    gradient: 'bg-white hover:bg-gradient-primary-altamedica',
   },
   outline: {
     base: 'bg-transparent text-primary-altamedica border-primary-altamedica',
     hover: 'hover:bg-primary-altamedica hover:text-white',
     active: 'active:bg-secondary-altamedica active:scale-95',
     disabled: 'disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed',
-    gradient: 'hover:bg-gradient-cta-altamedica'
+    gradient: 'hover:bg-gradient-cta-altamedica',
   },
   ghost: {
     base: 'bg-transparent text-primary-altamedica border-transparent',
     hover: 'hover:bg-gradient-primary-altamedica hover:border-primary-altamedica',
     active: 'active:bg-primary-altamedica active:text-white active:scale-95',
     disabled: 'disabled:text-gray-400 disabled:cursor-not-allowed',
-    gradient: 'hover:bg-gradient-primary-altamedica'
+    gradient: 'hover:bg-gradient-primary-altamedica',
   },
   danger: {
     base: 'bg-danger text-white border-danger',
     hover: 'hover:bg-red-700 hover:border-red-700',
     active: 'active:bg-danger active:scale-95',
     disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed',
-    gradient: 'bg-gradient-to-r from-danger to-red-600'
+    gradient: 'bg-gradient-to-r from-danger to-red-600',
   },
   success: {
     base: 'bg-success text-white border-success',
     hover: 'hover:bg-green-700 hover:border-green-700',
     active: 'active:bg-success active:scale-95',
     disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed',
-    gradient: 'bg-gradient-to-r from-success to-green-600'
+    gradient: 'bg-gradient-to-r from-success to-green-600',
   },
   warning: {
     base: 'bg-warning text-white border-warning',
     hover: 'hover:bg-orange-700 hover:border-orange-700',
     active: 'active:bg-warning active:scale-95',
     disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed',
-    gradient: 'bg-gradient-to-r from-warning to-orange-600'
+    gradient: 'bg-gradient-to-r from-warning to-orange-600',
   },
   medical: {
     base: 'bg-secondary-altamedica text-white border-secondary-altamedica',
     hover: 'hover:bg-primary-altamedica hover:border-primary-altamedica',
     active: 'active:bg-secondary-altamedica active:scale-95',
     disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed',
-    gradient: 'bg-gradient-to-r from-secondary-altamedica to-primary-altamedica'
+    gradient: 'bg-gradient-to-r from-secondary-altamedica to-primary-altamedica',
   },
   emergency: {
     base: 'bg-danger text-white border-danger animate-pulse',
     hover: 'hover:bg-red-700 hover:border-red-700 hover:animate-none',
     active: 'active:bg-danger active:scale-95',
-    disabled: 'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed disabled:animate-none',
-    gradient: 'bg-gradient-to-r from-danger to-red-600 animate-pulse'
-  }
+    disabled:
+      'disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed disabled:animate-none',
+    gradient: 'bg-gradient-to-r from-danger to-red-600 animate-pulse',
+  },
 };
 
 const BUTTON_SIZES = {
@@ -138,7 +141,7 @@ const BUTTON_SIZES = {
   sm: 'px-3 py-1.5 text-sm',
   md: 'px-4 py-2 text-sm',
   lg: 'px-6 py-3 text-base',
-  xl: 'px-8 py-4 text-lg'
+  xl: 'px-8 py-4 text-lg',
 };
 
 const ICON_SIZES = {
@@ -146,32 +149,34 @@ const ICON_SIZES = {
   sm: 'w-4 h-4',
   md: 'w-4 h-4',
   lg: 'w-5 h-5',
-  xl: 'w-6 h-6'
+  xl: 'w-6 h-6',
 };
 
 // 🔘 COMPONENTE PRINCIPAL BUTTON CORPORATIVO
 export const ButtonCorporate = forwardRef<HTMLButtonElement, ButtonCorporateProps>(
-  ({
-    variant = 'primary',
-    size = 'md',
-    loading = false,
-    loadingText = 'Cargando...',
-    icon,
-    iconPosition = 'left',
-    fullWidth = false,
-    rounded = true,
-    shadow = true,
-    gradient = false,
-    animate = true,
-    medical = false,
-    emergency = false,
-    disabled = false,
-    className = '',
-    children,
-    'aria-label': ariaLabel,
-    ...props
-  }, ref) => {
-    
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      loading = false,
+      loadingText = 'Cargando...',
+      icon,
+      iconPosition = 'left',
+      fullWidth = false,
+      rounded = true,
+      shadow = true,
+      gradient = false,
+      animate = true,
+      medical = false,
+      emergency = false,
+      disabled = false,
+      className = '',
+      children,
+      'aria-label': ariaLabel,
+      ...props
+    },
+    ref,
+  ) => {
     // 🛡️ VALIDACIONES ROBUSTAS
     if (medical) variant = 'medical';
     if (emergency) variant = 'emergency';
@@ -179,16 +184,18 @@ export const ButtonCorporate = forwardRef<HTMLButtonElement, ButtonCorporateProp
     // Accesibilidad: si no hay children y no hay aria-label, advertir en dev
     if (process.env.NODE_ENV !== 'production' && !children && !ariaLabel) {
       // eslint-disable-next-line no-console
-      logger.warn('[ButtonCorporate] Botón icon-only sin aria-label proporcionado. Añade aria-label para accesibilidad.');
+      console.warn(
+        '[ButtonCorporate] Botón icon-only sin aria-label proporcionado. Añade aria-label para accesibilidad.',
+      );
     }
-    
+
     const actuallyDisabled = disabled || loading;
-    
+
     // 🎨 CONSTRUCCIÓN DE CLASES CSS CORPORATIVAS
     const variantConfig = BUTTON_VARIANTS[variant];
     const sizeClass = BUTTON_SIZES[size];
     const iconSize = ICON_SIZES[size];
-    
+
     const baseClasses = `
       inline-flex items-center justify-center
       font-medium border
@@ -205,7 +212,9 @@ export const ButtonCorporate = forwardRef<HTMLButtonElement, ButtonCorporateProp
       ${emergency ? 'animate-pulse hover:animate-none' : ''}
       ${medical ? 'shadow-md' : ''}
       ${actuallyDisabled ? 'pointer-events-none' : ''}
-    `.replace(/\s+/g, ' ').trim();
+    `
+      .replace(/\s+/g, ' ')
+      .trim();
 
     const finalClassName = `${baseClasses} ${className}`;
 
@@ -219,32 +228,30 @@ export const ButtonCorporate = forwardRef<HTMLButtonElement, ButtonCorporateProp
       >
         {/* 🔄 LOADING STATE */}
         {loading && (
-          <Loader2 className={`animate-spin ${iconSize} ${iconPosition === 'right' ? 'ml-2' : 'mr-2'}`} />
+          <Loader2
+            className={`animate-spin ${iconSize} ${iconPosition === 'right' ? 'ml-2' : 'mr-2'}`}
+          />
         )}
-        
+
         {/* 🎯 ICON LEFT */}
         {!loading && icon && iconPosition === 'left' && (
-          <span className={`${iconSize} ${children ? 'mr-2' : ''} flex-shrink-0`}>
-            {icon}
-          </span>
+          <span className={`${iconSize} ${children ? 'mr-2' : ''} flex-shrink-0`}>{icon}</span>
         )}
-        
+
         {/* 📝 TEXT CONTENT (opcional) */}
         {children && (
           <span className={`${loading ? 'opacity-70' : ''} animate-fade-in-conservative`}>
             {loading ? loadingText : children}
           </span>
         )}
-        
+
         {/* 🎯 ICON RIGHT */}
         {!loading && icon && iconPosition === 'right' && (
-          <span className={`${iconSize} ${children ? 'ml-2' : ''} flex-shrink-0`}>
-            {icon}
-          </span>
+          <span className={`${iconSize} ${children ? 'ml-2' : ''} flex-shrink-0`}>{icon}</span>
         )}
       </button>
     );
-  }
+  },
 );
 
 ButtonCorporate.displayName = 'ButtonCorporate';

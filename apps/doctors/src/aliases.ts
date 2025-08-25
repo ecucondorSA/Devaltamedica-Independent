@@ -1,13 +1,13 @@
-// Archivo de alias temporal para resolver problemas de resolución de módulos
-// TODO: Eliminar cuando se resuelva el problema de resolución del workspace
+// Archivo de alias - Conectando con paquetes REALES
+// ELIMINACIÓN DE DEUDA TÉCNICA - 25 Agosto 2025
 
-// Re-exportar desde stubs temporales
-export * from './api-client-stub';
-export * from './components/ui-stub';
-export * from './firebase-stub';
-export * from './hooks-stub';
-export * from './marketplace-hooks-stub';
-export * from './medical-stub';
-export * from './telemedicine-core-stub';
-export * from './types-stub';
-export * from './utils-stub';
+// Re-exportar desde paquetes REALES del workspace
+export * from '@altamedica/api-client';
+export * from '@altamedica/ui';
+export * from '@altamedica/firebase';
+export * from '@altamedica/hooks';
+export * from '@altamedica/marketplace-hooks';
+export * from '@altamedica/medical';
+export * from '@altamedica/telemedicine-core';
+export * from '@altamedica/types';
+export * from '@altamedica/utils';
