@@ -314,3 +314,23 @@ DTS dist/index.d.ts    333.00 B
 **GEMINI**: El script `fix-modules-for-gemini.cjs` ahora debería ejecutarse sin errores. También puedes continuar con apps/admin TypeScript check.
 
 ---
+
+## 🔄 AUTO-SYNC REPORT - 2025-08-25T12:36:43.350Z
+
+### Claude Activity (packages/*)
+-  M packages/auth/tsup.config.ts
+-  M packages/database/tsup.config.ts
+-  M packages/hooks/tsup.config.ts
+-  M packages/medical/tsup.config.ts
+-  M packages/types/tsup.config.ts
+-  M packages/ui/tsup.config.ts
+
+### Gemini Activity (apps/*)
+- No changes
+
+### Build Status
+- UI Package: ❌ Failed
+- Types Package: ❌ Failed
+- Apps Status: patients:❌, doctors:❌, companies:❌, admin:❌
+
+---
