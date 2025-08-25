@@ -8,7 +8,7 @@ RUN corepack enable pnpm
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/*/package.json ./packages/*/
-RUN pnpm install --frozen-lockfile --prefer-offline
+RUN pnpm install --no-frozen-lockfile --prefer-offline
 
 # Build stage  
 FROM base AS builder

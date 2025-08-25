@@ -12,6 +12,14 @@ export interface MetricCardProps {
     value: number;
     isPositive: boolean;
     direction?: 'up' | 'down' | 'neutral';
+    label?: string;
+  };
+  status?: 'normal' | 'success' | 'warning' | 'critical';
+  realTimeUpdate?: boolean;
+  medicalContext?: {
+    isEmergency?: boolean;
+    hipaaCompliant?: boolean;
+    lastUpdated?: Date;
   };
   className?: string;
 }
@@ -23,7 +31,10 @@ export function MetricCard({
   subtitle,
   icon,
   trend,
-  className
+  status,
+  realTimeUpdate,
+  medicalContext,
+  className,
 }: MetricCardProps) {
   return (
     <Card className={cn('', className)}>
@@ -36,22 +47,20 @@ export function MetricCard({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
         {trend && (
           <div className="flex items-center pt-1">
             <span
               className={cn(
                 'text-xs font-medium',
-                trend.isPositive ? 'text-green-600' : 'text-red-600'
+                trend.isPositive ? 'text-green-600' : 'text-red-600',
               )}
             >
               {trend.isPositive ? '+' : ''}
               {trend.value}%
             </span>
             <span className="text-xs text-muted-foreground ml-1">
-              from last month
+              {trend.label || 'from last month'}
             </span>
           </div>
         )}

@@ -20,6 +20,7 @@ export interface User extends BaseEntity {
   firstName: string;
   lastName: string;
   name?: string; // Para compatibilidad con apps que usan 'name'
+  displayName?: string; // Para componentes admin
 
   // Contacto
   phone?: string;
@@ -31,6 +32,7 @@ export interface User extends BaseEntity {
 
   // Estados
   isActive: boolean;
+  status?: 'active' | 'inactive' | 'pending' | 'suspended'; // Para componentes admin
   profileComplete?: boolean;
 
   // Timestamps
