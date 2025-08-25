@@ -1,38 +1,23 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  Search, 
-  Filter, 
-  Plus,
-  MapPin,
-  Video,
-  Phone,
-  Star,
-  AlertCircle,
-  CheckCircle,
-  X,
-  ChevronDown,
-  Edit,
-  Trash2,
+import {
   ArrowLeft,
-  ArrowRight,
   Check,
   Heart,
-  Stethoscope,
-  FileText,
+  MapPin,
+  Search,
   Shield,
-  CreditCard
+  Star,
+  Stethoscope,
+  User,
+  Video,
 } from 'lucide-react';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '../../../shared-stub';
 // Tipos TypeScript
-import { Doctor } from '@altamedica/types';
+import { Doctor } from '../../../types-stub';
 
 interface AppointmentForm {
   doctorId: string;
@@ -79,7 +64,7 @@ export default function NewAppointmentPage() {
     isTelemedicine: false,
     urgency: 'normal',
     insurance: '',
-    notes: ''
+    notes: '',
   });
 
   // Especialidades médicas
@@ -88,44 +73,50 @@ export default function NewAppointmentPage() {
       id: 'cardiology',
       name: 'Cardiología',
       icon: <Heart className="w-8 h-8" />,
-      description: 'Especialidad médica que se encarga del diagnóstico y tratamiento de las enfermedades del corazón y del sistema circulatorio.',
-      commonReasons: ['Dolor en el pecho', 'Palpitaciones', 'Hipertensión', 'Chequeo cardiológico']
+      description:
+        'Especialidad médica que se encarga del diagnóstico y tratamiento de las enfermedades del corazón y del sistema circulatorio.',
+      commonReasons: ['Dolor en el pecho', 'Palpitaciones', 'Hipertensión', 'Chequeo cardiológico'],
     },
     {
       id: 'dermatology',
       name: 'Dermatología',
       icon: <Shield className="w-8 h-8" />,
-      description: 'Especialidad médica que se encarga del diagnóstico y tratamiento de las enfermedades de la piel.',
-      commonReasons: ['Erupciones cutáneas', 'Acné', 'Manchas en la piel', 'Alergias cutáneas']
+      description:
+        'Especialidad médica que se encarga del diagnóstico y tratamiento de las enfermedades de la piel.',
+      commonReasons: ['Erupciones cutáneas', 'Acné', 'Manchas en la piel', 'Alergias cutáneas'],
     },
     {
       id: 'general',
       name: 'Medicina General',
       icon: <Stethoscope className="w-8 h-8" />,
-      description: 'Atención médica integral para adultos, incluyendo prevención, diagnóstico y tratamiento.',
-      commonReasons: ['Chequeo general', 'Gripe y resfriados', 'Dolor de cabeza', 'Fatiga']
+      description:
+        'Atención médica integral para adultos, incluyendo prevención, diagnóstico y tratamiento.',
+      commonReasons: ['Chequeo general', 'Gripe y resfriados', 'Dolor de cabeza', 'Fatiga'],
     },
     {
       id: 'orthopedics',
       name: 'Ortopedia',
       icon: <User className="w-8 h-8" />,
-      description: 'Especialidad médica que se encarga del diagnóstico y tratamiento de lesiones y enfermedades del sistema musculoesquelético.',
-      commonReasons: ['Dolor de espalda', 'Lesiones deportivas', 'Artritis', 'Fracturas']
+      description:
+        'Especialidad médica que se encarga del diagnóstico y tratamiento de lesiones y enfermedades del sistema musculoesquelético.',
+      commonReasons: ['Dolor de espalda', 'Lesiones deportivas', 'Artritis', 'Fracturas'],
     },
     {
       id: 'pediatrics',
       name: 'Pediatría',
       icon: <Heart className="w-8 h-8" />,
-      description: 'Especialidad médica que se encarga del cuidado de la salud de los niños y adolescentes.',
-      commonReasons: ['Control pediátrico', 'Vacunas', 'Fiebre', 'Problemas de crecimiento']
+      description:
+        'Especialidad médica que se encarga del cuidado de la salud de los niños y adolescentes.',
+      commonReasons: ['Control pediátrico', 'Vacunas', 'Fiebre', 'Problemas de crecimiento'],
     },
     {
       id: 'psychology',
       name: 'Psicología',
       icon: <User className="w-8 h-8" />,
-      description: 'Especialidad que se encarga del estudio y tratamiento de los procesos mentales y el comportamiento humano.',
-      commonReasons: ['Ansiedad', 'Depresión', 'Estrés', 'Problemas de relación']
-    }
+      description:
+        'Especialidad que se encarga del estudio y tratamiento de los procesos mentales y el comportamiento humano.',
+      commonReasons: ['Ansiedad', 'Depresión', 'Estrés', 'Problemas de relación'],
+    },
   ];
 
   useEffect(() => {
@@ -134,9 +125,10 @@ export default function NewAppointmentPage() {
 
   useEffect(() => {
     if (selectedSpecialty) {
-      const filtered = doctors.filter(doctor => 
-        doctor.specialty.toLowerCase().includes(selectedSpecialty.toLowerCase()) &&
-        doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = doctors.filter(
+        (doctor) =>
+          doctor.specialty.toLowerCase().includes(selectedSpecialty.toLowerCase()) &&
+          doctor.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredDoctors(filtered);
     }
@@ -152,15 +144,18 @@ export default function NewAppointmentPage() {
           specialty: 'Cardiología',
           rating: 4.8,
           experience: 15,
+          isAvailable: true,
+          telemedicineAvailable: true,
           location: 'Centro Médico AltaMedica',
           avatar: '/api/placeholder/64/64',
           consultationFee: 800,
           availableSlots: ['09:00', '10:00', '11:00', '14:00', '15:00'],
-          description: 'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.',
+          description:
+            'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.',
           languages: ['Español', 'Inglés'],
           education: ['Universidad de Buenos Aires', 'Especialización en Cardiología'],
           certifications: ['Sociedad Argentina de Cardiología', 'American College of Cardiology'],
-          isTelemedicine: true
+          isTelemedicine: true,
         },
         {
           id: 'doc2',
@@ -168,15 +163,18 @@ export default function NewAppointmentPage() {
           specialty: 'Medicina General',
           rating: 4.9,
           experience: 12,
+          isAvailable: true,
+          telemedicineAvailable: true,
           location: 'Clínica Norte',
           avatar: '/api/placeholder/64/64',
           consultationFee: 600,
           availableSlots: ['08:00', '09:00', '10:00', '16:00', '17:00'],
-          description: 'Médica general con amplia experiencia en atención primaria y medicina preventiva.',
+          description:
+            'Médica general con amplia experiencia en atención primaria y medicina preventiva.',
           languages: ['Español', 'Portugués'],
           education: ['Universidad Nacional de Córdoba', 'Medicina General'],
           certifications: ['Colegio Médico de Córdoba'],
-          isTelemedicine: true
+          isTelemedicine: true,
         },
         {
           id: 'doc3',
@@ -184,15 +182,18 @@ export default function NewAppointmentPage() {
           specialty: 'Dermatología',
           rating: 4.7,
           experience: 10,
+          isAvailable: true,
+          telemedicineAvailable: false,
           location: 'Centro Dermatológico',
           avatar: '/api/placeholder/64/64',
           consultationFee: 750,
           availableSlots: ['11:00', '12:00', '15:00', '16:00'],
-          description: 'Dermatólogo especializado en el diagnóstico y tratamiento de enfermedades de la piel.',
+          description:
+            'Dermatólogo especializado en el diagnóstico y tratamiento de enfermedades de la piel.',
           languages: ['Español', 'Inglés'],
           education: ['Universidad de La Plata', 'Especialización en Dermatología'],
           certifications: ['Sociedad Argentina de Dermatología'],
-          isTelemedicine: false
+          isTelemedicine: false,
         },
         {
           id: 'doc4',
@@ -200,16 +201,19 @@ export default function NewAppointmentPage() {
           specialty: 'Psicología',
           rating: 4.6,
           experience: 8,
+          isAvailable: true,
+          telemedicineAvailable: true,
           location: 'Centro de Salud Mental',
           avatar: '/api/placeholder/64/64',
           consultationFee: 500,
           availableSlots: ['13:00', '14:00', '15:00', '16:00', '17:00'],
-          description: 'Psicóloga clínica especializada en terapia cognitivo-conductual y manejo del estrés.',
+          description:
+            'Psicóloga clínica especializada en terapia cognitivo-conductual y manejo del estrés.',
           languages: ['Español'],
           education: ['Universidad de Buenos Aires', 'Psicología Clínica'],
           certifications: ['Colegio de Psicólogos de Buenos Aires'],
-          isTelemedicine: true
-        }
+          isTelemedicine: true,
+        },
       ];
 
       setDoctors(mockDoctors);
@@ -225,34 +229,34 @@ export default function NewAppointmentPage() {
 
   const handleDoctorSelect = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       doctorId: doctor.id,
-      isTelemedicine: doctor.isTelemedicine
+      isTelemedicine: doctor.isTelemedicine || false,
     }));
     setCurrentStep(3);
   };
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
-    setFormData(prev => ({ ...prev, date }));
+    setFormData((prev) => ({ ...prev, date }));
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    setFormData(prev => ({ ...prev, time }));
+    setFormData((prev) => ({ ...prev, time }));
   };
 
   const handleFormChange = (field: keyof AppointmentForm, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       // Simulación de envío - en producción llamarías a tu API
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       setShowConfirmation(true);
       setCurrentStep(5);
     } catch (error) {
@@ -265,7 +269,10 @@ export default function NewAppointmentPage() {
   const renderStep1 = () => (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
-        <Link href="/appointments" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4">
+        <Link
+          href="/appointments"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Volver a citas
         </Link>
@@ -306,7 +313,7 @@ export default function NewAppointmentPage() {
   const renderStep2 = () => (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
-        <button 
+        <button
           onClick={() => setCurrentStep(1)}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
@@ -314,9 +321,11 @@ export default function NewAppointmentPage() {
           Cambiar especialidad
         </button>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Selecciona un médico - {specialties.find(s => s.id === selectedSpecialty)?.name}
+          Selecciona un médico - {specialties.find((s) => s.id === selectedSpecialty)?.name}
         </h2>
-        <p className="text-gray-600">Encuentra el profesional que mejor se adapte a tus necesidades</p>
+        <p className="text-gray-600">
+          Encuentra el profesional que mejor se adapte a tus necesidades
+        </p>
       </div>
 
       <div className="mb-6">
@@ -388,7 +397,7 @@ export default function NewAppointmentPage() {
   const renderStep3 = () => (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
-        <button 
+        <button
           onClick={() => setCurrentStep(2)}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
@@ -426,7 +435,7 @@ export default function NewAppointmentPage() {
               const dateStr = date.toISOString().split('T')[0];
               const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
               const dayNumber = date.getDate();
-              
+
               return (
                 <button
                   key={dateStr}
@@ -449,7 +458,7 @@ export default function NewAppointmentPage() {
         <div>
           <h3 className="text-lg font-semibold mb-4">Hora de la cita</h3>
           <div className="grid grid-cols-3 gap-2">
-            {selectedDoctor?.availableSlots.map((time) => (
+            {selectedDoctor?.availableSlots?.map((time) => (
               <button
                 key={time}
                 onClick={() => handleTimeSelect(time)}
@@ -466,7 +475,7 @@ export default function NewAppointmentPage() {
         </div>
       </div>
 
-      {(selectedDate && selectedTime) && (
+      {selectedDate && selectedTime && (
         <div className="mt-8">
           <button
             onClick={() => setCurrentStep(4)}
@@ -482,7 +491,7 @@ export default function NewAppointmentPage() {
   const renderStep4 = () => (
     <div className="max-w-2xl mx-auto p-6">
       <div className="mb-8">
-        <button 
+        <button
           onClick={() => setCurrentStep(3)}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
@@ -496,9 +505,7 @@ export default function NewAppointmentPage() {
       <div className="space-y-6">
         {/* Tipo de cita */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tipo de cita
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de cita</label>
           <select
             value={formData.type}
             onChange={(e) => handleFormChange('type', e.target.value)}
@@ -541,9 +548,7 @@ export default function NewAppointmentPage() {
 
         {/* Urgencia */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Nivel de urgencia
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Nivel de urgencia</label>
           <select
             value={formData.urgency}
             onChange={(e) => handleFormChange('urgency', e.target.value)}
@@ -624,7 +629,7 @@ export default function NewAppointmentPage() {
         <p className="text-gray-600 mb-6">
           Tu cita ha sido programada exitosamente. Recibirás una confirmación por email y SMS.
         </p>
-        
+
         <div className="bg-white p-4 rounded-lg mb-6 text-left">
           <h3 className="font-semibold text-gray-900 mb-3">Detalles de la cita</h3>
           <div className="space-y-2 text-sm">
@@ -676,24 +681,24 @@ export default function NewAppointmentPage() {
             <div className="flex items-center space-x-4">
               {[1, 2, 3, 4].map((step) => (
                 <div key={step} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    currentStep >= step
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
                     {currentStep > step ? <Check className="w-4 h-4" /> : step}
                   </div>
                   {step < 4 && (
-                    <div className={`w-12 h-1 mx-2 ${
-                      currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
-                    }`} />
+                    <div
+                      className={`w-12 h-1 mx-2 ${
+                        currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                    />
                   )}
                 </div>
               ))}
             </div>
-            <div className="text-sm text-gray-600">
-              Paso {currentStep} de 4
-            </div>
+            <div className="text-sm text-gray-600">Paso {currentStep} de 4</div>
           </div>
         </div>
       </div>
@@ -708,4 +713,4 @@ export default function NewAppointmentPage() {
       </div>
     </div>
   );
-} 
+}

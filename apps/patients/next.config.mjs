@@ -22,6 +22,7 @@ const config = withProfile(
       '@altamedica/api-client',
       '@altamedica/hooks',
       '@altamedica/auth', // Transpile auth package to handle 'use client' directive
+      '@altamedica/ui', // Agregar UI package para resolver componentes
     ],
     images: {
       domains: [
