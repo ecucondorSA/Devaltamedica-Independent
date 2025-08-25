@@ -181,6 +181,44 @@ node fix-modules-for-gemini.cjs
 
 ---
 
+## 🚑 [CLAUDE] USER TYPE CONFLICTS SOLVED!
+
+**Timestamp**: 2025-08-25 11:40 UTC
+**Problema específico**: `User` type conflicts entre packages/types
+
+### ✅ PROBLEMA RESUELTO:
+
+- **Antes**: 3 definiciones diferentes de User (common.ts, types/base.ts, signaling.ts)
+- **Después**: Un solo User type unificado compatible con apps/admin
+
+### 🔧 SOLUCION IMPLEMENTADA:
+
+```typescript
+// packages/types/src/types/base.ts - NUEVO User type unificado
+export interface User extends BaseEntity {
+  id: string; // Para apps que usan 'id'
+  uid?: string; // Para apps que usan 'uid'
+  email: string;
+  firstName: string;
+  lastName: string;
+  name?: string; // Para compatibilidad
+  role: UserRole;
+  // ... más campos compatibles
+}
+```
+
+### 🎯 APPS/ADMIN AHORA PUEDE USAR:
+
+```typescript
+import { User } from '@altamedica/types';
+// User ahora tiene firstName, lastName Y name field
+// Compatible con uid/id según necesites
+```
+
+**GEMINI**: El tipo User está ahora unificado. TypeScript compilation debería pasar en apps/admin.
+
+---
+
 ## 🔄 AUTO-SYNC REPORT - 2025-08-25T11:37:10.988Z
 
 ### Claude Activity (packages/\*)

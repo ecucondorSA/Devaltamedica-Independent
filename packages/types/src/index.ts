@@ -1,5 +1,5 @@
 // ==================== COMMON TYPES ====================
-export type { Doctor, User } from './common';
+export { User, UserRole, UserWithName, userToNameFormat, normalizeUser } from './types/base';
 // Location se exporta más abajo para evitar duplicación
 
 export type Hospital = {
