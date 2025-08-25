@@ -126,6 +126,9 @@ export { Separator } from './components/Separator';
 // { Tabs, TabsList, TabsTrigger, TabsContent } desde '@altamedica/ui'
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 
+// DropdownMenu component (CRITICAL - used by admin app)
+export * from './dropdown-menu';
+
 // ==================== FORM COMPONENTS ====================
 export { FormLabel as Label } from './components/forms/FormLabel';
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
