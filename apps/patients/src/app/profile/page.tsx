@@ -1,19 +1,8 @@
-"use client";
+'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState } from "react";
 import { logger } from '@altamedica/shared/services/logger.service';
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  Edit,
-  Save,
-  X,
-  Camera,
-} from "lucide-react";
+import { Camera, Edit, MapPin, Phone, Save, User, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface PatientProfile {
   id: string;
@@ -22,7 +11,7 @@ interface PatientProfile {
   email: string;
   phone: string;
   dateOfBirth: string;
-  gender: "male" | "female" | "other";
+  gender: 'male' | 'female' | 'other';
   address: {
     street: string;
     city: string;
@@ -47,30 +36,30 @@ interface PatientProfile {
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<PatientProfile>({
-    id: "1",
-    firstName: "María",
-    lastName: "González",
-    email: "maria.gonzalez@email.com",
-    phone: "+52 55 1234 5678",
-    dateOfBirth: "1985-03-15",
-    gender: "female",
+    id: '1',
+    firstName: 'María',
+    lastName: 'González',
+    email: 'maria.gonzalez@email.com',
+    phone: '+52 55 1234 5678',
+    dateOfBirth: '1985-03-15',
+    gender: 'female',
     address: {
-      street: "Av. Insurgentes Sur 1234",
-      city: "Ciudad de México",
-      state: "CDMX",
-      zipCode: "03100",
-      country: "México",
+      street: 'Av. Insurgentes Sur 1234',
+      city: 'Ciudad de México',
+      state: 'CDMX',
+      zipCode: '03100',
+      country: 'México',
     },
     emergencyContact: {
-      name: "Carlos González",
-      relationship: "Esposo",
-      phone: "+52 55 9876 5432",
+      name: 'Carlos González',
+      relationship: 'Esposo',
+      phone: '+52 55 9876 5432',
     },
     medicalInfo: {
-      bloodType: "O+",
-      allergies: ["Penicilina", "Polen"],
-      chronicConditions: ["Hipertensión"],
-      medications: ["Losartán 50mg", "Aspirina 100mg"],
+      bloodType: 'O+',
+      allergies: ['Penicilina', 'Polen'],
+      chronicConditions: ['Hipertensión'],
+      medications: ['Losartán 50mg', 'Aspirina 100mg'],
     },
   });
 
@@ -83,7 +72,7 @@ export default function ProfilePage() {
       setProfile(editedProfile);
       setIsEditing(false);
     } catch (error) {
-      logger.error("Error al guardar perfil:", error);
+      logger.error('Error al guardar perfil: ' + String(error));
     }
   };
 
@@ -127,9 +116,7 @@ export default function ProfilePage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mi Perfil</h1>
-          <p className="text-gray-600">
-            Gestiona tu información personal y médica
-          </p>
+          <p className="text-gray-600">Gestiona tu información personal y médica</p>
         </div>
         <div className="flex gap-2">
           {isEditing ? (
@@ -189,24 +176,18 @@ export default function ProfilePage() {
                 <h2 className="text-xl font-semibold text-gray-900">
                   {currentProfile.firstName} {currentProfile.lastName}
                 </h2>
-                <p className="text-gray-600">
-                  Paciente ID: {currentProfile.id}
-                </p>
+                <p className="text-gray-600">Paciente ID: {currentProfile.id}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nombre
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.firstName}
-                    onChange={(e) =>
-                      handleInputChange("firstName", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -214,16 +195,12 @@ export default function ProfilePage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Apellido
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.lastName}
-                    onChange={(e) =>
-                      handleInputChange("lastName", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -231,14 +208,12 @@ export default function ProfilePage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 {isEditing ? (
                   <input
                     type="email"
                     value={currentProfile.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -246,14 +221,12 @@ export default function ProfilePage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Teléfono
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
                 {isEditing ? (
                   <input
                     type="tel"
                     value={currentProfile.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -268,29 +241,21 @@ export default function ProfilePage() {
                   <input
                     type="date"
                     value={currentProfile.dateOfBirth}
-                    onChange={(e) =>
-                      handleInputChange("dateOfBirth", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
                   <p className="text-gray-900">
-                    {new Date(currentProfile.dateOfBirth).toLocaleDateString(
-                      "es-ES"
-                    )}
+                    {new Date(currentProfile.dateOfBirth).toLocaleDateString('es-ES')}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Género
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Género</label>
                 {isEditing ? (
                   <select
                     value={currentProfile.gender}
-                    onChange={(e) =>
-                      handleInputChange("gender", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('gender', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="male">Masculino</option>
@@ -299,11 +264,11 @@ export default function ProfilePage() {
                   </select>
                 ) : (
                   <p className="text-gray-900">
-                    {currentProfile.gender === "male"
-                      ? "Masculino"
-                      : currentProfile.gender === "female"
-                        ? "Femenino"
-                        : "Otro"}
+                    {currentProfile.gender === 'male'
+                      ? 'Masculino'
+                      : currentProfile.gender === 'female'
+                        ? 'Femenino'
+                        : 'Otro'}
                   </p>
                 )}
               </div>
@@ -318,35 +283,25 @@ export default function ProfilePage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Calle
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Calle</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.address.street}
-                    onChange={(e) =>
-                      handleAddressChange("street", e.target.value)
-                    }
+                    onChange={(e) => handleAddressChange('street', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.address.street}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.address.street}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Ciudad
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.address.city}
-                    onChange={(e) =>
-                      handleAddressChange("city", e.target.value)
-                    }
+                    onChange={(e) => handleAddressChange('city', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
@@ -354,22 +309,16 @@ export default function ProfilePage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Estado
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.address.state}
-                    onChange={(e) =>
-                      handleAddressChange("state", e.target.value)
-                    }
+                    onChange={(e) => handleAddressChange('state', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.address.state}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.address.state}</p>
                 )}
               </div>
               <div>
@@ -380,15 +329,11 @@ export default function ProfilePage() {
                   <input
                     type="text"
                     value={currentProfile.address.zipCode}
-                    onChange={(e) =>
-                      handleAddressChange("zipCode", e.target.value)
-                    }
+                    onChange={(e) => handleAddressChange('zipCode', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.address.zipCode}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.address.zipCode}</p>
                 )}
               </div>
             </div>
@@ -402,63 +347,42 @@ export default function ProfilePage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nombre
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.emergencyContact.name}
-                    onChange={(e) =>
-                      handleEmergencyContactChange("name", e.target.value)
-                    }
+                    onChange={(e) => handleEmergencyContactChange('name', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.emergencyContact.name}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.emergencyContact.name}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Relación
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Relación</label>
                 {isEditing ? (
                   <input
                     type="text"
                     value={currentProfile.emergencyContact.relationship}
-                    onChange={(e) =>
-                      handleEmergencyContactChange(
-                        "relationship",
-                        e.target.value
-                      )
-                    }
+                    onChange={(e) => handleEmergencyContactChange('relationship', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.emergencyContact.relationship}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.emergencyContact.relationship}</p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Teléfono
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
                 {isEditing ? (
                   <input
                     type="tel"
                     value={currentProfile.emergencyContact.phone}
-                    onChange={(e) =>
-                      handleEmergencyContactChange("phone", e.target.value)
-                    }
+                    onChange={(e) => handleEmergencyContactChange('phone', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <p className="text-gray-900">
-                    {currentProfile.emergencyContact.phone}
-                  </p>
+                  <p className="text-gray-900">{currentProfile.emergencyContact.phone}</p>
                 )}
               </div>
             </div>
@@ -468,40 +392,30 @@ export default function ProfilePage() {
         {/* Información Médica */}
         <div className="space-y-6">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Información Médica
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Información Médica</h3>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Tipo de Sangre
                 </label>
-                <p className="text-gray-900">
-                  {currentProfile.medicalInfo.bloodType}
-                </p>
+                <p className="text-gray-900">{currentProfile.medicalInfo.bloodType}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Alergias
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Alergias</label>
                 <div className="space-y-1">
                   {currentProfile.medicalInfo.allergies.length > 0 ? (
-                    currentProfile.medicalInfo.allergies.map(
-                      (allergy, index) => (
-                        <span
-                          key={index}
-                          className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mr-2 mb-1"
-                        >
-                          {allergy}
-                        </span>
-                      )
-                    )
+                    currentProfile.medicalInfo.allergies.map((allergy, index) => (
+                      <span
+                        key={index}
+                        className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mr-2 mb-1"
+                      >
+                        {allergy}
+                      </span>
+                    ))
                   ) : (
-                    <p className="text-gray-500 text-sm">
-                      Ninguna alergia registrada
-                    </p>
+                    <p className="text-gray-500 text-sm">Ninguna alergia registrada</p>
                   )}
                 </div>
               </div>
@@ -512,20 +426,16 @@ export default function ProfilePage() {
                 </label>
                 <div className="space-y-1">
                   {currentProfile.medicalInfo.chronicConditions.length > 0 ? (
-                    currentProfile.medicalInfo.chronicConditions.map(
-                      (condition, index) => (
-                        <span
-                          key={index}
-                          className="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full mr-2 mb-1"
-                        >
-                          {condition}
-                        </span>
-                      )
-                    )
+                    currentProfile.medicalInfo.chronicConditions.map((condition, index) => (
+                      <span
+                        key={index}
+                        className="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full mr-2 mb-1"
+                      >
+                        {condition}
+                      </span>
+                    ))
                   ) : (
-                    <p className="text-gray-500 text-sm">
-                      Ninguna condición crónica registrada
-                    </p>
+                    <p className="text-gray-500 text-sm">Ninguna condición crónica registrada</p>
                   )}
                 </div>
               </div>
@@ -536,20 +446,16 @@ export default function ProfilePage() {
                 </label>
                 <div className="space-y-1">
                   {currentProfile.medicalInfo.medications.length > 0 ? (
-                    currentProfile.medicalInfo.medications.map(
-                      (medication, index) => (
-                        <span
-                          key={index}
-                          className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full mr-2 mb-1"
-                        >
-                          {medication}
-                        </span>
-                      )
-                    )
+                    currentProfile.medicalInfo.medications.map((medication, index) => (
+                      <span
+                        key={index}
+                        className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full mr-2 mb-1"
+                      >
+                        {medication}
+                      </span>
+                    ))
                   ) : (
-                    <p className="text-gray-500 text-sm">
-                      Ningún medicamento registrado
-                    </p>
+                    <p className="text-gray-500 text-sm">Ningún medicamento registrado</p>
                   )}
                 </div>
               </div>
@@ -558,9 +464,7 @@ export default function ProfilePage() {
 
           {/* Acciones Rápidas */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Acciones Rápidas
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h3>
             <div className="space-y-2">
               <button className="w-full text-left px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md">
                 Actualizar información médica

@@ -11,6 +11,9 @@ export const useAuth = () => ({
   },
   isAuthenticated: true,
   isLoading: false,
+  logout: () => {
+    console.log('Stub logout called');
+  },
 });
 
 export type User = {

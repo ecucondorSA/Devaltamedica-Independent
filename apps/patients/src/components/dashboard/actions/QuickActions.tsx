@@ -1,6 +1,5 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState } from 'react';
 
 import { logger } from '@altamedica/shared/services/logger.service';
@@ -23,7 +22,7 @@ interface QuickAction {
 const QuickActions: React.FC<QuickActionsProps> = ({
   patientId,
   onEmergency,
-  onActionComplete
+  onActionComplete,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [confirmAction, setConfirmAction] = useState<QuickAction | null>(null);
@@ -43,7 +42,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       setShowMenu(false);
       setConfirmAction(null);
     } catch (error) {
-      logger.error('Error ejecutando acción:', error);
+      logger.error('Error ejecutando acción:', error as string);
     } finally {
       setIsProcessing(false);
     }
@@ -60,7 +59,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       confirmationMessage: '¿Está seguro de activar el protocolo de emergencia?',
       action: () => {
         onEmergency?.();
-      }
+      },
     },
     {
       id: 'call-doctor',
@@ -70,7 +69,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       action: async () => {
         // Simular llamada
         logger.info('Iniciando llamada al médico...');
-      }
+      },
     },
     {
       id: 'request-appointment',
@@ -80,7 +79,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       action: async () => {
         // Abrir modal de solicitud de cita
         logger.info('Abriendo solicitud de cita...');
-      }
+      },
     },
     {
       id: 'send-message',
@@ -90,7 +89,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       action: async () => {
         // Abrir chat del equipo
         logger.info('Abriendo chat del equipo...');
-      }
+      },
     },
     {
       id: 'request-medication',
@@ -100,7 +99,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       action: async () => {
         // Abrir formulario de solicitud
         logger.info('Solicitando medicamento...');
-      }
+      },
     },
     {
       id: 'download-records',
@@ -110,8 +109,8 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       action: async () => {
         // Descargar expediente
         logger.info('Descargando expediente médico...');
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -124,7 +123,12 @@ const QuickActions: React.FC<QuickActionsProps> = ({
           title="Acciones rápidas"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
           </svg>
         </button>
 
@@ -132,17 +136,14 @@ const QuickActions: React.FC<QuickActionsProps> = ({
         {showMenu && (
           <>
             {/* Overlay para cerrar el menú */}
-            <div 
-              className="fixed inset-0 z-40" 
-              onClick={() => setShowMenu(false)}
-            />
-            
+            <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+
             {/* Menú de acciones */}
             <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
               <div className="p-3 bg-gray-50 border-b border-gray-200">
                 <h3 className="font-semibold text-gray-900">Acciones Rápidas</h3>
               </div>
-              
+
               <div className="p-2">
                 {quickActions.map((action) => (
                   <button
@@ -171,13 +172,9 @@ const QuickActions: React.FC<QuickActionsProps> = ({
           <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6">
             <div className="text-center">
               <span className="text-4xl block mb-4">{confirmAction.icon}</span>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                {confirmAction.label}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {confirmAction.confirmationMessage}
-              </p>
-              
+              <h3 className="text-lg font-bold text-gray-900 mb-2">{confirmAction.label}</h3>
+              <p className="text-gray-600 mb-6">{confirmAction.confirmationMessage}</p>
+
               <div className="flex space-x-3">
                 <button
                   onClick={() => setConfirmAction(null)}
@@ -201,4 +198,4 @@ const QuickActions: React.FC<QuickActionsProps> = ({
   );
 };
 
-export default QuickActions; 
+export default QuickActions;

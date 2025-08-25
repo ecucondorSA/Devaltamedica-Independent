@@ -7,7 +7,7 @@ import PatientDetailCard from '../../../components/patients/PatientDetailCard';
 
 export default function PatientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { patient, loading, error } = usePatient(id);
+  const { data: patient, isLoading: loading, error } = usePatient();
   const router = useRouter();
 
   if (loading) return <div className="text-center py-12">Cargando paciente...</div>;
@@ -20,7 +20,7 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
         &larr; Volver
       </button>
       <div className="max-w-2xl mx-auto">
-        <PatientDetailCard patient={patient} />
+        {/* <PatientDetailCard patient={patient} />
         <div className="flex flex-wrap gap-4 mt-6">
           <button
             className="btn-primary"
@@ -40,6 +40,9 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
           >
             Ver prescripciones
           </button>
+        </div> */}
+        <div className="text-center py-12">
+          <p>Página de detalle del paciente temporalmente deshabilitada</p>
         </div>
       </div>
     </div>

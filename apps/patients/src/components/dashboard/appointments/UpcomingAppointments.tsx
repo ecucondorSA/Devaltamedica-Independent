@@ -1,9 +1,25 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useMemo } from 'react';
-import { Appointment } from '../../../types/medical-types';
-import { formatDate } from '../../../utils/medical-helpers';
+import React, { useMemo, useState } from 'react';
+
+interface Appointment {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  doctorName: string;
+  specialty: string;
+  date: string | Date;
+  time: string;
+  duration: number;
+  type: 'consultation' | 'follow-up' | 'procedure' | 'emergency' | 'telemedicine';
+  status: 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  notes?: string;
+  location?: string;
+  roomNumber?: string;
+  isVirtual?: boolean;
+  reason?: string;
+  preparationInstructions?: string;
+}
 
 interface UpcomingAppointmentsProps {
   appointments: Appointment[];
@@ -22,7 +38,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
   allowScheduling = false,
   onAppointmentClick,
   onReschedule,
-  onCancel
+  onCancel,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
@@ -31,39 +47,40 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
 
   // Clasificar citas
   const now = new Date();
-  const upcomingAppointments = appointments.filter(apt => 
-    new Date(apt.date) >= now && apt.status !== 'cancelled'
+  const upcomingAppointments = appointments.filter(
+    (apt) => new Date(apt.date) >= now && apt.status !== 'cancelled',
   );
-  const pastAppointments = appointments.filter(apt => 
-    new Date(apt.date) < now || apt.status === 'completed'
+  const pastAppointments = appointments.filter(
+    (apt) => new Date(apt.date) < now || apt.status === 'completed',
   );
-  const todayAppointments = upcomingAppointments.filter(apt => {
+  const todayAppointments = upcomingAppointments.filter((apt) => {
     const aptDate = new Date(apt.date);
     return aptDate.toDateString() === now.toDateString();
   });
 
   // Obtener especialidades únicas
   const specialties = useMemo(() => {
-    const uniqueSpecialties = new Set(appointments.map(apt => apt.specialty));
+    const uniqueSpecialties = new Set(appointments.map((apt) => apt.specialty));
     return Array.from(uniqueSpecialties);
   }, [appointments]);
 
   // Filtrar citas por especialidad
-  const filteredAppointments = filterSpecialty === 'all' 
-    ? upcomingAppointments 
-    : upcomingAppointments.filter(apt => apt.specialty === filterSpecialty);
+  const filteredAppointments =
+    filterSpecialty === 'all'
+      ? upcomingAppointments
+      : upcomingAppointments.filter((apt) => apt.specialty === filterSpecialty);
 
   // Obtener próxima cita
   const nextAppointment = upcomingAppointments[0];
 
   // Estilos para tipos de cita
-  const getAppointmentTypeStyle = (type: string) => {
-    const styles = {
+  const getAppointmentTypeStyle = (type: Appointment['type']) => {
+    const styles: Record<Appointment['type'], { bg: string; text: string; icon: string }> = {
       consultation: { bg: 'bg-blue-100', text: 'text-blue-800', icon: '👨‍⚕️' },
       'follow-up': { bg: 'bg-green-100', text: 'text-green-800', icon: '🔄' },
       procedure: { bg: 'bg-purple-100', text: 'text-purple-800', icon: '🏥' },
       emergency: { bg: 'bg-red-100', text: 'text-red-800', icon: '🚨' },
-      telemedicine: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: '💻' }
+      telemedicine: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: '💻' },
     };
     return styles[type] || styles.consultation;
   };
@@ -94,9 +111,11 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
         ) : (
           <div className="space-y-3">
             {upcomingAppointments.slice(0, 3).map((apt) => {
-              const daysUntil = Math.ceil((new Date(apt.date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+              const daysUntil = Math.ceil(
+                (new Date(apt.date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+              );
               const typeStyle = getAppointmentTypeStyle(apt.type);
-              
+
               return (
                 <button
                   key={apt.id}
@@ -110,9 +129,16 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                         <p className="font-medium text-gray-900">{apt.doctorName}</p>
                         <p className="text-sm text-gray-600">{apt.specialty}</p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {formatDate(apt.date, 'full')} - {new Date(apt.date).toLocaleTimeString('es-MX', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                          {new Date(apt.date).toLocaleDateString('es-MX', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}{' '}
+                          -{' '}
+                          {new Date(apt.date).toLocaleTimeString('es-MX', {
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                         </p>
                       </div>
@@ -125,14 +151,16 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                         <span className="text-xs font-medium text-orange-600">Mañana</span>
                       )}
                       {daysUntil > 1 && daysUntil <= 7 && (
-                        <span className="text-xs font-medium text-blue-600">En {daysUntil} días</span>
+                        <span className="text-xs font-medium text-blue-600">
+                          En {daysUntil} días
+                        </span>
                       )}
                     </div>
                   </div>
                 </button>
               );
             })}
-            
+
             {upcomingAppointments.length > 3 && (
               <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                 Ver {upcomingAppointments.length - 3} citas más...
@@ -154,20 +182,24 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             <h2 className="text-xl font-bold text-gray-900">Gestión de Citas Médicas</h2>
             <p className="text-sm text-gray-600 mt-1">
               {todayAppointments.length > 0 && (
-                <span className="text-blue-600 font-medium">{todayAppointments.length} cita{todayAppointments.length > 1 ? 's' : ''} hoy • </span>
+                <span className="text-blue-600 font-medium">
+                  {todayAppointments.length} cita{todayAppointments.length > 1 ? 's' : ''} hoy
+                  •{' '}
+                </span>
               )}
-              {upcomingAppointments.length} cita{upcomingAppointments.length !== 1 ? 's' : ''} próxima{upcomingAppointments.length !== 1 ? 's' : ''}
+              {upcomingAppointments.length} cita{upcomingAppointments.length !== 1 ? 's' : ''}{' '}
+              próxima{upcomingAppointments.length !== 1 ? 's' : ''}
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             {showCalendar && (
               <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode('list')}
                   className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                    viewMode === 'list' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                    viewMode === 'list'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
@@ -176,8 +208,8 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                 <button
                   onClick={() => setViewMode('calendar')}
                   className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                    viewMode === 'calendar' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                    viewMode === 'calendar'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
@@ -185,7 +217,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                 </button>
               </div>
             )}
-            
+
             {allowScheduling && (
               <button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                 <span className="mr-2">➕</span>
@@ -208,9 +240,16 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                   {nextAppointment.doctorName} - {nextAppointment.specialty}
                 </p>
                 <p className="text-sm text-gray-700">
-                  {formatDate(nextAppointment.date, 'full')} a las {new Date(nextAppointment.date).toLocaleTimeString('es-MX', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                  {new Date(nextAppointment.date).toLocaleDateString('es-MX', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}{' '}
+                  a las{' '}
+                  {new Date(nextAppointment.date).toLocaleTimeString('es-MX', {
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })}
                 </p>
               </div>
@@ -234,11 +273,13 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todas las especialidades</option>
-              {specialties.map(specialty => (
-                <option key={specialty} value={specialty}>{specialty}</option>
+              {specialties.map((specialty) => (
+                <option key={specialty} value={specialty}>
+                  {specialty}
+                </option>
               ))}
             </select>
-            
+
             <button
               onClick={() => setShowPastAppointments(!showPastAppointments)}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -250,7 +291,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
               Mostrar pasadas ({pastAppointments.length})
             </button>
           </div>
-          
+
           <div className="text-sm text-gray-600">
             {filteredAppointments.length} resultado{filteredAppointments.length !== 1 ? 's' : ''}
           </div>
@@ -270,7 +311,7 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
                 onClick={() => onAppointmentClick?.(apt)}
               />
             ))}
-            
+
             {showPastAppointments && pastAppointments.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">
@@ -303,17 +344,28 @@ const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({
             <div>
               <span className="text-gray-600">Este mes:</span>
               <span className="ml-1 font-medium text-gray-900">
-                {appointments.filter(apt => {
-                  const aptDate = new Date(apt.date);
-                  return aptDate.getMonth() === now.getMonth() && aptDate.getFullYear() === now.getFullYear();
-                }).length} citas
+                {
+                  appointments.filter((apt) => {
+                    const aptDate = new Date(apt.date);
+                    return (
+                      aptDate.getMonth() === now.getMonth() &&
+                      aptDate.getFullYear() === now.getFullYear()
+                    );
+                  }).length
+                }{' '}
+                citas
               </span>
             </div>
             <div className="w-px h-4 bg-gray-300"></div>
             <div>
               <span className="text-gray-600">Asistencia:</span>
               <span className="ml-1 font-medium text-green-600">
-                {Math.round((appointments.filter(apt => apt.status === 'completed').length / appointments.length) * 100)}%
+                {Math.round(
+                  (appointments.filter((apt) => apt.status === 'completed').length /
+                    appointments.length) *
+                    100,
+                )}
+                %
               </span>
             </div>
           </div>
@@ -339,7 +391,7 @@ const AppointmentCard: React.FC<{
     'follow-up': { bg: 'bg-green-100', text: 'text-green-800', icon: '🔄' },
     procedure: { bg: 'bg-purple-100', text: 'text-purple-800', icon: '🏥' },
     emergency: { bg: 'bg-red-100', text: 'text-red-800', icon: '🚨' },
-    telemedicine: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: '💻' }
+    telemedicine: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: '💻' },
   }[appointment.type] || { bg: 'bg-gray-100', text: 'text-gray-800', icon: '📅' };
 
   const statusStyle = {
@@ -348,11 +400,11 @@ const AppointmentCard: React.FC<{
     'in-progress': { text: 'text-yellow-600', label: 'En progreso' },
     completed: { text: 'text-gray-600', label: 'Completada' },
     cancelled: { text: 'text-red-600', label: 'Cancelada' },
-    'no-show': { text: 'text-orange-600', label: 'No asistió' }
+    'no-show': { text: 'text-orange-600', label: 'No asistió' },
   }[appointment.status];
 
   return (
-    <div 
+    <div
       className={`border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer ${
         isPast ? 'border-gray-200 bg-gray-50' : 'border-gray-300 bg-white'
       }`}
@@ -363,7 +415,7 @@ const AppointmentCard: React.FC<{
           <div className={`p-3 rounded-lg ${typeStyle.bg}`}>
             <span className="text-2xl">{typeStyle.icon}</span>
           </div>
-          
+
           <div className="flex-1">
             <div className="flex items-center space-x-2">
               <h4 className="font-semibold text-gray-900">{appointment.doctorName}</h4>
@@ -376,51 +428,81 @@ const AppointmentCard: React.FC<{
                 </span>
               )}
             </div>
-            
+
             <p className="text-sm text-gray-600 mt-1">{appointment.specialty}</p>
-            
+
             <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
               <span className="flex items-center">
                 <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
-                {formatDate(appointment.date, 'short')}
+                {new Date(appointment.date).toLocaleDateString('es-MX', {
+                  month: 'short',
+                  day: 'numeric',
+                })}
               </span>
               <span className="flex items-center">
                 <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                {new Date(appointment.date).toLocaleTimeString('es-MX', { 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
+                {new Date(appointment.date).toLocaleTimeString('es-MX', {
+                  hour: '2-digit',
+                  minute: '2-digit',
                 })}
               </span>
               {appointment.location && (
                 <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                   {appointment.location}
                 </span>
               )}
             </div>
-            
+
             {appointment.reason && (
               <p className="mt-2 text-sm text-gray-700 bg-gray-50 p-2 rounded">
                 Motivo: {appointment.reason}
               </p>
             )}
-            
+
             {appointment.preparationInstructions && (
               <div className="mt-2 p-2 bg-yellow-50 rounded-lg">
                 <p className="text-xs font-medium text-yellow-800">Preparación requerida:</p>
-                <p className="text-xs text-yellow-700 mt-1">{appointment.preparationInstructions}</p>
+                <p className="text-xs text-yellow-700 mt-1">
+                  {appointment.preparationInstructions}
+                </p>
               </div>
             )}
           </div>
         </div>
-        
+
         {!isPast && appointment.status !== 'cancelled' && appointment.status !== 'completed' && (
           <div className="flex items-center space-x-2">
             {onReschedule && (
@@ -433,7 +515,12 @@ const AppointmentCard: React.FC<{
                 title="Reprogramar"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
               </button>
             )}
@@ -447,7 +534,12 @@ const AppointmentCard: React.FC<{
                 title="Cancelar"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             )}
@@ -458,4 +550,4 @@ const AppointmentCard: React.FC<{
   );
 };
 
-export default UpcomingAppointments; 
+export default UpcomingAppointments;

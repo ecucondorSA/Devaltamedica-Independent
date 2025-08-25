@@ -17,10 +17,10 @@ export default function Home() {
   const searchParams = useSearchParams();
   const { labResults, loading: labsLoading, error: labsError, searchLabResults } = useLabResults();
   const {
-    prescriptions,
-    loading: rxLoading,
+    data: prescriptions,
+    isLoading: rxLoading,
     error: rxError,
-    searchPrescriptions,
+    refetch: searchPrescriptions,
   } = usePrescriptions();
   const hasEmergency = useMemo(() => searchParams.get('emergency') === '1', [searchParams]);
 
@@ -200,8 +200,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Recetas médicas */}
-        <section className="bg-white rounded-xl border shadow-sm p-4">
+        {/* Recetas médicas - Temporalmente comentado por incompatibilidad de tipos */}
+        {/* <section className="bg-white rounded-xl border shadow-sm p-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">Recetas médicas</h3>
             <Link href="/prescriptions" className="text-xs text-primary-700 hover:underline">
@@ -235,7 +235,7 @@ export default function Home() {
               Ver QR
             </button>
           </div>
-        </section>
+        </section> */}
 
         {/* Recomendaciones de descanso */}
         <section className="bg-white rounded-xl border shadow-sm p-4">

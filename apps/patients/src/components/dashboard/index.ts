@@ -23,16 +23,16 @@ export { default as TeamCommunication } from './communication/TeamCommunication'
 export { default as MedicalDocuments } from './documents/MedicalDocuments';
 
 // ✅ Tipos de datos desde package central
-export type {
-  Patient,
-  VitalSigns,
-  Medication,
-  Appointment,
-  LabResult
-} from '@altamedica/types';
+// export type {
+//   Patient,
+//   VitalSigns,
+//   Medication,
+//   Appointment,
+//   LabResult
+// } from '@altamedica/types';
 
 // Utilidades
-export {
-  formatDate,
-  calculateBMI
-} from '../../utils/medical-helpers'; 
+// export {
+//   formatDate,
+//   calculateBMI
+// } from '../../utils/medical-helpers';

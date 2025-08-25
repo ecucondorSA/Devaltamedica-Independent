@@ -1,54 +1,53 @@
-"use client";
+'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
-import { useRouter } from "next/navigation";
-import { User, Stethoscope, Building, ArrowRight } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { User, Stethoscope, Building, ArrowRight } from 'lucide-react';
 
 export default function SelectRolePage() {
   const router = useRouter();
 
   const roles = [
     {
-      id: "patient",
-      title: "Paciente",
-      description:
-        "Accede a tu información médica, agenda citas y gestiona tu salud",
+      id: 'patient',
+      title: 'Paciente',
+      description: 'Accede a tu información médica, agenda citas y gestiona tu salud',
       icon: User,
-      color: "blue",
+      color: 'blue',
       features: [
-        "Historial médico completo",
-        "Agenda de citas",
-        "Resultados de laboratorio",
-        "Prescripciones digitales",
-        "Telemedicina",
+        'Historial médico completo',
+        'Agenda de citas',
+        'Resultados de laboratorio',
+        'Prescripciones digitales',
+        'Telemedicina',
       ],
     },
     {
-      id: "doctor",
-      title: "Médico",
-      description: "Gestiona tus pacientes, agenda y práctica médica",
+      id: 'doctor',
+      title: 'Médico',
+      description: 'Gestiona tus pacientes, agenda y práctica médica',
       icon: Stethoscope,
-      color: "green",
+      color: 'green',
       features: [
-        "Gestión de pacientes",
-        "Agenda médica",
-        "Historiales clínicos",
-        "Prescripciones",
-        "Telemedicina",
+        'Gestión de pacientes',
+        'Agenda médica',
+        'Historiales clínicos',
+        'Prescripciones',
+        'Telemedicina',
       ],
     },
     {
-      id: "company",
-      title: "Empresa Médica",
-      description: "Administra tu institución médica y equipo",
+      id: 'company',
+      title: 'Empresa Médica',
+      description: 'Administra tu institución médica y equipo',
       icon: Building,
-      color: "purple",
+      color: 'purple',
       features: [
-        "Gestión de médicos",
-        "Reportes y analytics",
-        "Facturación",
-        "Configuración institucional",
-        "Dashboard empresarial",
+        'Gestión de médicos',
+        'Reportes y analytics',
+        'Facturación',
+        'Configuración institucional',
+        'Dashboard empresarial',
       ],
     },
   ];
@@ -59,37 +58,37 @@ export default function SelectRolePage() {
 
   const getColorClasses = (color: string) => {
     switch (color) {
-      case "blue":
+      case 'blue':
         return {
-          bg: "bg-blue-50",
-          border: "border-blue-200",
-          hover: "hover:border-blue-300 hover:bg-blue-100",
-          icon: "text-blue-600",
-          button: "bg-blue-600 hover:bg-blue-700",
+          bg: 'bg-blue-50',
+          border: 'border-blue-200',
+          hover: 'hover:border-blue-300 hover:bg-blue-100',
+          icon: 'text-blue-600',
+          button: 'bg-blue-600 hover:bg-blue-700',
         };
-      case "green":
+      case 'green':
         return {
-          bg: "bg-green-50",
-          border: "border-green-200",
-          hover: "hover:border-green-300 hover:bg-green-100",
-          icon: "text-green-600",
-          button: "bg-green-600 hover:bg-green-700",
+          bg: 'bg-green-50',
+          border: 'border-green-200',
+          hover: 'hover:border-green-300 hover:bg-green-100',
+          icon: 'text-green-600',
+          button: 'bg-green-600 hover:bg-green-700',
         };
-      case "purple":
+      case 'purple':
         return {
-          bg: "bg-purple-50",
-          border: "border-purple-200",
-          hover: "hover:border-purple-300 hover:bg-purple-100",
-          icon: "text-purple-600",
-          button: "bg-purple-600 hover:bg-purple-700",
+          bg: 'bg-purple-50',
+          border: 'border-purple-200',
+          hover: 'hover:border-purple-300 hover:bg-purple-100',
+          icon: 'text-purple-600',
+          button: 'bg-purple-600 hover:bg-purple-700',
         };
       default:
         return {
-          bg: "bg-gray-50",
-          border: "border-gray-200",
-          hover: "hover:border-gray-300 hover:bg-gray-100",
-          icon: "text-gray-600",
-          button: "bg-gray-600 hover:bg-gray-700",
+          bg: 'bg-gray-50',
+          border: 'border-gray-200',
+          hover: 'hover:border-gray-300 hover:bg-gray-100',
+          icon: 'text-gray-600',
+          button: 'bg-gray-600 hover:bg-gray-700',
         };
     }
   };
@@ -99,12 +98,9 @@ export default function SelectRolePage() {
       <div className="w-full max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-800 mb-4">
-            ¡Bienvenido a Altamedica!
-          </h1>
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">¡Bienvenido a Altamedica!</h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Selecciona tu rol para comenzar con la configuración personalizada
-            de tu experiencia
+            Selecciona tu rol para comenzar con la configuración personalizada de tu experiencia
           </p>
         </div>
 
@@ -122,13 +118,9 @@ export default function SelectRolePage() {
                   <div
                     className={`w-20 h-20 ${colors.bg} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
                   >
-                    {React.createElement(role.icon, {
-                      className: `w-10 h-10 ${colors.icon}`,
-                    })}
+                    {role.icon && <role.icon className={`w-10 h-10 ${colors.icon}`} />}
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-800 mb-2">
-                    {role.title}
-                  </h3>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">{role.title}</h3>
                   <p className="text-slate-600">{role.description}</p>
                 </div>
 
@@ -158,9 +150,9 @@ export default function SelectRolePage() {
         {/* Footer */}
         <div className="text-center">
           <p className="text-slate-500 text-sm">
-            ¿Ya tienes una cuenta?{" "}
+            ¿Ya tienes una cuenta?{' '}
             <button
-              onClick={() => router.push("/login")}
+              onClick={() => router.push('/login')}
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
               Iniciar sesión
@@ -186,12 +178,10 @@ export default function SelectRolePage() {
                 />
               </svg>
             </div>
-            <h4 className="font-semibold text-slate-800 mb-2">
-              Configuración Rápida
-            </h4>
+            <h4 className="font-semibold text-slate-800 mb-2">Configuración Rápida</h4>
             <p className="text-slate-600 text-sm">
-              Completa tu perfil en menos de 5 minutos y comienza a usar la
-              plataforma inmediatamente.
+              Completa tu perfil en menos de 5 minutos y comienza a usar la plataforma
+              inmediatamente.
             </p>
           </div>
 
@@ -211,12 +201,10 @@ export default function SelectRolePage() {
                 />
               </svg>
             </div>
-            <h4 className="font-semibold text-slate-800 mb-2">
-              Seguridad Garantizada
-            </h4>
+            <h4 className="font-semibold text-slate-800 mb-2">Seguridad Garantizada</h4>
             <p className="text-slate-600 text-sm">
-              Tus datos médicos están protegidos con los más altos estándares de
-              seguridad y privacidad.
+              Tus datos médicos están protegidos con los más altos estándares de seguridad y
+              privacidad.
             </p>
           </div>
 
@@ -236,12 +224,9 @@ export default function SelectRolePage() {
                 />
               </svg>
             </div>
-            <h4 className="font-semibold text-slate-800 mb-2">
-              Experiencia Optimizada
-            </h4>
+            <h4 className="font-semibold text-slate-800 mb-2">Experiencia Optimizada</h4>
             <p className="text-slate-600 text-sm">
-              Interfaz intuitiva diseñada específicamente para cada rol en el
-              ecosistema médico.
+              Interfaz intuitiva diseñada específicamente para cada rol en el ecosistema médico.
             </p>
           </div>
         </div>

@@ -1,9 +1,33 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useMemo } from 'react';
-import { LabResult, LabTest } from '../../../types/medical-types';
-import { formatDate } from '../../../utils/medical-helpers';
+import React, { useMemo, useState } from 'react';
+
+interface LabResult {
+  id: string;
+  patientId: string;
+  orderedDate: string | Date;
+  completedDate?: string | Date;
+  status: 'ordered' | 'in-progress' | 'completed' | 'cancelled';
+  category: string;
+  overallStatus: 'normal' | 'warning' | 'critical';
+  urgency: 'routine' | 'urgent' | 'stat';
+  tests: LabTest[];
+  orderedBy: string;
+  labName: string;
+  laboratory?: string;
+  notes?: string;
+}
+
+interface LabTest {
+  id: string;
+  name: string;
+  value: number;
+  result: string;
+  unit: string;
+  referenceRange: { min: number; max: number };
+  status: 'normal' | 'high' | 'low' | 'critical';
+  isAbnormal: boolean;
+}
 
 interface LabResultsTrendsProps {
   results: LabResult[];
@@ -20,7 +44,7 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
   showComparisons = false,
   showReports = false,
   onResultClick,
-  onDownloadReport
+  onDownloadReport,
 }) => {
   const [selectedTest, setSelectedTest] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -36,41 +60,45 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
     if (timeRange !== 'all') {
       const months = timeRange === '3m' ? 3 : timeRange === '6m' ? 6 : 12;
       const cutoffDate = new Date(now.getFullYear(), now.getMonth() - months, now.getDate());
-      filtered = filtered.filter(result => 
-        result.completedDate && new Date(result.completedDate) >= cutoffDate
+      filtered = filtered.filter(
+        (result) => result.completedDate && new Date(result.completedDate) >= cutoffDate,
       );
     }
 
     // Filtrar por categoría
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(result => result.category === selectedCategory);
+      filtered = filtered.filter((result) => result.category === selectedCategory);
     }
 
     // Filtrar solo críticos
     if (showCriticalOnly) {
-      filtered = filtered.filter(result => 
-        result.overallStatus === 'critical' || 
-        result.tests.some(test => test.status === 'critical')
+      filtered = filtered.filter(
+        (result) =>
+          result.overallStatus === 'critical' ||
+          result.tests.some((test) => test.status === 'critical'),
       );
     }
 
-    return filtered.sort((a, b) => 
-      new Date(b.completedDate || b.orderedDate).getTime() - 
-      new Date(a.completedDate || a.orderedDate).getTime()
+    return filtered.sort(
+      (a, b) =>
+        new Date(b.completedDate || b.orderedDate).getTime() -
+        new Date(a.completedDate || a.orderedDate).getTime(),
     );
   }, [results, timeRange, selectedCategory, showCriticalOnly]);
 
   // Obtener categorías únicas
   const categories = useMemo(() => {
-    const uniqueCategories = new Set(results.map(r => r.category));
+    const uniqueCategories = new Set(results.map((r) => r.category));
     return Array.from(uniqueCategories);
   }, [results]);
 
   // Vista compacta
   if (compact) {
     const recentResults = filteredResults.slice(0, 3);
-    const pendingResults = results.filter(r => r.status === 'ordered' || r.status === 'in-progress');
-    
+    const pendingResults = results.filter(
+      (r) => r.status === 'ordered' || r.status === 'in-progress',
+    );
+
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
@@ -98,22 +126,33 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-gray-900">
-                      {result.category === 'blood' ? '🩸' : 
-                       result.category === 'urine' ? '🧪' : 
-                       result.category === 'imaging' ? '📷' : '🔬'} {result.category.charAt(0).toUpperCase() + result.category.slice(1)}
+                      {result.category === 'blood'
+                        ? '🩸'
+                        : result.category === 'urine'
+                          ? '🧪'
+                          : result.category === 'imaging'
+                            ? '📷'
+                            : '🔬'}{' '}
+                      {result.category.charAt(0).toUpperCase() + result.category.slice(1)}
                     </p>
                     <p className="text-sm text-gray-600">
                       {result.tests.length} prueba{result.tests.length > 1 ? 's' : ''}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {formatDate(result.completedDate || result.orderedDate, 'relative')}
+                      {new Date(result.completedDate || result.orderedDate).toLocaleDateString(
+                        'es-MX',
+                        {
+                          month: 'short',
+                          day: 'numeric',
+                        },
+                      )}
                     </p>
                   </div>
                   <StatusIndicator status={result.overallStatus || 'normal'} />
                 </div>
               </button>
             ))}
-            
+
             {filteredResults.length > 3 && (
               <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                 Ver {filteredResults.length - 3} más...
@@ -132,24 +171,27 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Análisis de Resultados de Laboratorio</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              Análisis de Resultados de Laboratorio
+            </h2>
             <p className="text-sm text-gray-600 mt-1">
-              {filteredResults.length} resultado{filteredResults.length !== 1 ? 's' : ''} en los últimos {
-                timeRange === '3m' ? '3 meses' : 
-                timeRange === '6m' ? '6 meses' : 
-                timeRange === '1y' ? '12 meses' : 
-                'todos los tiempos'
-              }
+              {filteredResults.length} resultado{filteredResults.length !== 1 ? 's' : ''} en los
+              últimos{' '}
+              {timeRange === '3m'
+                ? '3 meses'
+                : timeRange === '6m'
+                  ? '6 meses'
+                  : timeRange === '1y'
+                    ? '12 meses'
+                    : 'todos los tiempos'}
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setShowCriticalOnly(!showCriticalOnly)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                showCriticalOnly
-                  ? 'bg-red-100 text-red-700'
-                  : 'bg-gray-100 text-gray-700'
+                showCriticalOnly ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
               }`}
             >
               <span className="mr-2">⚠️</span>
@@ -170,7 +212,7 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todas las categorías</option>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category} value={category}>
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </option>
@@ -187,19 +229,14 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
                     timeRange === range
                       ? 'bg-blue-600 text-white'
                       : 'text-gray-600 hover:text-gray-900'
-                  } ${
-                    range === '3m' ? 'rounded-l-lg' : 
-                    range === 'all' ? 'rounded-r-lg' : ''
-                  }`}
+                  } ${range === '3m' ? 'rounded-l-lg' : range === 'all' ? 'rounded-r-lg' : ''}`}
                 >
-                  {range === '3m' ? '3M' : 
-                   range === '6m' ? '6M' : 
-                   range === '1y' ? '1A' : 'Todo'}
+                  {range === '3m' ? '3M' : range === '6m' ? '6M' : range === '1y' ? '1A' : 'Todo'}
                 </button>
               ))}
             </div>
           </div>
-          
+
           {showReports && (
             <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               <span className="mr-1">📊</span>
@@ -213,7 +250,7 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
         {/* Lista de resultados */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-900">Resultados Recientes</h3>
-          
+
           {filteredResults.map((result) => (
             <LabResultCard
               key={result.id}
@@ -223,11 +260,13 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
               showReports={showReports}
             />
           ))}
-          
+
           {filteredResults.length === 0 && (
             <div className="text-center py-12">
               <span className="text-4xl mb-3 block">🔍</span>
-              <p className="text-gray-500">No se encontraron resultados con los filtros aplicados</p>
+              <p className="text-gray-500">
+                No se encontraron resultados con los filtros aplicados
+              </p>
             </div>
           )}
         </div>
@@ -250,27 +289,25 @@ const LabResultsTrends: React.FC<LabResultsTrendsProps> = ({
                 <span className="flex items-center">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
                   <span className="text-green-600 font-medium">
-                    {filteredResults.filter(r => r.overallStatus === 'normal').length}
+                    {filteredResults.filter((r) => r.overallStatus === 'normal').length}
                   </span>
                 </span>
                 <span className="flex items-center">
                   <span className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>
                   <span className="text-yellow-600 font-medium">
-                    {filteredResults.filter(r => r.overallStatus === 'abnormal').length}
+                    {filteredResults.filter((r) => r.overallStatus === 'warning').length}
                   </span>
                 </span>
                 <span className="flex items-center">
                   <span className="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
                   <span className="text-red-600 font-medium">
-                    {filteredResults.filter(r => r.overallStatus === 'critical').length}
+                    {filteredResults.filter((r) => r.overallStatus === 'critical').length}
                   </span>
                 </span>
               </div>
             </div>
           </div>
-          <button className="text-blue-600 hover:text-blue-700 font-medium">
-            Exportar datos
-          </button>
+          <button className="text-blue-600 hover:text-blue-700 font-medium">Exportar datos</button>
         </div>
       </div>
     </div>
@@ -285,23 +322,23 @@ const LabResultCard: React.FC<{
   showReports?: boolean;
 }> = ({ result, onClick, onDownload, showReports }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  
-  const categoryIcons = {
+
+  const categoryIcons: Record<string, string> = {
     blood: '🩸',
     urine: '🧪',
     imaging: '📷',
     pathology: '🔬',
-    other: '📋'
+    other: '📋',
   };
 
-  const urgencyColors = {
+  const urgencyColors: Record<'routine' | 'urgent' | 'stat', string> = {
     routine: 'text-gray-600',
     urgent: 'text-orange-600',
-    stat: 'text-red-600'
+    stat: 'text-red-600',
   };
 
-  const criticalTests = result.tests.filter(t => t.status === 'critical');
-  const abnormalTests = result.tests.filter(t => t.status === 'high' || t.status === 'low');
+  const criticalTests = result.tests.filter((t) => t.status === 'critical');
+  const abnormalTests = result.tests.filter((t) => t.status === 'high' || t.status === 'low');
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -315,19 +352,36 @@ const LabResultCard: React.FC<{
             <div className="flex-1">
               <div className="flex items-center space-x-2">
                 <h4 className="font-semibold text-gray-900">
-                  {result.category.charAt(0).toUpperCase() + result.category.slice(1)} - {result.tests.length} pruebas
+                  {result.category.charAt(0).toUpperCase() + result.category.slice(1)} -{' '}
+                  {result.tests.length} pruebas
                 </h4>
                 <span className={`text-xs font-medium ${urgencyColors[result.urgency]}`}>
-                  {result.urgency === 'stat' ? 'URGENTE' : result.urgency === 'urgent' ? 'Prioritario' : ''}
+                  {result.urgency === 'stat'
+                    ? 'URGENTE'
+                    : result.urgency === 'urgent'
+                      ? 'Prioritario'
+                      : ''}
                 </span>
               </div>
-              
+
               <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                <span>Ordenado: {formatDate(result.orderedDate, 'short')}</span>
+                <span>
+                  Ordenado:{' '}
+                  {new Date(result.orderedDate).toLocaleDateString('es-MX', {
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </span>
                 {result.completedDate && (
                   <>
                     <span>•</span>
-                    <span>Completado: {formatDate(result.completedDate, 'short')}</span>
+                    <span>
+                      Completado:{' '}
+                      {new Date(result.completedDate).toLocaleDateString('es-MX', {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </span>
                   </>
                 )}
                 <span>•</span>
@@ -350,18 +404,23 @@ const LabResultCard: React.FC<{
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             <StatusIndicator status={result.overallStatus || 'normal'} size="large" />
-            <svg 
+            <svg
               className={`w-5 h-5 text-gray-400 transform transition-transform ${
                 isExpanded ? 'rotate-180' : ''
-              }`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -377,9 +436,7 @@ const LabResultCard: React.FC<{
 
           <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
             <div className="text-sm text-gray-600">
-              {result.laboratory && (
-                <span>Laboratorio: {result.laboratory}</span>
-              )}
+              {result.laboratory && <span>Laboratorio: {result.laboratory}</span>}
             </div>
             <div className="flex items-center space-x-3">
               {onClick && (
@@ -395,8 +452,18 @@ const LabResultCard: React.FC<{
                   onClick={onDownload}
                   className="flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
                 >
-                  <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                    />
                   </svg>
                   Descargar PDF
                 </button>
@@ -413,19 +480,27 @@ const LabResultCard: React.FC<{
 const TestResultRow: React.FC<{ test: LabTest }> = ({ test }) => {
   const getStatusColor = () => {
     switch (test.status) {
-      case 'critical': return 'bg-red-100 text-red-900 border-red-200';
-      case 'high': return 'bg-yellow-100 text-yellow-900 border-yellow-200';
-      case 'low': return 'bg-yellow-100 text-yellow-900 border-yellow-200';
-      default: return 'bg-green-100 text-green-900 border-green-200';
+      case 'critical':
+        return 'bg-red-100 text-red-900 border-red-200';
+      case 'high':
+        return 'bg-yellow-100 text-yellow-900 border-yellow-200';
+      case 'low':
+        return 'bg-yellow-100 text-yellow-900 border-yellow-200';
+      default:
+        return 'bg-green-100 text-green-900 border-green-200';
     }
   };
 
   const getStatusIcon = () => {
     switch (test.status) {
-      case 'critical': return '⚠️';
-      case 'high': return '⬆️';
-      case 'low': return '⬇️';
-      default: return '✓';
+      case 'critical':
+        return '⚠️';
+      case 'high':
+        return '⬆️';
+      case 'low':
+        return '⬇️';
+      default:
+        return '✓';
     }
   };
 
@@ -441,42 +516,38 @@ const TestResultRow: React.FC<{ test: LabTest }> = ({ test }) => {
             <span className="font-semibold">{test.result}</span>
             {test.unit && <span className="ml-1 text-gray-600">{test.unit}</span>}
             {test.referenceRange && (
-              <span className="ml-3 text-gray-600">
-                (Ref: {test.referenceRange})
-              </span>
+              <span className="ml-3 text-gray-600">(Ref: {test.referenceRange})</span>
             )}
           </div>
         </div>
-        {test.notes && (
-          <div className="ml-4 text-sm text-gray-600 italic">
-            {test.notes}
-          </div>
-        )}
+        {test.notes && <div className="ml-4 text-sm text-gray-600 italic">{test.notes}</div>}
       </div>
     </div>
   );
 };
 
 // Componente para indicador de estado
-const StatusIndicator: React.FC<{ status: string; size?: 'small' | 'large' }> = ({ 
-  status, 
-  size = 'small' 
+const StatusIndicator: React.FC<{ status: string; size?: 'small' | 'large' }> = ({
+  status,
+  size = 'small',
 }) => {
   const styles = {
     normal: { bg: 'bg-green-100', text: 'text-green-800', label: 'Normal' },
     abnormal: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Anormal' },
-    critical: { bg: 'bg-red-100', text: 'text-red-800', label: 'Crítico' }
+    critical: { bg: 'bg-red-100', text: 'text-red-800', label: 'Crítico' },
   }[status] || { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Pendiente' };
 
   return (
-    <span className={`
+    <span
+      className={`
       inline-flex items-center rounded-full font-medium
       ${styles.bg} ${styles.text}
       ${size === 'large' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'}
-    `}>
+    `}
+    >
       {styles.label}
     </span>
   );
 };
 
-export default LabResultsTrends; 
+export default LabResultsTrends;

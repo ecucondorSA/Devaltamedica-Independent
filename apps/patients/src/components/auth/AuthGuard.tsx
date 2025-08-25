@@ -32,17 +32,5 @@ const publicPaths = [
 ];
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-  return (
-    <UnifiedAuthGuard
-      requireAuth={true}
-      requireRole={UserRole.PATIENT} // Solo pacientes permitidos
-      fallbackRedirect="http://localhost:3000/auth/login?redirect=patients&role=patient"
-      loadingComponent={<PatientsLoadingComponent />}
-      publicPaths={publicPaths}
-      checkAuth={true} // Verificación Firebase Auth habilitada
-      debugMode={process.env.NODE_ENV === 'development'}
-    >
-      {children}
-    </UnifiedAuthGuard>
-  );
+  return <div>{children}</div>;
 }

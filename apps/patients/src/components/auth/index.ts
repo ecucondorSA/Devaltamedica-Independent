@@ -5,20 +5,20 @@
  */
 
 // 🔐 Componentes principales de autenticación
-export { AuthGuard } from './AuthGuard';
-export {
-  LoginMedicalForm,
-  LoginMedicalFormCompact,
-  LoginMedicalFormModal,
-} from './LoginMedicalForm';
+export { default as AuthGuard } from './AuthGuard';
+// export {
+//   LoginMedicalForm,
+//   LoginMedicalFormCompact,
+//   LoginMedicalFormModal,
+// } from './LoginMedicalForm';
 
 // 🪝 Hooks de autenticación
 // Temporalmente exportamos desde el index principal
 export { useAuth } from '@altamedica/auth';
-export { useLoginForm } from '../../hooks/useLoginForm';
+// export { useLoginForm } from '../../hooks/useLoginForm';
 
 // 📝 Tipos y interfaces
-export type { LoginFormData, LoginFormErrors, LoginFormState } from '../../hooks/useLoginForm';
+// export type { LoginFormData, LoginFormErrors, LoginFormState } from '../../hooks/useLoginForm';
 
 export type { AuthState, LoginCredentials, RegisterData, User } from '@altamedica/auth';
 
@@ -52,8 +52,8 @@ export const AUTH_CONFIG = {
 };
 
 export default {
-  LoginMedicalForm,
-  useLoginForm,
-  useAuth,
+  // LoginMedicalForm,
+  // useLoginForm,
+  // useAuth,
   AUTH_CONFIG,
 };

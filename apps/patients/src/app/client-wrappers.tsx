@@ -40,13 +40,23 @@ export function EmergencyBannerWrapper() {
 
   return (
     <EmergencyBanner
-      emergency={emergency}
+      type={
+        emergency.severity === 'critical'
+          ? 'critical'
+          : emergency.severity === 'high'
+            ? 'urgent'
+            : 'warning'
+      }
+      title={`Emergencia ${emergency.type}`}
+      message={emergency.message}
       onDismiss={dismiss}
-      onActionClick={(action) => {
-        if (executeAction && action.id) {
-          executeAction(action.id);
-        }
+      onEmergencyCall={() => {
+        // Lógica para llamada de emergencia
+        console.log('Llamada de emergencia iniciada');
       }}
+      autoHide={emergency.autoHide}
+      autoHideDelay={emergency.autoHideDelay}
+      className="w-full"
     />
   );
 }

@@ -7,19 +7,21 @@ import LabResultDetailCard from '../../../components/lab-results/LabResultDetail
 
 export default function LabResultDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { labResult, loading, error } = useLabResult(id);
   const router = useRouter();
-
-  if (loading) return <div className="text-center py-12">Cargando resultado...</div>;
-  if (error || !labResult)
-    return <div className="text-center text-red-600 py-12">Resultado no encontrado</div>;
 
   return (
     <div className="max-w-3xl mx-auto">
       <button className="mb-4 text-blue-600" onClick={() => router.back()}>
         &larr; Volver
       </button>
-      <LabResultDetailCard labResult={labResult} />
+      <div className="text-center py-12">
+        <p className="text-gray-500 mb-4">
+          Detalle de resultado de laboratorio temporalmente deshabilitado
+        </p>
+        <p className="text-sm text-gray-400">
+          Se mostrará cuando se resuelvan los problemas de compatibilidad de interfaces
+        </p>
+      </div>
     </div>
   );
 }
