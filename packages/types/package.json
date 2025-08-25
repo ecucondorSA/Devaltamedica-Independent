@@ -3,72 +3,16 @@
   "version": "1.0.0",
   "description": "Shared TypeScript types for ALTAMEDICA APIs",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.js"
-    },
-    "./core": {
-      "types": "./dist/core/index.d.ts",
-      "import": "./dist/core/index.esm.js",
-      "require": "./dist/core/index.js"
-    },
-    "./medical": {
-      "types": "./dist/medical/index.d.ts",
-      "import": "./dist/medical/index.esm.js",
-      "require": "./dist/medical/index.js"
-    },
-    "./medical/patient": {
-      "types": "./dist/medical/patient/index.d.ts",
-      "import": "./dist/medical/patient/index.esm.js",
-      "require": "./dist/medical/patient/index.js"
-    },
-    "./medical/doctor": {
-      "types": "./dist/medical/doctor/index.d.ts",
-      "import": "./dist/medical/doctor/index.esm.js",
-      "require": "./dist/medical/doctor/index.js"
-    },
-    "./medical/clinical": {
-      "types": "./dist/medical/clinical/index.d.ts",
-      "import": "./dist/medical/clinical/index.esm.js",
-      "require": "./dist/medical/clinical/index.js"
-    },
-    "./api": {
-      "types": "./dist/api/index.d.ts",
-      "import": "./dist/api/index.esm.js",
-      "require": "./dist/api/index.js"
-    },
-    "./security": {
-      "types": "./dist/security/index.d.ts",
-      "import": "./dist/security/index.esm.js",
-      "require": "./dist/security/index.js"
-    },
-    "./validators": {
-      "types": "./dist/validators/index.d.ts",
-      "import": "./dist/validators/index.esm.js",
-      "require": "./dist/validators/index.js"
-    },
-    "./guards": {
-      "types": "./dist/guards/index.d.ts",
-      "import": "./dist/guards/index.esm.js",
-      "require": "./dist/guards/index.js"
-    },
-    "./ai": {
-      "types": "./dist/ai/index.d.ts",
-      "import": "./dist/ai/index.esm.js",
-      "require": "./dist/ai/index.js"
-    },
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.esm.js",
-      "require": "./dist/utils/index.js"
-    },
-    "./package.json": "./package.json"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
   },
   "files": [
     "dist*",

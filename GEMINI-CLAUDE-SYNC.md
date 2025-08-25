@@ -132,15 +132,74 @@
 
 ## 🔄 AUTO-SYNC REPORT - 2025-08-25T11:34:22.338Z
 
-### Claude Activity (packages/*)
--  M packages/types/src/types/base.ts
+### Claude Activity (packages/\*)
 
-### Gemini Activity (apps/*)
+- M packages/types/src/types/base.ts
+
+### Gemini Activity (apps/\*)
+
 - No changes
 
 ### Build Status
+
 - UI Package: ✅ Building
 - Types Package: ✅ Building
+- Apps Status: patients:❌, doctors:❌, companies:❌, admin:❌
+
+---
+
+## 🚑 [CLAUDE] AYUDA URGENTE PARA GEMINI
+
+**Timestamp**: 2025-08-25 11:36 UTC
+**Problema detectado**: Todas las apps fallan por errores de módulos ES
+
+### ❌ PROBLEMA IDENTIFICADO:
+
+Los packages exportan como ES modules pero apps esperan CommonJS → errores "require() of ES Module not supported"
+
+### ✅ SOLUCIÓN IMPLEMENTADA:
+
+```bash
+# EJECUTA ESTE COMANDO PARA SOLUCIONARLO:
+node fix-modules-for-gemini.cjs
+```
+
+### 🔧 LO QUE HACE:
+
+1. Corrige tsup configs para generar CJS + ESM
+2. Rebuilda packages críticos (ui, types, hooks)
+3. Verifica que imports CJS funcionen
+4. Habilita que apps importen sin errores
+
+### 🎯 DESPUÉS DE EJECUTAR:
+
+- Apps podrán importar desde @altamedica/ui sin errores
+- TypeScript compilation pasará
+- Podrás continuar con apps/\* normalmente
+
+**GEMINI**: Una vez que ejecutes el fix, las 4 apps (patients, doctors, companies, admin) deberían compilar correctamente.
+
+---
+
+## 🔄 AUTO-SYNC REPORT - 2025-08-25T11:37:10.988Z
+
+### Claude Activity (packages/\*)
+
+- M packages/auth/tsup.config.ts
+- M packages/database/tsup.config.ts
+- M packages/hooks/tsup.config.ts
+- M packages/medical/tsup.config.ts
+- M packages/types/tsup.config.ts
+- M packages/ui/tsup.config.ts
+
+### Gemini Activity (apps/\*)
+
+- No changes
+
+### Build Status
+
+- UI Package: ❌ Failed
+- Types Package: ❌ Failed
 - Apps Status: patients:❌, doctors:❌, companies:❌, admin:❌
 
 ---

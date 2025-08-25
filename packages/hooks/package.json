@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "React hooks centralizados para la plataforma AltaMedica - Medical, Auth, API, Realtime, UI, Performance y más",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
@@ -14,35 +14,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./api": "./src/api/index.ts",
-    "./api/*": "./src/api/*",
-    "./medical": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./medical/*": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./medical/useAppointments": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./realtime": "./src/realtime/index.ts",
-    "./realtime/*": "./src/realtime/*",
-    "./composed": "./src/composed/index.ts",
-    "./composed/*": "./src/composed/*",
-    "./providers": "./src/providers/index.ts",
-    "./providers/*": "./src/providers/*",
-    "./utils": "./src/utils/index.ts",
-    "./utils/*": "./src/utils/*",
-    "./*": "./src/*"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
