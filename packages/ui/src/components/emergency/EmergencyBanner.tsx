@@ -4,10 +4,10 @@
  * @description Banner prominente para situaciones de emergencia médica
  */
 
-import React, { useEffect, useState } from 'react';
 import { AlertTriangle, Phone, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Button } from '../button';
+import { Button } from '../Button';
 
 export interface EmergencyBannerProps {
   type: 'critical' | 'urgent' | 'warning';
@@ -25,13 +25,13 @@ export interface EmergencyBannerProps {
 const typeStyles = {
   critical: 'bg-red-600 text-white border-red-700',
   urgent: 'bg-orange-500 text-white border-orange-600',
-  warning: 'bg-yellow-500 text-black border-yellow-600'
+  warning: 'bg-yellow-500 text-black border-yellow-600',
 };
 
 const typeIcons = {
   critical: '🚨',
   urgent: '⚠️',
-  warning: '⚡'
+  warning: '⚡',
 };
 
 export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
@@ -44,7 +44,7 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
   autoHide = false,
   autoHideDelay = 10000,
   className,
-  sound = true
+  sound = true,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(true);
@@ -70,7 +70,7 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
   useEffect(() => {
     if (type === 'critical') {
       const interval = setInterval(() => {
-        setIsAnimating(prev => !prev);
+        setIsAnimating((prev) => !prev);
       }, 1000);
 
       return () => clearInterval(interval);
@@ -107,17 +107,15 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
         typeStyles[type],
         isAnimating && type === 'critical' && 'animate-pulse',
         !isVisible && 'opacity-0 -translate-y-full',
-        className
+        className,
       )}
     >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* Icono de emergencia */}
-            <span className="text-2xl animate-bounce">
-              {typeIcons[type]}
-            </span>
-            
+            <span className="text-2xl animate-bounce">{typeIcons[type]}</span>
+
             {/* Contenido del mensaje */}
             <div className="flex-1">
               <h3 className="font-bold text-lg flex items-center gap-2">
@@ -142,7 +140,7 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
                 Llamar {emergencyNumber}
               </Button>
             )}
-            
+
             {onDismiss && (
               <Button
                 data-testid="emergency-dismiss"
@@ -165,7 +163,7 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
               className="h-full bg-white/50 transition-all"
               style={{
                 animation: `progress ${autoHideDelay}ms linear`,
-                width: '0%'
+                width: '0%',
               }}
             />
           </div>
@@ -174,8 +172,12 @@ export const EmergencyBanner: React.FC<EmergencyBannerProps> = ({
 
       <style jsx>{`
         @keyframes progress {
-          from { width: 100%; }
-          to { width: 0%; }
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
         }
       `}</style>
     </div>

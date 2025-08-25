@@ -23,6 +23,7 @@
   "dependencies": {
     "@altamedica/api-client": "workspace:*",
     "@altamedica/auth": "workspace:*",
+    "@altamedica/config-next": "workspace:*",
     "@altamedica/database": "workspace:*",
     "@altamedica/diagnostic-engine": "workspace:*",
     "@altamedica/hooks": "workspace:*",

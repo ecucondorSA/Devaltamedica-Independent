@@ -1,59 +1,21 @@
-import { createSSOMiddleware } from '@altamedica/auth/middleware';
+import { createAuthMiddleware } from '@altamedica/auth/middleware';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 /**
- * 🏥 AltaMedica Web App SSO Middleware
+ * 🏥 AltaMedica Web App Auth Middleware
  * Gateway application with HIPAA-compliant security headers
  */
 
-// Create SSO middleware with web-app specific config
-const ssoMiddleware = createSSOMiddleware({
-  appName: 'web-app',
-  // No role restrictions - gateway accepts all authenticated users
-  allowedRoles: [],
+// Create auth middleware with web-app specific config
+const authMiddleware = createAuthMiddleware({
   loginUrl: process.env.NEXT_PUBLIC_LOGIN_URL || 'http://localhost:3000/auth/login',
   apiUrl: process.env.NEXT_PUBLIC_API_URL
     ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/verify`
     : 'http://localhost:3001/api/v1/auth/verify',
-  // Extended public paths for web-app
-  publicPaths: [
-    '/',
-    '/manifest.json',
-    '/api/font-css',
-    '/Video_Listo_.mp4',
-    '/Video_Listo_Encuentra_Doctor.mp4',
-    '/Video_Listo_Telemedicina.mp4',
-    '/auth/login',
-    '/auth/register',
-    '/auth/forgot-password',
-    '/auth/verify-email',
-    '/auth/complete-profile',
-    '/about',
-    '/services',
-    '/contact',
-    '/contacto',
-    '/pricing',
-    '/privacy',
-    '/terms',
-    '/help',
-    '/demo',
-    '/landing-demo',
-    '/telemedicine',
-    '/especialistas',
-    '/servicios',
-    '/hipaa',
-    '/status',
-    '/api/health',
-    '/api/contact',
-    '/_next',
-    '/favicon.ico',
-    '/images',
-    '/fonts',
-    '/public',
-  ],
-  debug: process.env.NODE_ENV === 'development',
+  // No role restrictions - gateway accepts all authenticated users
+  allowedRoles: [],
 });
 
 // Spanish to English route mappings for i18n support
@@ -87,16 +49,54 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, { status: 301 });
   }
 
-  // 1. Run SSO middleware first
-  const ssoResponse = await ssoMiddleware(request);
+  // Check if this is a public path
+  const publicPaths = [
+    '/',
+    '/manifest.json',
+    '/api/font-css',
+    '/Video_Listo_.mp4',
+    '/Video_Listo_Encuentra_Doctor.mp4',
+    '/Video_Listo_Telemedicina.mp4',
+    '/auth/login',
+    '/auth/register',
+    '/auth/forgot-password',
+    '/auth/verify-email',
+    '/auth/complete-profile',
+    '/about',
+    '/services',
+    '/contact',
+    '/contacto',
+    '/pricing',
+    '/privacy',
+    '/terms',
+    '/help',
+    '/demo',
+    '/landing-demo',
+    '/telemedicine',
+    '/especialistas',
+    '/servicios',
+    '/hipaa',
+    '/status',
+    '/api/health',
+    '/api/contact',
+    '/_next',
+    '/favicon.ico',
+    '/images',
+    '/fonts',
+    '/public',
+  ];
 
-  // If SSO middleware returns a response (redirect/unauthorized), use it
-  if (ssoResponse && ssoResponse.status !== 200) {
-    return ssoResponse;
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
+
+  // 1. Run auth middleware first (only for protected routes)
+  let response = NextResponse.next();
+  if (!isPublicPath) {
+    const authResponse = await authMiddleware(request);
+    if (authResponse && authResponse.status !== 200) {
+      return authResponse;
+    }
+    response = authResponse || NextResponse.next();
   }
-
-  // 2. Add additional HIPAA-specific headers
-  const response = ssoResponse || NextResponse.next();
 
   // Enhanced security headers for medical routes
   if (isHighRiskRoute(pathname)) {
@@ -187,5 +187,16 @@ function shouldRateLimit(clientIP: string, pathname: string): boolean {
   return record.count > limit;
 }
 
-// Export SSO middleware config from @altamedica/auth
-export { ssoMiddlewareConfig as config } from '@altamedica/auth/middleware';
+// Export config for Next.js middleware
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};

@@ -4,30 +4,30 @@
  * @description Hook avanzado para análisis de IA médica, diagnósticos y recomendaciones
  */
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../auth/useAuth';
 import { useNotifications } from '../realtime/useNotifications';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (...args: any[]) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
+      console.log(...args);
     }
   },
-  warn: (message, data) => {
+  warn: (...args: any[]) => {
     if (typeof console !== 'undefined') {
-      console.warn(message, data);
+      console.warn(...args);
     }
   },
-  error: (message, data) => {
+  error: (...args: any[]) => {
     if (typeof console !== 'undefined') {
-      console.error(message, data);
+      console.error(...args);
     }
   },
-  debug: (message, data) => {
+  debug: (...args: any[]) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
+      console.debug(...args);
     }
   }
 };
@@ -676,7 +676,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
   // REFS
   // ==========================================
   
-  const aiEngineRef = useRef<MedicalAIEngine>();
+  const aiEngineRef = useRef<MedicalAIEngine | undefined>(undefined);
   
   // ==========================================
   // HOOKS DEPENDIENTES

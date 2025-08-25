@@ -5,7 +5,7 @@
 
 import Redis from 'ioredis';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // P1 Stability: Retry strategy configuration
 const RETRY_CONFIG = {
   maxRetriesPerRequest: 3,
@@ -35,15 +35,15 @@ export const redis = new Redis(redisUrl, {
   lazyConnect: false, // Connect immediately
   maxRetriesPerRequest: 3,
   showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
-  
+
   // Connection options
   connectTimeout: 10000, // 10 seconds
   commandTimeout: 5000,  // 5 seconds
   keepAlive: 30000,      // 30 seconds
-  
+
   // Security
   password: process.env.REDIS_PASSWORD,
-  
+
   // Performance
   enableOfflineQueue: true,
   enableAutoPipelining: true,
@@ -197,12 +197,12 @@ export const rateLimiter = {
   async checkLimit(key: string, limit: number, windowSeconds: number): Promise<boolean> {
     try {
       const current = await redis.incr(key);
-      
+
       if (current === 1) {
         // First request in window
         await redis.expire(key, windowSeconds);
       }
-      
+
       return current <= limit;
     } catch (error) {
       logger.error(`[Redis] Rate limiter error for ${key}:`, undefined, error);

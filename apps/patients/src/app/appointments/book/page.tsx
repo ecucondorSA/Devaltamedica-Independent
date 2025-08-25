@@ -1,25 +1,22 @@
-"use client";
+'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { logger } from '@altamedica/shared/services/logger.service';
 import {
-  Calendar,
-  Clock,
-  User,
-  Stethoscope,
-  MapPin,
-  Video,
-  Phone,
   AlertCircle,
-  CheckCircle,
   ArrowLeft,
   ArrowRight,
+  Calendar,
+  CheckCircle,
+  Clock,
   Loader2,
-} from "lucide-react";
+  Stethoscope,
+  User,
+  Video,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { logger } from '../../../shared-stub';
 
-import { Doctor } from '@altamedica/types';
+import { Doctor } from '../../../types-stub';
 
 interface TimeSlot {
   time: string;
@@ -31,64 +28,79 @@ interface AppointmentForm {
   doctorId: string;
   date: string;
   time: string;
-  type: "consultation" | "follow_up" | "emergency" | "routine_checkup";
+  type: 'consultation' | 'follow_up' | 'emergency' | 'routine_checkup';
   reason: string;
   symptoms: string[];
   isTelemedicine: boolean;
-  urgency: "normal" | "urgent" | "emergency";
+  urgency: 'normal' | 'urgent' | 'emergency';
   notes: string;
 }
 
 const BOOKING_STEPS = [
-  { id: 1, title: "Seleccionar Especialidad", icon: Stethoscope },
-  { id: 2, title: "Elegir Médico", icon: User },
-  { id: 3, title: "Seleccionar Fecha y Hora", icon: Calendar },
-  { id: 4, title: "Información de la Cita", icon: AlertCircle },
-  { id: 5, title: "Confirmación", icon: CheckCircle },
+  { id: 1, title: 'Seleccionar Especialidad', icon: Stethoscope },
+  { id: 2, title: 'Elegir Médico', icon: User },
+  { id: 3, title: 'Seleccionar Fecha y Hora', icon: Calendar },
+  { id: 4, title: 'Información de la Cita', icon: AlertCircle },
+  { id: 5, title: 'Confirmación', icon: CheckCircle },
 ];
 
 const SPECIALTIES = [
-  { id: "general", name: "Medicina General", icon: "🏥" },
-  { id: "cardiology", name: "Cardiología", icon: "❤️" },
-  { id: "dermatology", name: "Dermatología", icon: "🩺" },
-  { id: "pediatrics", name: "Pediatría", icon: "👶" },
-  { id: "orthopedics", name: "Ortopedia", icon: "🦴" },
-  { id: "neurology", name: "Neurología", icon: "🧠" },
-  { id: "psychiatry", name: "Psiquiatría", icon: "🧠" },
-  { id: "gynecology", name: "Ginecología", icon: "👩‍⚕️" },
-  { id: "ophthalmology", name: "Oftalmología", icon: "👁️" },
-  { id: "dentistry", name: "Odontología", icon: "🦷" },
+  { id: 'general', name: 'Medicina General', icon: '🏥' },
+  { id: 'cardiology', name: 'Cardiología', icon: '❤️' },
+  { id: 'dermatology', name: 'Dermatología', icon: '🩺' },
+  { id: 'pediatrics', name: 'Pediatría', icon: '👶' },
+  { id: 'orthopedics', name: 'Ortopedia', icon: '🦴' },
+  { id: 'neurology', name: 'Neurología', icon: '🧠' },
+  { id: 'psychiatry', name: 'Psiquiatría', icon: '🧠' },
+  { id: 'gynecology', name: 'Ginecología', icon: '👩‍⚕️' },
+  { id: 'ophthalmology', name: 'Oftalmología', icon: '👁️' },
+  { id: 'dentistry', name: 'Odontología', icon: '🦷' },
 ];
 
 const SYMPTOMS_OPTIONS = [
-  "Dolor de cabeza", "Fiebre", "Tos", "Dolor de garganta",
-  "Dolor abdominal", "Náuseas", "Vómitos", "Diarrea",
-  "Fatiga", "Insomnio", "Ansiedad", "Depresión",
-  "Dolor en las articulaciones", "Dolor de espalda", "Mareos",
-  "Pérdida de apetito", "Pérdida de peso", "Hinchazón",
-  "Erupciones cutáneas", "Problemas de visión", "Otros"
+  'Dolor de cabeza',
+  'Fiebre',
+  'Tos',
+  'Dolor de garganta',
+  'Dolor abdominal',
+  'Náuseas',
+  'Vómitos',
+  'Diarrea',
+  'Fatiga',
+  'Insomnio',
+  'Ansiedad',
+  'Depresión',
+  'Dolor en las articulaciones',
+  'Dolor de espalda',
+  'Mareos',
+  'Pérdida de apetito',
+  'Pérdida de peso',
+  'Hinchazón',
+  'Erupciones cutáneas',
+  'Problemas de visión',
+  'Otros',
 ];
 
 export default function BookAppointmentPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedSpecialty, setSelectedSpecialty] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<AppointmentForm>({
-    doctorId: "",
-    date: "",
-    time: "",
-    type: "consultation",
-    reason: "",
+    doctorId: '',
+    date: '',
+    time: '',
+    type: 'consultation',
+    reason: '',
     symptoms: [],
     isTelemedicine: false,
-    urgency: "normal",
-    notes: "",
+    urgency: 'normal',
+    notes: '',
   });
 
   // Cargar médicos por especialidad
@@ -111,46 +123,48 @@ export default function BookAppointmentPage() {
       // Simulación de API - en producción sería una llamada real
       const mockDoctors: Doctor[] = [
         {
-          id: "doc-1",
-          name: "Dr. María García",
-          specialty: "Medicina General",
+          id: 'doc-1',
+          name: 'Dr. María García',
+          specialty: 'Medicina General',
           rating: 4.8,
           experience: 15,
-          languages: ["Español", "Inglés"],
+          languages: ['Español', 'Inglés'],
           isAvailable: true,
           consultationFee: 5000,
           telemedicineAvailable: true,
-          avatar: "/avatars/doctor-1.jpg",
+          avatar: '/avatars/doctor-1.jpg',
         },
         {
-          id: "doc-2",
-          name: "Dr. Carlos Rodríguez",
-          specialty: "Cardiología",
+          id: 'doc-2',
+          name: 'Dr. Carlos Rodríguez',
+          specialty: 'Cardiología',
           rating: 4.9,
           experience: 20,
-          languages: ["Español"],
+          languages: ['Español'],
           isAvailable: true,
           consultationFee: 8000,
           telemedicineAvailable: true,
-          avatar: "/avatars/doctor-2.jpg",
+          avatar: '/avatars/doctor-2.jpg',
         },
         {
-          id: "doc-3",
-          name: "Dra. Ana López",
-          specialty: "Dermatología",
+          id: 'doc-3',
+          name: 'Dra. Ana López',
+          specialty: 'Dermatología',
           rating: 4.7,
           experience: 12,
-          languages: ["Español", "Portugués"],
+          languages: ['Español', 'Portugués'],
           isAvailable: true,
           consultationFee: 6000,
           telemedicineAvailable: false,
-          avatar: "/avatars/doctor-3.jpg",
+          avatar: '/avatars/doctor-3.jpg',
         },
       ];
 
-      setDoctors(mockDoctors.filter(doc => doc.specialty.toLowerCase().includes(specialty.toLowerCase())));
+      setDoctors(
+        mockDoctors.filter((doc) => doc.specialty.toLowerCase().includes(specialty.toLowerCase())),
+      );
     } catch (error) {
-      logger.error("Error cargando médicos:", error);
+      logger.error('Error cargando médicos:', error);
     } finally {
       setIsLoading(false);
     }
@@ -161,18 +175,18 @@ export default function BookAppointmentPage() {
     try {
       // Simulación de API - en producción sería una llamada real
       const mockSlots: TimeSlot[] = [
-        { time: "09:00", available: true, isTelemedicine: true },
-        { time: "10:00", available: true, isTelemedicine: true },
-        { time: "11:00", available: false, isTelemedicine: false },
-        { time: "14:00", available: true, isTelemedicine: true },
-        { time: "15:00", available: true, isTelemedicine: true },
-        { time: "16:00", available: true, isTelemedicine: false },
-        { time: "17:00", available: true, isTelemedicine: true },
+        { time: '09:00', available: true, isTelemedicine: true },
+        { time: '10:00', available: true, isTelemedicine: true },
+        { time: '11:00', available: false, isTelemedicine: false },
+        { time: '14:00', available: true, isTelemedicine: true },
+        { time: '15:00', available: true, isTelemedicine: true },
+        { time: '16:00', available: true, isTelemedicine: false },
+        { time: '17:00', available: true, isTelemedicine: true },
       ];
 
       setAvailableSlots(mockSlots);
     } catch (error) {
-      logger.error("Error cargando horarios:", error);
+      logger.error('Error cargando horarios:', error);
     } finally {
       setIsLoading(false);
     }
@@ -193,38 +207,38 @@ export default function BookAppointmentPage() {
   const handleSpecialtySelect = (specialtyId: string) => {
     setSelectedSpecialty(specialtyId);
     setSelectedDoctor(null);
-    setSelectedDate("");
-    setSelectedTime("");
-    setFormData(prev => ({ ...prev, doctorId: "", date: "", time: "" }));
+    setSelectedDate('');
+    setSelectedTime('');
+    setFormData((prev) => ({ ...prev, doctorId: '', date: '', time: '' }));
   };
 
   const handleDoctorSelect = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
-    setFormData(prev => ({ ...prev, doctorId: doctor.id }));
+    setFormData((prev) => ({ ...prev, doctorId: doctor.id }));
   };
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
-    setSelectedTime("");
-    setFormData(prev => ({ ...prev, date, time: "" }));
+    setSelectedTime('');
+    setFormData((prev) => ({ ...prev, date, time: '' }));
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    const slot = availableSlots.find(s => s.time === time);
-    setFormData(prev => ({ 
-      ...prev, 
+    const slot = availableSlots.find((s) => s.time === time);
+    setFormData((prev) => ({
+      ...prev,
       time,
-      isTelemedicine: slot?.isTelemedicine || false 
+      isTelemedicine: slot?.isTelemedicine || false,
     }));
   };
 
   const handleSymptomToggle = (symptom: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       symptoms: prev.symptoms.includes(symptom)
-        ? prev.symptoms.filter(s => s !== symptom)
-        : [...prev.symptoms, symptom]
+        ? prev.symptoms.filter((s) => s !== symptom)
+        : [...prev.symptoms, symptom],
     }));
   };
 
@@ -232,15 +246,15 @@ export default function BookAppointmentPage() {
     setIsLoading(true);
     try {
       // En producción, aquí se enviaría a la API
-      logger.info("Datos de la cita:", formData);
-      
+      logger.info('Datos de la cita:', formData);
+
       // Simular envío exitoso
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Redirigir a confirmación
-      router.push("/appointments?success=true");
+      router.push('/appointments?success=true');
     } catch (error) {
-      logger.error("Error programando cita:", error);
+      logger.error('Error programando cita:', error);
     } finally {
       setIsLoading(false);
     }
@@ -248,11 +262,16 @@ export default function BookAppointmentPage() {
 
   const canProceedToNext = () => {
     switch (currentStep) {
-      case 1: return selectedSpecialty !== "";
-      case 2: return selectedDoctor !== null;
-      case 3: return selectedDate !== "" && selectedTime !== "";
-      case 4: return formData.reason.trim() !== "";
-      default: return true;
+      case 1:
+        return selectedSpecialty !== '';
+      case 2:
+        return selectedDoctor !== null;
+      case 3:
+        return selectedDate !== '' && selectedTime !== '';
+      case 4:
+        return formData.reason.trim() !== '';
+      default:
+        return true;
     }
   };
 
@@ -269,8 +288,8 @@ export default function BookAppointmentPage() {
                   onClick={() => handleSpecialtySelect(specialty.id)}
                   className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                     selectedSpecialty === specialty.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <div className="text-2xl mb-2">{specialty.icon}</div>
@@ -298,14 +317,18 @@ export default function BookAppointmentPage() {
                     onClick={() => handleDoctorSelect(doctor)}
                     className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left ${
                       selectedDoctor?.id === doctor.id
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                         {doctor.avatar ? (
-                          <img src={doctor.avatar} alt={doctor.name} className="w-full h-full rounded-full" />
+                          <img
+                            src={doctor.avatar}
+                            alt={doctor.name}
+                            className="w-full h-full rounded-full"
+                          />
                         ) : (
                           <User className="w-6 h-6 text-gray-500" />
                         )}
@@ -329,9 +352,7 @@ export default function BookAppointmentPage() {
                             Telemedicina
                           </span>
                         )}
-                        <span className="text-xs text-gray-500">
-                          {doctor.languages.join(", ")}
-                        </span>
+                        <span className="text-xs text-gray-500">{doctor.languages.join(', ')}</span>
                       </div>
                     </div>
                   </button>
@@ -345,7 +366,7 @@ export default function BookAppointmentPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-gray-900">Selecciona fecha y hora</h2>
-            
+
             {/* Calendario */}
             <div className="space-y-4">
               <h3 className="font-medium text-gray-900">Fecha</h3>
@@ -356,15 +377,15 @@ export default function BookAppointmentPage() {
                   const dateStr = date.toISOString().split('T')[0];
                   const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' });
                   const dayNumber = date.getDate();
-                  
+
                   return (
                     <button
                       key={dateStr}
                       onClick={() => handleDateSelect(dateStr)}
                       className={`p-3 rounded-lg border transition-all duration-200 ${
                         selectedDate === dateStr
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
                       <div className="text-xs text-gray-500">{dayName}</div>
@@ -393,10 +414,10 @@ export default function BookAppointmentPage() {
                         disabled={!slot.available}
                         className={`p-3 rounded-lg border transition-all duration-200 ${
                           !slot.available
-                            ? "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
+                            ? 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
                             : selectedTime === slot.time
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300"
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
                         <div className="flex items-center justify-center space-x-1">
@@ -421,7 +442,7 @@ export default function BookAppointmentPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-gray-900">Información de la cita</h2>
-            
+
             <div className="space-y-4">
               {/* Tipo de cita */}
               <div>
@@ -430,7 +451,9 @@ export default function BookAppointmentPage() {
                 </label>
                 <select
                   value={formData.type}
-                  onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as any }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, type: e.target.value as any }))
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="consultation">Consulta general</option>
@@ -447,7 +470,7 @@ export default function BookAppointmentPage() {
                 </label>
                 <textarea
                   value={formData.reason}
-                  onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, reason: e.target.value }))}
                   rows={3}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Describe brevemente el motivo de tu consulta..."
@@ -467,8 +490,8 @@ export default function BookAppointmentPage() {
                       onClick={() => handleSymptomToggle(symptom)}
                       className={`p-2 text-sm rounded border transition-all duration-200 ${
                         formData.symptoms.includes(symptom)
-                          ? "border-blue-500 bg-blue-50 text-blue-700"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
                       {symptom}
@@ -484,7 +507,9 @@ export default function BookAppointmentPage() {
                 </label>
                 <select
                   value={formData.urgency}
-                  onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as any }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, urgency: e.target.value as any }))
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="normal">Normal</option>
@@ -500,7 +525,7 @@ export default function BookAppointmentPage() {
                 </label>
                 <textarea
                   value={formData.notes}
-                  onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
                   rows={2}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Información adicional que consideres importante..."
@@ -514,7 +539,7 @@ export default function BookAppointmentPage() {
         return (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-gray-900">Confirma tu cita</h2>
-            
+
             <div className="bg-gray-50 rounded-lg p-6 space-y-4">
               {/* Resumen de la cita */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -523,20 +548,20 @@ export default function BookAppointmentPage() {
                   <p className="text-gray-600">{selectedDoctor?.name}</p>
                   <p className="text-sm text-gray-500">{selectedDoctor?.specialty}</p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Fecha y hora</h3>
                   <p className="text-gray-600">
-                    {new Date(selectedDate).toLocaleDateString('es-ES', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    {new Date(selectedDate).toLocaleDateString('es-ES', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </p>
                   <p className="text-gray-600">{selectedTime}</p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Tipo de consulta</h3>
                   <p className="text-gray-600 capitalize">{formData.type.replace('_', ' ')}</p>
@@ -547,7 +572,7 @@ export default function BookAppointmentPage() {
                     </span>
                   )}
                 </div>
-                
+
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Costo</h3>
                   <p className="text-2xl font-bold text-blue-600">
@@ -567,7 +592,10 @@ export default function BookAppointmentPage() {
                   <h3 className="font-medium text-gray-900 mb-2">Síntomas</h3>
                   <div className="flex flex-wrap gap-2">
                     {formData.symptoms.map((symptom) => (
-                      <span key={symptom} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">
+                      <span
+                        key={symptom}
+                        className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm"
+                      >
                         {symptom}
                       </span>
                     ))}
@@ -618,7 +646,7 @@ export default function BookAppointmentPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver
           </button>
-          
+
           <h1 className="text-3xl font-bold text-gray-900">Programar Cita</h1>
           <p className="text-gray-600 mt-2">Sigue los pasos para agendar tu consulta médica</p>
         </div>
@@ -630,17 +658,17 @@ export default function BookAppointmentPage() {
               const Icon = step.icon;
               const isActive = currentStep === step.id;
               const isCompleted = currentStep > step.id;
-              
+
               return (
                 <div key={step.id} className="flex items-center">
                   <div className="flex flex-col items-center">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-200 ${
                         isCompleted
-                          ? "bg-green-500 border-green-500 text-white"
+                          ? 'bg-green-500 border-green-500 text-white'
                           : isActive
-                          ? "bg-blue-500 border-blue-500 text-white"
-                          : "bg-white border-gray-300 text-gray-400"
+                            ? 'bg-blue-500 border-blue-500 text-white'
+                            : 'bg-white border-gray-300 text-gray-400'
                       }`}
                     >
                       {isCompleted ? (
@@ -651,7 +679,7 @@ export default function BookAppointmentPage() {
                     </div>
                     <span
                       className={`text-xs mt-2 text-center ${
-                        isActive ? "text-blue-600 font-medium" : "text-gray-500"
+                        isActive ? 'text-blue-600 font-medium' : 'text-gray-500'
                       }`}
                     >
                       {step.title}
@@ -659,9 +687,7 @@ export default function BookAppointmentPage() {
                   </div>
                   {index < BOOKING_STEPS.length - 1 && (
                     <div
-                      className={`w-16 h-0.5 mx-4 ${
-                        isCompleted ? "bg-green-500" : "bg-gray-300"
-                      }`}
+                      className={`w-16 h-0.5 mx-4 ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`}
                     />
                   )}
                 </div>
@@ -671,9 +697,7 @@ export default function BookAppointmentPage() {
         </div>
 
         {/* Step Content */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-          {renderStepContent()}
-        </div>
+        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">{renderStepContent()}</div>
 
         {/* Navigation */}
         <div className="flex items-center justify-between">
@@ -718,4 +742,4 @@ export default function BookAppointmentPage() {
       </div>
     </div>
   );
-} 
+}

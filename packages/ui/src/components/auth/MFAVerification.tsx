@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card';
-import { Button } from '../button';
-import { Input } from '../input';
-import { Label } from '../label';
+import { AlertCircle, Key, Loader2, Lock, RefreshCw, Shield, Smartphone } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, AlertDescription } from '../alert';
+import { Button } from '../Button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../Card';
 import { Checkbox } from '../checkbox';
+import { Input } from '../Input';
+import { Label } from '../label';
 // Simple logger implementation to avoid circular dependencies
 const logger = {
   info: (message, data) => {
@@ -28,9 +29,8 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
-import { Shield, Smartphone, AlertCircle, Loader2, Key, RefreshCw, Lock } from 'lucide-react';
 
 /**
  * Componente de verificación MFA

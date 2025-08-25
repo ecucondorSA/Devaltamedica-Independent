@@ -16,7 +16,33 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./api": "./src/api/index.ts",
+    "./api/*": "./src/api/*",
+    "./medical": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./medical/*": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./medical/useAppointments": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./realtime": "./src/realtime/index.ts",
+    "./realtime/*": "./src/realtime/*",
+    "./composed": "./src/composed/index.ts",
+    "./composed/*": "./src/composed/*",
+    "./providers": "./src/providers/index.ts",
+    "./providers/*": "./src/providers/*",
+    "./utils": "./src/utils/index.ts",
+    "./utils/*": "./src/utils/*",
+    "./*": "./src/*"
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",

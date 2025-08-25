@@ -1,26 +1,25 @@
-"use client";
+'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import type { LatLngTuple } from "leaflet";
+import type { LatLngTuple } from 'leaflet';
+import L from 'leaflet';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet/dist/leaflet.css';
+import { useEffect, useRef } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 // Tipos
-import { Doctor } from '@altamedica/types';
+import { Doctor, Location } from '@altamedica/types';
 
 interface InteractiveMapProps {
-  doctors: Doctor[];
+  doctors: (Doctor & { location?: Location })[];
   center?: LatLngTuple;
 }
 
 // Configurar iconos de Leaflet (necesario para SSR)
 const createCustomIcon = (status: string) => {
   return L.divIcon({
-    className: "custom-marker",
+    className: 'custom-marker',
     html: `
       <div class="marker-container">
         <div class="marker-icon ${status === 'Disponible' ? 'available' : 'busy'}">
@@ -41,26 +40,28 @@ const createCustomIcon = (status: string) => {
 export default function InteractiveMap({ doctors, center }: InteractiveMapProps) {
   const mapRef = useRef<L.Map | null>(null);
 
-  // Filtrar doctores con coordenadas
-  const doctorsWithCoordinates = doctors.filter(doctor => doctor.coordinates);
+  // Filtrar doctores con ubicación
+  const doctorsWithLocation = doctors.filter((doctor) => doctor.location);
 
   // Centro del mapa (Argentina) - fallback si no se proporciona center
   const mapCenter: LatLngTuple = center || [-34.6037, -58.3816]; // Buenos Aires
 
   useEffect(() => {
     // Asegurar que Leaflet se inicialice correctamente
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Eliminar iconos por defecto de Leaflet
       delete (L.Icon.Default.prototype as any)._getIconUrl;
       L.Icon.Default.mergeOptions({
-        iconRetinaUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyQzIgMTcuNTIgNi40OCAyMiAxMiAyMkMxNy41MiAyMiAyMiAxNy41MiAyMiAxMkMyMiA2LjQ4IDE3LjUyIDIgMTIgMloiIGZpbGw9IiM2NjY2NjYiLz4KPC9zdmc+",
-        iconUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyQzIgMTcuNTIgNi40OCAyMiAxMiAyMkMxNy41MiAyMiAyMiAxNy41MiAyMiAxMkMyMiA2LjQ4IDE3LjUyIDIgMTIgMloiIGZpbGw9IiM2NjY2NjYiLz4KPC9zdmc+",
-        shadowUrl: "",
+        iconRetinaUrl:
+          'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyQzIgMTcuNTIgNi40OCAyMiAxMiAyMkMxNy41MiAyMiAyMiAxNy41MiAyMiAxMkMyMiA2LjQ4IDE3LjUyIDIgMTIgMloiIGZpbGw9IiM2NjY2NjYiLz4KPC9zdmc+',
+        iconUrl:
+          'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyQzIgMTcuNTIgNi40OCAyMiAxMiAyMkMxNy41MiAyMiAyMiAxNy41MiAyMiAxMkMyMiA2LjQ4IDE3LjUyIDIgMTIgMloiIGZpbGw9IiM2NjY2NjYiLz4KPC9zdmc+',
+        shadowUrl: '',
       });
     }
   }, []);
 
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return (
       <div className="h-[600px] bg-gradient-to-br from-blue-50 to-sky-100 rounded-lg flex items-center justify-center border border-gray-200">
         <div className="text-center space-y-4">
@@ -79,14 +80,14 @@ export default function InteractiveMap({ doctors, center }: InteractiveMapProps)
           background: transparent;
           border: none;
         }
-        
+
         .marker-container {
           position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        
+
         .marker-icon {
           width: 24px;
           height: 24px;
@@ -97,39 +98,39 @@ export default function InteractiveMap({ doctors, center }: InteractiveMapProps)
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
           transition: transform 0.2s ease;
         }
-        
+
         .marker-icon:hover {
           transform: scale(1.1);
         }
-        
+
         .marker-icon.available {
           background: rgba(16, 185, 129, 0.1);
           border: 2px solid #10b981;
         }
-        
+
         .marker-icon.busy {
           background: rgba(239, 68, 68, 0.1);
           border: 2px solid #ef4444;
         }
-        
+
         .leaflet-popup-content {
           margin: 8px 12px;
           font-family: var(--font-inter), system-ui, sans-serif;
         }
-        
+
         .leaflet-popup-content h3 {
           font-size: 14px;
           font-weight: 600;
           margin: 0 0 4px 0;
           color: #1f2937;
         }
-        
+
         .leaflet-popup-content p {
           font-size: 12px;
           margin: 2px 0;
           color: #6b7280;
         }
-        
+
         .leaflet-popup-content .status {
           display: inline-block;
           padding: 2px 8px;
@@ -138,12 +139,12 @@ export default function InteractiveMap({ doctors, center }: InteractiveMapProps)
           font-weight: 500;
           margin-top: 4px;
         }
-        
+
         .leaflet-popup-content .status.available {
           background: #dcfce7;
           color: #166534;
         }
-        
+
         .leaflet-popup-content .status.busy {
           background: #fee2e2;
           color: #991b1b;
@@ -167,22 +168,28 @@ export default function InteractiveMap({ doctors, center }: InteractiveMapProps)
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        
-        {doctorsWithCoordinates.map((doctor) => (
+
+        {doctorsWithLocation.map((doctor) => (
           <Marker
             key={doctor.id}
-            position={doctor.coordinates!}
-            icon={createCustomIcon(doctor.status)}
+            position={[doctor.location!.lat, doctor.location!.lng]}
+            icon={createCustomIcon('Disponible')}
           >
             <Popup>
               <div className="doctor-popup">
-                <h3>{doctor.name}</h3>
-                <p><strong>Especialidad:</strong> {doctor.specialty}</p>
-                <p><strong>Ubicación:</strong> {doctor.location}</p>
-                <p><strong>Calificación:</strong> ⭐ {doctor.rating}/5.0</p>
-                <span className={`status ${doctor.status.toLowerCase()}`}>
-                  {doctor.status}
-                </span>
+                <h3>
+                  {doctor.firstName} {doctor.lastName}
+                </h3>
+                <p>
+                  <strong>Especialidad:</strong> {doctor.specialty}
+                </p>
+                <p>
+                  <strong>Ubicación:</strong> {doctor.location?.address || 'No especificada'}
+                </p>
+                <p>
+                  <strong>Experiencia:</strong> {doctor.experience} años
+                </p>
+                <span className="status available">Disponible</span>
               </div>
             </Popup>
           </Marker>

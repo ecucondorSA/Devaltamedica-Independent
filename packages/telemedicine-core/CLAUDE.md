@@ -1,5 +1,94 @@
 # CLAUDE.md - Telemedicine Core
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO WebRTC
+
+### ✅ Script Start (WebRTC Package)
+```javascript
+import { MediaSoup } from 'mediasoup-client';
+import { Socket } from 'socket.io-client';
+```
+
+### ✅ WebRTC Connection Setup
+```javascript
+export const createWebRTCConnection = () => {
+  const config = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ],
+    iceCandidatePoolSize: 10
+  };
+  return new RTCPeerConnection(config);
+};
+```
+
+### ✅ Media Capture Pattern
+```javascript
+export const captureMedia = async (constraints = {}) => {
+  const defaultConstraints = {
+    video: { 
+      width: { ideal: 1280 }, 
+      height: { ideal: 720 },
+      facingMode: 'user'
+    },
+    audio: { 
+      echoCancellation: true, 
+      noiseSuppression: true,
+      autoGainControl: true
+    }
+  };
+  
+  return await navigator.mediaDevices.getUserMedia({
+    ...defaultConstraints,
+    ...constraints
+  });
+};
+```
+
+### ✅ Quality Monitor
+```javascript
+export const monitorConnectionQuality = (peerConnection) => {
+  return setInterval(async () => {
+    const stats = await peerConnection.getStats();
+    const report = Array.from(stats.values())
+      .filter(stat => stat.type === 'inbound-rtp' && stat.mediaType === 'video')[0];
+    
+    if (report) {
+      const quality = {
+        packetsLost: report.packetsLost || 0,
+        jitter: report.jitter || 0,
+        bytesReceived: report.bytesReceived || 0,
+        timestamp: Date.now()
+      };
+      console.log('WebRTC Quality:', quality);
+    }
+  }, 2000);
+};
+```
+
+### ✅ Test WebRTC Connection
+```javascript
+const testWebRTCConnection = async () => {
+  try {
+    const pc = createWebRTCConnection();
+    const stream = await captureMedia();
+    
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+    
+    return {
+      status: 'SUCCESS',
+      videoTracks: stream.getVideoTracks().length,
+      audioTracks: stream.getAudioTracks().length,
+      connectionState: pc.connectionState
+    };
+  } catch (error) {
+    return { status: 'FAILED', error: error.message };
+  }
+};
+```
+
+---
+
 Resumen operativo para agentes IA sobre el paquete `@altamedica/telemedicine-core`.
 
 ## 🌳 WORKTREE PARA TELEMEDICINE CORE

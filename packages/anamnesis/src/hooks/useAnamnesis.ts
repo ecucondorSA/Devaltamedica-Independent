@@ -7,19 +7,16 @@
  * - apps/web-app/src/hooks/useAnamnesis.ts
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useAuth } from '@altamedica/auth';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type {
   AnamnesisData,
-  AnamnesisSection,
-  AnamnesisQuestion,
-  AnamnesisResponse,
-  ProgresoAnamnesis,
-  SeccionAnamnesis,
-  PreguntaAnamnesis,
-  RespuestaAnamnesis,
+  EscenaAnamnesis,
   Logro,
-  EscenaAnamnesis
+  PreguntaAnamnesis,
+  ProgresoAnamnesis,
+  RespuestaAnamnesis,
+  SeccionAnamnesis
 } from '../types/anamnesis.types';
 
 export interface UseAnamnesisOptions {
@@ -78,7 +75,7 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
     onSave
   } = options;
 
-  const { authState } = useAuth();
+  const auth = useAuth();
   const [anamnesis, setAnamnesis] = useState<AnamnesisData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,7 +92,7 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
   const [points, setPoints] = useState(0);
   const [tiempoInicio] = useState(Date.now());
 
-  const id = patientId || authState?.user?.id;
+  const id = patientId || (auth?.user as any)?.id;
 
   // Calcular sección y pregunta actual
   const seccionActual = useMemo(() => 
@@ -185,7 +182,7 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
 
   // Cargar anamnesis
   const loadAnamnesis = useCallback(async () => {
-    if (!id || !authState?.token) {
+  if (!id || !(auth as any)?.token) {
       setLoading(false);
       return;
     }
@@ -197,7 +194,7 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
       // Simulación - reemplazar con llamada real a API
       const response = await fetch(`/api/v1/anamnesis/${id}`, {
         headers: {
-          'Authorization': `Bearer ${authState.token}`
+          'Authorization': `Bearer ${(auth as any).token}`
         }
       });
       
@@ -215,11 +212,11 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
     } finally {
       setLoading(false);
     }
-  }, [id, authState?.token]);
+  }, [id, (auth as any)?.token]);
 
   // Guardar anamnesis
   const saveAnamnesis = useCallback(async (data?: Partial<AnamnesisData>) => {
-    if (!id || !authState?.token) return;
+  if (!id || !(auth as any)?.token) return;
 
     try {
       const dataToSave = data || {
@@ -229,10 +226,10 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
         mode
       };
 
-      const response = await fetch(`/api/v1/anamnesis/${id}`, {
+    const response = await fetch(`/api/v1/anamnesis/${id}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${authState.token}`,
+      'Authorization': `Bearer ${(auth as any).token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(dataToSave)
@@ -249,7 +246,7 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error saving anamnesis');
     }
-  }, [id, authState?.token, progreso, completionPercentage, mode, onSave]);
+  }, [id, (auth as any)?.token, progreso, completionPercentage, mode, onSave]);
 
   // Responder pregunta
   const responderPregunta = useCallback((preguntaId: string, valor: any) => {
@@ -257,12 +254,13 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
       ...prev,
       respuestas: {
         ...prev.respuestas,
-        [preguntaId]: {
+        [preguntaId]: ({
           preguntaId,
           valor,
+          respuesta: valor,
           timestamp: new Date(),
-          tipo: preguntaActual?.type || 'text'
-        } as RespuestaAnamnesis
+          tipo: (preguntaActual as any)?.type || 'text'
+        } as unknown) as RespuestaAnamnesis
       }
     }));
 
@@ -337,12 +335,13 @@ export function useAnamnesis(options: UseAnamnesisOptions = {}): UseAnamnesisRet
     const respuestasConvertidas: Record<string, RespuestaAnamnesis> = {};
     
     Object.entries(respuestasJuego).forEach(([key, value]) => {
-      respuestasConvertidas[key] = {
+      respuestasConvertidas[key] = ({
         preguntaId: key,
         valor: value,
+        respuesta: value,
         timestamp: new Date(),
         tipo: 'imported'
-      } as RespuestaAnamnesis;
+      } as unknown) as RespuestaAnamnesis;
     });
     
     setProgreso(prev => ({

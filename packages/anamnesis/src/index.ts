@@ -1,7 +1,8 @@
 // Barrel principal del paquete @altamedica/anamnesis
 // ✅ MIGRACIÓN COMPLETA - Consolidación de componentes anamnesis
 
-export * from './types/anamnesis.types'
+// Types are available via their files directly. Avoid re-exporting here to prevent
+// duplicate type symbol collisions with component-local types during d.ts bundling.
 
 // Componente principal unificado
 export * from './components/UnifiedAnamnesis'

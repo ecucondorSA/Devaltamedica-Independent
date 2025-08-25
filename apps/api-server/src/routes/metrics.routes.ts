@@ -3,10 +3,10 @@
  * P1 Monitoring: Expose metrics for Prometheus scraping
  */
 
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { getMetrics, getMetricsJson } from '../lib/metrics';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 const router = Router();
 
 /**
@@ -16,12 +16,12 @@ const router = Router();
 router.get('/metrics', async (req: Request, res: Response) => {
   try {
     const metrics = await getMetrics();
-    
+
     // Set Prometheus content type
     res.setHeader('Content-Type', 'text/plain; version=0.0.4; charset=utf-8');
     res.send(metrics);
   } catch (error: any) {
-    logger.error('[Metrics] Error getting metrics:', undefined, error);
+    logger.error('[Metrics] Error getting metrics', undefined, error);
     res.status(500).json({
       error: 'Failed to get metrics',
       message: error.message
@@ -38,7 +38,7 @@ router.get('/metrics/json', async (req: Request, res: Response) => {
     const metrics = await getMetricsJson();
     res.json(metrics);
   } catch (error: any) {
-    logger.error('[Metrics] Error getting JSON metrics:', undefined, error);
+    logger.error('[Metrics] Error getting JSON metrics', undefined, error);
     res.status(500).json({
       error: 'Failed to get metrics',
       message: error.message

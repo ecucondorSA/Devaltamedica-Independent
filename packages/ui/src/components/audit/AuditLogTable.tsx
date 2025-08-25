@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
-import { Button } from '../button';
-import { Input } from '../input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button } from '../Button';
 import { Calendar } from '../calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover';
-import { Badge } from '../badge';
-import { Loader2, Download, Filter, ChevronUp, ChevronDown, CalendarIcon } from 'lucide-react';
+import { Input } from '../Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table/Table';
+// Popover no existe en esta lib; omitir si no está en uso
+// import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { CalendarIcon, ChevronDown, ChevronUp, Download, Filter, Loader2 } from 'lucide-react';
+import { Badge } from '../Badge';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
@@ -33,7 +34,7 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 /**
  * Audit Log Table Component

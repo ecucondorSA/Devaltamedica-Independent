@@ -4,10 +4,8 @@
  * @description Botón de pánico para activar protocolos de emergencia
  */
 
-import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Phone, Heart, Loader2 } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { Button } from '../button';
+import { AlertTriangle, Heart, Loader2, Phone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -15,10 +13,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../dialog';
-import { RadioGroup, RadioGroupItem } from '../radio-group';
-import { Label } from '../label';
-import { Textarea } from '../textarea';
+} from '../../dialog';
+import { cn } from '../../lib/utils';
+import { Textarea } from '../../textarea';
+import { Button } from '../Button';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
@@ -41,7 +39,7 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 export interface EmergencyType {
   code: string;
@@ -70,49 +68,49 @@ const EMERGENCY_TYPES: EmergencyType[] = [
     label: 'Paro Cardíaco',
     icon: <Heart className="w-5 h-5" />,
     severity: 'critical',
-    description: 'Paciente sin pulso o respiración'
+    description: 'Paciente sin pulso o respiración',
   },
   {
     code: 'CODE_STEMI',
     label: 'Infarto Agudo',
     icon: <Heart className="w-5 h-5" />,
     severity: 'critical',
-    description: 'Dolor torácico con cambios ECG'
+    description: 'Dolor torácico con cambios ECG',
   },
   {
     code: 'CODE_STROKE',
     label: 'ACV/Stroke',
     icon: <AlertTriangle className="w-5 h-5" />,
     severity: 'critical',
-    description: 'Déficit neurológico agudo'
+    description: 'Déficit neurológico agudo',
   },
   {
     code: 'CODE_RESPIRATORY',
     label: 'Insuf. Respiratoria',
     icon: <AlertTriangle className="w-5 h-5" />,
     severity: 'urgent',
-    description: 'Dificultad respiratoria severa'
+    description: 'Dificultad respiratoria severa',
   },
   {
     code: 'CODE_ANAPHYLAXIS',
     label: 'Anafilaxia',
     icon: <AlertTriangle className="w-5 h-5" />,
     severity: 'urgent',
-    description: 'Reacción alérgica grave'
+    description: 'Reacción alérgica grave',
   },
   {
     code: 'GENERAL_EMERGENCY',
     label: 'Otra Emergencia',
     icon: <AlertTriangle className="w-5 h-5" />,
     severity: 'moderate',
-    description: 'Situación médica urgente'
-  }
+    description: 'Situación médica urgente',
+  },
 ];
 
 const sizeClasses = {
   sm: 'px-3 py-2 text-sm',
   md: 'px-4 py-3 text-base',
-  lg: 'px-6 py-4 text-lg'
+  lg: 'px-6 py-4 text-lg',
 };
 
 export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
@@ -125,7 +123,7 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
   size = 'md',
   variant = 'default',
   showPulse = true,
-  className
+  className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isActivating, setIsActivating] = useState(false);
@@ -154,8 +152,8 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
 
   const handleTypeSelect = (typeCode: string) => {
     setSelectedType(typeCode);
-    const emergencyType = EMERGENCY_TYPES.find(t => t.code === typeCode);
-    
+    const emergencyType = EMERGENCY_TYPES.find((t) => t.code === typeCode);
+
     // Para emergencias críticas, iniciar countdown
     if (emergencyType?.severity === 'critical') {
       setIsConfirming(true);
@@ -164,11 +162,11 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
   };
 
   const handleConfirmedActivation = async () => {
-    const emergencyType = EMERGENCY_TYPES.find(t => t.code === selectedType);
+    const emergencyType = EMERGENCY_TYPES.find((t) => t.code === selectedType);
     if (!emergencyType) return;
 
     setIsActivating(true);
-    
+
     try {
       await onEmergencyActivate(emergencyType, notes);
       setIsOpen(false);
@@ -232,7 +230,7 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'w-16 h-16 flex items-center justify-center',
             showPulse && !disabled && 'animate-pulse',
-            className
+            className,
           )}
           aria-label="Activar emergencia médica"
         >
@@ -244,11 +242,7 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
           onClick={handleEmergencyClick}
           disabled={disabled}
           variant="destructive"
-          className={cn(
-            sizeClasses[size],
-            showPulse && !disabled && 'animate-pulse',
-            className
-          )}
+          className={cn(sizeClasses[size], showPulse && !disabled && 'animate-pulse', className)}
         >
           {buttonContent}
         </Button>
@@ -262,25 +256,34 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
               Activar Protocolo de Emergencia
             </DialogTitle>
             <DialogDescription>
-              Seleccione el tipo de emergencia médica. Esta acción notificará 
-              inmediatamente al equipo médico y servicios de emergencia.
+              Seleccione el tipo de emergencia médica. Esta acción notificará inmediatamente al
+              equipo médico y servicios de emergencia.
             </DialogDescription>
           </DialogHeader>
 
           {!isConfirming ? (
             <div className="space-y-4">
-              <RadioGroup value={selectedType} onValueChange={handleTypeSelect}>
+              <div role="radiogroup" aria-label="Tipos de emergencia" className="space-y-2">
                 {EMERGENCY_TYPES.map((type) => (
                   <div
                     key={type.code}
                     className={cn(
                       'flex items-start space-x-3 p-3 rounded-lg border cursor-pointer transition-colors',
-                      selectedType === type.code ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:bg-gray-50'
+                      selectedType === type.code
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-200 hover:bg-gray-50',
                     )}
                     onClick={() => handleTypeSelect(type.code)}
                   >
-                    <RadioGroupItem value={type.code} id={type.code} className="mt-1" />
-                    <Label htmlFor={type.code} className="flex-1 cursor-pointer">
+                    <input
+                      type="radio"
+                      id={type.code}
+                      name="emergency-type"
+                      className="mt-1"
+                      checked={selectedType === type.code}
+                      onChange={() => handleTypeSelect(type.code)}
+                    />
+                    <label htmlFor={type.code} className="flex-1 cursor-pointer">
                       <div className="flex items-center gap-2 font-semibold">
                         {type.icon}
                         {type.label}
@@ -291,14 +294,16 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
                         )}
                       </div>
                       <p className="text-sm text-gray-600 mt-1">{type.description}</p>
-                    </Label>
+                    </label>
                   </div>
                 ))}
-              </RadioGroup>
+              </div>
 
               {selectedType && (
                 <div className="space-y-2">
-                  <Label htmlFor="notes">Notas adicionales (opcional)</Label>
+                  <label htmlFor="notes" className="text-sm font-medium text-gray-700">
+                    Notas adicionales (opcional)
+                  </label>
                   <Textarea
                     id="notes"
                     value={notes}
@@ -311,33 +316,25 @@ export const EmergencyButton: React.FC<EmergencyButtonProps> = ({
             </div>
           ) : (
             <div className="text-center py-8">
-              <div className="text-6xl font-bold text-red-600 mb-4">
-                {countdown}
-              </div>
+              <div className="text-6xl font-bold text-red-600 mb-4">{countdown}</div>
               <p className="text-lg font-semibold mb-2">
-                Activando {EMERGENCY_TYPES.find(t => t.code === selectedType)?.label}
+                Activando {EMERGENCY_TYPES.find((t) => t.code === selectedType)?.label}
               </p>
-              <p className="text-sm text-gray-600">
-                La emergencia se activará automáticamente
-              </p>
+              <p className="text-sm text-gray-600">La emergencia se activará automáticamente</p>
             </div>
           )}
 
           <DialogFooter>
             {!isConfirming ? (
               <>
-                <Button
-                  variant="outline"
-                  onClick={handleCancel}
-                  disabled={isActivating}
-                >
+                <Button variant="outline" onClick={handleCancel} disabled={isActivating}>
                   Cancelar
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={() => {
                     if (selectedType) {
-                      const type = EMERGENCY_TYPES.find(t => t.code === selectedType);
+                      const type = EMERGENCY_TYPES.find((t) => t.code === selectedType);
                       if (type?.severity === 'critical') {
                         handleTypeSelect(selectedType);
                       } else {

@@ -1,3 +1,5 @@
+'use client';
+
 // @altamedica/auth - Paquete centralizado de autenticación consolidado
 // IMPORTANTE: Este archivo ahora incluye toda la funcionalidad unificada
 
@@ -5,12 +7,19 @@ export const authVersion = '1.1.0';
 
 // ============== SERVICIOS ==============
 // Servicio de autenticación consolidado (migrado desde auth-service)
-export { AuthService, PublicUserRole, getAuthService } from './services/AuthService';
+export {
+  AuthService,
+  PublicUserRole,
+  getAuthService,
+  type User as AuthUser,
+} from './services/AuthService';
 // Re-export de UserRole desde types para evitar dependencia cruzada
 export { UserRole } from '@altamedica/types';
 
 // Tipos principales
 export type { AuthState, LoginCredentials, RegisterData, User } from './services/AuthService';
+// Types expected by api-server: re-export AuthToken/AuthResult shapes if present in types package
+export type { AuthResult, AuthToken } from '@altamedica/types';
 
 // ============== HOOKS Y COMPONENTES ==============
 // Hooks de React (migrado y mejorado desde auth-service)

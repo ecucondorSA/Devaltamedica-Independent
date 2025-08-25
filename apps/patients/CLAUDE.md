@@ -1,5 +1,66 @@
 # CLAUDE.md - App: Patients 🏥
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO PACIENTES
+
+### ✅ Script Start (Next.js Patient)
+```javascript
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import { z } from 'zod';
+```
+
+### ✅ Patient Auth Pattern
+```javascript
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) return res.status(401).json({ error: 'Unauthorized' });
+  
+  if (!session.user.roles.includes('PATIENT')) {
+    return res.status(403).json({ error: 'Patient access required' });
+  }
+}
+```
+
+### ✅ Patient Data Validation
+```javascript
+const PatientUpdateSchema = z.object({
+  personalInfo: z.object({
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    dateOfBirth: z.string().datetime()
+  }),
+  medicalHistory: z.array(z.object({
+    condition: z.string(),
+    diagnosedDate: z.string().datetime(),
+    status: z.enum(['active', 'resolved', 'monitoring'])
+  }))
+});
+```
+
+### ✅ Test Patient Endpoint
+```javascript
+const testPatientEndpoint = async (endpoint) => {
+  const testData = {
+    patientId: '123e4567-e89b-12d3-a456-426614174000',
+    action: 'update_profile'
+  };
+  
+  try {
+    const response = await fetch(`http://localhost:3003/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testData)
+    });
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+```
+
+---
+
+
 ## 🌳 WORKTREE PARA PATIENTS APP
 
 - **Para auditar componentes duplicados**: usar `../devaltamedica-audit/`

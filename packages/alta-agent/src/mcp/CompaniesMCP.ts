@@ -3,6 +3,7 @@
  * Puerto 3004 - Marketplace médico B2B
  */
 
+import { logger } from '../logger.js';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const companiesConfig: MCPConfig = {
@@ -166,29 +167,7 @@ export class CompaniesMCP extends BaseMCP {
 // Mapa del marketplace (SSR-safe)
 import dynamic from 'next/dynamic';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 const MarketplaceMap = dynamic(
   () => import('@/components/marketplace/MarketplaceMap'),
   { ssr: false }

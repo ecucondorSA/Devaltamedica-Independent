@@ -1,10 +1,10 @@
+import { logger } from '@altamedica/shared';
 import { App, getApps, initializeApp, ServiceAccount } from 'firebase-admin/app';
 import { Auth, getAuth } from 'firebase-admin/auth';
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { getStorage, Storage } from 'firebase-admin/storage';
 import fs from 'fs';
 import path from 'path';
-import { logger } from '@altamedica/shared/services/logger.service';
 // Removed 'server-only' import - not compatible with Express server
 
 // Singleton instances
@@ -33,9 +33,9 @@ function getFirebaseCredentials(): ServiceAccount | null {
   }
 
   // Fallback a variables individuales
-  if (process.env.FIREBASE_PROJECT_ID && 
-      process.env.FIREBASE_CLIENT_EMAIL && 
-      process.env.FIREBASE_PRIVATE_KEY) {
+  if (process.env.FIREBASE_PROJECT_ID &&
+    process.env.FIREBASE_CLIENT_EMAIL &&
+    process.env.FIREBASE_PRIVATE_KEY) {
     return {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
@@ -74,7 +74,7 @@ function validateFirebaseCredentials(): void {
       '  - Or individual: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY'
     );
   }
-  
+
   logger.info('✅ [Firebase] Credentials validated from environment variables');
 }
 
@@ -85,7 +85,7 @@ function validateFirebaseCredentials(): void {
 function initializeFirebaseAdmin(): App | null {
   // Si ya está inicializado, retornar la instancia existente
   if (app) return app;
-  
+
   // Verificar si ya hay una app inicializada
   const existingApps = getApps();
   if (existingApps.length > 0) {
@@ -129,10 +129,10 @@ function initializeFirebaseAdmin(): App | null {
  */
 export function getAuthAdmin(): Auth | null {
   if (auth) return auth;
-  
+
   const firebaseApp = initializeFirebaseAdmin();
   if (!firebaseApp) return null;
-  
+
   auth = getAuth(firebaseApp);
   return auth;
 }
@@ -143,12 +143,12 @@ export function getAuthAdmin(): Auth | null {
  */
 export function getFirestoreAdmin(): Firestore | null {
   if (db) return db;
-  
+
   const firebaseApp = initializeFirebaseAdmin();
   if (!firebaseApp) return null;
-  
+
   db = getFirestore(firebaseApp);
-  
+
   // Configurar ajustes de Firestore solo si no han sido configurados antes
   try {
     db.settings({
@@ -162,7 +162,7 @@ export function getFirestoreAdmin(): Firestore | null {
     // Los settings ya fueron configurados, ignorar el error
     logger.info('Firestore settings already configured');
   }
-  
+
   return db;
 }
 
@@ -172,10 +172,10 @@ export function getFirestoreAdmin(): Firestore | null {
  */
 export function getStorageAdmin(): Storage | null {
   if (storage) return storage;
-  
+
   const firebaseApp = initializeFirebaseAdmin();
   if (!firebaseApp) return null;
-  
+
   storage = getStorage(firebaseApp);
   return storage;
 }

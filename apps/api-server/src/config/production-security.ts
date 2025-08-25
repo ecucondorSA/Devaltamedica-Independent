@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Module type: ESM (via tsx/tsc; runtime CJS-compatible)
 
 /**
@@ -86,7 +86,7 @@ export function validateEnvironment(): EnvironmentConfig {
         if (fs.existsSync(envPath)) {
           dotenv.config({ path: envPath });
         }
-      } catch {}
+      } catch { }
     }
   }
 
@@ -166,7 +166,7 @@ export function validateEnvironment(): EnvironmentConfig {
             merged.FIREBASE_PRIVATE_KEY = (json.private_key as string).replace(/\n/g, '\n');
           }
         }
-      } catch {}
+      } catch { }
     }
     Object.entries(devDefaults).forEach(([key, value]) => {
       const current = (merged as any)[key];

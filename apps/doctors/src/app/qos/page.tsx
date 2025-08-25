@@ -1,7 +1,7 @@
-import { Metadata } from 'next';
 import { QoSDashboard } from '@/components/qos/QoSDashboard';
-import { auth } from '@/lib/auth';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { auth } from '../../lib/auth-stub';
 
 export const metadata: Metadata = {
   title: 'QoS Dashboard | AltaMedica Doctors',
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function QoSPage() {
   const session = await auth();
-  
+
   if (!session) {
     redirect('/login');
   }

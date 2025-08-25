@@ -2,7 +2,7 @@ import { createClient } from 'redis';
 import { v4 as uuidv4 } from 'uuid';
 import { serverConfig } from '../config/server.config.js';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // TODO: Definir estos tipos en @altamedica/types
 interface User {
   id: string;

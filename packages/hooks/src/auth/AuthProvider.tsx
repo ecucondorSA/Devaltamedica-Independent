@@ -4,28 +4,28 @@
  * @description Componente React que proporciona contexto de autenticación a toda la app
  */
 
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import { createContext, ReactNode, useContext, useEffect } from 'react';
+import type { AuthState, AuthTokens, User } from './types';
 import { useAuth } from './useAuth';
-import type { AuthState, User, AuthTokens } from './types';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (message: any, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message: any, data?: any) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message: any, data?: any) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message: any, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }

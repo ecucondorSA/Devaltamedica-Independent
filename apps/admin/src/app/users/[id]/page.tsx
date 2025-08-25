@@ -1,45 +1,45 @@
-'use client'
+'use client';
 
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@altamedica/ui'
-import { useToast } from '@/hooks/use-toast'
-import { ArrowLeft, Save, User } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@altamedica/ui';
+import { useToast } from '../../../hooks/use-toast';
+import { ArrowLeft, Save, User } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface UserData {
-  id: string
-  name: string
-  email: string
-  role: 'patient' | 'doctor' | 'company' | 'admin' | 'super-admin'
-  status: 'active' | 'inactive' | 'suspended'
-  phoneNumber?: string
-  address?: string
-  createdAt: string
-  lastLogin: string
-  permissions?: string[]
+  id: string;
+  name: string;
+  email: string;
+  role: 'patient' | 'doctor' | 'company' | 'admin' | 'super-admin';
+  status: 'active' | 'inactive' | 'suspended';
+  phoneNumber?: string;
+  address?: string;
+  createdAt: string;
+  lastLogin: string;
+  permissions?: string[];
 }
 
 export default function EditUserPage() {
-  const router = useRouter()
-  const params = useParams()
-  const userId = params?.id as string
-  const { toast } = useToast()
-  
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [user, setUser] = useState<UserData | null>(null)
+  const router = useRouter();
+  const params = useParams();
+  const userId = params?.id as string;
+  const { toast } = useToast();
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [user, setUser] = useState<UserData | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     role: '',
     status: '',
     phoneNumber: '',
-    address: ''
-  })
+    address: '',
+  });
 
   useEffect(() => {
     if (userId && userId !== 'new') {
-      fetchUser()
+      fetchUser();
     } else if (userId === 'new') {
       // Initialize form for new user
       setFormData({
@@ -48,109 +48,104 @@ export default function EditUserPage() {
         role: 'patient',
         status: 'active',
         phoneNumber: '',
-        address: ''
-      })
-      setLoading(false)
+        address: '',
+      });
+      setLoading(false);
     }
-  }, [userId])
+  }, [userId]);
 
   const fetchUser = async () => {
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      
-      if (!response.ok) throw new Error('Failed to fetch user')
-      
-      const data = await response.json()
-      setUser(data.user)
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch user');
+
+      const data = await response.json();
+      setUser(data.user);
       setFormData({
         name: data.user.name || '',
         email: data.user.email || '',
         role: data.user.role || '',
         status: data.user.status || '',
         phoneNumber: data.user.phoneNumber || '',
-        address: data.user.address || ''
-      })
+        address: data.user.address || '',
+      });
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to load user data',
-        variant: 'destructive'
-      })
-      router.push('/users')
+        variant: 'destructive',
+      });
+      router.push('/users');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
+    e.preventDefault();
+    setSaving(true);
 
     try {
-      const url = userId === 'new' 
-        ? 'http://localhost:3001/api/v1/users'
-        : `http://localhost:3001/api/v1/users/${userId}`
-      
-      const method = userId === 'new' ? 'POST' : 'PUT'
-      
+      const url =
+        userId === 'new'
+          ? 'http://localhost:3001/api/v1/users'
+          : `http://localhost:3001/api/v1/users/${userId}`;
+
+      const method = userId === 'new' ? 'POST' : 'PUT';
+
       const response = await fetch(url, {
         method,
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
-      })
+        body: JSON.stringify(formData),
+      });
 
-      if (!response.ok) throw new Error('Failed to save user')
+      if (!response.ok) throw new Error('Failed to save user');
 
       toast({
         title: 'Success',
-        description: userId === 'new' ? 'User created successfully' : 'User updated successfully'
-      })
-      
-      router.push('/users')
+        description: userId === 'new' ? 'User created successfully' : 'User updated successfully',
+      });
+
+      router.push('/users');
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to save user',
-        variant: 'destructive'
-      })
+        variant: 'destructive',
+      });
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }))
-  }
+      [field]: value,
+    }));
+  };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-full">Loading...</div>
+    return <div className="flex items-center justify-center h-full">Loading...</div>;
   }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push('/users')}
-          >
+          <Button variant="ghost" size="sm" onClick={() => router.push('/users')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Users
           </Button>
-          <h1 className="text-2xl font-bold">
-            {userId === 'new' ? 'Add New User' : 'Edit User'}
-          </h1>
+          <h1 className="text-2xl font-bold">{userId === 'new' ? 'Add New User' : 'Edit User'}</h1>
         </div>
       </div>
 
@@ -259,12 +254,7 @@ export default function EditUserPage() {
                 <label htmlFor="password" className="text-sm font-medium">
                   Initial Password *
                 </label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Minimum 8 characters"
-                  required
-                />
+                <Input id="password" type="password" placeholder="Minimum 8 characters" required />
                 <p className="text-sm text-gray-500">
                   User will be required to change password on first login
                 </p>
@@ -287,11 +277,7 @@ export default function EditUserPage() {
             )}
 
             <div className="flex justify-end space-x-4 pt-6">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push('/users')}
-              >
+              <Button type="button" variant="outline" onClick={() => router.push('/users')}>
                 Cancel
               </Button>
               <Button type="submit" disabled={saving}>
@@ -303,5 +289,5 @@ export default function EditUserPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

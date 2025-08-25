@@ -10,15 +10,25 @@
 // 🏥 HOOKS MÉDICOS (evitar duplicados)
 // ==========================================
 export {
-    useDiagnosticEngine, useDoctorSchedule,
-    useDoctorWorkflow, useMedicalAI,
-    useMedicalRecord,
-    useMedicalRecords, useWebRTC as useMedicalWebRTC, usePatientDashboard,
-    usePatientPortal, usePrescription,
-    usePrescriptions, useTelemedicine,
-    useVideoCall, useVitalSigns,
-    useVitalSignsMonitoring
+  useDiagnosticEngine,
+  useDoctorSchedule,
+  useDoctorWorkflow,
+  useMedicalAI,
+  useMedicalRecord,
+  useMedicalRecords,
+  useWebRTC as useMedicalWebRTC,
+  usePatientDashboard,
+  usePatientPortal,
+  usePrescription,
+  usePrescriptions,
+  useTelemedicine,
+  useVideoCall,
+  useVitalSigns,
+  useVitalSignsMonitoring,
 } from './medical';
+
+// Accesos directos frecuentes
+export { usePatientData } from './medical';
 
 // ==========================================
 // 🔐 HOOKS DE AUTENTICACIÓN
@@ -55,7 +65,12 @@ export * from './realtime/types';
 // ==========================================
 // 🧩 HOOKS COMPUESTOS
 // ==========================================
-export { useAdminDashboard, usePatientDashboard as useComposedPatientDashboard, useDoctorDashboard, useMedicalDashboard } from './composed/useMedicalDashboard';
+export {
+  useAdminDashboard,
+  usePatientDashboard as useComposedPatientDashboard,
+  useDoctorDashboard,
+  useMedicalDashboard,
+} from './composed/useMedicalDashboard';
 export { useTelemedicineSession } from './composed/useTelemedicineSession';
 
 // ==========================================

@@ -1,3 +1,19 @@
+# PNPM Workspace Optimization
 packages:
   - 'apps/*'
   - 'packages/*'
+  - 'tools/*'
+
+# Performance optimizations
+resolution-mode: 'highest'
+save-exact: true
+auto-install-peers: true
+
+# Build optimizations  
+enable-pre-post-scripts: false
+shamefully-hoist: false
+strict-peer-dependencies: false
+
+# Cache optimizations
+store-dir: ~/.pnpm-store
+cache-dir: ~/.pnpm-cache

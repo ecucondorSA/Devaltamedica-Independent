@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserPreferences } from '../../contexts/UserPreferencesContext';
 
 import { logger } from '@altamedica/shared/services/logger.service';
@@ -32,7 +31,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
     const loadMetrics = async () => {
       try {
         setLoading(true);
-        
+
         // Simular carga de métricas (en producción esto vendría de la API)
         const mockMetrics: MetricCard[] = [
           {
@@ -43,7 +42,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             changeType: 'increase',
             icon: '📅',
             color: 'bg-blue-500',
-            description: 'Próximas 30 días'
+            description: 'Próximas 30 días',
           },
           {
             id: 'prescriptions',
@@ -53,7 +52,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             changeType: 'decrease',
             icon: '💊',
             color: 'bg-green-500',
-            description: 'Vigentes'
+            description: 'Vigentes',
           },
           {
             id: 'lab-results',
@@ -63,7 +62,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             changeType: 'neutral',
             icon: '🔬',
             color: 'bg-yellow-500',
-            description: 'Por revisar'
+            description: 'Por revisar',
           },
           {
             id: 'health-score',
@@ -73,20 +72,20 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             changeType: 'increase',
             icon: '❤️',
             color: 'bg-red-500',
-            description: 'Basado en métricas'
-          }
+            description: 'Basado en métricas',
+          },
         ];
 
         // Filtrar métricas según preferencias del usuario
-        const filteredMetrics = preferences.dashboard.showMetrics 
-          ? mockMetrics 
+        const filteredMetrics = preferences.dashboard.showMetrics
+          ? mockMetrics
           : mockMetrics.slice(0, 2);
 
         setMetrics(filteredMetrics);
         setError(null);
       } catch (err) {
         setError('Error al cargar métricas');
-        logger.error('Error loading metrics:', err);
+        logger.error('Error loading metrics: ' + String(err));
       } finally {
         setLoading(false);
       }
@@ -106,7 +105,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
           // Aquí iría la lógica de recarga real
           logger.info('Auto-refreshing metrics...');
         } catch (error) {
-          logger.error('Error auto-refreshing metrics:', error);
+          logger.error('Error auto-refreshing metrics: ' + String(error));
         }
       };
       loadMetrics();
@@ -117,7 +116,9 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
 
   if (loading) {
     return (
-      <div className={`grid gap-4 ${compact ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}`}>
+      <div
+        className={`grid gap-4 ${compact ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}`}
+      >
         {Array.from({ length: compact ? 2 : 4 }).map((_, i) => (
           <div key={i} className="bg-white dark:bg-gray-800 rounded-lg p-4 animate-pulse">
             <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
@@ -164,7 +165,9 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className={`font-semibold ${compact ? 'text-sm' : 'text-lg'} text-gray-900 dark:text-white`}>
+        <h3
+          className={`font-semibold ${compact ? 'text-sm' : 'text-lg'} text-gray-900 dark:text-white`}
+        >
           Métricas de Salud
         </h3>
         {preferences.dashboard.autoRefresh && (
@@ -175,7 +178,9 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
         )}
       </div>
 
-      <div className={`grid gap-4 ${compact ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}`}>
+      <div
+        className={`grid gap-4 ${compact ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}`}
+      >
         {metrics.map((metric) => (
           <div
             key={metric.id}
@@ -184,9 +189,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className={`text-2xl ${compact ? 'text-xl' : 'text-2xl'}`}>
-                {metric.icon}
-              </span>
+              <span className={`text-2xl ${compact ? 'text-xl' : 'text-2xl'}`}>{metric.icon}</span>
               {metric.change !== undefined && (
                 <div className={`flex items-center text-xs ${getChangeColor(metric.changeType)}`}>
                   <span className="mr-1">{getChangeIcon(metric.changeType)}</span>
@@ -196,14 +199,16 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
             </div>
 
             <div className="mb-1">
-              <div className={`font-bold text-gray-900 dark:text-white ${
-                compact ? 'text-sm' : 'text-lg'
-              }`}>
+              <div
+                className={`font-bold text-gray-900 dark:text-white ${
+                  compact ? 'text-sm' : 'text-lg'
+                }`}
+              >
                 {metric.value}
               </div>
-              <div className={`text-gray-600 dark:text-gray-400 ${
-                compact ? 'text-xs' : 'text-sm'
-              }`}>
+              <div
+                className={`text-gray-600 dark:text-gray-400 ${compact ? 'text-xs' : 'text-sm'}`}
+              >
                 {metric.title}
               </div>
             </div>
@@ -220,9 +225,10 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
                 <div
                   className={`h-1 rounded-full ${metric.color.replace('bg-', 'bg-')}`}
                   style={{
-                    width: typeof metric.value === 'number' 
-                      ? `${Math.min(metric.value * 10, 100)}%` 
-                      : '60%'
+                    width:
+                      typeof metric.value === 'number'
+                        ? `${Math.min(metric.value * 10, 100)}%`
+                        : '60%',
                   }}
                 ></div>
               </div>
@@ -234,9 +240,7 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
       {/* Métricas adicionales en modo detallado */}
       {!compact && preferences.dashboard.layout === 'detailed' && (
         <div className="mt-6">
-          <h4 className="font-medium text-gray-900 dark:text-white mb-3">
-            Métricas Detalladas
-          </h4>
+          <h4 className="font-medium text-gray-900 dark:text-white mb-3">Métricas Detalladas</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
               <div className="text-sm text-gray-600 dark:text-gray-400">Última Visita</div>
@@ -255,4 +259,4 @@ export default function DashboardMetrics({ patientId, compact = false }: Dashboa
       )}
     </div>
   );
-} 
+}

@@ -6,11 +6,11 @@
  */
 
 import { EmergencyBanner } from '@altamedica/ui';
-import NotificationsCard from '@/components/notifications/NotificationsMVP';
+import NotificationsCard from '../components/notifications/NotificationsMVP';
 import { useState, useEffect } from 'react';
 import { useEmergencyBanner } from '../hooks/useEmergency';
 import { emergencyService } from '../services/emergency-service';
-
+import { AuthProvider as AuthProviderClient } from '@altamedica/auth';
 
 /**
  * Wrapper para EmergencyBanner usando el sistema unificado de emergencias
@@ -28,7 +28,7 @@ export function EmergencyBannerWrapper() {
           message: 'Sistema de emergencias médicas activo y funcionando',
           actions: [],
           autoHide: true,
-          autoHideDelay: 10000
+          autoHideDelay: 10000,
         });
       }, 2000);
 
@@ -40,13 +40,23 @@ export function EmergencyBannerWrapper() {
 
   return (
     <EmergencyBanner
-      emergency={emergency}
+      type={
+        emergency.severity === 'critical'
+          ? 'critical'
+          : emergency.severity === 'high'
+            ? 'urgent'
+            : 'warning'
+      }
+      title={`Emergencia ${emergency.type}`}
+      message={emergency.message}
       onDismiss={dismiss}
-      onActionClick={(action) => {
-        if (executeAction && action.id) {
-          executeAction(action.id);
-        }
+      onEmergencyCall={() => {
+        // Lógica para llamada de emergencia
+        console.log('Llamada de emergencia iniciada');
       }}
+      autoHide={emergency.autoHide}
+      autoHideDelay={emergency.autoHideDelay}
+      className="w-full"
     />
   );
 }
@@ -63,3 +73,10 @@ export default function ClientSidebarWidgets() {
  * Re-export individual para uso específico
  */
 export { NotificationsCard as ClientNotifications };
+
+/**
+ * Wrapper para AuthProvider que necesita 'use client'
+ */
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return <AuthProviderClient>{children}</AuthProviderClient>;
+}

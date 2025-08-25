@@ -1,28 +1,28 @@
 /**
  * 📅 MIGRADO A CENTRALIZED: useAppointments
- * 
+ *
  * Esta implementación local (284 líneas) ha sido reemplazada por la versión
  * centralizada y robusta de @altamedica/hooks que incluye:
  * - Schemas Zod completos
- * - TanStack Query optimizado  
+ * - TanStack Query optimizado
  * - Manejo de errores profesional
  * - Compatibilidad total con la API
- * 
+ *
  * @deprecated Usar @altamedica/hooks en su lugar
  */
 
-// Re-export de todos los hooks de appointments desde la versión centralizada
+// Re-export de todos los hooks de appointments desde nuestro stub temporal
 export {
-  useAppointments,
   useAppointment,
-  useCreateAppointment,
-  useUpdateAppointment,
-  useCancelAppointment,
-  useConfirmAppointment,
-  useRescheduleAppointment,
+  useAppointments,
   useAvailableSlots,
+  useCancelAppointment,
   useCompleteAppointment,
-} from '@altamedica/api-client/hooks';
+  useConfirmAppointment,
+  useCreateAppointment,
+  useRescheduleAppointment,
+  useUpdateAppointment,
+} from '../../api-client-stub';
 
 // Para compatibilidad, mantener los query keys similares
 export const appointmentKeys = {

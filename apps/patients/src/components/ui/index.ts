@@ -17,39 +17,48 @@ import type { AppointmentData, MedicalRecordData } from '@altamedica/ui';
 // ⚠️ COMPONENTES MIGRADOS A @altamedica/ui PACKAGES
 // Los siguientes componentes están ahora centralizados:
 // - SearchFilter → @altamedica/ui/forms
-// - FormLabel → @altamedica/ui/forms  
+// - FormLabel → @altamedica/ui/forms
 // - FormError → @altamedica/ui/forms
 // - FormGroup → @altamedica/ui/forms
 
 // 📦 RE-EXPORTACIÓN DE COMPONENTES CENTRALIZADOS
-// export { 
-//   SearchFilter, 
-//   SearchFilterCompact, 
-//   SearchFilterExpanded 
+// export {
+//   SearchFilter,
+//   SearchFilterCompact,
+//   SearchFilterExpanded
 // } from '@altamedica/ui/forms';
 
-// export { 
-//   FormLabel, 
-//   FormLabelCompact, 
-//   FormLabelLarge 
+// Re-export de CardCorporate y partes desde @altamedica/ui para mantener imports locales existentes
+export {
+  ButtonCorporate,
+  CardContentCorporate,
+  CardCorporate,
+  CardFooterCorporate,
+  CardHeaderCorporate,
+} from '@altamedica/ui';
+
+// export {
+//   FormLabel,
+//   FormLabelCompact,
+//   FormLabelLarge
 // } from '@altamedica/ui/forms';
 
-// export { 
-//   FormError 
+// export {
+//   FormError
 // } from '@altamedica/ui/forms';
 
-// export { 
-//   FormGroup, 
-//   FormGroupCompact, 
-//   FormGroupHorizontal 
+// export {
+//   FormGroup,
+//   FormGroupCompact,
+//   FormGroupHorizontal
 // } from '@altamedica/ui/forms';
 
 // 📝 Tipos y interfaces locales (disponibles en @altamedica/ui)
-// export type { 
+// export type {
 //   MedicalRecordType,
 //   Priority,
 //   MedicalRecordData,
-//   MedicalRecordCardProps 
+//   MedicalRecordCardProps
 // } from '@altamedica/ui';
 
 // ⚠️ NOTA: Los tipos de componentes migrados están disponibles en @altamedica/ui:
@@ -72,13 +81,13 @@ export const MOCK_APPOINTMENT: AppointmentData = {
     id: 'doc-001',
     name: 'Dr. Carlos Mendoza',
     specialty: 'Cardiología',
-    rating: 4.8
+    rating: 4.8,
   },
   location: 'Consultorio 205, 2do Piso',
   isTelemedicine: false,
   patientNotes: 'Dolor leve en el pecho ocasionalmente',
   cost: 3500,
-  insurance: 'OSDE'
+  insurance: 'OSDE',
 };
 
 export const MOCK_TELEMEDICINE_APPOINTMENT: AppointmentData = {
@@ -94,10 +103,10 @@ export const MOCK_TELEMEDICINE_APPOINTMENT: AppointmentData = {
     id: 'doc-002',
     name: 'Dra. Ana López',
     specialty: 'Medicina General',
-    rating: 4.9
+    rating: 4.9,
   },
   isTelemedicine: true,
-  patientNotes: 'Resultados de análisis de sangre completos'
+  patientNotes: 'Resultados de análisis de sangre completos',
 };
 
 export const MOCK_MEDICAL_RECORD: MedicalRecordData = {
@@ -110,7 +119,7 @@ export const MOCK_MEDICAL_RECORD: MedicalRecordData = {
   doctor: {
     id: 'doc-001',
     name: 'Dr. Carlos Mendoza',
-    specialty: 'Cardiología'
+    specialty: 'Cardiología',
   },
   diagnosis: ['Hipertensión arterial leve', 'Arritmia sinusal'],
   symptoms: ['Palpitaciones ocasionales', 'Fatiga leve'],
@@ -121,18 +130,18 @@ export const MOCK_MEDICAL_RECORD: MedicalRecordData = {
       name: 'Presión Arterial',
       result: '145/90 mmHg',
       normalRange: '<120/80 mmHg',
-      status: 'abnormal'
+      status: 'abnormal',
     },
     {
       name: 'Frecuencia Cardíaca',
       result: '78 bpm',
       normalRange: '60-100 bpm',
-      status: 'normal'
-    }
+      status: 'normal',
+    },
   ],
   followUpRequired: true,
   followUpDate: '2025-02-10T14:30:00',
-  tags: ['cardiología', 'hipertensión', 'seguimiento']
+  tags: ['cardiología', 'hipertensión', 'seguimiento'],
 };
 
 export const MOCK_EMERGENCY_RECORD: MedicalRecordData = {
@@ -145,7 +154,7 @@ export const MOCK_EMERGENCY_RECORD: MedicalRecordData = {
   doctor: {
     id: 'doc-003',
     name: 'Dr. Roberto Silva',
-    specialty: 'Medicina de Emergencias'
+    specialty: 'Medicina de Emergencias',
   },
   diagnosis: ['Angina de pecho', 'Descartado infarto agudo de miocardio'],
   symptoms: ['Dolor torácico intenso', 'Sudoración', 'Náuseas'],
@@ -156,17 +165,17 @@ export const MOCK_EMERGENCY_RECORD: MedicalRecordData = {
       name: 'Troponina I',
       result: '0.02 ng/mL',
       normalRange: '<0.04 ng/mL',
-      status: 'normal'
+      status: 'normal',
     },
     {
       name: 'ECG',
       result: 'Sin alteraciones agudas',
-      status: 'normal'
-    }
+      status: 'normal',
+    },
   ],
   followUpRequired: true,
   followUpDate: '2025-01-12T09:00:00',
-  tags: ['emergencia', 'cardiología', 'dolor-torácico']
+  tags: ['emergencia', 'cardiología', 'dolor-torácico'],
 };
 
 // 🎯 CONFIGURACIÓN DE TEMAS CORPORATIVOS
@@ -181,28 +190,28 @@ export const UI_THEME_CONFIG = {
     gradients: {
       primary: 'var(--gradient-primary-altamedica)',
       cta: 'var(--gradient-cta-altamedica)',
-      hero: 'var(--gradient-hero)'
+      hero: 'var(--gradient-hero)',
     },
     animations: {
       fadeIn: 'animate-fade-in-conservative',
       scaleHover: 'hover:scale-105',
-      scaleActive: 'active:scale-95'
-    }
-  }
+      scaleActive: 'active:scale-95',
+    },
+  },
 };
 
 export default {
   // Componentes locales restantes
   // SearchFilter,
-  
+
   // Datos mock para desarrollo
   MOCK_APPOINTMENT,
   MOCK_TELEMEDICINE_APPOINTMENT,
   MOCK_MEDICAL_RECORD,
   MOCK_EMERGENCY_RECORD,
-  
+
   // Configuración
-  UI_THEME_CONFIG
+  UI_THEME_CONFIG,
 };
 
 // ⚠️ MIGRACIÓN COMPLETADA:

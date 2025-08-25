@@ -21,23 +21,24 @@ import {
 } from 'firebase/auth';
 import { doc, Firestore, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 // Simple logger implementation to avoid circular dependencies
+type LogData = unknown;
 const logger = {
-  info: (message, data) => {
+  info: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
@@ -53,11 +54,24 @@ enum UserRole {
 }
 // Función auxiliar para normalizar roles
 const normalizeUserRole = (role: string): UserRole => {
-  const normalized = role.toUpperCase() as UserRole;
-  if (!Object.values(UserRole).includes(normalized)) {
-    return UserRole.PATIENT; // Default role
+  const key = role?.toString().trim().toLowerCase();
+  switch (key) {
+    case 'admin':
+    case 'ADMIN':
+    case 'platform-admin':
+      return UserRole.ADMIN;
+    case 'doctor':
+    case 'medical_director':
+    case 'nurse':
+      return UserRole.DOCTOR;
+    case 'company':
+    case 'company-admin':
+    case 'company_admin':
+      return UserRole.COMPANY;
+    case 'patient':
+    default:
+      return UserRole.PATIENT;
   }
-  return normalized;
 };
 
 // Eliminado enum duplicado: se usan los roles canónicos. Si un flujo requiere "estado previo a selección"

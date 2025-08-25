@@ -50,7 +50,10 @@
       "Bash(fi)",
       "Bash(done)",
       "Bash(npx tsup:*)",
-      "Bash(firebase login:ci:*)"
+      "Bash(firebase login:ci:*)",
+      "Bash(npx next build:*)",
+      "Bash(git config:*)",
+      "Bash(NODE_ENV=production pnpm build)"
     ],
     "deny": [],
     "ask": [],

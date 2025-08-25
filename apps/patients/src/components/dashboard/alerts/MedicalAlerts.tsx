@@ -1,10 +1,24 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from 'react';
-import { MedicalAlert } from '../../../types/medical-types';
+import React, { useEffect, useState } from 'react';
 
 import { logger } from '@altamedica/shared/services/logger.service';
+
+interface MedicalAlert {
+  id: string;
+  patientId: string;
+  type: 'vital_sign' | 'medication' | 'lab_result' | 'appointment' | 'general';
+  severity: 'info' | 'warning' | 'critical';
+  title: string;
+  message: string;
+  timestamp: Date;
+  acknowledged: boolean;
+  acknowledgedBy?: string;
+  acknowledgedAt?: Date;
+  actionRequired: boolean;
+  relatedEntityId: string | null;
+}
+
 interface MedicalAlertsProps {
   patientId: string;
   onEmergencyTrigger?: () => void;
@@ -16,7 +30,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
   patientId,
   onEmergencyTrigger,
   onAlertClick,
-  maxVisible = 5
+  maxVisible = 5,
 }) => {
   const [alerts, setAlerts] = useState<MedicalAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,11 +50,12 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             type: 'vital_sign',
             severity: 'critical',
             title: 'Presión arterial elevada crítica',
-            message: 'La presión arterial ha alcanzado niveles críticos: 180/120 mmHg. Se requiere atención inmediata.',
+            message:
+              'La presión arterial ha alcanzado niveles críticos: 180/120 mmHg. Se requiere atención inmediata.',
             timestamp: new Date(Date.now() - 30 * 60000), // Hace 30 minutos
             acknowledged: false,
             actionRequired: true,
-            relatedEntityId: 'vs-001'
+            relatedEntityId: 'vs-001',
           },
           {
             id: '2',
@@ -52,7 +67,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             timestamp: new Date(Date.now() - 2 * 3600000), // Hace 2 horas
             acknowledged: false,
             actionRequired: true,
-            relatedEntityId: 'med-002'
+            relatedEntityId: 'med-002',
           },
           {
             id: '3',
@@ -66,7 +81,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             acknowledgedBy: 'Dr. Martínez',
             acknowledgedAt: new Date(Date.now() - 3 * 3600000),
             actionRequired: false,
-            relatedEntityId: 'lab-003'
+            relatedEntityId: 'lab-003',
           },
           {
             id: '4',
@@ -78,7 +93,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             timestamp: new Date(Date.now() - 6 * 3600000), // Hace 6 horas
             acknowledged: false,
             actionRequired: false,
-            relatedEntityId: 'apt-004'
+            relatedEntityId: 'apt-004',
           },
           {
             id: '5',
@@ -86,17 +101,18 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             type: 'general',
             severity: 'warning',
             title: 'Actualización del plan de tratamiento',
-            message: 'Su médico ha actualizado su plan de tratamiento. Por favor revise los cambios.',
+            message:
+              'Su médico ha actualizado su plan de tratamiento. Por favor revise los cambios.',
             timestamp: new Date(Date.now() - 24 * 3600000), // Hace 24 horas
             acknowledged: false,
             actionRequired: true,
-            relatedEntityId: null
-          }
+            relatedEntityId: null,
+          },
         ];
 
         setAlerts(mockAlerts);
       } catch (error) {
-        logger.error('Error cargando alertas:', error);
+        logger.error('Error cargando alertas:', error as string);
       } finally {
         setIsLoading(false);
       }
@@ -106,7 +122,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
   }, [patientId]);
 
   // Filtrar alertas
-  const filteredAlerts = alerts.filter(alert => {
+  const filteredAlerts = alerts.filter((alert) => {
     if (filter === 'critical') return alert.severity === 'critical';
     if (filter === 'unread') return !alert.acknowledged;
     return true;
@@ -115,67 +131,69 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
   // Contar alertas por tipo
   const alertCounts = {
     total: alerts.length,
-    critical: alerts.filter(a => a.severity === 'critical').length,
-    unread: alerts.filter(a => !a.acknowledged).length
+    critical: alerts.filter((a) => a.severity === 'critical').length,
+    unread: alerts.filter((a) => !a.acknowledged).length,
   };
 
   // Verificar si hay alertas críticas no reconocidas
   const hasCriticalUnacknowledged = alerts.some(
-    a => a.severity === 'critical' && !a.acknowledged
+    (a) => a.severity === 'critical' && !a.acknowledged,
   );
 
   // Marcar alerta como reconocida
   const acknowledgeAlert = async (alertId: string) => {
     try {
       // En producción, esto actualizaría en el servidor
-      setAlerts(prev => prev.map(alert => 
-        alert.id === alertId 
-          ? { 
-              ...alert, 
-              acknowledged: true, 
-              acknowledgedBy: 'Usuario actual',
-              acknowledgedAt: new Date()
-            }
-          : alert
-      ));
+      setAlerts((prev) =>
+        prev.map((alert) =>
+          alert.id === alertId
+            ? {
+                ...alert,
+                acknowledged: true,
+                acknowledgedBy: 'Usuario actual',
+                acknowledgedAt: new Date(),
+              }
+            : alert,
+        ),
+      );
     } catch (error) {
-      logger.error('Error al reconocer alerta:', error);
+      logger.error('Error al reconocer alerta:', error as string);
     }
   };
 
   // Obtener icono según tipo de alerta
-  const getAlertIcon = (type: string) => {
-    const icons = {
+  const getAlertIcon = (type: MedicalAlert['type']) => {
+    const icons: Record<MedicalAlert['type'], string> = {
       vital_sign: '❤️',
       medication: '💊',
       appointment: '📅',
       lab_result: '🔬',
-      general: '📢'
+      general: '📢',
     };
     return icons[type] || '⚠️';
   };
 
   // Obtener estilo según severidad
-  const getSeverityStyle = (severity: string) => {
+  const getSeverityStyle = (severity: MedicalAlert['severity']) => {
     const styles = {
       critical: {
         container: 'bg-red-50 border-red-300',
         icon: 'text-red-600',
         title: 'text-red-900',
-        badge: 'bg-red-100 text-red-800'
+        badge: 'bg-red-100 text-red-800',
       },
       warning: {
         container: 'bg-yellow-50 border-yellow-300',
         icon: 'text-yellow-600',
         title: 'text-yellow-900',
-        badge: 'bg-yellow-100 text-yellow-800'
+        badge: 'bg-yellow-100 text-yellow-800',
       },
       info: {
         container: 'bg-blue-50 border-blue-300',
         icon: 'text-blue-600',
         title: 'text-blue-900',
-        badge: 'bg-blue-100 text-blue-800'
-      }
+        badge: 'bg-blue-100 text-blue-800',
+      },
     };
     return styles[severity] || styles.info;
   };
@@ -186,7 +204,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
         <div className="animate-pulse space-y-3">
           <div className="h-4 bg-gray-200 rounded w-1/3"></div>
           <div className="space-y-2">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="h-20 bg-gray-100 rounded-lg"></div>
             ))}
           </div>
@@ -204,13 +222,11 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
             <h2 className="text-xl font-bold text-gray-900">Alertas Médicas</h2>
             <p className="text-sm text-gray-600 mt-1">
               {alertCounts.unread > 0 && (
-                <span className="text-orange-600 font-medium">
-                  {alertCounts.unread} sin leer • 
-                </span>
+                <span className="text-orange-600 font-medium">{alertCounts.unread} sin leer •</span>
               )}
               {alertCounts.critical > 0 && (
                 <span className="text-red-600 font-medium">
-                  {alertCounts.critical} crítica{alertCounts.critical > 1 ? 's' : ''} • 
+                  {alertCounts.critical} crítica{alertCounts.critical > 1 ? 's' : ''} •
                 </span>
               )}
               {alertCounts.total} total
@@ -242,9 +258,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
                   : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
               }`}
             >
-              {filterType === 'all' ? 'Todas' :
-               filterType === 'critical' ? 'Críticas' :
-               'Sin leer'}
+              {filterType === 'all' ? 'Todas' : filterType === 'critical' ? 'Críticas' : 'Sin leer'}
               {filterType !== 'all' && (
                 <span className="ml-1">
                   ({filterType === 'critical' ? alertCounts.critical : alertCounts.unread})
@@ -261,24 +275,24 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
           <div className="text-center py-8">
             <span className="text-4xl mb-3 block">✅</span>
             <p className="text-gray-500">
-              {filter === 'all' ? 'No hay alertas activas' :
-               filter === 'critical' ? 'No hay alertas críticas' :
-               'Todas las alertas han sido leídas'}
+              {filter === 'all'
+                ? 'No hay alertas activas'
+                : filter === 'critical'
+                  ? 'No hay alertas críticas'
+                  : 'Todas las alertas han sido leídas'}
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-            {filteredAlerts
-              .slice(0, showAll ? undefined : maxVisible)
-              .map((alert) => (
-                <AlertCard
-                  key={alert.id}
-                  alert={alert}
-                  onAcknowledge={() => acknowledgeAlert(alert.id)}
-                  onClick={() => onAlertClick?.(alert)}
-                />
-              ))}
-            
+            {filteredAlerts.slice(0, showAll ? undefined : maxVisible).map((alert) => (
+              <AlertCard
+                key={alert.id}
+                alert={alert}
+                onAcknowledge={() => acknowledgeAlert(alert.id)}
+                onClick={() => onAlertClick?.(alert)}
+              />
+            ))}
+
             {!showAll && filteredAlerts.length > maxVisible && (
               <button
                 onClick={() => setShowAll(true)}
@@ -287,7 +301,7 @@ const MedicalAlerts: React.FC<MedicalAlertsProps> = ({
                 Mostrar {filteredAlerts.length - maxVisible} alertas más
               </button>
             )}
-            
+
             {showAll && filteredAlerts.length > maxVisible && (
               <button
                 onClick={() => setShowAll(false)}
@@ -333,31 +347,32 @@ const AlertCard: React.FC<{
       icon: 'text-red-600',
       title: 'text-red-900',
       badge: 'bg-red-100 text-red-800',
-      button: 'bg-red-600 text-white hover:bg-red-700'
+      button: 'bg-red-600 text-white hover:bg-red-700',
     },
     warning: {
       container: 'bg-yellow-50 border-yellow-300',
       icon: 'text-yellow-600',
       title: 'text-yellow-900',
       badge: 'bg-yellow-100 text-yellow-800',
-      button: 'bg-yellow-600 text-white hover:bg-yellow-700'
+      button: 'bg-yellow-600 text-white hover:bg-yellow-700',
     },
     info: {
       container: 'bg-blue-50 border-blue-300',
       icon: 'text-blue-600',
       title: 'text-blue-900',
       badge: 'bg-blue-100 text-blue-800',
-      button: 'bg-blue-600 text-white hover:bg-blue-700'
-    }
+      button: 'bg-blue-600 text-white hover:bg-blue-700',
+    },
   }[alert.severity];
 
-  const alertIcon = {
-    vital_sign: '❤️',
-    medication: '💊',
-    appointment: '📅',
-    lab_result: '🔬',
-    general: '📢'
-  }[alert.type] || '⚠️';
+  const alertIcon =
+    {
+      vital_sign: '❤️',
+      medication: '💊',
+      appointment: '📅',
+      lab_result: '🔬',
+      general: '📢',
+    }[alert.type] || '⚠️';
 
   // Calcular tiempo transcurrido
   const getTimeAgo = (date: Date) => {
@@ -374,7 +389,7 @@ const AlertCard: React.FC<{
   };
 
   return (
-    <div 
+    <div
       className={`
         p-4 rounded-lg border-2 transition-all cursor-pointer
         ${severityStyle.container}
@@ -386,26 +401,28 @@ const AlertCard: React.FC<{
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 flex-1">
           <span className={`text-2xl ${severityStyle.icon}`}>{alertIcon}</span>
-          
+
           <div className="flex-1">
             <div className="flex items-center space-x-2">
-              <h4 className={`font-semibold ${severityStyle.title}`}>
-                {alert.title}
-              </h4>
+              <h4 className={`font-semibold ${severityStyle.title}`}>{alert.title}</h4>
               {!alert.acknowledged && (
                 <span className="relative flex h-2 w-2">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    alert.severity === 'critical' ? 'bg-red-400' : 'bg-yellow-400'
-                  }`}></span>
-                  <span className={`relative inline-flex rounded-full h-2 w-2 ${
-                    alert.severity === 'critical' ? 'bg-red-500' : 'bg-yellow-500'
-                  }`}></span>
+                  <span
+                    className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                      alert.severity === 'critical' ? 'bg-red-400' : 'bg-yellow-400'
+                    }`}
+                  ></span>
+                  <span
+                    className={`relative inline-flex rounded-full h-2 w-2 ${
+                      alert.severity === 'critical' ? 'bg-red-500' : 'bg-yellow-500'
+                    }`}
+                  ></span>
                 </span>
               )}
             </div>
-            
+
             <p className="text-sm text-gray-700 mt-1">{alert.message}</p>
-            
+
             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
               <span>{getTimeAgo(alert.timestamp)}</span>
               {alert.acknowledged && alert.acknowledgedBy && (
@@ -440,4 +457,4 @@ const AlertCard: React.FC<{
   );
 };
 
-export default MedicalAlerts; 
+export default MedicalAlerts;

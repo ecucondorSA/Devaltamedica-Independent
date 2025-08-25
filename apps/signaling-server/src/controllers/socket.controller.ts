@@ -4,7 +4,7 @@ import { authenticateSocketToken } from '../middleware/auth.middleware.js';
 import { FirebaseService } from '../services/firebase.service.js';
 import { RoomService } from '../services/room.service.js';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // TODO: Definir estos tipos en @altamedica/types
 type ToggleMediaData = any;
 type VitalsUpdateData = any;

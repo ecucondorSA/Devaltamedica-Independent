@@ -1,5 +1,5 @@
+import { logger } from '@altamedica/shared';
 import client from 'prom-client';
-import { logger } from '@altamedica/shared/services/logger.service';
 // import logger from '@/lib/response-helpers/logger';
 
 // Create a Registry which registers the metrics

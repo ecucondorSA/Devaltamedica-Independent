@@ -1,31 +1,20 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from 'react';
 import { logger } from '@altamedica/shared/services/logger.service';
-import { 
-  Pill, 
-  Calendar, 
-  Search, 
-  Filter, 
-  Download, 
-  Share2,
-  Eye,
-  Plus,
-  AlertCircle,
+import {
+  AlertTriangle,
   CheckCircle,
   Clock,
-  User,
-  Stethoscope,
-  FileText,
-  Printer,
+  Download,
+  Eye,
   Mail,
+  Pill,
+  Printer,
   RefreshCw,
-  AlertTriangle,
+  Search,
   X,
-  Edit,
-  Trash2
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface Prescription {
   id: string;
@@ -108,7 +97,7 @@ export default function PrescriptionsPage() {
               contraindications: ['Alergia a amlodipina', 'Embarazo'],
               isGeneric: true,
               brandName: 'Norvasc',
-              genericName: 'Amlodipina'
+              genericName: 'Amlodipina',
             },
             {
               id: 'med2',
@@ -122,9 +111,9 @@ export default function PrescriptionsPage() {
               contraindications: ['Enfermedad hepática', 'Embarazo'],
               isGeneric: true,
               brandName: 'Lipitor',
-              genericName: 'Atorvastatina'
-            }
-          ]
+              genericName: 'Atorvastatina',
+            },
+          ],
         },
         {
           id: '2',
@@ -151,9 +140,9 @@ export default function PrescriptionsPage() {
               contraindications: ['Alergia a paracetamol', 'Enfermedad hepática'],
               isGeneric: true,
               brandName: 'Tylenol',
-              genericName: 'Paracetamol'
-            }
-          ]
+              genericName: 'Paracetamol',
+            },
+          ],
         },
         {
           id: '3',
@@ -180,16 +169,16 @@ export default function PrescriptionsPage() {
               contraindications: ['Embarazo', 'Lactancia'],
               isGeneric: true,
               brandName: 'Retin-A',
-              genericName: 'Tretinoína'
-            }
-          ]
-        }
+              genericName: 'Tretinoína',
+            },
+          ],
+        },
       ];
 
       setPrescriptions(mockPrescriptions);
       setLoading(false);
     } catch (error) {
-      logger.error('Error loading prescriptions:', error);
+      logger.error('Error loading prescriptions: ' + String(error));
       setLoading(false);
     }
   };
@@ -198,21 +187,22 @@ export default function PrescriptionsPage() {
     let filtered = prescriptions;
 
     if (searchTerm) {
-      filtered = filtered.filter(prescription =>
-        prescription.doctor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        prescription.diagnosis.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        prescription.medications.some(med => 
-          med.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+      filtered = filtered.filter(
+        (prescription) =>
+          prescription.doctor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          prescription.diagnosis.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          prescription.medications.some((med) =>
+            med.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
       );
     }
 
     if (selectedStatus !== 'all') {
-      filtered = filtered.filter(prescription => prescription.status === selectedStatus);
+      filtered = filtered.filter((prescription) => prescription.status === selectedStatus);
     }
 
     if (selectedDoctor !== 'all') {
-      filtered = filtered.filter(prescription => prescription.doctor === selectedDoctor);
+      filtered = filtered.filter((prescription) => prescription.doctor === selectedDoctor);
     }
 
     setFilteredPrescriptions(filtered);
@@ -220,21 +210,31 @@ export default function PrescriptionsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'completed': return 'bg-blue-100 text-blue-800';
-      case 'expired': return 'bg-red-100 text-red-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'expired':
+        return 'bg-red-100 text-red-800';
+      case 'cancelled':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <CheckCircle className="w-4 h-4" />;
-      case 'completed': return <CheckCircle className="w-4 h-4" />;
-      case 'expired': return <AlertTriangle className="w-4 h-4" />;
-      case 'cancelled': return <X className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case 'active':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'completed':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'expired':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'cancelled':
+        return <X className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
@@ -275,7 +275,7 @@ export default function PrescriptionsPage() {
     setShowPrescriptionModal(true);
   };
 
-  const doctors = Array.from(new Set(prescriptions.map(p => p.doctor))).sort();
+  const doctors = Array.from(new Set(prescriptions.map((p) => p.doctor))).sort();
 
   if (loading) {
     return (
@@ -331,7 +331,7 @@ export default function PrescriptionsPage() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtros</h3>
-              
+
               {/* Búsqueda */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
@@ -372,8 +372,10 @@ export default function PrescriptionsPage() {
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="all">Todos los médicos</option>
-                  {doctors.map(doctor => (
-                    <option key={doctor} value={doctor}>{doctor}</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor} value={doctor}>
+                      {doctor}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -389,21 +391,23 @@ export default function PrescriptionsPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Activas:</span>
                     <span className="font-medium text-green-600">
-                      {filteredPrescriptions.filter(p => p.status === 'active').length}
+                      {filteredPrescriptions.filter((p) => p.status === 'active').length}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Por expirar:</span>
                     <span className="font-medium text-orange-600">
-                      {filteredPrescriptions.filter(p => 
-                        p.status === 'active' && daysUntilExpiry(p.expiresAt) <= 30
-                      ).length}
+                      {
+                        filteredPrescriptions.filter(
+                          (p) => p.status === 'active' && daysUntilExpiry(p.expiresAt) <= 30,
+                        ).length
+                      }
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Expiradas:</span>
                     <span className="font-medium text-red-600">
-                      {filteredPrescriptions.filter(p => p.status === 'expired').length}
+                      {filteredPrescriptions.filter((p) => p.status === 'expired').length}
                     </span>
                   </div>
                 </div>
@@ -475,7 +479,9 @@ export default function PrescriptionsPage() {
                             <p className="text-sm text-gray-600">{prescription.diagnosis}</p>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(prescription.status)}`}>
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${getStatusColor(prescription.status)}`}
+                            >
                               {prescription.status}
                             </span>
                             {getStatusIcon(prescription.status)}
@@ -493,7 +499,9 @@ export default function PrescriptionsPage() {
                           </div>
                           <div>
                             <span className="text-sm font-medium text-gray-700">Fecha:</span>
-                            <p className="text-gray-900">{new Date(prescription.date).toLocaleDateString('es-ES')}</p>
+                            <p className="text-gray-900">
+                              {new Date(prescription.date).toLocaleDateString('es-ES')}
+                            </p>
                           </div>
                         </div>
 
@@ -543,15 +551,16 @@ export default function PrescriptionsPage() {
                             >
                               <Eye className="w-4 h-4" />
                             </button>
-                            {prescription.status === 'active' && prescription.refillsRemaining > 0 && (
-                              <button
-                                onClick={() => requestRefill(prescription)}
-                                className="inline-flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                              >
-                                <RefreshCw className="w-3 h-3 mr-1" />
-                                Reposición
-                              </button>
-                            )}
+                            {prescription.status === 'active' &&
+                              prescription.refillsRemaining > 0 && (
+                                <button
+                                  onClick={() => requestRefill(prescription)}
+                                  className="inline-flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                >
+                                  <RefreshCw className="w-3 h-3 mr-1" />
+                                  Reposición
+                                </button>
+                              )}
                           </div>
                         </div>
 
@@ -566,16 +575,19 @@ export default function PrescriptionsPage() {
                           </div>
                         )}
 
-                        {prescription.status === 'active' && !isExpired(prescription.expiresAt) && daysUntilExpiry(prescription.expiresAt) <= 30 && (
-                          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                            <div className="flex items-center">
-                              <AlertTriangle className="w-4 h-4 text-yellow-600 mr-2" />
-                              <span className="text-sm text-yellow-800">
-                                Esta receta expira en {daysUntilExpiry(prescription.expiresAt)} días.
-                              </span>
+                        {prescription.status === 'active' &&
+                          !isExpired(prescription.expiresAt) &&
+                          daysUntilExpiry(prescription.expiresAt) <= 30 && (
+                            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                              <div className="flex items-center">
+                                <AlertTriangle className="w-4 h-4 text-yellow-600 mr-2" />
+                                <span className="text-sm text-yellow-800">
+                                  Esta receta expira en {daysUntilExpiry(prescription.expiresAt)}{' '}
+                                  días.
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                   </div>
@@ -600,7 +612,7 @@ export default function PrescriptionsPage() {
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              
+
               <div className="space-y-6">
                 {/* Información general */}
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -616,7 +628,9 @@ export default function PrescriptionsPage() {
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">Fecha:</span>
-                      <p className="text-gray-900">{new Date(selectedPrescription.date).toLocaleDateString('es-ES')}</p>
+                      <p className="text-gray-900">
+                        {new Date(selectedPrescription.date).toLocaleDateString('es-ES')}
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">Estado:</span>
@@ -628,7 +642,9 @@ export default function PrescriptionsPage() {
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">Vence:</span>
-                      <p className="text-gray-900">{new Date(selectedPrescription.expiresAt).toLocaleDateString('es-ES')}</p>
+                      <p className="text-gray-900">
+                        {new Date(selectedPrescription.expiresAt).toLocaleDateString('es-ES')}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -659,16 +675,18 @@ export default function PrescriptionsPage() {
                             )}
                           </div>
                         </div>
-                        
+
                         <div className="space-y-2 text-sm">
                           <div>
                             <span className="font-medium text-gray-700">Instrucciones:</span>
                             <p className="text-gray-900">{medication.instructions}</p>
                           </div>
-                          
+
                           {medication.sideEffects && medication.sideEffects.length > 0 && (
                             <div>
-                              <span className="font-medium text-gray-700">Efectos secundarios:</span>
+                              <span className="font-medium text-gray-700">
+                                Efectos secundarios:
+                              </span>
                               <ul className="list-disc list-inside text-gray-900">
                                 {medication.sideEffects.map((effect, index) => (
                                   <li key={index}>{effect}</li>
@@ -676,17 +694,20 @@ export default function PrescriptionsPage() {
                               </ul>
                             </div>
                           )}
-                          
-                          {medication.contraindications && medication.contraindications.length > 0 && (
-                            <div>
-                              <span className="font-medium text-gray-700">Contraindicaciones:</span>
-                              <ul className="list-disc list-inside text-gray-900">
-                                {medication.contraindications.map((contraindication, index) => (
-                                  <li key={index}>{contraindication}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
+
+                          {medication.contraindications &&
+                            medication.contraindications.length > 0 && (
+                              <div>
+                                <span className="font-medium text-gray-700">
+                                  Contraindicaciones:
+                                </span>
+                                <ul className="list-disc list-inside text-gray-900">
+                                  {medication.contraindications.map((contraindication, index) => (
+                                    <li key={index}>{contraindication}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                         </div>
                       </div>
                     ))}
@@ -714,15 +735,17 @@ export default function PrescriptionsPage() {
               <p className="text-gray-600 mb-4">
                 ¿Estás seguro de que quieres solicitar una reposición para esta receta?
               </p>
-              
+
               <div className="bg-blue-50 p-4 rounded-md mb-4">
-                <h3 className="font-medium text-gray-900 mb-2">Receta #{selectedPrescription.id}</h3>
+                <h3 className="font-medium text-gray-900 mb-2">
+                  Receta #{selectedPrescription.id}
+                </h3>
                 <p className="text-sm text-gray-600">{selectedPrescription.diagnosis}</p>
                 <p className="text-sm text-gray-600">
                   Reposiciones restantes: {selectedPrescription.refillsRemaining}
                 </p>
               </div>
-              
+
               <div className="flex items-center justify-end space-x-3">
                 <button
                   onClick={() => setShowRefillModal(false)}

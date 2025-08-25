@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Interfaces para auditoría
 interface AuditLogEntry {
   id: string;
@@ -115,7 +115,7 @@ export async function auditLog(entry: {
     // Validar entrada
     const validation = auditLogSchema.safeParse(entry);
     if (!validation.success) {
-      logger.error('Invalid audit log entry:', validation.error);
+      logger.error('Invalid audit log entry', undefined, validation.error);
       return;
     }
 
@@ -164,14 +164,14 @@ export async function auditLog(entry: {
 
     // Logging en consola para desarrollo
     if (process.env.NODE_ENV === 'development') {
-      logger.info(`[AUDIT] ${auditEntry.action} by ${auditEntry.userEmail} on ${auditEntry.resource}`, {
+      logger.info(`[AUDIT] ${auditEntry.action} by ${auditEntry.userEmail} on ${auditEntry.resource}`, undefined, {
         details: auditEntry.details,
         severity: auditEntry.severity
       });
     }
 
   } catch (error) {
-    logger.error('Audit logging failed:', undefined, error);
+    logger.error('Audit logging failed', undefined, error);
     // En caso de error, loguear en sistema de emergencia
     await emergencyAuditLog(entry, error instanceof Error ? error : new Error(String(error)));
   }
@@ -270,7 +270,7 @@ export async function generateAuditReport(params: {
 }): Promise<{ reportId: string; downloadUrl: string }> {
   try {
     const reportId = `audit-report-${Date.now()}`;
-    
+
     // Obtener logs para el período
     const logs = await getAuditLogs({
       userId: params.userId,
@@ -282,7 +282,7 @@ export async function generateAuditReport(params: {
 
     // Generar reporte según el formato
     const report = await generateReport(logs.logs, params.format);
-    
+
     // Guardar reporte
     const downloadUrl = await saveReport(reportId, report, params.format);
 
@@ -312,7 +312,7 @@ export async function generateAuditReport(params: {
 // Funciones auxiliares
 async function getUserInfo(userId: string): Promise<any> {
   // Simular obtener información del usuario
-  const mockUsers = {
+  const mockUsers: Record<string, { email: string; roles: string[] }> = {
     '1': { email: 'admin@altamedica.com', roles: ['admin'] },
     '2': { email: 'doctor@altamedica.com', roles: ['doctor'] },
     '3': { email: 'patient@altamedica.com', roles: ['patient'] }
@@ -322,7 +322,7 @@ async function getUserInfo(userId: string): Promise<any> {
 }
 
 function categorizeAction(action: string): { category: string; severity: string; containsPHI: boolean } {
-  const actionCategories = {
+  const actionCategories: Record<string, { category: string; severity: string; containsPHI: boolean }> = {
     'login': { category: 'authentication', severity: 'low', containsPHI: false },
     'login_failed': { category: 'authentication', severity: 'high', containsPHI: false },
     'logout': { category: 'authentication', severity: 'low', containsPHI: false },
@@ -342,11 +342,11 @@ function getRetentionPeriod(category: string, containsPHI: boolean): number {
   if (containsPHI || category === 'medical') {
     return 2555; // 7 años para datos médicos
   }
-  
+
   if (category === 'compliance') {
     return 1825; // 5 años para compliance
   }
-  
+
   return 1095; // 3 años para otros logs
 }
 
@@ -355,16 +355,16 @@ async function encryptSensitiveData(data: any): Promise<any> {
   if (typeof data === 'object' && data !== null) {
     const sensitiveFields = ['password', 'ssn', 'medical_record', 'diagnosis'];
     const encrypted = { ...data };
-    
+
     for (const field of sensitiveFields) {
       if (encrypted[field]) {
         encrypted[field] = `[ENCRYPTED:${field}]`;
       }
     }
-    
+
     return encrypted;
   }
-  
+
   return data;
 }
 
@@ -423,7 +423,7 @@ async function sendRealTimeAlert(entry: AuditLogEntry): Promise<void> {
 
 async function emergencyAuditLog(entry: any, error: Error): Promise<void> {
   // Sistema de emergencia para audit logs
-  logger.error('[EMERGENCY AUDIT]', {
+  logger.error('[EMERGENCY AUDIT]', undefined, {
     originalEntry: entry,
     error: error.message,
     timestamp: new Date().toISOString()
@@ -470,12 +470,17 @@ async function generateReport(logs: AuditLogEntry[], format: string): Promise<an
 function convertToCSV(logs: AuditLogEntry[]): string {
   const headers = ['timestamp', 'action', 'userEmail', 'resource', 'severity', 'success'];
   const csv = [headers.join(',')];
-  
+
   for (const log of logs) {
-    const row = headers.map(header => log[header] || '');
+    const row = headers.map(header => {
+      const key = header as keyof AuditLogEntry;
+      // dynamic access of AuditLogEntry
+      // @ts-ignore
+      return (log[key] as any) || '';
+    });
     csv.push(row.join(','));
   }
-  
+
   return csv.join('\n');
 }
 

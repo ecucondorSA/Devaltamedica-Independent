@@ -1,44 +1,48 @@
-
 /**
  * HealthMetricCard.tsx - Componente para mostrar una métrica de salud
  * Proyecto: Altamedica Pacientes
  */
 
 import React from 'react';
-import { CardCorporate } from '@altamedica/ui';
-import { CardContentCorporate } from '../CardCorporate';
-import Link from 'next/link';
 
 interface HealthMetricCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  status: string;
-  statusColor: string;
+  title: string;
+  value: string | number;
+  unit?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  trend?: string;
   link: string;
+  className?: string;
 }
 
-export const HealthMetricCard: React.FC<HealthMetricCardProps> = ({ icon, label, value, status, statusColor, link }) => {
+export default function HealthMetricCard({
+  title,
+  value,
+  unit,
+  icon: Icon,
+  trend,
+  link,
+  className = '',
+}: HealthMetricCardProps) {
   return (
-    <Link href={link}>
-      <CardCorporate variant="default" size="sm" className="hover:border-sky-400 hover:shadow-md transition-all duration-200 h-full">
-        <CardContentCorporate className="p-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-sky-100 rounded-lg">
-              {icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 truncate">{label}</p>
-              <p className="text-base font-bold text-gray-800 truncate">{value}</p>
-            </div>
+    <div
+      className={`bg-white rounded-lg border p-4 hover:border-sky-400 hover:shadow-md transition-all duration-200 h-full ${className}`}
+    >
+      <div className="flex items-center space-x-3">
+        <div className="p-2 bg-sky-100 rounded-lg">
+          <Icon className="w-5 h-5 text-sky-600" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-sm font-medium text-gray-600">{title}</h3>
+          <div className="flex items-baseline space-x-1">
+            <span className="text-2xl font-bold text-gray-900">{value}</span>
+            {unit && <span className="text-sm text-gray-500">{unit}</span>}
           </div>
-          <div className="mt-2 text-right">
-            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
-              {status}
-            </span>
-          </div>
-        </CardContentCorporate>
-      </CardCorporate>
-    </Link>
+        </div>
+      </div>
+      <div className="text-center py-4">
+        <p className="text-xs text-gray-500">Funcionalidad temporalmente deshabilitada</p>
+      </div>
+    </div>
   );
-};
+}

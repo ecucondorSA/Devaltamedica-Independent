@@ -1,3 +1,26 @@
 {
-  "extends": "../../tsconfig.base.json"
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@altamedica/ui": ["./src/aliases.ts"],
+      "@altamedica/utils": ["./src/aliases.ts"],
+      "@altamedica/hooks": ["./src/aliases.ts"],
+      "@altamedica/marketplace-hooks": ["./src/aliases.ts"],
+      "@altamedica/telemedicine-core": ["./src/aliases.ts"],
+      "@altamedica/medical": ["./src/aliases.ts"],
+      "@altamedica/api-client": ["./src/aliases.ts"],
+      "@altamedica/firebase": ["./src/aliases.ts"],
+      "@altamedica/types": ["./src/aliases.ts"]
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["src/**/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next", "out"]
 }

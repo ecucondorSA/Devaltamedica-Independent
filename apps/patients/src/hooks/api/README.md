@@ -9,34 +9,33 @@ import { useAltaMedicaAPI, usePatients } from './hooks/api';
 
 function MyComponent() {
   const { auth, isHealthy } = useAltaMedicaAPI();
-  const { patients, loading } = usePatients({ 
+  const { patients, loading } = usePatients({
     token: auth.token,
-    immediate: auth.isAuthenticated 
+    immediate: auth.isAuthenticated,
   });
-  
+
   if (!isHealthy) return <div>Servicios no disponibles</div>;
   if (!auth.isAuthenticated) return <LoginForm />;
-  
-  return (
-    <div>
-      {loading ? 'Cargando...' : `${patients.length} pacientes`}
-    </div>
-  );
+
+  return <div>{loading ? 'Cargando...' : `${patients.length} pacientes`}</div>;
 }
 ```
 
 ## 📚 Hooks Disponibles
 
 ### 🔐 Autenticación
+
 - `useAuth()` - Gestión de autenticación y tokens
 
 ### 👥 Gestión de Datos
+
 - `usePatients()` - CRUD de pacientes
-- `useDoctors()` - Gestión de doctores  
+- `useDoctors()` - Gestión de doctores
 - `useAppointments()` - Gestión de citas
 - `useVideoCall()` - Video llamadas
 
 ### 🔧 Utilidades
+
 - `useApiBridge()` - Comunicación directa con API Bridge
 - `useServiceHealth()` - Monitoreo de servicios
 
@@ -52,11 +51,12 @@ function MyComponent() {
 - ✅ **Type Safe**: TypeScript completo
 - ✅ **Auto-retry**: Manejo automático de errores
 - ✅ **Caching**: Optimización automática
-- ✅ **SSO Ready**: Integración con tokens JWT
+- ✅ **Firebase Auth Ready**: Integración con cookies httpOnly
 
 ## 🔄 Migración desde Mocks
 
 Busca y reemplaza:
+
 ```tsx
 // Antes (mock)
 const [patients, setPatients] = useState(mockPatients);
@@ -66,6 +66,7 @@ const { patients } = usePatients({ token: auth.token });
 ```
 
 Estos hooks son **auto-generados**. Para regenerar:
+
 ```bash
 python tools/python/frontend_hook_generator.py
 ```
