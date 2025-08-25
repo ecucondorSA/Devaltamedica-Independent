@@ -54,7 +54,8 @@
       "Bash(npx next build:*)",
       "Bash(git config:*)",
       "Bash(NODE_ENV=production pnpm build)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Read(//home/edu/.claude/**)"
     ],
     "deny": [],
     "ask": [],

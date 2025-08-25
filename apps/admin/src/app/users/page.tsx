@@ -101,8 +101,8 @@ export default function UsersPage() {
     }
   };
 
-  const handleToggleStatus = async (userId: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  const handleToggleStatus = async (userId: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
 
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}/status`, {
@@ -111,14 +111,14 @@ export default function UsersPage() {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ isActive: newStatus }),
       });
 
       if (!response.ok) throw new Error('Failed to update user status');
 
       toast({
         title: 'Success',
-        description: `User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`,
+        description: `User ${newStatus ? 'activated' : 'deactivated'} successfully`,
       });
 
       fetchUsers();
@@ -133,10 +133,11 @@ export default function UsersPage() {
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+    const userStatus = user.isActive ? 'active' : 'inactive';
+    const matchesStatus = statusFilter === 'all' || userStatus === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -156,17 +157,11 @@ export default function UsersPage() {
     }
   };
 
-  const getStatusBadgeColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800';
-      case 'inactive':
-        return 'bg-gray-100 text-gray-800';
-      case 'suspended':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  const getStatusBadgeColor = (status: boolean) => {
+    if (status) {
+      return 'bg-green-100 text-green-800';
     }
+    return 'bg-gray-100 text-gray-800';
   };
 
   return (
@@ -215,7 +210,6 @@ export default function UsersPage() {
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
-                <option value="suspended">Suspended</option>
               </select>
               <Button variant="outline">
                 <Download className="h-4 w-4 mr-2" />
@@ -242,17 +236,21 @@ export default function UsersPage() {
               </TableHeader>
               <TableBody>
                 {filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableRow key={user.uid}>
+                    <TableCell className="font-medium">{`${user.firstName} ${user.lastName}`}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
                       <Badge className={getRoleBadgeColor(user.role)}>{user.role}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge className={getStatusBadgeColor(user.status)}>{user.status}</Badge>
+                      <Badge className={getStatusBadgeColor(user.isActive)}>
+                        {user.isActive ? 'Active' : 'Inactive'}
+                      </Badge>
                     </TableCell>
                     <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
-                    <TableCell>{new Date(user.lastLogin).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : 'N/A'}
+                    </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -261,14 +259,14 @@ export default function UsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => router.push(`/users/${user.id}`)}>
+                          <DropdownMenuItem onClick={() => router.push(`/users/${user.uid}`)}>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleToggleStatus(user.id, user.status)}
+                            onClick={() => handleToggleStatus(user.uid, user.isActive)}
                           >
-                            {user.status === 'active' ? (
+                            {user.isActive ? (
                               <>
                                 <UserX className="mr-2 h-4 w-4" />
                                 Deactivate
@@ -281,7 +279,7 @@ export default function UsersPage() {
                             )}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => handleDeleteUser(user.uid)}
                             className="text-red-600"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
