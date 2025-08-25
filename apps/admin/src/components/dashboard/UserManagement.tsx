@@ -1,22 +1,8 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState } from 'react';
 import { logger } from '@altamedica/shared/services/logger.service';
-import {
-  Search,
-  Filter,
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  UserCheck,
-  UserX,
-  Mail,
-  Phone,
-  Calendar,
-  Shield
-} from 'lucide-react';
+import { Edit, Eye, Plus, Search, Trash2, UserCheck, UserX } from 'lucide-react';
+import React, { useState } from 'react';
 
 import { User } from '@altamedica/types';
 
@@ -31,7 +17,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
   users,
   onUpdateRole,
   onSuspendUser,
-  onActivateUser
+  onActivateUser,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
@@ -41,29 +27,39 @@ const UserManagement: React.FC<UserManagementProps> = ({
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'admin': return 'bg-red-100 text-red-800';
-      case 'doctor': return 'bg-blue-100 text-blue-800';
-      case 'patient': return 'bg-green-100 text-green-800';
-      case 'company': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'admin':
+        return 'bg-red-100 text-red-800';
+      case 'doctor':
+        return 'bg-blue-100 text-blue-800';
+      case 'patient':
+        return 'bg-green-100 text-green-800';
+      case 'company':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-gray-100 text-gray-800';
-      case 'suspended': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'inactive':
+        return 'bg-gray-100 text-gray-800';
+      case 'suspended':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.displayName?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.displayName?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' || user.role === filterRole;
     const matchesStatus = filterStatus === 'all' || user.status === filterStatus;
-    
+
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -80,7 +76,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
           break;
       }
     } catch (error) {
-      logger.error('Error en acción de usuario:', error);
+      logger.error('Error en acción de usuario:', String(error));
     }
   };
 
@@ -99,7 +95,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
             Nuevo Usuario
           </button>
         </div>
-        
+
         {/* Filtros y búsqueda */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1">
@@ -114,7 +110,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
               />
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             <select
               value={filterRole}
@@ -127,7 +123,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
               <option value="patient">Pacientes</option>
               <option value="company">Empresas</option>
             </select>
-            
+
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -182,40 +178,41 @@ const UserManagement: React.FC<UserManagementProps> = ({
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}
+                    >
                       {user.role}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
-                      {user.status}
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status || 'unknown')}`}
+                    >
+                      {user.status || 'unknown'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.lastLogin 
-                      ? new Date(user.lastLogin).toLocaleString()
-                      : 'Nunca'
-                    }
+                    {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Nunca'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button 
+                      <button
                         onClick={() => handleViewUser(user)}
                         className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
                         title="Ver detalles"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-                      
-                      <button 
+
+                      <button
                         className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
                         title="Editar"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
-                      
+
                       {user.status === 'active' ? (
-                        <button 
+                        <button
                           onClick={() => handleUserAction('suspend', user.id)}
                           className="text-yellow-600 hover:text-yellow-900 p-1 rounded hover:bg-yellow-50"
                           title="Suspender"
@@ -223,7 +220,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
                           <UserX className="w-4 h-4" />
                         </button>
                       ) : (
-                        <button 
+                        <button
                           onClick={() => handleUserAction('activate', user.id)}
                           className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
                           title="Activar"
@@ -231,8 +228,8 @@ const UserManagement: React.FC<UserManagementProps> = ({
                           <UserCheck className="w-4 h-4" />
                         </button>
                       )}
-                      
-                      <button 
+
+                      <button
                         className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
                         title="Eliminar"
                       >
@@ -267,55 +264,56 @@ const UserManagement: React.FC<UserManagementProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Detalles del Usuario
-              </h3>
-              <button 
+              <h3 className="text-lg font-semibold text-gray-900">Detalles del Usuario</h3>
+              <button
                 onClick={() => setShowUserModal(false)}
                 className="text-gray-400 hover:text-gray-600"
               >
                 ×
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-700">Nombre</label>
                 <p className="text-sm text-gray-900">{selectedUser.displayName || 'Sin nombre'}</p>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Email</label>
                 <p className="text-sm text-gray-900">{selectedUser.email}</p>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Rol</label>
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(selectedUser.role)}`}>
+                <span
+                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(selectedUser.role)}`}
+                >
                   {selectedUser.role}
                 </span>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Estado</label>
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedUser.status)}`}>
-                  {selectedUser.status}
+                <span
+                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedUser.status || 'unknown')}`}
+                >
+                  {selectedUser.status || 'unknown'}
                 </span>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Último Acceso</label>
                 <p className="text-sm text-gray-900">
-                  {selectedUser.lastLogin 
+                  {selectedUser.lastLogin
                     ? new Date(selectedUser.lastLogin).toLocaleString()
-                    : 'Nunca'
-                  }
+                    : 'Nunca'}
                 </p>
               </div>
             </div>
-            
+
             <div className="mt-6 flex justify-end space-x-3">
-              <button 
+              <button
                 onClick={() => setShowUserModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
               >
@@ -332,4 +330,4 @@ const UserManagement: React.FC<UserManagementProps> = ({
   );
 };
 
-export default UserManagement; 
+export default UserManagement;

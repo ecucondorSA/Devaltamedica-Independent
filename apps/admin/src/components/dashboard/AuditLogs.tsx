@@ -1,23 +1,18 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState } from 'react';
 import { logger } from '@altamedica/shared/services/logger.service';
 import {
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Calendar,
-  User,
   Activity,
   AlertTriangle,
   CheckCircle,
-  Clock,
-  Globe,
+  Download,
+  Eye,
+  FileText,
+  Search,
   Shield,
-  FileText
+  User,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface AuditLog {
   id: string;
@@ -45,34 +40,48 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'critical':
+        return 'bg-red-100 text-red-800';
+      case 'high':
+        return 'bg-orange-100 text-orange-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getActionIcon = (action: string) => {
     switch (action) {
-      case 'USER_LOGIN': return <User className="w-4 h-4" />;
-      case 'USER_LOGOUT': return <User className="w-4 h-4" />;
-      case 'USER_ROLE_UPDATE': return <Shield className="w-4 h-4" />;
-      case 'USER_SUSPENDED': return <AlertTriangle className="w-4 h-4" />;
-      case 'USER_ACTIVATED': return <CheckCircle className="w-4 h-4" />;
-      case 'DATA_ACCESS': return <FileText className="w-4 h-4" />;
-      case 'SYSTEM_CHANGE': return <Activity className="w-4 h-4" />;
-      default: return <Activity className="w-4 h-4" />;
+      case 'USER_LOGIN':
+        return <User className="w-4 h-4" />;
+      case 'USER_LOGOUT':
+        return <User className="w-4 h-4" />;
+      case 'USER_ROLE_UPDATE':
+        return <Shield className="w-4 h-4" />;
+      case 'USER_SUSPENDED':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'USER_ACTIVATED':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'DATA_ACCESS':
+        return <FileText className="w-4 h-4" />;
+      case 'SYSTEM_CHANGE':
+        return <Activity className="w-4 h-4" />;
+      default:
+        return <Activity className="w-4 h-4" />;
     }
   };
 
-  const filteredLogs = logs.filter(log => {
-    const matchesSearch = log.userEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         log.action.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredLogs = logs.filter((log) => {
+    const matchesSearch =
+      log.userEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log.action.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSeverity = filterSeverity === 'all' || log.severity === filterSeverity;
     const matchesAction = filterAction === 'all' || log.action === filterAction;
-    
+
     return matchesSearch && matchesSeverity && matchesAction;
   });
 
@@ -86,7 +95,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
     try {
       await onExport(type);
     } catch (error) {
-      logger.error('Error exportando logs:', error);
+      logger.error('Error exportando logs:', String(error));
     }
   };
 
@@ -112,7 +121,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
             </button>
           </div>
         </div>
-        
+
         {/* Filtros y búsqueda */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1">
@@ -127,7 +136,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
               />
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             <select
               value={filterSeverity}
@@ -140,7 +149,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
               <option value="medium">Medio</option>
               <option value="low">Bajo</option>
             </select>
-            
+
             <select
               value={filterAction}
               onChange={(e) => setFilterAction(e.target.value)}
@@ -195,9 +204,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
                         <div className="text-sm font-medium text-gray-900">
                           {log.action.replace(/_/g, ' ')}
                         </div>
-                        <div className="text-sm text-gray-500 truncate max-w-xs">
-                          {log.details}
-                        </div>
+                        <div className="text-sm text-gray-500 truncate max-w-xs">{log.details}</div>
                       </div>
                     </div>
                   </td>
@@ -206,7 +213,9 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
                     <div className="text-sm text-gray-500">ID: {log.userId}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(log.severity)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(log.severity)}`}
+                    >
                       {log.severity}
                     </span>
                   </td>
@@ -217,7 +226,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
+                    <button
                       onClick={() => handleViewLog(log)}
                       className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
                       title="Ver detalles"
@@ -252,59 +261,59 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Detalles del Log de Auditoría
-              </h3>
-              <button 
+              <h3 className="text-lg font-semibold text-gray-900">Detalles del Log de Auditoría</h3>
+              <button
                 onClick={() => setShowLogModal(false)}
                 className="text-gray-400 hover:text-gray-600"
               >
                 ×
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">ID del Log</label>
                   <p className="text-sm text-gray-900 font-mono">{selectedLog.id}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-gray-700">Acción</label>
                   <p className="text-sm text-gray-900">{selectedLog.action}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-gray-700">Usuario</label>
                   <p className="text-sm text-gray-900">{selectedLog.userEmail}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-gray-700">ID de Usuario</label>
                   <p className="text-sm text-gray-900 font-mono">{selectedLog.userId}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-gray-700">Severidad</label>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(selectedLog.severity)}`}>
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(selectedLog.severity)}`}
+                  >
                     {selectedLog.severity}
                   </span>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-gray-700">Dirección IP</label>
                   <p className="text-sm text-gray-900 font-mono">{selectedLog.ipAddress}</p>
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Timestamp</label>
                 <p className="text-sm text-gray-900">
                   {new Date(selectedLog.timestamp).toLocaleString()}
                 </p>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700">Detalles</label>
                 <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg">
@@ -312,9 +321,9 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
                 </p>
               </div>
             </div>
-            
+
             <div className="mt-6 flex justify-end space-x-3">
-              <button 
+              <button
                 onClick={() => setShowLogModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
               >
@@ -331,4 +340,4 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ logs, onViewLog, onExport }) => {
   );
 };
 
-export default AuditLogs; 
+export default AuditLogs;

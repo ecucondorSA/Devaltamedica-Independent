@@ -1,24 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import {
-  Search,
-  Filter,
-  Plus,
-  Edit,
-  Trash2,
-  MoreVertical,
-  UserCheck,
-  UserX,
-  Download,
-} from 'lucide-react';
-import {
+  Badge,
+  Button,
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
-  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Input,
   Table,
   TableBody,
@@ -26,12 +17,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Badge,
 } from '@altamedica/ui';
+import { Download, Edit, MoreVertical, Plus, Search, Trash2, UserCheck, UserX } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useToast } from '../../hooks/use-toast';
 
 import { User } from '@altamedica/types';
@@ -264,7 +253,7 @@ export default function UsersPage() {
                             Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleToggleStatus(user.uid, user.isActive)}
+                            onClick={() => user.uid && handleToggleStatus(user.uid, user.isActive)}
                           >
                             {user.isActive ? (
                               <>
@@ -279,7 +268,7 @@ export default function UsersPage() {
                             )}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleDeleteUser(user.uid)}
+                            onClick={() => user.uid && handleDeleteUser(user.uid)}
                             className="text-red-600"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />

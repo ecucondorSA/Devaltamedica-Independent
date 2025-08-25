@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRealTimeUpdates } from '@/hooks/useRealTimeUpdates';
+import { useRealTimeUpdates, RealTimeUpdate } from './useRealTimeUpdates';
 import { MetricCardProps } from '@altamedica/ui';
 
 export interface AdminMetrics {
@@ -41,18 +41,22 @@ export const useEnhancedAdminDashboard = () => {
 
   // Real-time updates siguiendo el pattern del patient dashboard
   const { isConnected, connectionQuality } = useRealTimeUpdates({
-    onUpdate: (update) => {
+    onUpdate: (update: RealTimeUpdate) => {
       if (update.type === 'emergency_alert') {
         setEmergencyMode(true);
         // Trigger emergency protocols
       }
       // Update metrics in real-time
-      setData(prevData => prevData ? {
-        ...prevData,
-        ...update.data
-      } : null);
+      setData((prevData) =>
+        prevData
+          ? {
+              ...prevData,
+              ...update.data,
+            }
+          : null,
+      );
     },
-    endpoint: '/admin/realtime'
+    endpoint: '/admin/realtime',
   });
 
   const fetchDashboardData = useCallback(async () => {
@@ -63,7 +67,7 @@ export const useEnhancedAdminDashboard = () => {
       // Fetch admin metrics
       const metricsResponse = await fetch('/api/v1/admin/metrics', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
 
@@ -92,11 +96,9 @@ export const useEnhancedAdminDashboard = () => {
       setData(dashboardData);
 
       // Check for emergency conditions
-      if (dashboardData.emergencyAlerts.length > 0 || 
-          dashboardData.metrics.criticalAlerts > 0) {
+      if (dashboardData.emergencyAlerts.length > 0 || dashboardData.metrics.criticalAlerts > 0) {
         setEmergencyMode(true);
       }
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -113,24 +115,24 @@ export const useEnhancedAdminDashboard = () => {
         title: 'Total Users',
         value: data.metrics.totalUsers.toLocaleString(),
         subtitle: 'Active platform users',
-        trend: { value: 12, direction: 'up', label: 'vs last month' },
+        trend: { value: 12, isPositive: true, direction: 'up', label: 'vs last month' },
         status: 'normal',
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Active Patients',
         value: data.metrics.activePatients.toLocaleString(),
         subtitle: 'Currently enrolled',
-        trend: { value: 8, direction: 'up', label: 'vs last week' },
+        trend: { value: 8, isPositive: true, direction: 'up', label: 'vs last week' },
         status: 'success',
         realTimeUpdate: true,
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Active Doctors',
@@ -141,18 +143,18 @@ export const useEnhancedAdminDashboard = () => {
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Revenue',
         value: `$${(data.metrics.totalRevenue / 1000).toFixed(1)}K`,
         subtitle: 'This month',
-        trend: { value: 15, direction: 'up', label: 'vs last month' },
+        trend: { value: 15, isPositive: true, direction: 'up', label: 'vs last month' },
         status: 'success',
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Emergency Consultations',
@@ -164,21 +166,22 @@ export const useEnhancedAdminDashboard = () => {
           isEmergency: data.metrics.emergencyConsultations > 5,
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'System Health',
         value: `${data.metrics.systemHealth}%`,
         subtitle: 'Overall performance',
         status: data.metrics.systemHealth < 90 ? 'warning' : 'success',
-        trend: { 
-          value: Math.abs(data.metrics.systemHealth - 95), 
-          direction: data.metrics.systemHealth >= 95 ? 'up' : 'down' 
+        trend: {
+          value: Math.abs(data.metrics.systemHealth - 95),
+          isPositive: data.metrics.systemHealth >= 95,
+          direction: data.metrics.systemHealth >= 95 ? 'up' : 'down',
         },
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'HIPAA Compliance',
@@ -189,21 +192,22 @@ export const useEnhancedAdminDashboard = () => {
           isEmergency: data.metrics.hipaaCompliance < 95,
           hipaaCompliant: data.metrics.hipaaCompliance >= 95,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Avg Response Time',
         value: `${data.metrics.avgResponseTime}ms`,
         subtitle: 'API performance',
         status: data.metrics.avgResponseTime > 500 ? 'warning' : 'success',
-        trend: { 
-          value: 5, 
-          direction: data.metrics.avgResponseTime < 200 ? 'down' : 'up' 
+        trend: {
+          value: 5,
+          isPositive: data.metrics.avgResponseTime < 200,
+          direction: data.metrics.avgResponseTime < 200 ? 'down' : 'up',
         },
         medicalContext: {
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
       {
         title: 'Critical Alerts',
@@ -215,7 +219,7 @@ export const useEnhancedAdminDashboard = () => {
           isEmergency: data.metrics.criticalAlerts > 0,
           hipaaCompliant: true,
           lastUpdated: new Date(),
-        }
+        },
       },
     ];
   }, [data]);
@@ -223,9 +227,9 @@ export const useEnhancedAdminDashboard = () => {
   // Get emergency metrics for StatsGrid
   const getEmergencyMetrics = useCallback((): string[] => {
     if (!data) return [];
-    
+
     const emergencyMetrics: string[] = [];
-    
+
     if (data.metrics.emergencyConsultations > 5) {
       emergencyMetrics.push('Emergency Consultations');
     }
@@ -235,16 +239,16 @@ export const useEnhancedAdminDashboard = () => {
     if (data.metrics.criticalAlerts > 0) {
       emergencyMetrics.push('Critical Alerts');
     }
-    
+
     return emergencyMetrics;
   }, [data]);
 
   useEffect(() => {
     fetchDashboardData();
-    
+
     // Refresh every 30 seconds for real-time admin monitoring
     const interval = setInterval(fetchDashboardData, 30000);
-    
+
     return () => clearInterval(interval);
   }, [fetchDashboardData]);
 

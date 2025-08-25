@@ -3,19 +3,12 @@
 
 'use client';
 
-import {
-    Users
-} from 'lucide-react';
+import { Users } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 // Importar componentes básicos
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from '@altamedica/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 
 // ============================================================================
 // TIPOS Y INTERFACES
@@ -44,10 +37,10 @@ const OrphanPatientsStandardized: React.FC = () => {
     setIsLoading(true);
     try {
       // Implementar carga de datos
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setLastUpdated(new Date().toLocaleString('es-ES'));
     } catch (error) {
-      logger.error('Error loading dashboard data:', error);
+      logger.error('Error loading dashboard data:', String(error));
     } finally {
       setIsLoading(false);
     }
@@ -64,8 +57,8 @@ const OrphanPatientsStandardized: React.FC = () => {
       change: 5.2,
       icon: <Users className="h-6 w-6" />,
       color: 'normal' as const,
-      trend: 'up' as const
-    }
+      trend: 'up' as const,
+    },
   ];
 
   // ============================================================================
@@ -84,16 +77,12 @@ const OrphanPatientsStandardized: React.FC = () => {
         {kpiData.map((kpi, index) => (
           <Card key={index}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {kpi.title}
-              </CardTitle>
+              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
               {kpi.icon}
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{kpi.value}</div>
-              <p className="text-xs text-muted-foreground">
-                +{kpi.change}% desde el último mes
-              </p>
+              <p className="text-xs text-muted-foreground">+{kpi.change}% desde el último mes</p>
             </CardContent>
           </Card>
         ))}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 import {
   Badge,
   Card,
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                 { name: 'Auth Service', status: 'warning', uptime: 99.85, responseTime: 200 },
                 { name: 'Analytics', status: 'healthy', uptime: 99.92, responseTime: 150 },
               ]}
-              onServiceClick={(service) => logger.info('Service details:', service)}
+              onServiceClick={(service) => logger.info('Service details:', JSON.stringify(service))}
             />
           </CardContent>
         </Card>

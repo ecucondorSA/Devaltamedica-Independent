@@ -3,15 +3,10 @@
 
 'use client';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from '@altamedica/ui';
-import {
-    // Importar iconos necesarios
-    Users
+  // Importar iconos necesarios
+  Users,
 } from 'lucide-react'; // Importar componentes básicos
 import React, { useState } from 'react';
 
@@ -49,10 +44,10 @@ const AdminStandardized: React.FC = () => {
     setIsLoading(true);
     try {
       // Implementar carga de datos
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setLastUpdated(new Date().toLocaleString('es-ES'));
     } catch (error) {
-      logger.error('Error loading dashboard data:', error);
+      logger.error('Error loading dashboard data:', String(error));
     } finally {
       setIsLoading(false);
     }
@@ -121,4 +116,5 @@ const AdminStandardized: React.FC = () => {
       </div>
     </div>
   );
-};export default AdminStandardized;
+};
+export default AdminStandardized;
