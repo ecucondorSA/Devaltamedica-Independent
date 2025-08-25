@@ -1,9 +1,7 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
 import NotificationCenter from '@/components/NotificationCenter';
-import { useAuth  } from '@altamedica/auth';;
-import { cn } from '@altamedica/utils';
+import { useAuth } from '@altamedica/auth';
 import {
   BarChart3,
   Bell,
@@ -24,6 +22,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { cn } from '../../utils-stub';
 
 interface DoctorLayoutProps {
   children: React.ReactNode;

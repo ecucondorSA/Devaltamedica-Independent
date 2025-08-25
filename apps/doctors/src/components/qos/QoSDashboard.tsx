@@ -1,21 +1,44 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@altamedica/ui/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@altamedica/ui/components/ui/tabs';
-import { Alert, AlertDescription } from '@altamedica/ui/components/ui/alert';
-import { Badge } from '@altamedica/ui/components/ui/badge';
-import { Button } from '@altamedica/ui/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  LineChart, Line, AreaChart, Area, BarChart, Bar,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
-import { 
-  Activity, Wifi, WifiOff, AlertTriangle, 
-  TrendingUp, TrendingDown, Download, RefreshCw 
+import {
+  AlertTriangle,
+  Download,
+  RefreshCw,
+  TrendingDown,
+  TrendingUp,
+  Wifi,
+  WifiOff,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import {
+  Alert,
+  AlertDescription,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '../ui-stub';
 
 interface QoSDashboardProps {
   doctorId?: string;
@@ -27,21 +50,25 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
   const [autoRefresh, setAutoRefresh] = useState(false);
 
   // Fetch QoS reports
-  const { data: reports, isLoading, refetch } = useQuery({
+  const {
+    data: reports,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['qos-reports', doctorId, selectedPeriod],
     queryFn: async () => {
       const params = new URLSearchParams({
         ...(doctorId && { doctorId }),
         startDate: getStartDate(selectedPeriod).toISOString(),
         endDate: new Date().toISOString(),
-        limit: '100'
+        limit: '100',
       });
-      
+
       const response = await fetch(`/api/v1/telemedicine/qos/reports?${params}`);
       if (!response.ok) throw new Error('Failed to fetch QoS reports');
       return response.json();
     },
-    refetchInterval: autoRefresh ? 30000 : false // Refresh every 30s if enabled
+    refetchInterval: autoRefresh ? 30000 : false, // Refresh every 30s if enabled
   });
 
   // Auto-refresh toggle
@@ -71,9 +98,7 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold">QoS Dashboard</h2>
-          <p className="text-muted-foreground">
-            Monitor call quality and network performance
-          </p>
+          <p className="text-muted-foreground">Monitor call quality and network performance</p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -103,7 +128,9 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className={`text-2xl font-bold ${qualityScoreColor(reports?.aggregatedMetrics?.avgQualityScore || 0)}`}>
+              <span
+                className={`text-2xl font-bold ${qualityScoreColor(reports?.aggregatedMetrics?.avgQualityScore || 0)}`}
+              >
                 {reports?.aggregatedMetrics?.avgQualityScore?.toFixed(1) || '-'}
               </span>
               <span className="text-sm text-muted-foreground">/100</span>
@@ -192,9 +219,7 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
           <Card>
             <CardHeader>
               <CardTitle>Quality Metrics Over Time</CardTitle>
-              <CardDescription>
-                Network performance metrics for the selected period
-              </CardDescription>
+              <CardDescription>Network performance metrics for the selected period</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={350}>
@@ -205,25 +230,25 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
                   <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
                   <Legend />
-                  <Line 
+                  <Line
                     yAxisId="left"
-                    type="monotone" 
-                    dataKey="latency" 
-                    stroke="#8884d8" 
+                    type="monotone"
+                    dataKey="latency"
+                    stroke="#8884d8"
                     name="Latency (ms)"
                   />
-                  <Line 
+                  <Line
                     yAxisId="left"
-                    type="monotone" 
-                    dataKey="jitter" 
-                    stroke="#82ca9d" 
+                    type="monotone"
+                    dataKey="jitter"
+                    stroke="#82ca9d"
                     name="Jitter (ms)"
                   />
-                  <Line 
+                  <Line
                     yAxisId="right"
-                    type="monotone" 
-                    dataKey="packetLoss" 
-                    stroke="#ff7300" 
+                    type="monotone"
+                    dataKey="packetLoss"
+                    stroke="#ff7300"
                     name="Packet Loss (%)"
                   />
                 </LineChart>
@@ -236,16 +261,16 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
           <Card>
             <CardHeader>
               <CardTitle>Quality Score Distribution</CardTitle>
-              <CardDescription>
-                Breakdown of session quality across all calls
-              </CardDescription>
+              <CardDescription>Breakdown of session quality across all calls</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
-                      data={prepareQualityDistribution(reports?.aggregatedMetrics?.qualityDistribution)}
+                      data={prepareQualityDistribution(
+                        reports?.aggregatedMetrics?.qualityDistribution,
+                      )}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
@@ -254,8 +279,13 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {prepareQualityDistribution(reports?.aggregatedMetrics?.qualityDistribution).map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={QUALITY_COLORS[index % QUALITY_COLORS.length]} />
+                      {prepareQualityDistribution(
+                        reports?.aggregatedMetrics?.qualityDistribution,
+                      ).map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={QUALITY_COLORS[index % QUALITY_COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -264,23 +294,25 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
 
                 <div className="space-y-4">
                   <h4 className="font-medium">Quality Breakdown</h4>
-                  {prepareQualityDistribution(reports?.aggregatedMetrics?.qualityDistribution).map((item, index) => (
-                    <div key={item.name} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: QUALITY_COLORS[index] }}
-                        />
-                        <span className="text-sm">{item.name}</span>
+                  {prepareQualityDistribution(reports?.aggregatedMetrics?.qualityDistribution).map(
+                    (item, index) => (
+                      <div key={item.name} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: QUALITY_COLORS[index] }}
+                          />
+                          <span className="text-sm">{item.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{item.value}</span>
+                          <span className="text-sm text-muted-foreground">
+                            ({item.percentage}%)
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{item.value}</span>
-                        <span className="text-sm text-muted-foreground">
-                          ({item.percentage}%)
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -291,9 +323,7 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
           <Card>
             <CardHeader>
               <CardTitle>Common Issues</CardTitle>
-              <CardDescription>
-                Most frequent quality problems detected
-              </CardDescription>
+              <CardDescription>Most frequent quality problems detected</CardDescription>
             </CardHeader>
             <CardContent>
               {reports?.aggregatedMetrics?.commonIssues?.length > 0 ? (
@@ -316,14 +346,15 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
           <Card>
             <CardHeader>
               <CardTitle>Recent Sessions</CardTitle>
-              <CardDescription>
-                Individual session quality metrics
-              </CardDescription>
+              <CardDescription>Individual session quality metrics</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {reports?.reports?.map((report: any) => (
-                  <div key={report.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={report.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex-1">
                       <p className="font-medium">{report.patientName}</p>
                       <p className="text-sm text-muted-foreground">
@@ -353,11 +384,15 @@ export function QoSDashboard({ doctorId, sessionId }: QoSDashboardProps) {
 // Helper functions
 function getStartDate(period: string): Date {
   const now = new Date();
-  switch(period) {
-    case '24h': return new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    case '7d': return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    case '30d': return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    default: return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  switch (period) {
+    case '24h':
+      return new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    case '7d':
+      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    case '30d':
+      return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    default:
+      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   }
 }
 
@@ -377,22 +412,41 @@ function formatDuration(seconds: number): string {
 
 function prepareTimelineData(reports: any[]): any[] {
   if (!reports) return [];
-  return reports.map(r => ({
+  return reports.map((r) => ({
     time: new Date(r.startTime).toLocaleDateString(),
     latency: r.avgLatency,
     jitter: r.avgJitter,
-    packetLoss: r.avgPacketLoss
+    packetLoss: r.avgPacketLoss,
   }));
 }
 
 function prepareQualityDistribution(distribution: any): any[] {
   if (!distribution) return [];
-  const total = Object.values(distribution).reduce((sum: number, val: any) => sum + val, 0) as number;
+  const total = Object.values(distribution).reduce(
+    (sum: number, val: any) => sum + val,
+    0,
+  ) as number;
   return [
-    { name: 'Excellent', value: distribution.excellent, percentage: ((distribution.excellent / total) * 100).toFixed(1) },
-    { name: 'Good', value: distribution.good, percentage: ((distribution.good / total) * 100).toFixed(1) },
-    { name: 'Fair', value: distribution.fair, percentage: ((distribution.fair / total) * 100).toFixed(1) },
-    { name: 'Poor', value: distribution.poor, percentage: ((distribution.poor / total) * 100).toFixed(1) }
+    {
+      name: 'Excellent',
+      value: distribution.excellent,
+      percentage: ((distribution.excellent / total) * 100).toFixed(1),
+    },
+    {
+      name: 'Good',
+      value: distribution.good,
+      percentage: ((distribution.good / total) * 100).toFixed(1),
+    },
+    {
+      name: 'Fair',
+      value: distribution.fair,
+      percentage: ((distribution.fair / total) * 100).toFixed(1),
+    },
+    {
+      name: 'Poor',
+      value: distribution.poor,
+      percentage: ((distribution.poor / total) * 100).toFixed(1),
+    },
   ];
 }
 
@@ -400,8 +454,8 @@ const QUALITY_COLORS = ['#10b981', '#eab308', '#f97316', '#ef4444'];
 
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
-  const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+  const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
+  const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
 
   return (
     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
