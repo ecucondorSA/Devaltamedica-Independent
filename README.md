@@ -19,6 +19,10 @@ AltaMedica es una **plataforma médica de vanguardia** que implementa un **siste
 - **✅ Compliance Médico**: 100% HIPAA ready
 - **✅ Arquitectura Escalable**: Preparada para crecimiento exponencial
 
+#### Seguridad (actualizado)
+- JWT_SECRET ahora se carga automáticamente desde AWS Secrets Manager al iniciar `apps/api-server`.
+- Endurecimiento de búsquedas en `apps/api-server/src/domains/patients/patient.service.ts`: sanitización de parámetros y whitelisting de ordenamiento.
+
 ---
 
 ## 🏗️ **ARQUITECTURA DE LIDERAZGO AI**
@@ -127,6 +131,23 @@ AltaMedica es una **plataforma médica de vanguardia** que implementa un **siste
 - **Tecnologías**: React, TypeScript, Tailwind CSS, Node.js
 - **Compliance**: HIPAA, estándares médicos internacionales
 - **Testing**: Suite completa de pruebas automatizadas
+  - `SECURITY.md` (política de seguridad)
+  - `.github/workflows/security-scan.yml` (ZAP + Snyk)
+  - `apps/api-server/src/__tests__/security/` (estructura de tests HIPAA)
+  - `e2e/security/hipaa-compliance.spec.ts` (Playwright E2E)
+  - `.github/workflows/performance.yml` (Lighthouse CI)
+  - `tests/load/telemedicine-load.js` (K6 load test)
+  - `monitoring/grafana/dashboards/performance-overview.json` (Grafana)
+  - `monitoring/prometheus/prometheus.yml` (Prometheus)
+  - `.github/workflows/k6-load.yml` (K6 CI)
+  - `docker-compose.monitoring.yml` (stack Prometheus/Grafana)
+  - `monitoring/grafana/provisioning/datasources/prometheus.yml` (datasource)
+  - `monitoring/grafana/provisioning/dashboards/dashboards.yml` (provisioning)
+  - `apps/api-server/src/app/api/swagger/spec/route.ts` (OpenAPI JSON)
+  - `.github/workflows/typedoc.yml` (TypeDoc CI)
+  - `typedoc.json` (config TypeDoc)
+  - `docs/onboarding/DEV_ONBOARDING.md` (onboarding)
+  - `e2e/tests/performance/ui-regression.spec.ts` (visual regression)
 
 ---
 

@@ -1048,3 +1048,9 @@ Esta documentación exhaustiva proporciona todo lo necesario para trabajar con e
 - Shared logger: soporte de subruta `@altamedica/shared/services/logger.service` con artefactos dedicados (CJS/ESM/DTS).
 
 Nota: estos cambios no alteran la lógica de negocio; están orientados a estabilizar compilación e integración entre paquetes.
+
+## 🆕 Cambios recientes (2025-08-27)
+
+- Seguridad JWT: Se agrega `config/secrets-loader.ts` que carga `JWT_SECRET` y `JWT_REFRESH_SECRET` desde AWS Secrets Manager antes de iniciar el servidor (ver `src/server.ts`).
+- Endurecimiento de `PatientService` (dominio patients): sanitización de parámetros de búsqueda, whitelisting de `sortBy` y normalización de `sortOrder`.
+- Documentación: README actualizado con nota de seguridad y endurecimiento de consultas.

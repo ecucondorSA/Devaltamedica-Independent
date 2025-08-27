@@ -7,6 +7,7 @@ import { initializeMiddlewares } from './middleware';
 import { csrfMiddleware } from './middleware/csrf.middleware';
 import authFirebaseRoutes from './routes/auth-firebase.routes';
 // SSO routes removed - using session-based auth only
+import { initSecrets } from './config/secrets-loader';
 import mfaRoutes from './routes/mfa.routes';
 
 const app = express();
@@ -384,6 +385,10 @@ function startServer(port: number, attemptsLeft = 2) {
   });
 }
 
-startServer(Number(PORT));
+;(async () => {
+  // Cargar secretos antes de iniciar el servidor (JWT, etc.)
+  await initSecrets()
+  startServer(Number(PORT))
+})()
 
 export default app;
