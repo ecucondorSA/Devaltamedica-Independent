@@ -38,6 +38,8 @@
     "@altamedica/shared": "workspace:*",
     "@altamedica/types": "workspace:*",
     "@altamedica/utils": "workspace:*",
+    "@aws-sdk/client-kms": "^3.876.0",
+    "@aws-sdk/client-secrets-manager": "^3.876.0",
     "@prisma/client": "^6.1.0",
     "@sentry/node": "^10.5.0",
     "@types/bcrypt": "^6.0.0",
