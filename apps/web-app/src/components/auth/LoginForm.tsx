@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import { getRedirectUrlForRole } from '@altamedica/auth/utils/redirects';
+import { ReCaptcha } from './ReCaptcha';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 export function LoginForm() {
@@ -19,6 +20,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const { checkLimit, recordAttempt, resetLimit } = useRateLimiter();
   const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +49,12 @@ export function LoginForm() {
       );
     }
 
+    // Verificar captcha si es requerido
+    if (showCaptcha && !captchaToken) {
+      setError('Por favor, completa el captcha para continuar.');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -62,8 +70,10 @@ export function LoginForm() {
         throw new Error('No se pudo establecer la sesión segura');
       }
 
-      // Login exitoso - resetear rate limit
+      // Login exitoso - resetear rate limit y captcha
       resetLimit(email);
+      setShowCaptcha(false);
+      setCaptchaToken(null);
 
       // 3) Consultar al backend para conocer rol y destino (session-verify)
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
@@ -73,8 +83,8 @@ export function LoginForm() {
       const verify = await verifyRes.json();
       const role = verify?.role || verify?.user?.role || verify?.user?.customClaims?.role;
       const normalizedRole = (role || '').toString().toLowerCase() as any;
-      const redirectUrl = verify?.redirectUrl
-        || getRedirectUrlForRole(normalizedRole, { target: 'dashboard' });
+      const redirectUrl =
+        verify?.redirectUrl || getRedirectUrlForRole(normalizedRole, { target: 'dashboard' });
 
       logger.info('[LoginForm] Redirigiendo a:', redirectUrl);
 
@@ -100,6 +110,11 @@ export function LoginForm() {
       }
 
       setError(errorMessage);
+
+      // Reset captcha token on error
+      if (showCaptcha) {
+        setCaptchaToken(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -206,6 +221,28 @@ export function LoginForm() {
               />
             </div>
           </div>
+
+          {showCaptcha && (
+            <div className="mt-4">
+              <ReCaptcha
+                platform="web"
+                onVerify={(token) => {
+                  setCaptchaToken(token);
+                  setError('');
+                }}
+                onExpired={() => {
+                  setCaptchaToken(null);
+                  setError('El captcha ha expirado. Por favor, intenta nuevamente.');
+                }}
+                onError={(error) => {
+                  console.error('ReCAPTCHA error:', error);
+                  setError('Error al cargar el captcha. Por favor, recarga la página.');
+                }}
+                theme="light"
+                size="normal"
+              />
+            </div>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
