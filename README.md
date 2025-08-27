@@ -125,6 +125,30 @@ AltaMedica es una **plataforma médica de vanguardia** que implementa un **siste
 - **🔄 [PROCESOS_REPETIBLES_DELEGACION.md](docs/PROCESOS_REPETIBLES_DELEGACION.md)**: Procesos repetibles y escalables
 - **🔄 [GEMINI-CLAUDE-SYNC.md](GEMINI-CLAUDE-SYNC.md)**: Sincronización y comunicación del equipo AI
 
+### ⚡ Arranque rápido (local)
+
+```bash
+# 1) Instalar dependencias
+pnpm i
+
+# 2) Generar Prisma Client
+pnpm --dir apps/api-server run prisma:generate
+
+# 3) Credenciales Firebase (elige uno)
+# a) GOOGLE_APPLICATION_CREDENTIALS con JSON de servicio
+export GOOGLE_APPLICATION_CREDENTIALS=$PWD/apps/api-server/altamedic-firebase-admin.json
+# b) Variables individuales
+export FIREBASE_PROJECT_ID=altamedica-platform
+export FIREBASE_CLIENT_EMAIL="...@...gserviceaccount.com"
+export FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+
+# 4) Levantar API Server
+pnpm --dir apps/api-server dev
+
+# 5) Health
+curl http://localhost:3001/api/health
+```
+
 ### 🔧 **Documentación Técnica**
 
 - **Arquitectura**: Monorepo con apps y packages
