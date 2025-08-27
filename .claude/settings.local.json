@@ -62,7 +62,9 @@
       "Bash(timeout 30s npx eslint src/ --fix)",
       "Bash(sudo docker builder build:*)",
       "Bash(docker build:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(pkill:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": [],
