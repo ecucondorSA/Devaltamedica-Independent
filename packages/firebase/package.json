@@ -22,7 +22,7 @@
     "dev": "tsup src/index.ts --format=esm --watch"
   },
   "dependencies": {
-    "firebase": "^10.7.1",
+    "firebase": "^10.14.1",
     "firebase-admin": "^12.0.0"
   },
   "devDependencies": {

@@ -9,6 +9,37 @@ import { issueCsrfToken } from '../middleware/csrf.middleware';
 import { logger } from '@altamedica/shared';
 const router = Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SessionLoginRequest:
+ *       type: object
+ *       required:
+ *         - idToken
+ *       properties:
+ *         idToken:
+ *           type: string
+ *           description: Firebase ID token obtained from the client.
+ *     SessionLoginResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         csrfToken:
+ *           type: string
+ *           description: CSRF token to be used in subsequent requests.
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: false
+ *         error:
+ *           type: string
+ *           description: Error code.
+ */
+
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 3, // Reducido de 10 a 3 intentos para mayor seguridad
@@ -24,8 +55,38 @@ const cookieBase = {
   domain: process.env.COOKIE_DOMAIN || 'localhost',
 };
 
-// POST /api/v1/auth/session-login
-// Body: { idToken: string }
+/**
+ * @swagger
+ * /auth/session-login:
+ *   post:
+ *     summary: Creates a session cookie for the user.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SessionLoginRequest'
+ *     responses:
+ *       200:
+ *         description: Session created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SessionLoginResponse'
+ *       400:
+ *         description: Missing ID token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Invalid ID token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post('/session-login', loginLimiter as any, async (req: Request, res: Response) => {
   try {
     const { idToken } = req.body || {};

@@ -10,9 +10,13 @@ import authFirebaseRoutes from './routes/auth-firebase.routes';
 // Importar Vercel secrets loader (sin AWS)
 import { initSecrets } from './config/vercel-secrets-loader';
 import mfaRoutes from './routes/mfa.routes';
+import { setupSwagger } from './config/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 3001; // Changed from 3002 to 3001
+
+// Setup Swagger documentation
+setupSwagger(app);
 
 // P0 Security: Global rate limiting (before other middlewares)
 const globalRateLimiter = rateLimit({
@@ -124,7 +128,7 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     architecture: 'Express.js + TypeScript',
-    documentation: '/api/v1/health',
+    documentation: '/api-docs',
     endpoints: {
       health: '/api/v1/health',
       auth: '/api/v1/auth',
