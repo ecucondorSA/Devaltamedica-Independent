@@ -14,8 +14,9 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
-  viteFinal: async (config) => {
-    return config;
+  typescript: {
+    check: false,
+    reactDocgen: false, // Disable for now to avoid the issue
   },
 };
 
