@@ -4,7 +4,7 @@ import { serverConfig } from '../config/server.config.js';
 
 import { logger } from '@altamedica/shared';
 // TODO: Definir este tipo en @altamedica/types
-interface User {
+export interface User {
   id: string;
   email: string;
   role: string;

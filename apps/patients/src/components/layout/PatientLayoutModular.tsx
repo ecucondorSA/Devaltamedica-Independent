@@ -5,7 +5,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
-import { AuthProvider } from '../../auth-stub';
+import { AuthProvider } from '@altamedica/auth';
 import type { FooterProps } from './PatientFooterModular';
 import PatientFooterModular from './PatientFooterModular';
 import PatientHeaderModular from './PatientHeaderModular';

@@ -1,15 +1,4 @@
 import { appConfigs, withProfile } from '@altamedica/config-next';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Resolver rutas absolutas al monorepo para alias explícitos (evitar subpath exports de dist en dev)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '../../..');
-// Usaremos la versión publicada (dist) desde node_modules para @altamedica/hooks
-const hooksNodeModulesPath = path.resolve(__dirname, 'node_modules/@altamedica/hooks');
-const apiClientSrcPath = path.resolve(repoRoot, 'packages/api-client/src');
-const apiClientHooksSrcPath = path.resolve(repoRoot, 'packages/api-client/src/hooks/index.ts');
 
 /** @type {import('next').NextConfig} */
 const config = withProfile(
@@ -18,11 +7,15 @@ const config = withProfile(
       '@altamedica/patient-services',
       '@altamedica/medical-hooks',
       '@altamedica/telemedicine-core',
-      // Necesario para resolver subpath exports desde paquetes enlazados en dev/SSR
       '@altamedica/api-client',
       '@altamedica/hooks',
-      '@altamedica/auth', // Transpile auth package to handle 'use client' directive
-      '@altamedica/ui', // Agregar UI package para resolver componentes
+      '@altamedica/auth',
+      '@altamedica/ui',
+      '@altamedica/shared',
+      '@altamedica/types',
+      '@altamedica/firebase',
+      '@altamedica/anamnesis',
+      '@altamedica/utils',
     ],
     images: {
       domains: [
@@ -37,10 +30,10 @@ const config = withProfile(
       scrollRestoration: true,
     },
     typescript: {
-      ignoreBuildErrors: true, // Temporarily ignore for build
+      ignoreBuildErrors: false,
     },
     eslint: {
-      ignoreDuringBuilds: true, // Temporarily ignore for build
+      ignoreDuringBuilds: false,
     },
     compiler: {
       removeConsole: process.env.NODE_ENV === 'production' && {

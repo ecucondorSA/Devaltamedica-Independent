@@ -15,13 +15,10 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { logger } from '../../shared-stub';
+import { logger } from '@altamedica/shared';
 
 // Tipos TypeScript
-import { Doctor } from '../../types-stub';
-
-// Removed local interface - using @altamedica/types
-import { Appointment } from '../../types-stub';
+import { DoctorProfile as Doctor, DoctorId, MedicalSpecialty, LicenseStatus, Appointment, AppointmentId, AppointmentType, AppointmentStatus, PatientId, AppointmentPriority, ConsultationType } from '@altamedica/types';
 
 export default function AppointmentsPage() {
   // Estados
@@ -55,83 +52,141 @@ export default function AppointmentsPage() {
       // Simulación de datos - en producción usarías tus APIs
       const mockAppointments: Appointment[] = [
         {
-          id: '1',
-          doctorId: 'doc1',
-          doctorName: 'Dr. García López',
-          specialty: 'Cardiología',
-          date: '2025-06-27',
-          time: '10:00',
-          type: 'consultation',
-          status: 'confirmed',
-          reason: 'Chequeo cardiológico de rutina',
-          isTelemedicine: false,
-          estimatedDuration: 30,
+          id: '1' as AppointmentId,
+          doctorId: 'doc1' as DoctorId,
+          patientId: 'patient1' as PatientId,
+          scheduledDate: new Date('2025-06-27T10:00:00'),
+          duration: 30,
+          type: AppointmentType.FIRST_VISIT,
+          status: AppointmentStatus.CONFIRMED,
+          priority: AppointmentPriority.MEDIUM,
+          consultationType: ConsultationType.TELEMEDICINE,
+          specialty: MedicalSpecialty.CARDIOLOGY,
+          chiefComplaint: 'Chequeo cardiológico de rutina',
+          isVirtual: false,
+          isPaid: true,
+          requiresFollowUp: false,
+          createdBy: 'patient1',
+          remindersSent: 0,
+          rescheduleCount: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          reminders: [],
         },
         {
-          id: '2',
-          doctorId: 'doc2',
-          doctorName: 'Dra. María Ruiz',
-          specialty: 'Medicina General',
-          date: '2025-07-02',
-          time: '14:30',
-          type: 'follow_up',
-          status: 'scheduled',
-          reason: 'Seguimiento de resultados de laboratorio',
-          isTelemedicine: true,
-          estimatedDuration: 20,
+          id: '2' as AppointmentId,
+          doctorId: 'doc2' as DoctorId,
+          patientId: 'patient1' as PatientId,
+          scheduledDate: new Date('2025-07-02T14:30:00'),
+          duration: 20,
+          type: AppointmentType.FOLLOW_UP,
+          status: AppointmentStatus.SCHEDULED,
+          priority: AppointmentPriority.MEDIUM,
+          consultationType: ConsultationType.TELEMEDICINE,
+          specialty: MedicalSpecialty.GENERAL_PRACTICE,
+          chiefComplaint: 'Seguimiento de resultados de laboratorio',
+          isVirtual: true,
+          isPaid: true,
+          requiresFollowUp: true,
+          createdBy: 'patient1',
+          remindersSent: 0,
+          rescheduleCount: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          reminders: [],
         },
       ];
 
       const mockDoctors: Doctor[] = [
         {
-          id: 'doc1',
-          name: 'Dr. García López',
-          specialty: 'Cardiología',
-          rating: 4.8,
-          experience: 15,
+          id: 'doc1' as DoctorId,
+          userId: 'user-doc1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-12345',
+          specialties: [MedicalSpecialty.CARDIOLOGY],
+          primarySpecialty: MedicalSpecialty.CARDIOLOGY,
+          licenses: [{
+            licenseNumber: 'LP-67890',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2010-05-20'),
+            expirationDate: new Date('2025-05-20'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad de Buenos Aires',
+            degree: 'Médico Cirujano',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2008,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Centro Médico AltaMedica',
+            position: 'Cardiólogo',
+            startDate: new Date('2010-06-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 15,
           languages: ['Español', 'Inglés'],
-          isAvailable: true,
-          telemedicineAvailable: true,
-          location: 'Centro Médico AltaMedica',
-          avatar: '/api/placeholder/64/64',
+          hospitalAffiliations: ['Centro Médico AltaMedica'],
+          schedule: [],
           consultationFee: 800,
-          availableSlots: ['09:00', '10:00', '11:00', '14:00', '15:00'],
+          acceptedInsurance: ['OSDE', 'Swiss Medical'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.8,
         },
         {
-          id: 'doc2',
-          name: 'Dra. María Ruiz',
-          specialty: 'Medicina General',
-          rating: 4.9,
-          experience: 12,
-          languages: ['Español'],
-          isAvailable: true,
-          telemedicineAvailable: true,
-          location: 'Clínica Norte',
-          avatar: '/api/placeholder/64/64',
+          id: 'doc2' as DoctorId,
+          userId: 'user-doc2',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-54321',
+          specialties: [MedicalSpecialty.GENERAL_PRACTICE],
+          primarySpecialty: MedicalSpecialty.GENERAL_PRACTICE,
+          licenses: [{
+            licenseNumber: 'LP-09876',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2012-03-15'),
+            expirationDate: new Date('2027-03-15'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad Nacional de Córdoba',
+            degree: 'Médico General',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2011,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Clínica Norte',
+            position: 'Médico General',
+            startDate: new Date('2012-04-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 12,
+          languages: ['Español', 'Portugués'],
+          hospitalAffiliations: ['Clínica Norte'],
+          schedule: [],
           consultationFee: 600,
-          availableSlots: ['08:00', '09:00', '10:00', '16:00', '17:00'],
-        },
-        {
-          id: 'doc3',
-          name: 'Dr. Roberto Silva',
-          specialty: 'Dermatología',
-          rating: 4.7,
-          experience: 10,
-          languages: ['Español', 'Inglés'],
-          isAvailable: true,
-          telemedicineAvailable: false,
-          location: 'Centro Dermatológico',
-          avatar: '/api/placeholder/64/64',
-          consultationFee: 750,
-          availableSlots: ['11:00', '12:00', '15:00', '16:00'],
+          acceptedInsurance: ['OSDE', 'Galeno'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.9,
         },
       ];
 
       setAppointments(mockAppointments);
       setDoctors(mockDoctors);
       setLoading(false);
-    } catch {
-      // logger.error('Error loading data:', error);
+    } catch (error) {
+      logger.error('Error loading data:', (error as Error).message);
       setLoading(false);
     }
   };
@@ -139,7 +194,7 @@ export default function AppointmentsPage() {
   const filteredAppointments = appointments.filter((appointment) => {
     const matchesStatus = filterStatus === 'all' || appointment.status === filterStatus;
     const matchesSearch =
-      appointment.doctorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      appointment.doctorId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       appointment.specialty.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
   });
@@ -177,13 +232,27 @@ export default function AppointmentsPage() {
   const handleBookAppointment = async () => {
     try {
       // Aquí llamarías a tu API POST /api/v1/appointments
-      const newAppointment = {
-        ...bookingForm,
-        doctorName: selectedDoctor?.name || '',
-        specialty: selectedDoctor?.specialty || '',
-        status: 'scheduled' as const,
-        id: Date.now().toString(),
-        estimatedDuration: 30,
+      const newAppointment: Appointment = {
+        id: Date.now().toString() as AppointmentId,
+        patientId: 'patient1' as PatientId, // Assuming a mock patientId
+        doctorId: selectedDoctor?.id || 'doc-unknown' as DoctorId,
+        scheduledDate: new Date(`${bookingForm.date}T${bookingForm.time}`),
+        duration: 30,
+        type: AppointmentType.FIRST_VISIT, // Defaulting to this, as bookingForm.type is a string
+        status: AppointmentStatus.SCHEDULED,
+        priority: AppointmentPriority.MEDIUM,
+        consultationType: bookingForm.isTelemedicine ? ConsultationType.TELEMEDICINE : ConsultationType.IN_PERSON,
+        specialty: selectedDoctor?.primarySpecialty || MedicalSpecialty.GENERAL_PRACTICE,
+        chiefComplaint: bookingForm.reason,
+        isVirtual: bookingForm.isTelemedicine,
+        isPaid: false,
+        requiresFollowUp: false,
+        createdBy: 'patient1',
+        remindersSent: 0,
+        rescheduleCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        reminders: [],
       };
 
       setAppointments([...appointments, newAppointment]);
@@ -204,7 +273,7 @@ export default function AppointmentsPage() {
       // Mostrar mensaje de éxito
       alert('¡Cita agendada exitosamente!');
     } catch (error) {
-      logger.error('Error booking appointment:', error);
+      logger.error('Error booking appointment:', (error as Error).message);
       alert('Error al agendar la cita. Inténtalo de nuevo.');
     }
   };
@@ -215,12 +284,12 @@ export default function AppointmentsPage() {
         // Aquí llamarías a tu API DELETE /api/v1/appointments/[id]
         setAppointments(
           appointments.map((apt) =>
-            apt.id === appointmentId ? { ...apt, status: 'cancelled' as const } : apt,
+            apt.id === appointmentId ? { ...apt, status: AppointmentStatus.CANCELLED } : apt,
           ),
         );
         alert('Cita cancelada exitosamente');
       } catch (error) {
-        logger.error('Error cancelling appointment:', error);
+        logger.error('Error cancelling appointment:', (error as Error).message);
         alert('Error al cancelar la cita');
       }
     }
@@ -307,7 +376,7 @@ export default function AppointmentsPage() {
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">
-                          {appointment.doctorName}
+                          Doctor ID: {appointment.doctorId}
                         </h3>
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(appointment.status)}`}
@@ -326,14 +395,14 @@ export default function AppointmentsPage() {
                       <div className="flex items-center space-x-6 text-sm text-gray-500 mb-3">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-1" />
-                          {appointment.date}
+                          {appointment.scheduledDate.toLocaleDateString()}
                         </div>
                         <div className="flex items-center">
                           <Clock className="w-4 h-4 mr-1" />
-                          {appointment.time} ({appointment.estimatedDuration} min)
+                          {appointment.scheduledDate.toLocaleTimeString()} ({appointment.duration} min)
                         </div>
                         <div className="flex items-center">
-                          {appointment.isTelemedicine ? (
+                          {appointment.isVirtual ? (
                             <>
                               <Video className="w-4 h-4 mr-1" />
                               Teleconsulta
@@ -348,12 +417,12 @@ export default function AppointmentsPage() {
                       </div>
 
                       <p className="text-gray-700 text-sm">
-                        <strong>Motivo:</strong> {appointment.reason}
+                        <strong>Motivo:</strong> {appointment.chiefComplaint}
                       </p>
                     </div>
 
                     <div className="flex flex-col space-y-2 ml-6">
-                      {appointment.status === 'confirmed' && appointment.isTelemedicine && (
+                      {appointment.status === 'confirmed' && appointment.isVirtual && (
                         <button className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
                           <Video className="w-4 h-4 mr-1" />
                           Unirse
@@ -446,15 +515,15 @@ export default function AppointmentsPage() {
                             <User className="w-6 h-6 text-gray-600" />
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900">{doctor.name}</h4>
-                            <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                            <h4 className="font-medium text-gray-900">Doctor: {doctor.userId}</h4>
+                            <p className="text-sm text-gray-600">{doctor.primarySpecialty}</p>
                             <div className="flex items-center space-x-4 mt-1">
                               <div className="flex items-center">
                                 <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                                <span className="text-sm text-gray-600">{doctor.rating}</span>
+                                <span className="text-sm text-gray-600">{doctor.averageRating}</span>
                               </div>
                               <span className="text-sm text-gray-600">
-                                {doctor.experience} años exp.
+                                {doctor.yearsOfExperience} años exp.
                               </span>
                               <span className="text-sm text-gray-600">
                                 ${doctor.consultationFee}
@@ -495,7 +564,8 @@ export default function AppointmentsPage() {
                         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="">Seleccionar hora</option>
-                        {selectedDoctor.availableSlots?.map((slot) => (
+                        {/* Mock available slots */}
+                        {['09:00', '10:00', '11:00', '14:00', '15:00'].map((slot) => (
                           <option key={slot} value={slot}>
                             {slot}
                           </option>

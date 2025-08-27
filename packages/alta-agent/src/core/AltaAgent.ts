@@ -7,7 +7,7 @@
 import type { Anamnesis as Medical } from '@altamedica/types';
 import { EventEmitter } from 'events';
 import OpenAI from 'openai';
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import type {
   AltaConfig,
   AltaConversationContext,

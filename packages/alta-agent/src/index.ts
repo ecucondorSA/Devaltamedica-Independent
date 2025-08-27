@@ -66,7 +66,7 @@ export { CompaniesMCP, companiesMCP } from './mcp/CompaniesMCP';
 export { UnifiedMCP, mcp } from './mcp/UnifiedMCP';
 
 // Quick access functions for Package Expert
-import { logger } from './logger.js';
+import { logger } from './logger';
 import { packageExpert } from './PackageExpertAgent';
 
 export const agent = packageExpert;

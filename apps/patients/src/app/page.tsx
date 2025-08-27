@@ -6,7 +6,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import DiagnosisPresuntivo from '../components/ai-diagnosis/DiagnosisPresuntivo';
 import TelemedicineMVP from '../components/telemedicine/TelemedicineClient';
 import { useLabResults } from '../hooks/useLabResults';
-import { usePrescriptions } from '../hooks/usePrescriptions';
+import { usePrescriptions } from '@altamedica/hooks/medical/usePrescriptions';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,7 +17,7 @@ export default function Home() {
   const searchParams = useSearchParams();
   const { labResults, loading: labsLoading, error: labsError, searchLabResults } = useLabResults();
   const {
-    data: prescriptions,
+    prescriptions,
     isLoading: rxLoading,
     error: rxError,
     refetch: searchPrescriptions,

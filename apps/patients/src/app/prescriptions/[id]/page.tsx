@@ -2,12 +2,12 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { use } from 'react';
 import { useRouter } from 'next/navigation';
-import { usePrescription } from '../../../hooks/usePrescriptions';
+import { usePrescription } from '@altamedica/hooks/medical/usePrescriptions';
 import PrescriptionDetailCard from '../../../components/prescriptions/PrescriptionDetailCard';
 
 export default function PrescriptionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { prescription, loading, error } = usePrescription(id);
+  const { prescription, isLoading: loading, error } = usePrescription(id);
   const router = useRouter();
 
   if (loading) return <div className="text-center py-12">Cargando prescripción...</div>;

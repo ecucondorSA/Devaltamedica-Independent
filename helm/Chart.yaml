@@ -1,74 +1,79 @@
 apiVersion: v2
 name: altamedica
-description: AltaMedica Healthcare Platform - Complete Helm Chart
+description: Plataforma de telemedicina AltaMedica - Monorepo completo
 type: application
 version: 1.0.0
 appVersion: "1.0.0"
 keywords:
+  - telemedicina
   - healthcare
   - telemedicine
-  - medical
-  - hipaa
+  - nextjs
+  - nodejs
+  - postgresql
+  - redis
 home: https://altamedica.com
 sources:
-  - https://github.com/altamedica/platform
+  - https://github.com/altamedica/altamedica-platform
 maintainers:
-  - name: AltaMedica DevOps Team
-    email: devops@altamedica.com
-icon: https://altamedica.com/logo.svg
-
+  - name: AltaMedica Team
+    email: dev@altamedica.com
+icon: https://altamedica.com/logo.png
+annotations:
+  category: Healthcare
+  licenses: Proprietary
+  vendor: AltaMedica Inc.
+  support: https://support.altamedica.com
 dependencies:
   - name: postgresql
-    version: 12.1.9
+    version: 12.5.6
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
-  
   - name: redis
-    version: 17.6.0
+    version: 17.3.3
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
-  
+  - name: nginx-ingress
+    version: 9.7.6
+    repository: https://kubernetes.github.io/ingress-nginx
+    condition: nginx-ingress.enabled
+  - name: cert-manager
+    version: v1.13.0
+    repository: https://charts.jetstack.io
+    condition: cert-manager.enabled
+  - name: prometheus
+    version: 25.0.0
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.enabled
+  - name: grafana
+    version: 7.0.3
+    repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled
   - name: elasticsearch
     version: 8.5.1
     repository: https://helm.elastic.co
     condition: elasticsearch.enabled
-  
   - name: kibana
     version: 8.5.1
     repository: https://helm.elastic.co
     condition: kibana.enabled
-  
-  - name: prometheus
-    version: 19.3.3
-    repository: https://prometheus-community.github.io/helm-charts
-    condition: prometheus.enabled
-  
-  - name: grafana
-    version: 6.50.7
-    repository: https://grafana.github.io/helm-charts
-    condition: grafana.enabled
-  
-  - name: ingress-nginx
-    version: 4.5.2
-    repository: https://kubernetes.github.io/ingress-nginx
-    condition: ingress-nginx.enabled
-  
-  - name: cert-manager
-    version: 1.11.0
-    repository: https://charts.jetstack.io
-    condition: cert-manager.enabled
-
-annotations:
-  artifacthub.io/changes: |
-    - Initial release of AltaMedica platform
-    - HIPAA compliant configuration
-    - Multi-tenant support
-    - WebRTC signaling server
-    - Complete monitoring stack
-  artifacthub.io/containsSecurityUpdates: "true"
-  artifacthub.io/license: MIT
-  artifacthub.io/operator: "false"
-  artifacthub.io/prerelease: "false"
-  artifacthub.io/recommendations: |
-    - url: https://artifacthub.io/packages/helm/bitnami/postgresql
-    - url: https://artifacthub.io/packages/helm/bitnami/redis
+  - name: filebeat
+    version: 8.5.1
+    repository: https://helm.elastic.co
+    condition: filebeat.enabled
+  - name: jaeger
+    version: 0.69.0
+    repository: https://jaegertracing.github.io/helm-charts
+    condition: jaeger.enabled
+  - name: istio
+    version: 1.20.0
+    repository: https://istio-release.storage.googleapis.com/charts
+    condition: istio.enabled
+  - name: argocd
+    version: 5.51.6
+    repository: https://argoproj.github.io/argo-helm
+    condition: argocd.enabled
+  - name: vault
+    version: 0.27.0
+    repository: https://helm.releases.hashicorp.com
+    condition: vault.enabled

@@ -3,7 +3,7 @@
  * Conecta el frontend con las APIs de pacientes del servidor Docker
  */
 
-import { apiClient, ApiResponse  } from '@altamedica/api-client';;
+import { apiClient, ApiResponse  } from '@altamedica/api-client';
 import { API_CONFIG } from '../config/api';
 
 import { Patient } from '@altamedica/types';
@@ -14,6 +14,7 @@ export interface PatientsResponse {
   total: number;
   page?: number;
   limit?: number;
+}
 
 export interface PatientProfile {
   id: string;
@@ -61,6 +62,7 @@ export interface PatientProfile {
       allowMarketingCommunications: boolean;
     };
   };
+}
 
 export interface CreatePatientRequest {
   firstName: string;
@@ -76,6 +78,7 @@ export interface CreatePatientRequest {
   emergencyContactRelationship?: string;
   insuranceProvider?: string;
   insurancePolicyNumber?: string;
+}
 
 export interface UpdatePatientRequest {
   firstName?: string;
@@ -105,6 +108,7 @@ export interface UpdatePatientRequest {
       allowMarketingCommunications?: boolean;
     };
   };
+}
 
 class PatientsService {
   
@@ -294,7 +298,7 @@ class PatientsService {
       errors.push('Email no válido');
     }
     
-    if ('phone' in data && data.phone && !/^\+?[\d\s\-\(\)]+$/.test(data.phone)) {
+    if ('phone' in data && data.phone && !/^\+?[\d\s\-()]+$/.test(data.phone)) {
       errors.push('Teléfono no válido');
     }
     
@@ -308,6 +312,7 @@ class PatientsService {
     
     return errors;
   }
+}
 
 // Singleton del servicio de pacientes
 export const patientsService = new PatientsService();

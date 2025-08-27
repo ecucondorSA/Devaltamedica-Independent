@@ -2,8 +2,8 @@ import {
   AUTH_COOKIES as AUTH_COOKIES_IMPORTED,
   LEGACY_AUTH_COOKIES as LEGACY_AUTH_COOKIES_IMPORTED,
 } from '@altamedica/auth';
-import { createCsp } from '@altamedica/config-next';
-import { rateLimiter } from '@altamedica/utils/rate-limiter';
+import { buildCsp } from '@altamedica/config-next';
+// import { rateLimiter } from '@altamedica/utils/rate-limiter';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -17,7 +17,7 @@ function addSecurityHeaders(response: NextResponse, nonce: string) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  const csp = createCsp({
+  const csp = buildCsp({
     nonce,
     overrides: {
       'script-src': ['https://checkout.mercadopago.com'],
@@ -42,15 +42,15 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Apply rate limiting to all incoming requests for this app
-  const clientIP = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
-  const { isAllowed, remaining } = await rateLimiter(`patients-app:${clientIP}`, 100, 60);
+  // const clientIP = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+  // const { isAllowed, remaining } = await rateLimiter(`patients-app:${clientIP}`, 100, 60);
 
-  if (!isAllowed) {
-    return new NextResponse('Too Many Requests', {
-      status: 429,
-      headers: { 'Retry-After': '60', 'X-RateLimit-Remaining': String(remaining) },
-    });
-  }
+  // if (!isAllowed) {
+  //   return new NextResponse('Too Many Requests', {
+  //     status: 429,
+  //     headers: { 'Retry-After': '60', 'X-RateLimit-Remaining': String(remaining) },
+  //   });
+  // }
 
   if (pathname.startsWith('/_next') || pathname.startsWith('/static') || pathname.includes('.')) {
     return NextResponse.next();

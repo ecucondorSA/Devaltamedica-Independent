@@ -516,11 +516,11 @@ const TestResultRow: React.FC<{ test: LabTest }> = ({ test }) => {
             <span className="font-semibold">{test.result}</span>
             {test.unit && <span className="ml-1 text-gray-600">{test.unit}</span>}
             {test.referenceRange && (
-              <span className="ml-3 text-gray-600">(Ref: {test.referenceRange})</span>
+              <span className="ml-3 text-gray-600">(Ref: {test.referenceRange.min} - {test.referenceRange.max})</span>
             )}
           </div>
         </div>
-        {test.notes && <div className="ml-4 text-sm text-gray-600 italic">{test.notes}</div>}
+        
       </div>
     </div>
   );

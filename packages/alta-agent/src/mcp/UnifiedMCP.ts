@@ -3,7 +3,7 @@
  * Este es el punto de entrada principal para consultar sobre cualquier parte del sistema
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { WebMCP, webMCP } from './WebMCP';
 import { PatientMCP, patientMCP } from './PatientMCP';
 import { DoctorMCP, doctorMCP } from './DoctorMCP';

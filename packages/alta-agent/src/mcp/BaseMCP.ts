@@ -1,4 +1,4 @@
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 
 /**
  * BaseMCP - Clase base para todos los agentes MCP especializados

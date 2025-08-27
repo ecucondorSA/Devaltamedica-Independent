@@ -1,3 +1,4 @@
+'use server';
 import Redis from 'ioredis';
 
 let redis: Redis;

@@ -39,31 +39,23 @@ services:
       timeout: 5s
       retries: 5
 
-  # Main Application
-  app:
+  # API Server
+  api-server:
     build:
       context: .
-      dockerfile: Dockerfile.optimized
+      dockerfile: apps/api-server/Dockerfile
       args:
         NODE_ENV: ${NODE_ENV:-development}
-    container_name: altamedica-app
+    container_name: altamedica-api
     env_file:
       - .env.docker
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-altamedica}:${POSTGRES_PASSWORD:-altamedica123}@postgres:5432/${POSTGRES_DB:-altamedica}
       REDIS_URL: redis://redis:6379
       NODE_ENV: ${NODE_ENV:-development}
-    volumes:
-      - ./apps:/app/apps:delegated
-      - ./packages:/app/packages:delegated
-      - ./config:/app/config:ro
-      - node_modules:/app/node_modules
-      - pnpm_store:/app/.pnpm-store
+      PORT: 3001
     ports:
-      - "3000:3000"  # Web App
-      - "3001:3001"  # API
-      - "3002:3002"  # Admin Panel
-      - "8888:8888"  # WebRTC Signaling
+      - "3001:3001"
     networks:
       - altamedica-network
     depends_on:
@@ -71,7 +63,116 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: sh -c "pnpm install && pnpm run dev"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Web Application
+  web-app:
+    build:
+      context: .
+      dockerfile: apps/web-app/Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+    container_name: altamedica-web
+    env_file:
+      - .env.docker
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://api-server:3001
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    networks:
+      - altamedica-network
+    depends_on:
+      - api-server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Doctors Application  
+  doctors-app:
+    build:
+      context: .
+      dockerfile: apps/doctors/Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+    container_name: altamedica-doctors
+    env_file:
+      - .env.docker
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://api-server:3001
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3002
+    ports:
+      - "3002:3002"
+    networks:
+      - altamedica-network
+    depends_on:
+      - api-server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Patients Application
+  patients-app:
+    build:
+      context: .
+      dockerfile: apps/patients/Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+    container_name: altamedica-patients
+    env_file:
+      - .env.docker
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://api-server:3001
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3003
+    ports:
+      - "3003:3003"
+    networks:
+      - altamedica-network
+    depends_on:
+      - api-server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # WebRTC Signaling Server
+  signaling-server:
+    build:
+      context: .
+      dockerfile: apps/signaling-server/Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+    container_name: altamedica-signaling
+    env_file:
+      - .env.docker
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 8888
+    ports:
+      - "8888:8888"
+    networks:
+      - altamedica-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     restart: unless-stopped
 
   # PgAdmin for Database Management

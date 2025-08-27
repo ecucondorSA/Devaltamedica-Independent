@@ -3,7 +3,7 @@
  * Puerto 3003 - Portal de pacientes grado empresarial
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const patientsConfig: MCPConfig = {

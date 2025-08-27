@@ -1,0 +1,348 @@
+apiVersion: install.istio.io/v1beta1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: altamedica-istio-control-plane
+spec:
+  profile: production
+  components:
+    pilot:
+      k8s:
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2048Mi
+          limits:
+            cpu: 1000m
+            memory: 4096Mi
+        hpaSpec:
+          maxReplicas: 5
+          minReplicas: 2
+        overlays:
+          - apiVersion: apps/v1
+            kind: Deployment
+            name: istiod
+            patches:
+              - path: spec.template.spec.containers[0].resources.limits.cpu
+                value: "1000m"
+              - path: spec.template.spec.containers[0].resources.limits.memory
+                value: "4096Mi"
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+        k8s:
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+          hpaSpec:
+            maxReplicas: 5
+            minReplicas: 2
+          service:
+            ports:
+              - name: http2
+                port: 80
+                targetPort: 8080
+              - name: https
+                port: 443
+                targetPort: 8443
+    egressGateways:
+      - name: istio-egressgateway
+        enabled: true
+        k8s:
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1024Mi
+    addonComponents:
+      grafana:
+        enabled: true
+      kiali:
+        enabled: true
+      tracing:
+        enabled: true
+      prometheus:
+        enabled: true
+  values:
+    global:
+      proxy:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      defaultResources:
+        requests:
+          cpu: 500m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 1024Mi
+    pilot:
+      autoscaleEnabled: true
+      autoscaleMin: 2
+      autoscaleMax: 5
+      resources:
+        requests:
+          cpu: 500m
+          memory: 2048Mi
+        limits:
+          cpu: 1000m
+          memory: 4096Mi
+    gateways:
+      istio-ingressgateway:
+        autoscaleEnabled: true
+        autoscaleMin: 2
+        autoscaleMax: 5
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1024Mi
+          limits:
+            cpu: 1000m
+            memory: 2048Mi
+    kiali:
+      dashboard:
+        auth:
+          strategy: token
+        grafanaURL: http://grafana:3000
+        prometheusURL: http://prometheus:9090
+        jaegerURL: http://jaeger-query:16686
+      prometheus:
+        url: http://prometheus:9090
+      grafana:
+        url: http://grafana:3000
+      tracing:
+        url: http://jaeger-query:16686
+    grafana:
+      security:
+        enabled: true
+      persistence:
+        enabled: true
+        storageClassName: gp2
+        accessMode: ReadWriteOnce
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1024Mi
+    prometheus:
+      retention: 7d
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1024Mi
+        limits:
+          cpu: 1000m
+          memory: 2048Mi
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: gp2
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 50Gi
+    tracing:
+      jaeger:
+        template: production
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        storage:
+          type: elasticsearch
+          options:
+            es:
+              serverUrls: http://elasticsearch-master:9200
+              indexPrefix: jaeger
+              username: elastic
+              password: changeme
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: altamedica-web
+  namespace: altamedica
+spec:
+  hosts:
+    - altamedica.com
+    - www.altamedica.com
+  gateways:
+    - altamedica-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: altamedica-web-app-service
+            port:
+              number: 80
+          weight: 100
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+      timeout: 30s
+      cors:
+        allowOrigin:
+          - exact: https://altamedica.com
+          - exact: https://www.altamedica.com
+        allowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowHeaders:
+          - authorization
+          - content-type
+          - x-requested-with
+        allowCredentials: true
+        maxAge: "24h"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: altamedica-api
+  namespace: altamedica
+spec:
+  hosts:
+    - api.altamedica.com
+  gateways:
+    - altamedica-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: altamedica-api-server-service
+            port:
+              number: 80
+          weight: 100
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+      timeout: 30s
+      cors:
+        allowOrigin:
+          - exact: https://altamedica.com
+          - exact: https://www.altamedica.com
+        allowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowHeaders:
+          - authorization
+          - content-type
+          - x-requested-with
+        allowCredentials: true
+        maxAge: "24h"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: altamedica-gateway
+  namespace: altamedica
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - altamedica.com
+        - www.altamedica.com
+        - api.altamedica.com
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - altamedica.com
+        - www.altamedica.com
+        - api.altamedica.com
+      tls:
+        mode: SIMPLE
+        credentialName: altamedica-tls
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: altamedica-auth-policy
+  namespace: altamedica
+spec:
+  selector:
+    matchLabels:
+      app: altamedica-api-server
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/altamedica/sa/default"]
+        - source:
+            namespaces: ["altamedica"]
+      to:
+        - operation:
+            methods: ["GET", "POST", "PUT", "DELETE"]
+            paths: ["/api/*"]
+    - from:
+        - source:
+            principals: ["cluster.local/ns/altamedica/sa/default"]
+      to:
+        - operation:
+            methods: ["GET"]
+            paths: ["/health", "/ready", "/metrics"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: altamedica-peer-auth
+  namespace: altamedica
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: altamedica-destination-rule
+  namespace: altamedica
+spec:
+  host: "*.altamedica.svc.cluster.local"
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30ms
+      http:
+        http1MaxPendingRequests: 1000
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 10s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 10

@@ -3,7 +3,7 @@
  * Puerto 3002 - Portal de doctores con telemedicina
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const doctorsConfig: MCPConfig = {

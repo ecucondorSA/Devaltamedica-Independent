@@ -20,7 +20,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useState, useCallback, useMemo } from 'react';
 import type { MedicalRecord } from '@altamedica/types';
 

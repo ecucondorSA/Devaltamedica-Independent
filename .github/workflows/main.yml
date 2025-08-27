@@ -2,9 +2,15 @@ name: 🏥 AltaMedica CI/CD Pipeline
 
 on:
   push:
-    branches: ['**']
+    branches: 
+      - main
+      - develop
+      - 'release/**'
+      - 'hotfix/**'
   pull_request:
-    branches: [auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, develop]
+    branches: 
+      - main
+      - develop
   workflow_dispatch:
     inputs:
       environment:
@@ -237,8 +243,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: [build-docker, build-apps]
-    if: github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' || github.ref == 'refs/heads/develop'
-    environment: ${{ github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' && 'production' || 'staging' }}
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
     steps:
       - name: 📥 Checkout del código
@@ -357,4 +363,4 @@ jobs:
         run: |
           echo "🎉 AltaMedica CI/CD Pipeline completed!"
           echo "📊 All jobs status: ${{ needs.*.result }}"
-          echo "🚀 Ready for deployment to ${{ github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' && 'production' || 'staging' }}"
+          echo "🚀 Ready for deployment to ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}"

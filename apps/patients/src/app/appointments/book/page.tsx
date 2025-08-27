@@ -14,9 +14,9 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { logger } from '../../../shared-stub';
+import { logger } from '@altamedica/shared';
 
-import { Doctor } from '../../../types-stub';
+import { DoctorProfile as Doctor, DoctorId, MedicalSpecialty, LicenseStatus } from '@altamedica/types';
 
 interface TimeSlot {
   time: string;
@@ -123,48 +123,135 @@ export default function BookAppointmentPage() {
       // Simulación de API - en producción sería una llamada real
       const mockDoctors: Doctor[] = [
         {
-          id: 'doc-1',
-          name: 'Dr. María García',
-          specialty: 'Medicina General',
-          rating: 4.8,
-          experience: 15,
+          id: 'doc-1' as DoctorId,
+          userId: 'user-1',
+          registrationNumber: 'MN-12345',
+          specialties: [MedicalSpecialty.GENERAL_PRACTICE, MedicalSpecialty.CARDIOLOGY],
+          primarySpecialty: MedicalSpecialty.GENERAL_PRACTICE,
+          licenses: [{
+            licenseNumber: 'LP-67890',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2010-05-20'),
+            expirationDate: new Date('2025-05-20'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad de Buenos Aires',
+            degree: 'Médico Cirujano',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2008,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Hospital Central',
+            position: 'Médico de Planta',
+            startDate: new Date('2010-06-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 15,
           languages: ['Español', 'Inglés'],
-          isAvailable: true,
           consultationFee: 5000,
-          telemedicineAvailable: true,
-          avatar: '/avatars/doctor-1.jpg',
+          acceptedInsurance: ['OSDE', 'Swiss Medical'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          schedule: [],
+          hospitalAffiliations: ['Hospital Central'],
+          averageRating: 4.8,
         },
         {
-          id: 'doc-2',
-          name: 'Dr. Carlos Rodríguez',
-          specialty: 'Cardiología',
-          rating: 4.9,
-          experience: 20,
+          id: 'doc-2' as DoctorId,
+          userId: 'user-2',
+          registrationNumber: 'MN-54321',
+          specialties: [MedicalSpecialty.CARDIOLOGY],
+          primarySpecialty: MedicalSpecialty.CARDIOLOGY,
+          licenses: [{
+            licenseNumber: 'LP-09876',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2005-03-15'),
+            expirationDate: new Date('2024-03-15'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad Nacional de Córdoba',
+            degree: 'Especialista en Cardiología',
+            fieldOfStudy: 'Cardiología',
+            graduationYear: 2004,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Clínica Norte',
+            position: 'Cardiólogo Jefe',
+            startDate: new Date('2005-04-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 20,
           languages: ['Español'],
-          isAvailable: true,
           consultationFee: 8000,
-          telemedicineAvailable: true,
-          avatar: '/avatars/doctor-2.jpg',
+          acceptedInsurance: ['OSDE', 'Galeno'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          schedule: [],
+          hospitalAffiliations: ['Clínica Norte'],
+          averageRating: 4.9,
         },
         {
-          id: 'doc-3',
-          name: 'Dra. Ana López',
-          specialty: 'Dermatología',
-          rating: 4.7,
-          experience: 12,
+          id: 'doc-3' as DoctorId,
+          userId: 'user-3',
+          registrationNumber: 'MN-67890',
+          specialties: [MedicalSpecialty.DERMATOLOGY],
+          primarySpecialty: MedicalSpecialty.DERMATOLOGY,
+          licenses: [{
+            licenseNumber: 'LP-11223',
+            licenseType: 'provincial',
+            issuingAuthority: 'Colegio Médico de Buenos Aires',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2012-08-01'),
+            expirationDate: new Date('2026-08-01'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad de La Plata',
+            degree: 'Dermatóloga',
+            fieldOfStudy: 'Dermatología',
+            graduationYear: 2011,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Centro Dermatológico',
+            position: 'Dermatóloga',
+            startDate: new Date('2012-09-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 12,
           languages: ['Español', 'Portugués'],
-          isAvailable: true,
           consultationFee: 6000,
-          telemedicineAvailable: false,
-          avatar: '/avatars/doctor-3.jpg',
+          acceptedInsurance: ['Swiss Medical', 'Galeno'],
+          offersTelemedicine: false,
+          isVerified: true,
+          acceptingNewPatients: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          schedule: [],
+          hospitalAffiliations: [],
+          averageRating: 4.7,
         },
       ];
 
       setDoctors(
-        mockDoctors.filter((doc) => doc.specialty.toLowerCase().includes(specialty.toLowerCase())),
+        mockDoctors.filter((doc) => doc.primarySpecialty.toLowerCase().includes(specialty.toLowerCase())),
       );
     } catch (error) {
-      logger.error('Error cargando médicos:', error);
+      logger.error('Error cargando médicos:', (error as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -186,7 +273,7 @@ export default function BookAppointmentPage() {
 
       setAvailableSlots(mockSlots);
     } catch (error) {
-      logger.error('Error cargando horarios:', error);
+      logger.error('Error cargando horarios:', (error as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -246,7 +333,7 @@ export default function BookAppointmentPage() {
     setIsLoading(true);
     try {
       // En producción, aquí se enviaría a la API
-      logger.info('Datos de la cita:', formData);
+      logger.info('Datos de la cita:', JSON.stringify(formData));
 
       // Simular envío exitoso
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -254,7 +341,7 @@ export default function BookAppointmentPage() {
       // Redirigir a confirmación
       router.push('/appointments?success=true');
     } catch (error) {
-      logger.error('Error programando cita:', error);
+      logger.error('Error programando cita:', (error as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -323,22 +410,16 @@ export default function BookAppointmentPage() {
                   >
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                        {doctor.avatar ? (
-                          <img
-                            src={doctor.avatar}
-                            alt={doctor.name}
-                            className="w-full h-full rounded-full"
-                          />
-                        ) : (
-                          <User className="w-6 h-6 text-gray-500" />
-                        )}
+                        {/* El avatar no está en DoctorProfile, usamos un ícono genérico */}
+                        <User className="w-6 h-6 text-gray-500" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{doctor.name}</h3>
-                        <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                        {/* DoctorProfile no tiene un campo 'name', usamos userId por ahora */}
+                        <h3 className="font-semibold text-gray-900">Doctor ID: {doctor.userId}</h3>
+                        <p className="text-sm text-gray-600">{doctor.primarySpecialty}</p>
                         <div className="flex items-center space-x-4 mt-1">
                           <span className="flex items-center text-sm text-gray-500">
-                            ⭐ {doctor.rating} ({doctor.experience} años)
+                            ⭐ {doctor.averageRating} ({doctor.yearsOfExperience} años)
                           </span>
                           <span className="text-sm text-gray-500">
                             ${doctor.consultationFee.toLocaleString()}
@@ -346,7 +427,7 @@ export default function BookAppointmentPage() {
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
-                        {doctor.telemedicineAvailable && (
+                        {doctor.offersTelemedicine && (
                           <span className="flex items-center text-xs text-green-600">
                             <Video className="w-3 h-3 mr-1" />
                             Telemedicina
@@ -545,8 +626,8 @@ export default function BookAppointmentPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Médico</h3>
-                  <p className="text-gray-600">{selectedDoctor?.name}</p>
-                  <p className="text-sm text-gray-500">{selectedDoctor?.specialty}</p>
+                  <p className="text-gray-600">{selectedDoctor?.userId}</p>
+                  <p className="text-sm text-gray-500">{selectedDoctor?.primarySpecialty}</p>
                 </div>
 
                 <div>

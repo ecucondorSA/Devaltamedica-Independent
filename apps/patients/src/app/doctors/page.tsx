@@ -25,7 +25,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@altamedica/auth';
 
 // Interfaces TypeScript
-import { Doctor } from '@altamedica/types';
+import { DoctorProfile as Doctor, DoctorId, MedicalSpecialty, LicenseStatus } from '@altamedica/types';
 
 interface Filters {
   search: string;
@@ -70,46 +70,97 @@ export default function DoctorsDirectoryPage() {
   }, []);
 
   const loadDoctors = async () => {
-    if (!isAuthenticated) return;
-
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(`/api/v1/users?role=doctor&verified=true&limit=50`);
-
-      const responseJson = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseJson?.error || 'Error al cargar doctores');
-      }
-
-      // Simular datos adicionales hasta que tengamos endpoints completos
-      const doctorsWithDetails = (responseJson.data || []).map((doctor: any) => ({
-        ...doctor,
-        rating: Math.random() * 2 + 3, // 3-5 stars
-        reviewsCount: Math.floor(Math.random() * 200) + 10,
-        experience: `${Math.floor(Math.random() * 20) + 5} años de experiencia`,
-        qualifications: ['Certificación en ' + doctor.specialty, 'Medicina General'],
-        location: doctor.location || 'Ciudad de México',
-        consultationFee: Math.floor(Math.random() * 1000) + 500,
-        availability: {
-          today: Math.random() > 0.5,
-          nextAvailable: 'Mañana a las 10:00 AM',
-          schedule: ['Lunes-Viernes 9:00-17:00', 'Sábados 9:00-13:00'],
+      // Simulación de datos - en producción usarías tus APIs
+      const mockDoctors: Doctor[] = [
+        {
+          id: 'doc1' as DoctorId,
+          userId: 'user-doc1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-12345',
+          specialties: [MedicalSpecialty.CARDIOLOGY],
+          primarySpecialty: MedicalSpecialty.CARDIOLOGY,
+          licenses: [{
+            licenseNumber: 'LP-67890',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2010-05-20'),
+            expirationDate: new Date('2025-05-20'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad de Buenos Aires',
+            degree: 'Médico Cirujano',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2008,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Centro Médico AltaMedica',
+            position: 'Cardiólogo',
+            startDate: new Date('2010-06-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 15,
+          languages: ['Español', 'Inglés'],
+          hospitalAffiliations: ['Centro Médico AltaMedica'],
+          schedule: [],
+          consultationFee: 800,
+          acceptedInsurance: ['OSDE', 'Swiss Medical'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.8,
+          bio: 'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.',
         },
-        services: {
-          inPerson: true,
-          telemedicine: Math.random() > 0.3,
-          emergency: Math.random() > 0.7,
+        {
+          id: 'doc2' as DoctorId,
+          userId: 'user-doc2',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-54321',
+          specialties: [MedicalSpecialty.GENERAL_PRACTICE],
+          primarySpecialty: MedicalSpecialty.GENERAL_PRACTICE,
+          licenses: [{
+            licenseNumber: 'LP-09876',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2012-03-15'),
+            expirationDate: new Date('2027-03-15'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad Nacional de Córdoba',
+            degree: 'Médico General',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2011,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Clínica Norte',
+            position: 'Médico General',
+            startDate: new Date('2012-04-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 12,
+          languages: ['Español', 'Portugués'],
+          hospitalAffiliations: ['Clínica Norte'],
+          schedule: [],
+          consultationFee: 600,
+          acceptedInsurance: ['OSDE', 'Galeno'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.9,
+          bio: 'Médica general con amplia experiencia en atención primaria y medicina preventiva.',
         },
-        languages: ['Español', 'Inglés'],
-        bio: `Especialista en ${doctor.specialty} con amplia experiencia en el diagnóstico y tratamiento de pacientes.`,
-        hospitalAffiliations: ['Hospital General', 'Clínica Especializada'],
-        specialty: doctor.specialty || 'general',
-      }));
-
-      setDoctors(doctorsWithDetails);
+      ];
+      setDoctors(mockDoctors);
     } catch (error: any) {
       setError(error.message || 'Error al cargar doctores');
     } finally {
@@ -123,7 +174,7 @@ export default function DoctorsDirectoryPage() {
       // Búsqueda por nombre
       if (
         filters.search &&
-        !`${doctor.firstName} ${doctor.lastName}`
+        !doctor.userId
           .toLowerCase()
           .includes(filters.search.toLowerCase())
       ) {
@@ -131,46 +182,39 @@ export default function DoctorsDirectoryPage() {
       }
 
       // Filtro por especialidad
-      if (filters.specialty !== 'all' && doctor.specialty !== filters.specialty) {
+      if (filters.specialty !== 'all' && doctor.primarySpecialty !== filters.specialty) {
         return false;
       }
 
-      // Filtro por ubicación - Temporalmente comentado por problemas de tipos
-      // if (
-      //   filters.location &&
-      //   !doctor.location.toLowerCase().includes(filters.location.toLowerCase())
-      // ) {
-      //   return false;
-      // }
+      // Filtro por ubicación
+      if (
+        filters.location &&
+        !doctor.hospitalAffiliations.join(', ').toLowerCase().includes(filters.location.toLowerCase())
+      ) {
+        return false;
+      }
 
-      // Disponible hoy - Temporalmente comentado por problemas de tipos
-      // if (filters.availableToday && !doctor.availability.today) {
-      //   return false;
-      // }
-
-      // Solo telemedicina - Temporalmente comentado por problemas de tipos
-      // if (filters.telemedicineOnly && !doctor.services.telemedicine) {
-      //   return false;
-      // }
+      // Solo telemedicina
+      if (filters.telemedicineOnly && !doctor.offersTelemedicine) {
+        return false;
+      }
 
       return true;
     });
 
-    // Ordenar - Temporalmente simplificado por problemas de tipos
-    // filtered.sort((a, b) => {
-    //   switch (filters.sortBy) {
-    //     case 'rating':
-    //       return b.rating - a.rating;
-    //     case 'experience':
-    //       return parseInt(b.experience) - parseInt(a.experience);
-    //     case 'fee':
-    //       return a.consultationFee - b.consultationFee;
-    //     case 'availability':
-    //       return a.availability.today === b.availability.today ? 0 : a.availability.today ? -1 : 1;
-    //     default:
-    //       return 0;
-    //   }
-    // });
+    // Ordenar
+    filtered.sort((a, b) => {
+      switch (filters.sortBy) {
+        case 'rating':
+          return (b.averageRating || 0) - (a.averageRating || 0);
+        case 'experience':
+          return b.yearsOfExperience - a.yearsOfExperience;
+        case 'fee':
+          return a.consultationFee - b.consultationFee;
+        default:
+          return 0;
+      }
+    });
 
     return filtered;
   }, [doctors, filters]);
@@ -232,7 +276,7 @@ export default function DoctorsDirectoryPage() {
             <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Buscar por nombre del doctor..."
+              placeholder="Buscar por ID de doctor..."
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
@@ -330,14 +374,42 @@ export default function DoctorsDirectoryPage() {
               </p>
             </div>
 
-            {/* Lista de Doctores - Temporalmente comentada por problemas de tipos */}
-            <div className="text-center py-12">
-              <p className="text-gray-500 mb-4">
-                Lista de doctores temporalmente deshabilitada por problemas de tipos
-              </p>
-              <p className="text-sm text-gray-400">
-                Se mostrará cuando se resuelvan los problemas de compatibilidad de interfaces
-              </p>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredDoctors.map((doctor) => (
+                <div key={doctor.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-start space-x-4">
+                       <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                         <User className="w-8 h-8 text-gray-500" />
+                       </div>
+                       <div className="flex-1">
+                         <h2 className="text-lg font-bold text-gray-900">Doctor: {doctor.userId}</h2>
+                         <p className="text-blue-600 font-semibold">{doctor.primarySpecialty}</p>
+                         <div className="flex items-center mt-2 space-x-2">
+                           <div className="flex items-center text-sm text-gray-600">
+                             <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
+                             <span className="font-medium">{doctor.averageRating}</span>
+                           </div>
+                           <span className="text-gray-400">|</span>
+                           <div className="flex items-center text-sm text-gray-600">
+                             <Award className="w-4 h-4 text-gray-500 mr-1" />
+                             <span>{doctor.yearsOfExperience} años</span>
+                           </div>
+                         </div>
+                       </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-4">{doctor.bio}</p>
+                  </div>
+                  <div className="px-6 py-4 bg-gray-50 border-t">
+                     <div className="flex justify-between items-center">
+                        <p className="text-lg font-bold text-gray-800">${doctor.consultationFee}</p>
+                        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                           Ver Perfil
+                        </button>
+                     </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {filteredDoctors.length === 0 && !isLoading && (

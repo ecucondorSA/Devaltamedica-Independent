@@ -15,9 +15,9 @@ import {
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-import { logger } from '../../../shared-stub';
+import { logger } from '@altamedica/shared';
 // Tipos TypeScript
-import { Doctor } from '../../../types-stub';
+import { DoctorProfile as Doctor, DoctorId, MedicalSpecialty, LicenseStatus } from '@altamedica/types';
 
 interface AppointmentForm {
   doctorId: string;
@@ -127,8 +127,8 @@ export default function NewAppointmentPage() {
     if (selectedSpecialty) {
       const filtered = doctors.filter(
         (doctor) =>
-          doctor.specialty.toLowerCase().includes(selectedSpecialty.toLowerCase()) &&
-          doctor.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          doctor.primarySpecialty.toLowerCase().includes(selectedSpecialty.toLowerCase()) &&
+          doctor.userId.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredDoctors(filtered);
     }
@@ -139,86 +139,92 @@ export default function NewAppointmentPage() {
       // Simulación de datos - en producción usarías tus APIs
       const mockDoctors: Doctor[] = [
         {
-          id: 'doc1',
-          name: 'Dr. Carlos García López',
-          specialty: 'Cardiología',
-          rating: 4.8,
-          experience: 15,
-          isAvailable: true,
-          telemedicineAvailable: true,
-          location: 'Centro Médico AltaMedica',
-          avatar: '/api/placeholder/64/64',
+          id: 'doc1' as DoctorId,
+          userId: 'user-doc1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-12345',
+          specialties: [MedicalSpecialty.CARDIOLOGY],
+          primarySpecialty: MedicalSpecialty.CARDIOLOGY,
+          licenses: [{
+            licenseNumber: 'LP-67890',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2010-05-20'),
+            expirationDate: new Date('2025-05-20'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad de Buenos Aires',
+            degree: 'Médico Cirujano',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2008,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Centro Médico AltaMedica',
+            position: 'Cardiólogo',
+            startDate: new Date('2010-06-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 15,
+          languages: ['Español', 'Inglés'],
+          hospitalAffiliations: ['Centro Médico AltaMedica'],
+          schedule: [],
           consultationFee: 800,
-          availableSlots: ['09:00', '10:00', '11:00', '14:00', '15:00'],
-          description:
-            'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.',
-          languages: ['Español', 'Inglés'],
-          education: ['Universidad de Buenos Aires', 'Especialización en Cardiología'],
-          certifications: ['Sociedad Argentina de Cardiología', 'American College of Cardiology'],
-          isTelemedicine: true,
+          acceptedInsurance: ['OSDE', 'Swiss Medical'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.8,
         },
         {
-          id: 'doc2',
-          name: 'Dra. María Ruiz Fernández',
-          specialty: 'Medicina General',
-          rating: 4.9,
-          experience: 12,
-          isAvailable: true,
-          telemedicineAvailable: true,
-          location: 'Clínica Norte',
-          avatar: '/api/placeholder/64/64',
-          consultationFee: 600,
-          availableSlots: ['08:00', '09:00', '10:00', '16:00', '17:00'],
-          description:
-            'Médica general con amplia experiencia en atención primaria y medicina preventiva.',
+          id: 'doc2' as DoctorId,
+          userId: 'user-doc2',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          registrationNumber: 'MN-54321',
+          specialties: [MedicalSpecialty.GENERAL_PRACTICE],
+          primarySpecialty: MedicalSpecialty.GENERAL_PRACTICE,
+          licenses: [{
+            licenseNumber: 'LP-09876',
+            licenseType: 'national',
+            issuingAuthority: 'Ministerio de Salud',
+            status: LicenseStatus.ACTIVE,
+            issueDate: new Date('2012-03-15'),
+            expirationDate: new Date('2027-03-15'),
+          }],
+          certifications: [],
+          education: [{
+            institution: 'Universidad Nacional de Córdoba',
+            degree: 'Médico General',
+            fieldOfStudy: 'Medicina',
+            graduationYear: 2011,
+            country: 'Argentina',
+          }],
+          experience: [{
+            institution: 'Clínica Norte',
+            position: 'Médico General',
+            startDate: new Date('2012-04-01'),
+            isCurrent: true,
+          }],
+          yearsOfExperience: 12,
           languages: ['Español', 'Portugués'],
-          education: ['Universidad Nacional de Córdoba', 'Medicina General'],
-          certifications: ['Colegio Médico de Córdoba'],
-          isTelemedicine: true,
-        },
-        {
-          id: 'doc3',
-          name: 'Dr. Roberto Silva',
-          specialty: 'Dermatología',
-          rating: 4.7,
-          experience: 10,
-          isAvailable: true,
-          telemedicineAvailable: false,
-          location: 'Centro Dermatológico',
-          avatar: '/api/placeholder/64/64',
-          consultationFee: 750,
-          availableSlots: ['11:00', '12:00', '15:00', '16:00'],
-          description:
-            'Dermatólogo especializado en el diagnóstico y tratamiento de enfermedades de la piel.',
-          languages: ['Español', 'Inglés'],
-          education: ['Universidad de La Plata', 'Especialización en Dermatología'],
-          certifications: ['Sociedad Argentina de Dermatología'],
-          isTelemedicine: false,
-        },
-        {
-          id: 'doc4',
-          name: 'Dra. Ana Martínez',
-          specialty: 'Psicología',
-          rating: 4.6,
-          experience: 8,
-          isAvailable: true,
-          telemedicineAvailable: true,
-          location: 'Centro de Salud Mental',
-          avatar: '/api/placeholder/64/64',
-          consultationFee: 500,
-          availableSlots: ['13:00', '14:00', '15:00', '16:00', '17:00'],
-          description:
-            'Psicóloga clínica especializada en terapia cognitivo-conductual y manejo del estrés.',
-          languages: ['Español'],
-          education: ['Universidad de Buenos Aires', 'Psicología Clínica'],
-          certifications: ['Colegio de Psicólogos de Buenos Aires'],
-          isTelemedicine: true,
+          hospitalAffiliations: ['Clínica Norte'],
+          schedule: [],
+          consultationFee: 600,
+          acceptedInsurance: ['OSDE', 'Galeno'],
+          offersTelemedicine: true,
+          isVerified: true,
+          acceptingNewPatients: true,
+          averageRating: 4.9,
         },
       ];
 
       setDoctors(mockDoctors);
     } catch (error) {
-      logger.error('Error loading doctors:', error);
+      logger.error('Error loading doctors:', (error as Error).message);
     }
   };
 
@@ -232,7 +238,7 @@ export default function NewAppointmentPage() {
     setFormData((prev) => ({
       ...prev,
       doctorId: doctor.id,
-      isTelemedicine: doctor.isTelemedicine || false,
+      isTelemedicine: doctor.offersTelemedicine || false,
     }));
     setCurrentStep(3);
   };
@@ -260,7 +266,7 @@ export default function NewAppointmentPage() {
       setShowConfirmation(true);
       setCurrentStep(5);
     } catch (error) {
-      logger.error('Error booking appointment:', error);
+      logger.error('Error booking appointment:', (error as Error).message);
     } finally {
       setLoading(false);
     }
@@ -333,7 +339,7 @@ export default function NewAppointmentPage() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Buscar médico por nombre..."
+            placeholder="Buscar médico por ID de usuario..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -349,32 +355,30 @@ export default function NewAppointmentPage() {
             className="p-6 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"
           >
             <div className="flex items-start space-x-4">
-              <img
-                src={doctor.avatar}
-                alt={doctor.name}
-                className="w-16 h-16 rounded-full object-cover"
-              />
+              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                 <User className="w-8 h-8 text-gray-500" />
+              </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{doctor.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Doctor: {doctor.userId}</h3>
                   <div className="flex items-center space-x-2">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm font-medium">{doctor.rating}</span>
+                    <span className="text-sm font-medium">{doctor.averageRating}</span>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-2">{doctor.specialty}</p>
-                <p className="text-sm text-gray-500 mb-3">{doctor.description}</p>
+                <p className="text-gray-600 mb-2">{doctor.primarySpecialty}</p>
+                <p className="text-sm text-gray-500 mb-3">{doctor.bio}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4 text-sm text-gray-600">
                     <span className="flex items-center">
                       <MapPin className="w-4 h-4 mr-1" />
-                      {doctor.location}
+                      {doctor.hospitalAffiliations[0] || 'N/A'}
                     </span>
                     <span className="flex items-center">
                       <User className="w-4 h-4 mr-1" />
-                      {doctor.experience} años
+                      {doctor.yearsOfExperience} años
                     </span>
-                    {doctor.isTelemedicine && (
+                    {doctor.offersTelemedicine && (
                       <span className="flex items-center text-blue-600">
                         <Video className="w-4 h-4 mr-1" />
                         Telemedicina
@@ -411,14 +415,12 @@ export default function NewAppointmentPage() {
       {selectedDoctor && (
         <div className="bg-blue-50 p-4 rounded-lg mb-6">
           <div className="flex items-center space-x-4">
-            <img
-              src={selectedDoctor.avatar}
-              alt={selectedDoctor.name}
-              className="w-12 h-12 rounded-full object-cover"
-            />
+            <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+               <User className="w-6 h-6 text-gray-500" />
+            </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{selectedDoctor.name}</h3>
-              <p className="text-gray-600">{selectedDoctor.specialty}</p>
+              <h3 className="font-semibold text-gray-900">Doctor: {selectedDoctor.userId}</h3>
+              <p className="text-gray-600">{selectedDoctor.primarySpecialty}</p>
             </div>
           </div>
         </div>
@@ -458,7 +460,7 @@ export default function NewAppointmentPage() {
         <div>
           <h3 className="text-lg font-semibold mb-4">Hora de la cita</h3>
           <div className="grid grid-cols-3 gap-2">
-            {selectedDoctor?.availableSlots?.map((time) => (
+            {['09:00', '10:00', '11:00', '14:00', '15:00'].map((time) => (
               <button
                 key={time}
                 onClick={() => handleTimeSelect(time)}
@@ -581,11 +583,11 @@ export default function NewAppointmentPage() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Médico:</span>
-              <span className="font-medium">{selectedDoctor?.name}</span>
+              <span className="font-medium">{selectedDoctor?.userId}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Especialidad:</span>
-              <span className="font-medium">{selectedDoctor?.specialty}</span>
+              <span className="font-medium">{selectedDoctor?.primarySpecialty}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Fecha:</span>
@@ -598,7 +600,7 @@ export default function NewAppointmentPage() {
             <div className="flex justify-between">
               <span className="text-gray-600">Modalidad:</span>
               <span className="font-medium">
-                {selectedDoctor?.isTelemedicine ? 'Telemedicina' : 'Presencial'}
+                {selectedDoctor?.offersTelemedicine ? 'Telemedicina' : 'Presencial'}
               </span>
             </div>
             <div className="flex justify-between">
@@ -635,7 +637,7 @@ export default function NewAppointmentPage() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Médico:</span>
-              <span className="font-medium">{selectedDoctor?.name}</span>
+              <span className="font-medium">{selectedDoctor?.userId}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Fecha:</span>
@@ -648,7 +650,7 @@ export default function NewAppointmentPage() {
             <div className="flex justify-between">
               <span className="text-gray-600">Modalidad:</span>
               <span className="font-medium">
-                {selectedDoctor?.isTelemedicine ? 'Telemedicina' : 'Presencial'}
+                {selectedDoctor?.offersTelemedicine ? 'Telemedicina' : 'Presencial'}
               </span>
             </div>
           </div>

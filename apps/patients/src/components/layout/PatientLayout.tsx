@@ -6,7 +6,7 @@
 
 import { Bell, Search, User } from 'lucide-react';
 import React from 'react';
-import { AuthProvider } from '../../auth-stub';
+import { AuthProvider } from '@altamedica/auth';
 import PatientSidebar from './PatientSidebar';
 
 import { logger } from '@altamedica/shared/services/logger.service';

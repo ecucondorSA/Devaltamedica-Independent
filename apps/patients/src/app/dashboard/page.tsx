@@ -2,7 +2,7 @@
 
 import { Button, Card, Input } from '@altamedica/ui';
 import { api } from '../../lib/api-client-jwt';
-import { useAuth } from '../../auth-stub';
+import { useAuth } from '@altamedica/auth';
 import { usePatientData } from '@altamedica/hooks';
 import {
   Activity,
@@ -155,7 +155,7 @@ export default function DashboardPage() {
 
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.displayName}</p>
                   <p className="text-xs text-neutral-500">{user?.email}</p>
                 </div>
                 <button
@@ -175,7 +175,7 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Bienvenido, {user?.name?.split(' ')[0]}
+            Bienvenido, {user?.displayName?.split(' ')[0]}
           </h1>
           <p className="text-neutral-600 mt-2">
             Aquí puedes gestionar tus citas médicas y ver tu historial

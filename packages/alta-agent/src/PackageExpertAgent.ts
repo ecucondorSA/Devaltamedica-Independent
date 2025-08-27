@@ -9,7 +9,7 @@
  * - Soluciones a problemas comunes
  */
 
-import { logger } from './logger.js';
+import { logger } from './logger';
 import type { PackageInfo, PackageQuery, PackageRecommendation } from './types';
 
 

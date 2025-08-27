@@ -10,7 +10,7 @@ import type {
   AltaEmotion,
   AltaMessage,
 } from '../types/alta.types';
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { AltaAgent } from './AltaAgent';
 
 

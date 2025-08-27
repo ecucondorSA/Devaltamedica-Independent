@@ -3,7 +3,7 @@
  * Puerto 3004 - Marketplace médico B2B
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const companiesConfig: MCPConfig = {

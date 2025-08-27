@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const useWebRTCQoS = (config: any) => {
   return {
     metrics: null,
-    qualityLevel: 'good',
+    qualityLevel: 'good' as const,
     qualityScore: 100,
   };
 };

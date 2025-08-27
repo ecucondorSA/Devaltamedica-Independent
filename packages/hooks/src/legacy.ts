@@ -64,7 +64,7 @@ function createShim<T extends AnyFn>({ name, target, replacement }: LegacyHookSh
 let real: Record<string, AnyFn> | null = null;
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  real = require('@altamedica/api-client/hooks');
+  real = require('@altamedica/api-client');
 } catch (_e) {
   real = null; // api-client aún no disponible o build fallido
 }

@@ -28,6 +28,7 @@ export interface AuditFilter {
   userRole?: string;
   action?: string;
   resource?: string;
+  resourceId?: string;
   startDate?: string;
   endDate?: string;
   limit?: number;

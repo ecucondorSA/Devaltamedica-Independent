@@ -5,7 +5,7 @@
  * Uso: alta-agent [comando] [argumentos]
  */
 
-import { logger } from './logger.js';
+import { logger } from './logger';
 import { program } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
@@ -105,7 +105,7 @@ program
       ]);
 
       switch (action) {
-        case 'info':
+        case 'info': {
           const { packageName } = await inquirer.prompt([
             {
               type: 'input',
@@ -120,8 +120,9 @@ program
           ]);
           packageExpert.explainUsage(packageName);
           break;
+        }
 
-        case 'recommend':
+        case 'recommend': {
           const { need } = await inquirer.prompt([
             {
               type: 'input',
@@ -138,12 +139,14 @@ program
             });
           }
           break;
+        }
 
-        case 'list':
+        case 'list': {
           packageExpert.listAllPackages();
           break;
+        }
 
-        case 'check':
+        case 'check': {
           const { functionality } = await inquirer.prompt([
             {
               type: 'input',
@@ -153,8 +156,9 @@ program
           ]);
           packageExpert.checkDuplication(functionality);
           break;
+        }
 
-        case 'troubleshoot':
+        case 'troubleshoot': {
           const { problem } = await inquirer.prompt([
             {
               type: 'input',
@@ -164,15 +168,18 @@ program
           ]);
           packageExpert.troubleshoot(problem);
           break;
+        }
 
-        case 'hierarchy':
+        case 'hierarchy': {
           packageExpert.showDependencyHierarchy();
           break;
+        }
 
-        case 'exit':
+        case 'exit': {
           continuar = false;
           logger.info(chalk.green('\n👋 ¡Hasta luego!\n'));
           break;
+        }
       }
 
       if (action !== 'exit') {

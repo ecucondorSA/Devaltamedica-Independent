@@ -17,8 +17,8 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 // Importación desde @altamedica/ui centralizado
-import { useAuth } from '../../../auth-stub';
-import { Button, Card, CardContent, CardHeader, LoadingSpinner } from '../../../ui-stub';
+import { useAuth } from '@altamedica/auth';
+import { Button, Card, CardContent, CardHeader, LoadingSpinner } from '@altamedica/ui';
 
 // import { useMarketplaceJobs, useJobApplications } from '@altamedica/marketplace-hooks';
 // import { useTelemedicineUnified } from '@altamedica/telemedicine-core';
@@ -391,7 +391,7 @@ export default function AppointmentDetailPage() {
           {/* Sidebar de Acciones */}
           <div className="space-y-6">
             {/* Acciones Principales */}
-            <Card variant="default" size="md">
+            <Card>
               <CardHeader className="px-6 py-4 border-b">
                 <div className="flex items-center space-x-2">
                   <MessageCircle className="w-5 h-5 text-blue-600" />
@@ -402,7 +402,7 @@ export default function AppointmentDetailPage() {
                 <div className="space-y-3">
                   {appointment.status === 'confirmed' && appointment.type === 'telemedicine' && (
                     <Button
-                      variant="primary"
+                      variant="default"
                       className="w-full flex items-center justify-center space-x-2"
                       onClick={handleJoinTelemedicine}
                       disabled={!isJoinEnabled}

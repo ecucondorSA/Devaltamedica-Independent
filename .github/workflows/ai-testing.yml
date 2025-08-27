@@ -2,9 +2,9 @@ name: 🧪 AI-Enhanced Testing Pipeline
 
 on:
   push:
-    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, develop, fix/compilation-errors-resolved ]
+    branches: [ main, develop, 'fix/**' ]
   pull_request:
-    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps ]
+    branches: [ main, develop ]
 
 jobs:
   unit-tests:

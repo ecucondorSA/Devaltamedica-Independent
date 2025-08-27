@@ -67,13 +67,15 @@
       "Bash(git rm:*)",
       "Bash(git log:*)",
       "Bash(git log:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(sed:*)"
     ],
     "deny": [],
     "ask": [],
     "additionalDirectories": [
       "C:\\c\\Users\\Eduardo\\Documents\\devaltamedica\\apps",
-      "C:\\Users\\Eduardo\\Documents\\devaltamedica-validate"
+      "C:\\Users\\Eduardo\\Documents\\devaltamedica-validate",
+      "/home/edu"
     ]
   },
   "outputStyle": "node-functional"

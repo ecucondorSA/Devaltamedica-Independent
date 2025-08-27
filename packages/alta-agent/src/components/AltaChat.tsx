@@ -4,7 +4,7 @@
  * Desarrollado por Dr. Eduardo Marques (Medicina-UBA)
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bot, Download, Mic, MicOff, RefreshCw, Send, User, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

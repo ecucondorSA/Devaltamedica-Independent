@@ -3,7 +3,7 @@
  * Puerto 3000 - Gateway público de AltaMedica
  */
 
-import { logger } from '../logger.js';
+import { logger } from '../logger';
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
 
 const webAppConfig: MCPConfig = {
