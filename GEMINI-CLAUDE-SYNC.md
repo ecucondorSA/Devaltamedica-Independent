@@ -302,7 +302,7 @@ ARCHIVOS ESPECÍFICOS:
 TAREAS:
 
 1. [x] Consolidar componentes duplicados en @altamedica/ui ✅
-2. [x] Crear Design System con Storybook ✅ (Historias creadas para todos los componentes UI)
+2. [x] Crear Design System con Storybook ✅ (Historias creadas para todos los componentes UI y pruebas Playwright)
 3. [x] Unificar gestión de estado con Zustand ✅ (Gestión de autenticación unificada)
 4. [x] Implementar HOC withAuth para protección de rutas ✅
 5. [x] Estandarizar formularios con react-hook-form + zod ✅ (LoginForm refactorizado)

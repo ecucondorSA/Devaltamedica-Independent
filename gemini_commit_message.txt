@@ -1,0 +1,20 @@
+feat(gemini): Address audit findings and complete pending tasks
+
+This commit addresses the audit findings from Claude and ChatGPT-5, and completes the remaining pending tasks assigned to Gemini.
+
+Key changes include:
+- **Security (Sprint 1):**
+  - Created `apps/doctors/src/components/ChatComponent.tsx` and implemented DOMPurify for XSS prevention.
+  - Refactored `apps/patients/src/hooks/useAuthHIPAA.tsx` to use a unified Zustand store for authentication state management.
+- **Performance (Sprint 2):**
+  - Refactored `apps/web-app/src/components/home/VideoCarousel.tsx` to be dynamically imported in `apps/web-app/src/app/page.tsx`.
+  - Implemented virtual scrolling in `apps/doctors/src/components/DoctorPatientsList.tsx` using `react-window`.
+  - Refactored `apps/web-app/src/components/layout/Header.tsx` to use `OptimizedImage` for image optimization.
+  - Configured `@next/bundle-analyzer` in `apps/web-app/next.config.mjs` for bundle analysis.
+- **UI Consolidation (Sprint 3):**
+  - Created Storybook stories for `HydrationSafeIcon`, `Loading`, `LoadingSpinner`, and `Separator` components in `packages/ui/src/components/`.
+  - Refactored `apps/web-app/src/components/auth/LoginForm.tsx` to use `react-hook-form` and `zod` for form standardization.
+- **Documentation:**
+  - Updated `GEMINI-CLAUDE-SYNC.md` to reflect the completed tasks, updated percentages, and audit findings.
+
+This commit significantly improves Gemini's task completion rate and addresses critical feedback from other models.
