@@ -57,14 +57,14 @@ ARCHIVOS ESPECÍFICOS:
 - apps/patients/src/hooks/useAuth.tsx
 ```
 
-### 🧪 **ChatGPT-5** - Security Testing & CI (30%) ✅ COMPLETADO
+### 🧪 **ChatGPT-5** - Security Testing & CI (30%)
 ```markdown
 TAREAS:
-1. [x] Crear suite de tests HIPAA compliance ✅
-2. [x] Implementar OWASP ZAP security scanning en CI ✅
-3. [x] Setup Snyk para vulnerability scanning ✅
-4. [x] Crear tests E2E para flujos de autenticación ✅
-5. [x] Documentar política de seguridad en SECURITY.md ✅
+1. [ ] Crear suite de tests HIPAA compliance
+2. [ ] Implementar OWASP ZAP security scanning en CI
+3. [ ] Setup Snyk para vulnerability scanning
+4. [ ] Crear tests E2E para flujos de autenticación
+5. [ ] Documentar política de seguridad en SECURITY.md
 
 ARCHIVOS ESPECÍFICOS:
 - .github/workflows/security-scan.yml (creado)
@@ -112,14 +112,14 @@ ARCHIVOS ESPECÍFICOS:
 - turbo.json (cache configuration)
 ```
 
-### 📊 **ChatGPT-5** - Performance Testing (25%) ✅ COMPLETADO
+### 📊 **ChatGPT-5** - Performance Testing (25%)
 ```markdown
 TAREAS:
-1. [x] Implementar Lighthouse CI en GitHub Actions ✅
-2. [x] Crear tests de carga con K6/Artillery ✅
-3. [x] Setup monitoring con Grafana/Prometheus ✅
-4. [x] Documentar métricas de performance baseline ✅
-5. [x] Crear dashboard de performance en Vercel Analytics ✅
+1. [ ] Implementar Lighthouse CI en GitHub Actions
+2. [ ] Crear tests de carga con K6/Artillery
+3. [ ] Setup monitoring con Grafana/Prometheus
+4. [ ] Documentar métricas de performance baseline
+5. [ ] Crear dashboard de performance en Vercel Analytics
 
 ARCHIVOS ESPECÍFICOS:
 - .github/workflows/performance.yml (creado)
@@ -171,15 +171,15 @@ ARCHIVOS ESPECÍFICOS:
 - packages/shared/src/stores/auth.store.ts
 ```
 
-### 📚 **ChatGPT-5** - Testing & Documentation (25%) ✅ COMPLETADO
+### 📚 **ChatGPT-5** - Testing & Documentation (25%)
 ```markdown
 TAREAS:
-1. [x] Aumentar code coverage a 80% mínimo ✅
-2. [x] Crear tests de integración para flujos críticos ✅
-3. [x] Documentar API con OpenAPI/Swagger ✅
-4. [x] Generar documentación técnica con TypeDoc ✅
-5. [x] Crear guías de onboarding para nuevos devs ✅
-6. [x] Setup de Playwright para visual regression testing ✅
+1. [ ] Aumentar code coverage a 80% mínimo
+2. [ ] Crear tests de integración para flujos críticos
+3. [ ] Documentar API con OpenAPI/Swagger
+4. [ ] Generar documentación técnica con TypeDoc
+5. [ ] Crear guías de onboarding para nuevos devs
+6. [ ] Setup de Playwright para visual regression testing
 
 ARCHIVOS ESPECÍFICOS:
 - apps/api-server/src/lib/swagger/swagger-config.ts (existente)
