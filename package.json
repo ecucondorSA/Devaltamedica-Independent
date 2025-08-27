@@ -61,6 +61,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@rollup/rollup-win32-x64-msvc": "^4.46.4",
+    "@types/cookie": "^1.0.0",
     "@types/express-rate-limit": "^6.0.2",
     "@types/ioredis": "^5.0.0",
     "@types/minimatch": "^6.0.0",

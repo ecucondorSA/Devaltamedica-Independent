@@ -7,98 +7,58 @@
   },
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**",
-        "lib/**",
-        ".next/**",
-        "!.next/cache/**",
-        "build/**"
-      ],
+      "outputs": ["dist/**", "lib/**", ".next/**", "!.next/cache/**", "build/**"],
       "cache": true,
-      "persistent": true,
-      "env": [
-        "NODE_ENV",
-        "NEXT_PUBLIC_*"
-      ]
+      "env": ["NODE_ENV", "NEXT_PUBLIC_*"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": [
-        "NODE_ENV",
-        "NEXT_PUBLIC_*",
-        "FIREBASE_*",
-        "DATABASE_URL"
-      ]
+      "env": ["NODE_ENV", "NEXT_PUBLIC_*", "FIREBASE_*", "DATABASE_URL"]
     },
     "lint": {
       "outputs": ["eslint-report.json", "eslint-report.html"],
-      "cache": true,
-      "persistent": true,
-      "dependsOn": []
+      "cache": true
     },
     "type-check": {
       "outputs": ["tsconfig.tsbuildinfo"],
-      "cache": true,
-      "persistent": true,
-      "dependsOn": ["^build"]
+      "cache": true
     },
     "test": {
       "outputs": ["coverage/**"],
       "cache": true,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
+      "env": ["NODE_ENV", "CI"]
     },
     "test:unit": {
       "outputs": ["coverage/**"],
       "cache": true,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
+      "env": ["NODE_ENV", "CI"]
     },
     "test:integration": {
       "outputs": ["coverage/**"],
       "cache": true,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI",
-        "DATABASE_URL"
-      ]
+      "env": ["NODE_ENV", "CI", "DATABASE_URL"]
     },
     "test:e2e": {
       "outputs": ["playwright-report/**", "test-results/**"],
       "cache": false,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI",
-        "E2E_USE_MOCK_LOGIN"
-      ]
+      "env": ["NODE_ENV", "CI", "E2E_USE_MOCK_LOGIN"]
     },
     "test:hipaa": {
       "outputs": ["coverage/hipaa/**", "hipaa-report.json"],
       "cache": true,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
+      "env": ["NODE_ENV", "CI"]
     },
     "test:a11y": {
       "outputs": ["a11y-report/**"],
       "cache": true,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
+      "env": ["NODE_ENV", "CI"]
     },
     "test:coverage": {
       "outputs": ["coverage/**"],
@@ -109,20 +69,11 @@
       "outputs": ["performance-report/**"],
       "cache": false,
       "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
+      "env": ["NODE_ENV", "CI"]
     },
     "clean": {
       "cache": false
     }
   },
-  "globalEnv": [
-    "TURBO_TOKEN",
-    "TURBO_TEAM",
-    "VERCEL_URL",
-    "PORT",
-    "NODE_ENV"
-  ]
+  "globalEnv": ["TURBO_TOKEN", "TURBO_TEAM", "VERCEL_URL", "PORT", "NODE_ENV"]
 }

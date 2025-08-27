@@ -66,7 +66,8 @@
       "Bash(pkill:*)",
       "Bash(git rm:*)",
       "Bash(git log:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": [],

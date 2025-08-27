@@ -17,6 +17,14 @@ export interface Patient {
   medicalHistory?: MedicalRecord[];
   allergies?: string[];
   medications?: Medication[];
+  medicalRecordNumber?: string;
+  patientId?: string;
+  age?: number;
+  bloodType?: string;
+  emergencyContacts?: EmergencyContact[];
+  activeAppointments?: Appointment[];
+  pastAppointments?: number;
+  isNewPatient?: boolean;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -36,6 +44,13 @@ export interface Doctor {
   acceptedInsurance?: string[];
   rating?: number;
   reviewCount?: number;
+  ageRestrictions?: {
+    min?: number;
+    max?: number;
+  };
+  activeAppointments?: number;
+  consultationFee?: number;
+  returningPatientDiscount?: number;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -54,6 +69,22 @@ export interface Appointment {
   location?: string;
   isVirtual: boolean;
   meetingUrl?: string;
+  rescheduleHistory?: Array<{
+    from: Date | string;
+    to: Date | string;
+    reason?: string;
+    originalDate?: Date | string;
+    newDate?: string;
+    rescheduledAt?: string;
+    rescheduledBy?: string;
+  }>;
+  recurrenceInfo?: {
+    rule: RecurrenceRule;
+    isRecurring: boolean;
+    parentId?: string;
+    seriesId?: string;
+    occurrenceNumber?: number;
+  };
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -219,4 +250,27 @@ export interface TelemedicineSession {
   technicalIssues?: string[];
   patientRating?: number;
   doctorRating?: number;
+}
+
+export interface TimeSlot {
+  id: string;
+  start?: Date | string;
+  end?: Date | string;
+  startTime: Date | string;
+  endTime: Date | string;
+  available: boolean;
+  doctorId?: string;
+  duration?: number;
+  type?: AppointmentType;
+}
+
+export interface RecurrenceRule {
+  frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  interval: number;
+  count?: number;
+  until?: Date | string;
+  byWeekDay?: number[];
+  byMonth?: number[];
+  byMonthDay?: number[];
+  maxOccurrences?: number;
 }
