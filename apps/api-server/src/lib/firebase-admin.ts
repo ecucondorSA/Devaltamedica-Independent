@@ -1,5 +1,12 @@
 import { logger } from '@altamedica/shared';
-import { App, getApps, initializeApp, ServiceAccount } from 'firebase-admin/app';
+import {
+  App,
+  applicationDefault,
+  cert,
+  getApps,
+  initializeApp,
+  ServiceAccount,
+} from 'firebase-admin/app';
 import { Auth, getAuth } from 'firebase-admin/auth';
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { getStorage, Storage } from 'firebase-admin/storage';
@@ -25,7 +32,7 @@ function getFirebaseCredentials(): ServiceAccount | null {
       return {
         projectId: serviceAccount.project_id,
         clientEmail: serviceAccount.client_email,
-        privateKey: serviceAccount.private_key
+        privateKey: serviceAccount.private_key,
       };
     } catch (error) {
       logger.error('Error parsing FIREBASE_SERVICE_ACCOUNT:', undefined, error);
@@ -33,13 +40,15 @@ function getFirebaseCredentials(): ServiceAccount | null {
   }
 
   // Fallback a variables individuales
-  if (process.env.FIREBASE_PROJECT_ID &&
+  if (
+    process.env.FIREBASE_PROJECT_ID &&
     process.env.FIREBASE_CLIENT_EMAIL &&
-    process.env.FIREBASE_PRIVATE_KEY) {
+    process.env.FIREBASE_PRIVATE_KEY
+  ) {
     return {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
     };
   }
 
@@ -70,8 +79,8 @@ function validateFirebaseCredentials(): void {
   if (!credentials) {
     throw new Error(
       '[FATAL] Firebase credentials not configured. Set either:\n' +
-      '  - GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json\n' +
-      '  - Or individual: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY'
+        '  - GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json\n' +
+        '  - Or individual: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY',
     );
   }
 
@@ -97,23 +106,34 @@ function initializeFirebaseAdmin(): App | null {
   validateFirebaseCredentials();
 
   try {
-    // Use explicit credentials if available
-    const credentials = getFirebaseCredentials();
-    if (credentials) {
+    // Prioridad 1: GOOGLE_APPLICATION_CREDENTIALS (archivo JSON)
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      const credPath = path.resolve(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+      const raw = fs.readFileSync(credPath, 'utf-8');
+      const json = JSON.parse(raw);
       app = initializeApp({
-        credential: {
-          getAccessToken: async () => ({ access_token: '', expires_in: 0 }),
-          projectId: credentials.projectId,
-          clientEmail: credentials.clientEmail,
-          privateKey: credentials.privateKey
-        } as any,
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+        credential: cert(json),
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
       });
     } else {
-      // El SDK de Firebase Admin buscará automáticamente GOOGLE_APPLICATION_CREDENTIALS
-      app = initializeApp({
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET
-      });
+      // Prioridad 2: Variables FIREBASE_*
+      const credentials = getFirebaseCredentials();
+      if (credentials) {
+        app = initializeApp({
+          credential: cert({
+            projectId: credentials.projectId,
+            clientEmail: credentials.clientEmail,
+            privateKey: credentials.privateKey,
+          } as ServiceAccount),
+          storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        });
+      } else {
+        // Prioridad 3: Application Default Credentials
+        app = initializeApp({
+          credential: applicationDefault(),
+          storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        });
+      }
     }
     logger.info('✅ [Firebase] Admin SDK initialized successfully');
     return app;
@@ -153,10 +173,8 @@ export function getFirestoreAdmin(): Firestore | null {
   try {
     db.settings({
       ignoreUndefinedProperties: true,
-      // Aumentar el tiempo de espera para funciones serverless
-      ...(process.env.NODE_ENV === 'production' && {
-        preferRest: true // Usar REST en lugar de gRPC para mejor compatibilidad con serverless
-      })
+      // Forzar REST para evitar problemas de gRPC en entornos locales
+      preferRest: true,
     });
   } catch (error) {
     // Los settings ya fueron configurados, ignorar el error
