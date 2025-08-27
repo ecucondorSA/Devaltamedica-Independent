@@ -4,6 +4,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useRef, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { Send, Paperclip, Image, File, User, Clock } from "lucide-react";
+import DOMPurify from "dompurify";
 
 import { logger } from '@altamedica/shared/services/logger.service';
 interface ChatMessage {
@@ -89,7 +90,7 @@ export default function ChatPanel({
         id: Date.now().toString(),
         senderId: data.from || 'unknown',
         senderName: data.userType === 'patient' ? 'Paciente' : 'Dr. Martínez',
-        message: data.message,
+        message: DOMPurify.sanitize(data.message),
         timestamp: new Date(data.timestamp || Date.now()),
         type: "text"
       };
@@ -112,10 +113,11 @@ export default function ChatPanel({
 
   const handleSendMessage = () => {
     if (newMessage.trim() && socketRef.current && isConnected) {
+      const sanitizedMessage = DOMPurify.sanitize(newMessage.trim());
       // Enviar mensaje al servidor
       socketRef.current.emit('chat-message', {
         roomId: sessionId,
-        message: newMessage.trim()
+        message: sanitizedMessage
       });
       
       // Agregar mensaje local inmediatamente
@@ -123,7 +125,7 @@ export default function ChatPanel({
         id: Date.now().toString(),
         senderId: "doctor",
         senderName: "Dr. Martínez",
-        message: newMessage.trim(),
+        message: sanitizedMessage,
         timestamp: new Date(),
         type: "text"
       };
@@ -132,7 +134,7 @@ export default function ChatPanel({
       setNewMessage("");
       
       if (onSendMessage) {
-        onSendMessage(newMessage.trim());
+        onSendMessage(sanitizedMessage);
       }
     }
   };
@@ -199,7 +201,7 @@ export default function ChatPanel({
                     {message.senderName}
                   </div>
                 )}
-                <div className="text-sm">{message.message}</div>
+                <div className="text-sm" dangerouslySetInnerHTML={{ __html: message.message }}></div>
                 <div
                   className={`text-xs mt-1 flex items-center ${
                     isOwnMessage ? "text-blue-100" : "text-gray-500"

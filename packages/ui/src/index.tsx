@@ -123,6 +123,9 @@ export { Textarea } from './textarea';
 // ==================== HOOKS ====================
 export * from './hooks';
 
+// ==================== PROVIDERS ====================
+export * from './providers/ThemeProvider';
+
 // ==================== UTILS ====================
 export * from './lib/utils';
 // export * from './utils/cn'; // Commented due to duplicate export

@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["./src/index.tsx"],
+  "out": "docs",
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "markdown",
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "gitRemote": "origin",
+  "gitRevision": "main"
+}

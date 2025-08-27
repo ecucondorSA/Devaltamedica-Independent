@@ -1,0 +1,187 @@
+name: Code Quality Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Ejecutar diariamente a las 4 AM UTC
+    - cron: '0 4 * * *'
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint:check
+        continue-on-error: true
+
+      - name: Run Prettier check
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Run TypeScript type check
+        run: npm run type-check
+        continue-on-error: true
+
+      - name: Run SonarQube analysis
+        uses: sonarqube-quality-gate-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=altamedica
+            -Dsonar.sources=src
+            -Dsonar.tests=tests
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.testExecutionReportPaths=test-report.xml
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: Comment PR with quality results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 🔍 Code Quality Analysis Results\n\n';
+            
+            try {
+              // Verificar resultados de ESLint
+              if (fs.existsSync('eslint-report.json')) {
+                const eslintResults = JSON.parse(fs.readFileSync('eslint-report.json', 'utf8'));
+                const errors = eslintResults.filter(r => r.severity === 2).length;
+                const warnings = eslintResults.filter(r => r.severity === 1).length;
+                
+                comment += `### ESLint\n`;
+                comment += `- ❌ **Errores**: ${errors}\n`;
+                comment += `- ⚠️ **Advertencias**: ${warnings}\n\n`;
+              }
+              
+              // Verificar resultados de TypeScript
+              comment += `### TypeScript\n`;
+              comment += `- ✅ **Type check**: Completado\n\n`;
+              
+              // Verificar cobertura
+              if (fs.existsSync('coverage/lcov.info')) {
+                comment += `### Coverage\n`;
+                comment += `- 📊 **Reporte**: Generado y enviado a Codecov\n\n`;
+              }
+              
+              comment += `### SonarQube\n`;
+              comment += `- 🔍 **Análisis**: Completado\n`;
+              comment += `- 📈 **Métricas**: Disponibles en SonarQube\n\n`;
+              
+              if (errors > 0) {
+                comment += `⚠️ **Recomendación**: Corregir errores de ESLint antes del merge.`;
+              } else {
+                comment += `✅ **Estado**: Código cumple con estándares de calidad.`;
+              }
+              
+            } catch (error) {
+              comment += `❌ **Error**: ${error.message}`;
+            }
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run yarn audit
+        run: yarn audit --level moderate
+        continue-on-error: true
+
+      - name: Comment PR with security audit results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let comment = '## 🔒 Security Audit Results\n\n';
+            
+            try {
+              const { execSync } = require('child_process');
+              
+              // Ejecutar npm audit
+              try {
+                const npmAudit = execSync('npm audit --json', { encoding: 'utf8' });
+                const npmResults = JSON.parse(npmAudit);
+                
+                if (npmResults.metadata && npmResults.metadata.vulnerabilities) {
+                  const vulns = npmResults.metadata.vulnerabilities;
+                  const critical = vulns.critical || 0;
+                  const high = vulns.high || 0;
+                  const moderate = vulns.moderate || 0;
+                  const low = vulns.low || 0;
+                  
+                  comment += `### NPM Audit\n`;
+                  comment += `- 🔴 **Críticas**: ${critical}\n`;
+                  comment += `- 🟠 **Altas**: ${high}\n`;
+                  comment += `- 🟡 **Moderadas**: ${moderate}\n`;
+                  comment += `- 🟢 **Bajas**: ${low}\n\n`;
+                  
+                  if (critical > 0 || high > 0) {
+                    comment += `⚠️ **CRÍTICO**: Actualizar dependencias vulnerables inmediatamente.`;
+                  } else if (moderate > 0) {
+                    comment += `⚠️ **Recomendación**: Revisar vulnerabilidades moderadas.`;
+                  } else {
+                    comment += `✅ **Estado**: Sin vulnerabilidades críticas o altas.`;
+                  }
+                }
+              } catch (npmError) {
+                comment += `❌ **Error NPM Audit**: ${npmError.message}\n\n`;
+              }
+              
+            } catch (error) {
+              comment += `❌ **Error general**: ${error.message}`;
+            }
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

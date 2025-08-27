@@ -37,7 +37,16 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <Card className={cn('', className)}>
+        <Card
+      className={cn(
+        {
+          'border-green-500': status === 'success',
+          'border-yellow-500': status === 'warning',
+          'border-red-500': status === 'critical',
+        },
+        className,
+      )}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
           <CardTitle className="text-sm font-medium">{title}</CardTitle>

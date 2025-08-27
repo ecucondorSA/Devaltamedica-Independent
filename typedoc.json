@@ -1,0 +1,9 @@
+
+{
+  "entryPoints": ["packages/*"],
+  "out": "docs/typedoc",
+  "exclude": ["**/node_modules/**", "**/*.test.ts"],
+  "name": "AltaMedica TypeDoc Documentation",
+  "readme": "none",
+  "theme": "default"
+}

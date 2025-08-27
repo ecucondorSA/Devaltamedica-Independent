@@ -1,70 +1,61 @@
-import React, { useState } from 'react';
+
+import React, { useState, useCallback } from 'react';
 import DOMPurify from 'dompurify';
 
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'other';
+interface Message {
+  id: string;
   text: string;
+  sender: 'me' | 'other';
 }
 
-export function ChatComponent() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: 1, sender: 'other', text: '¡Hola! ¿En qué puedo ayudarte hoy?' },
-  ]);
-  const [input, setInput] = useState('');
+export const ChatComponent = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
 
-  const handleSendMessage = () => {
-    if (input.trim()) {
-      // Sanitizar el input del usuario con DOMPurify
-      const cleanInput = DOMPurify.sanitize(input);
+  const handleSendMessage = useCallback(() => {
+    if (newMessage.trim() === '') return;
 
-      const newMessage: ChatMessage = {
-        id: messages.length + 1,
-        sender: 'user',
-        text: cleanInput,
-      };
-      setMessages([...messages, newMessage]);
-      setInput('');
-    }
-  };
+    const sanitizedMessage = DOMPurify.sanitize(newMessage);
+
+    setMessages([
+      ...messages,
+      { id: Date.now().toString(), text: sanitizedMessage, sender: 'me' },
+    ]);
+    setNewMessage('');
+  }, [newMessage, messages]);
 
   return (
-    <div className="flex flex-col h-96 border rounded-lg shadow-md">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            style={{
+              textAlign: msg.sender === 'me' ? 'right' : 'left',
+              marginBottom: '10px',
+            }}
           >
-            <div
-              className={`max-w-xs px-4 py-2 rounded-lg ${
-                msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
-              }`}
-              dangerouslySetInnerHTML={{ __html: msg.text }} // Usar dangerouslySetInnerHTML para mostrar HTML sanitizado
+            <span
+              style={{
+                backgroundColor: msg.sender === 'me' ? '#dcf8c6' : '#fff',
+                padding: '5px 10px',
+                borderRadius: '7px',
+              }}
+              dangerouslySetInnerHTML={{ __html: msg.text }}
             />
           </div>
         ))}
       </div>
-      <div className="border-t p-4 flex">
+      <div style={{ display: 'flex', padding: '10px' }}>
         <input
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleSendMessage();
-            }
-          }}
-          placeholder="Escribe tu mensaje..."
-          className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          style={{ flex: 1, marginRight: '10px' }}
+          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
         />
-        <button
-          onClick={handleSendMessage}
-          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Enviar
-        </button>
+        <button onClick={handleSendMessage}>Send</button>
       </div>
     </div>
   );
-}
+};

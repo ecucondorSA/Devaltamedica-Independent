@@ -11,6 +11,8 @@
     "noEmit": false,
     "composite": false,
     "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
       "@altamedica/*": ["../*/src"]
     }

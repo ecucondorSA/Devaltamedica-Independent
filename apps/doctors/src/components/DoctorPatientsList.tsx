@@ -1,10 +1,11 @@
 /**
- * 👥 DOCTOR PATIENTS LIST - USANDO SERVICIO CENTRALIZADO
- * Componente para que los doctores vean y gestionen sus pacientes
+ * 👥 DOCTOR PATIENTS LIST - USANDO SERVICIO CENTRALIZADO Y VIRTUALIZACIÓN
+ * Componente para que los doctores vean y gestionen sus pacientes de forma eficiente
  */
 
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState } from 'react';
+import { FixedSizeList as List } from 'react-window';
 import { usePatients } from '../hooks/usePatients';
 import { usePatientData } from '@altamedica/hooks';
 import { 
@@ -17,6 +18,7 @@ import {
 import type { Patient } from '../services/patients-service';
 
 import { logger } from '@altamedica/shared/services/logger.service';
+
 interface DoctorPatientsListProps {
   doctorId: string;
 }
@@ -58,6 +60,20 @@ export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
       // Mostrar notificación de éxito
       logger.info('Paciente actualizado exitosamente');
     }
+  };
+
+  // Componente de fila para la lista virtualizada
+  const PatientRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const patient = patients[index];
+    return (
+      <div style={style}>
+        <PatientCard 
+          patient={patient} 
+          isSelected={selectedPatient?.id === patient.id}
+          onClick={() => handlePatientSelect(patient)}
+        />
+      </div>
+    );
   };
 
   if (loading && patients.length === 0) {
@@ -138,20 +154,20 @@ export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
         {/* Lista de Pacientes */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Lista de Pacientes</h2>
-          <div className="space-y-4 max-h-96 overflow-y-auto">
+          <div className="max-h-96 overflow-y-auto">
             {patients.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 {searchTerm ? 'No se encontraron pacientes.' : 'No tienes pacientes asignados.'}
               </div>
             ) : (
-              patients.map((patient) => (
-                <PatientCard 
-                  key={patient.id} 
-                  patient={patient} 
-                  isSelected={selectedPatient?.id === patient.id}
-                  onClick={() => handlePatientSelect(patient)}
-                />
-              ))
+              <List
+                height={384} // max-h-96
+                itemCount={patients.length}
+                itemSize={90} // Altura estimada de cada PatientCard
+                width="100%"
+              >
+                {PatientRow}
+              </List>
             )}
           </div>
         </div>
@@ -190,7 +206,7 @@ function PatientCard({
 
   return (
     <div 
-      className={`bg-white rounded-lg border p-4 cursor-pointer transition-all ${
+      className={`bg-white rounded-lg border p-4 cursor-pointer transition-all mx-1 ${
         isSelected 
           ? 'border-blue-500 ring-2 ring-blue-200' 
           : 'border-gray-200 hover:border-gray-300'

@@ -9,3 +9,4 @@ export * from './config';
 
 // NO exportar admin directamente para evitar problemas en el cliente
 // Las funciones admin están disponibles en './admin-server' para uso en API routes
+export * from './admin-server';

@@ -4,6 +4,10 @@
  * Gestión unificada de llamadas, errores, autenticación y tipos
  */
 
+// Export base types first to avoid circular dependencies
+export * from './base-types';
+
+// Then export the rest
 export * from './client';
 export * from './types';
 export * from './endpoints';

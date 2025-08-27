@@ -1,6 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "remoteCache": {
+    "enabled": true,
+    "signature": true
+  },
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
@@ -12,6 +16,7 @@
         "build/**"
       ],
       "cache": true,
+      "persistent": true,
       "env": [
         "NODE_ENV",
         "NEXT_PUBLIC_*"
@@ -30,16 +35,18 @@
     "lint": {
       "outputs": ["eslint-report.json", "eslint-report.html"],
       "cache": true,
+      "persistent": true,
       "dependsOn": []
     },
     "type-check": {
       "outputs": ["tsconfig.tsbuildinfo"],
       "cache": true,
+      "persistent": true,
       "dependsOn": ["^build"]
     },
     "test": {
       "outputs": ["coverage/**"],
-      "cache": false,
+      "cache": true,
       "dependsOn": ["build"],
       "env": [
         "NODE_ENV",
@@ -48,7 +55,7 @@
     },
     "test:unit": {
       "outputs": ["coverage/**"],
-      "cache": false,
+      "cache": true,
       "dependsOn": ["build"],
       "env": [
         "NODE_ENV",
@@ -57,7 +64,7 @@
     },
     "test:integration": {
       "outputs": ["coverage/**"],
-      "cache": false,
+      "cache": true,
       "dependsOn": ["build"],
       "env": [
         "NODE_ENV",
@@ -77,7 +84,7 @@
     },
     "test:hipaa": {
       "outputs": ["coverage/hipaa/**", "hipaa-report.json"],
-      "cache": false,
+      "cache": true,
       "dependsOn": ["build"],
       "env": [
         "NODE_ENV",
@@ -86,7 +93,7 @@
     },
     "test:a11y": {
       "outputs": ["a11y-report/**"],
-      "cache": false,
+      "cache": true,
       "dependsOn": ["build"],
       "env": [
         "NODE_ENV",
