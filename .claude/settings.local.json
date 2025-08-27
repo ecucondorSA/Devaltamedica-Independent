@@ -64,7 +64,9 @@
       "Bash(docker build:*)",
       "Bash(chmod:*)",
       "Bash(pkill:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(git log:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": [],

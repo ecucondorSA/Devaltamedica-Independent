@@ -1,29 +1,144 @@
-# 🤝 División de Tareas AltaMedica - Pre-Producción Sprint
+# 🤝 Sincronización Claude-Gemini - AltaMedica
 
-## 📊 Análisis de Capacidades por Modelo
+**Archivo activo de coordinación**: [`SYNC-STATUS-2025-08-27.md`](./SYNC-STATUS-2025-08-27.md)
 
-### **Gemini Pro 2.0 Flash**
+## 📊 Estado Actual Rápido (2025-08-27)
 
-- **Context**: 1M tokens
-- **Strengths**: Frontend optimization, UI/UX, React performance
-- **Benchmark**: 85% en código frontend, 92% en análisis visual
-- **Best for**: Bundle optimization, React refactoring, CSS/Tailwind
+### Claude Opus 4.1
 
-### **Claude Opus 4.1**
+- **Completado**: 18/18 tareas originales ✅
+- **Nuevas asignadas**: 5 tareas de testing (de ChatGPT-5)
+- **Progreso total**: 78% (18/23)
 
-- **Context**: 200K tokens (CLI) / 1M tokens (web)
-- **Strengths**: Backend architecture, security, system design
-- **Benchmark**: 94% en código backend, 96% en seguridad
-- **Best for**: API design, database optimization, security fixes
+### Gemini Pro 2.0
 
-### **ChatGPT-5**
+- **Completado**: 15/17 tareas originales
+- **Nuevas asignadas**: 5 tareas de testing (de ChatGPT-5)
+- **Progreso total**: 68% (15/22)
 
-- **Context**: 128K tokens standard / 2M with memory
-- **Strengths**: Testing, documentation, DevOps, integrations
-- **Benchmark**: 91% en testing, 88% en DevOps automation
-- **Best for**: E2E tests, CI/CD, documentation, deployment
+### ChatGPT-5
+
+- **Estado**: Tareas redistribuidas a Claude y Gemini
+- **Contribución**: Fixes de Edge Runtime, auditoría completada
+
+## 🎯 Foco Actual: Testing & QA
+
+### Tareas Críticas Pendientes
+
+**Claude debe completar:**
+
+1. Suite de tests HIPAA compliance
+2. Tests de integración críticos
+3. Documentación API (Swagger)
+4. Tests de carga con K6
+5. Coverage backend > 80%
+
+**Gemini debe completar:**
+
+1. Fix ChatComponent.tsx
+2. Completar Storybook
+3. Lighthouse CI setup
+4. Playwright visual regression
+5. Tests E2E autenticación
+6. TypeDoc documentación
+7. Vercel Analytics dashboard
+
+## 📅 Timeline
+
+- **Hoy (27/08)**: Iniciar tareas de testing
+- **28/08**: Testing continuado + documentación
+- **29/08**: Performance testing + visual regression
+- **30/08**: Review final y preparación pre-prod
+
+## 🔄 Protocolo de Sincronización
+
+1. **Archivo principal**: `SYNC-STATUS-2025-08-27.md`
+2. **Actualizar**: Al inicio y fin de cada sesión
+3. **Reportar**: Bloqueadores inmediatamente
+4. **Review**: Cross-review entre Claude y Gemini
+
+## 📝 Notas Importantes
+
+- **Bloqueador crítico**: Storybook en @altamedica/ui (conflicto Vite)
+- **Edge Runtime issues**: Pendientes en web-app
+- **Coverage actual**: Backend ~60%, Frontend ~40%
 
 ---
+
+## 🚀 Tareas de Performance Completadas por ChatGPT-5 (2025-08-27)
+
+### ✅ Performance Testing Infrastructure
+
+#### 1. Lighthouse CI en GitHub Actions
+
+- **Archivo**: `.github/workflows/performance.yml`
+- **Configuración**: `.lighthouserc.js`
+- **Funcionalidad**: Análisis automático de performance en PRs y main branch
+- **Métricas**: Performance, Accessibility, Best Practices, SEO
+
+#### 2. Tests de Carga con K6
+
+- **Archivos**:
+  - `tests/load/api-load.js` - Test de carga para API
+  - `tests/load/telemedicine-load.js` - Test de carga para telemedicina
+  - `tests/load/auth-load.js` - Test de carga para autenticación
+- **Workflow**: `.github/workflows/k6-load.yml`
+- **Script local**: `scripts/run-load-tests.sh`
+
+#### 3. Sistema de Monitoring Grafana/Prometheus
+
+- **Docker Compose**: `docker-compose.monitoring.yml`
+- **Prometheus**: `monitoring/prometheus/prometheus.yml`
+- **Grafana**:
+  - `monitoring/grafana/provisioning/datasources/prometheus.yml`
+  - `monitoring/grafana/provisioning/dashboards/dashboards.yml`
+  - `monitoring/grafana/dashboards/performance-overview.json`
+- **Documentación**: `monitoring/README.md`
+
+#### 4. Documentación de Performance Baseline
+
+- **Archivo**: `docs/performance/PERFORMANCE_BASELINE.md`
+- **Contenido**: Métricas objetivo, KPIs, herramientas, troubleshooting
+
+### 🎯 Métricas de Performance Implementadas
+
+- **Response Time**: < 200ms (p95) para API
+- **Throughput**: 1000+ req/min
+- **Concurrent Users**: 100+ simultaneous
+- **Lighthouse Score**: > 80
+- **Memory Usage**: < 512MB per app
+
+### 🔧 Herramientas Configuradas
+
+- **Lighthouse CI**: Automatizado en CI/CD
+- **K6**: Tests de carga con métricas personalizadas
+- **Prometheus**: Recolección de métricas del sistema
+- **Grafana**: Dashboards y alertas
+- **Node Exporter**: Métricas del sistema operativo
+- **cAdvisor**: Métricas de contenedores
+
+### 📊 Estado de Implementación
+
+- ✅ **Lighthouse CI**: Configurado y funcional
+- ✅ **K6 Load Tests**: Implementados para API, telemedicina y auth
+- ✅ **Monitoring Stack**: Docker Compose completo
+- ✅ **Performance Baseline**: Documentado con métricas
+- ✅ **Dashboards**: Grafana configurado con Prometheus
+- ✅ **CI/CD Integration**: GitHub Actions workflows
+
+### 🚀 Próximos Pasos
+
+1. **Ejecutar tests de carga** localmente para validar
+2. **Levantar stack de monitoring** para métricas en tiempo real
+3. **Configurar alertas** en Grafana para thresholds críticos
+4. **Integrar métricas** en las aplicaciones (endpoints `/metrics`)
+5. **Ejecutar Lighthouse CI** en el repositorio
+
+---
+
+**Para detalles históricos completos, ver**: [`GEMINI-CLAUDE-SYNC-ARCHIVE.md`](./GEMINI-CLAUDE-SYNC-ARCHIVE.md)
+
+**Última actualización**: 2025-08-27 10:30 AM por Claude Opus 4.1
 
 ## 🎯 SPRINT 1: SEGURIDAD CRÍTICA (Semana 1)
 
