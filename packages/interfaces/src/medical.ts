@@ -69,17 +69,26 @@ export interface Appointment {
   location?: string;
   isVirtual: boolean;
   meetingUrl?: string;
-  rescheduleHistory?: Array<{
-    from: Date | string;
-    to: Date | string;
-    reason?: string;
-    originalDate?: Date | string;
-    newDate?: string;
-    rescheduledAt?: string;
-    rescheduledBy?: string;
-  }>;
+  rescheduleHistory?: Array<
+    | {
+        from: Date | string;
+        to: Date | string;
+        reason?: string;
+        originalDate?: Date | string;
+        newDate?: string;
+        rescheduledAt?: string;
+        rescheduledBy?: string;
+      }
+    | {
+        originalDate: Date | string;
+        newDate: string;
+        reason: string;
+        rescheduledAt: string;
+        rescheduledBy: string;
+      }
+  >;
   recurrenceInfo?: {
-    rule: RecurrenceRule;
+    rule?: RecurrenceRule;
     isRecurring: boolean;
     parentId?: string;
     seriesId?: string;
@@ -253,11 +262,11 @@ export interface TelemedicineSession {
 }
 
 export interface TimeSlot {
-  id: string;
+  id?: string;
   start?: Date | string;
   end?: Date | string;
-  startTime: Date | string;
-  endTime: Date | string;
+  startTime?: Date | string;
+  endTime?: Date | string;
   available: boolean;
   doctorId?: string;
   duration?: number;
