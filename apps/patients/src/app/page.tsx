@@ -6,7 +6,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import DiagnosisPresuntivo from '../components/ai-diagnosis/DiagnosisPresuntivo';
 import TelemedicineMVP from '../components/telemedicine/TelemedicineClient';
 import { useLabResults } from '../hooks/useLabResults';
-import { usePrescriptions } from '@altamedica/hooks/medical/usePrescriptions';
+import { usePrescriptions } from '@altamedica/hooks';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';

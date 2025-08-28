@@ -2,7 +2,7 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { use } from 'react';
 import { useRouter } from 'next/navigation';
-import { usePrescription } from '@altamedica/hooks/medical/usePrescriptions';
+import { usePrescriptions } from '@altamedica/hooks';
 import PrescriptionDetailCard from '../../../components/prescriptions/PrescriptionDetailCard';
 
 export default function PrescriptionDetailPage({ params }: { params: Promise<{ id: string }> }) {

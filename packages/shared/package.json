@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/services/logger.service.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts src/services/logger.service.ts --format cjs --format esm --dts --clean",
     "dev": "tsup src/index.ts --format=esm --watch",
     "clean": "rimraf dist",
     "type-check": "tsc --noEmit"

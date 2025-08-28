@@ -68,7 +68,9 @@
       "Bash(git log:*)",
       "Bash(git log:*)",
       "Bash(timeout:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(turbo lint:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": [],

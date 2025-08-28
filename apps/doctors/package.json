@@ -5,9 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "pnpm --dir ../../packages/types run build && pnpm --dir ../../packages/config-next run build && pnpm --dir ../../packages/shared run build && pnpm --dir ../../packages/firebase run build && pnpm --dir ../../packages/auth run build",
     "dev": "next dev --port 3002",
-    "prebuild": "pnpm --dir ../../packages/types run build && pnpm --dir ../../packages/config-next run build && pnpm --dir ../../packages/shared run build && pnpm --dir ../../packages/firebase run build && pnpm --dir ../../packages/auth run build",
     "build": "npx next build",
     "start": "next start --port 3002",
     "signaling": "node scripts/start-signaling.js",

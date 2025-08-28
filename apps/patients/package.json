@@ -8,7 +8,6 @@
     "./middleware": "./src/middleware.ts"
   },
   "scripts": {
-    "predev": "pnpm --dir ../../packages/types run build && pnpm --dir ../../packages/config-next run build && pnpm --dir ../../packages/shared run build && pnpm --dir ../../packages/firebase run build && pnpm --dir ../../packages/auth run build",
     "dev": "next dev --port 3003",
     "build": "npx next build",
     "build:with-deps": "pnpm --dir ../../packages/types run build && pnpm --dir ../../packages/config-next run build && pnpm --dir ../../packages/shared run build && pnpm --dir ../../packages/firebase run build && pnpm --dir ../../packages/auth run build && npx next build",

@@ -5,7 +5,7 @@
   "description": "Express API Server for Altamedica",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env PORT=3001 pnpm exec tsx src/server.ts",
+    "dev": "cross-env-shell \"pnpm exec tsx --env-file .env src/server.ts\"",
     "prisma:generate": "prisma generate --schema=../../packages/database/schema.prisma",
     "prebuild": "pnpm run prisma:generate",
     "build": "tsc -p tsconfig.build.json",
