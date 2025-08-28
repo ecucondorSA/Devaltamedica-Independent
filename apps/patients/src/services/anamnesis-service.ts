@@ -5,7 +5,7 @@
 
 import { buildApiUrl, getDefaultHeaders } from '../config/api';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Interfaces para los datos de anamnesis
 export interface AnamnesisData {
   id: string;

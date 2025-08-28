@@ -1,7 +1,7 @@
 import { UserRole } from '@altamedica/types';
 import { headers } from 'next/headers';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export interface UserInfo {
   uid: string;
   email: string;

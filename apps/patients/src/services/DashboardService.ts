@@ -6,7 +6,7 @@
 
 import { ApiService, apiService } from './ApiService';
 import { medicalService } from './MedicalService';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import type {
   PatientDashboardDTO,
   UserProfileDTO,

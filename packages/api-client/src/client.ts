@@ -213,7 +213,7 @@ export class ApiClient {
     const errorMessage = errorData.message || errorData.error || response.statusText;
 
     switch (response.status) {
-      case 401:
+      case 401: {
         // Try to refresh token
         const newToken = await this.config.onTokenExpired();
         if (newToken) {
@@ -221,6 +221,7 @@ export class ApiClient {
           throw new AuthenticationError('Token expired, please retry');
         }
         throw new AuthenticationError(errorMessage);
+      }
       
       case 403:
         throw new ApiError(errorMessage, response.status, 'FORBIDDEN');

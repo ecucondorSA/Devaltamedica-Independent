@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input, Label, Textarea } from '@altamedica/ui';
+import { Button, Input, Textarea, Label } from '@altamedica/ui';
 import { LifeBuoy, MessageSquare, Phone } from 'lucide-react';
 
 export default function SupportPage() {

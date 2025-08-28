@@ -3,7 +3,7 @@ import { useAuth  } from '@altamedica/auth';;
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface UseTriageAgentOptions {
   autoLog?: boolean;
   onSuccess?: (result: TriageResult) => void;

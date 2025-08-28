@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 import { Button } from '@altamedica/ui';
 import { Input } from '@altamedica/ui';
 import { Textarea } from '@altamedica/ui';
-import { Label } from '@altamedica/ui';
+
 import { Badge } from '@altamedica/ui';
 import { Separator } from '@altamedica/ui';
 import { logger } from '@altamedica/shared/services/logger.service';
@@ -243,24 +243,24 @@ export default function PostConsultationForm() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <Label>Nombre</Label>
+              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Nombre</div>
               <p className="font-medium">{patientData.name}</p>
             </div>
             <div>
-              <Label>Edad</Label>
+              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Edad</div>
               <p className="font-medium">{patientData.age} años</p>
             </div>
             <div>
-              <Label>Género</Label>
+              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Género</div>
               <p className="font-medium">{patientData.gender}</p>
             </div>
             <div>
-              <Label>ID Paciente</Label>
+              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">ID Paciente</div>
               <p className="font-medium">{patientData.id}</p>
             </div>
           </div>
           <div className="mt-4">
-            <Label>Historial Médico</Label>
+            <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Historial Médico</div>
             <div className="flex flex-wrap gap-2 mt-2">
               {patientData.medicalHistory.map((condition, index) => (
                 <Badge key={index} variant="secondary">{condition}</Badge>
@@ -278,7 +278,7 @@ export default function PostConsultationForm() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="diagnosis">Diagnóstico Principal</Label>
+              <Label htmlFor="diagnosis">Diagnóstico Principal</div>
               <Input
                 id="diagnosis"
                 value={formData.diagnosis}
@@ -287,7 +287,7 @@ export default function PostConsultationForm() {
               />
             </div>
             <div>
-              <Label htmlFor="symptoms">Síntomas Reportados</Label>
+              <Label htmlFor="symptoms">Síntomas Reportados</div>
               <Textarea
                 id="symptoms"
                 value={formData.symptoms}
@@ -297,7 +297,7 @@ export default function PostConsultationForm() {
               />
             </div>
             <div>
-              <Label htmlFor="physicalExam">Examen Físico</Label>
+              <Label htmlFor="physicalExam">Examen Físico</div>
               <Textarea
                 id="physicalExam"
                 value={formData.physicalExam}
@@ -316,7 +316,7 @@ export default function PostConsultationForm() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="treatmentPlan">Plan de Tratamiento</Label>
+              <Label htmlFor="treatmentPlan">Plan de Tratamiento</div>
               <Textarea
                 id="treatmentPlan"
                 value={formData.treatmentPlan}
@@ -326,7 +326,7 @@ export default function PostConsultationForm() {
               />
             </div>
             <div>
-              <Label htmlFor="followUpDate">Fecha de Seguimiento</Label>
+              <Label htmlFor="followUpDate">Fecha de Seguimiento</div>
               <Input
                 id="followUpDate"
                 type="date"
@@ -335,7 +335,7 @@ export default function PostConsultationForm() {
               />
             </div>
             <div>
-              <Label htmlFor="followUpNotes">Notas de Seguimiento</Label>
+              <Label htmlFor="followUpNotes">Notas de Seguimiento</div>
               <Textarea
                 id="followUpNotes"
                 value={formData.followUpNotes}
@@ -362,7 +362,7 @@ export default function PostConsultationForm() {
               <div key={prescription.id} className="border rounded-lg p-4">
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                   <div>
-                    <Label>Medicamento</Label>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Medicamento</div>
                     <Input
                       value={prescription.medication}
                       onChange={(e) => updatePrescription(prescription.id, 'medication', e.target.value)}
@@ -370,7 +370,7 @@ export default function PostConsultationForm() {
                     />
                   </div>
                   <div>
-                    <Label>Dosis</Label>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Dosis</div>
                     <Input
                       value={prescription.dosage}
                       onChange={(e) => updatePrescription(prescription.id, 'dosage', e.target.value)}
@@ -378,7 +378,7 @@ export default function PostConsultationForm() {
                     />
                   </div>
                   <div>
-                    <Label>Frecuencia</Label>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Frecuencia</div>
                     <Input
                       value={prescription.frequency}
                       onChange={(e) => updatePrescription(prescription.id, 'frequency', e.target.value)}
@@ -386,7 +386,7 @@ export default function PostConsultationForm() {
                     />
                   </div>
                   <div>
-                    <Label>Duración</Label>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Duración</div>
                     <Input
                       value={prescription.duration}
                       onChange={(e) => updatePrescription(prescription.id, 'duration', e.target.value)}
@@ -394,7 +394,7 @@ export default function PostConsultationForm() {
                     />
                   </div>
                   <div>
-                    <Label>Cantidad</Label>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Cantidad</div>
                     <Input
                       type="number"
                       value={prescription.quantity}
@@ -413,7 +413,7 @@ export default function PostConsultationForm() {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <Label>Instrucciones Especiales</Label>
+                  <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Instrucciones Especiales</div>
                   <Input
                     value={prescription.instructions}
                     onChange={(e) => updatePrescription(prescription.id, 'instructions', e.target.value)}

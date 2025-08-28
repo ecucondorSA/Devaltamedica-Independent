@@ -15,8 +15,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
     "dev": "tsup src/index.ts --format=esm --watch",
-    "lint": "eslint . --no-error-on-unmatched-pattern",
-    "lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
+    "lint": "eslint src --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint src --fix --no-error-on-unmatched-pattern",
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist"
   },

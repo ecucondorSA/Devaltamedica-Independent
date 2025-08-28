@@ -11,21 +11,25 @@ import { AUTH_COOKIES, LEGACY_AUTH_COOKIES } from '../constants/cookies';
 const logger = {
   info: (message: string, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.log(message, data);
     }
   },
   warn: (message: string, data?: any) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.warn(message, data);
     }
   },
   error: (message: string, data?: any) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.error(message, data);
     }
   },
   debug: (message: string, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.debug(message, data);
     }
   },

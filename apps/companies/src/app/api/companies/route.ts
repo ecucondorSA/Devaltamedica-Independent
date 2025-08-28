@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UnifiedAuth } from '../../../../../api-server/src/auth/UnifiedAuthSystem';
 import { UserRole } from "@altamedica/types";
 // Importar repositorio de companies si es necesario
 // import { companyRepository } from "@altamedica/database";

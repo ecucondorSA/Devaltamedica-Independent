@@ -517,6 +517,7 @@ export function removeFromStorage(key: string): boolean {
 // ==========================================
 
 export * from './dev';
+export * from './rate-limiter';
 
 // ==========================================
 // SERVICIOS DE COOKIES SEGURAS

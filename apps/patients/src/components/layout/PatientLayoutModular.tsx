@@ -12,7 +12,7 @@ import PatientHeaderModular from './PatientHeaderModular';
 import type { SidebarConfig } from './PatientSidebarModular';
 import PatientSidebarModular from './PatientSidebarModular';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 📝 INTERFAZ COMPATIBLE CON LAYOUT ORIGINAL
 interface PatientLayoutModularProps {
   children: React.ReactNode;

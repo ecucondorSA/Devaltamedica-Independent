@@ -9,7 +9,7 @@ import React from 'react';
 import { AuthProvider } from '@altamedica/auth';
 import PatientSidebar from './PatientSidebar';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface PatientLayoutProps {
   children: React.ReactNode;
   title?: string;

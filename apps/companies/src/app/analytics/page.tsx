@@ -41,7 +41,7 @@ const useAnalyticsData = (timeRange: string) => {
 
   // Integrated hooks for real data
   const { networkMetrics, mapHospitals, loadNetworkData } = useNetworkStatusLogic();
-  const { redistributionSuggestions, staffShortages } = useRedistributionLogic();
+  const { redistributions, totalActiveRedistributions } = useRedistributionLogic();
   const { jobPostings } = useJobPostingLogic();
 
   useEffect(() => {
@@ -75,15 +75,15 @@ const useAnalyticsData = (timeRange: string) => {
 
         // Calculate metrics based on real data with some historical simulation
         const baseOccupancy = networkMetrics?.occupancyRate || 75;
-        const redistributions = redistributionSuggestions.length;
-        const shortages = staffShortages.length;
+        const redistributionsCount = redistributions.length;
+        const shortages = 0; // TODO: Implement staff shortages logic
         const jobs = jobPostings.length;
 
         monthlyData.push({
           name: monthNames[monthIndex],
           Consultas: Math.round(baseOccupancy * 50 + Math.random() * 500),
           Ingresos: Math.round(baseOccupancy * 100 + Math.random() * 2000),
-          Redistribuciones: redistributions + Math.floor(Math.random() * 5),
+          Redistribuciones: redistributionsCount + Math.floor(Math.random() * 5),
           VacantesPublicadas: jobs + Math.floor(Math.random() * 3),
           PersonalDeficit: shortages + Math.floor(Math.random() * 2),
         });
@@ -99,8 +99,8 @@ const useAnalyticsData = (timeRange: string) => {
             (networkMetrics?.totalBeds || 100)) *
             100,
         ),
-        criticalAlerts: redistributionSuggestions.filter((r) => r.priority === 'critical').length,
-        staffingCoverage: Math.round(100 - staffShortages.length * 5),
+        criticalAlerts: 0, // TODO: Implement critical alerts logic
+        staffingCoverage: 95, // TODO: Implement staffing coverage logic
       };
 
       setAnalyticsData({
@@ -113,9 +113,9 @@ const useAnalyticsData = (timeRange: string) => {
             .length,
         },
         redistributionMetrics: {
-          active: redistributionSuggestions.filter((r) => r.status === 'executing').length,
-          completed: redistributionSuggestions.filter((r) => r.status === 'completed').length,
-          pending: redistributionSuggestions.filter((r) => r.status === 'pending').length,
+          active: redistributions.filter((r) => r.status === 'in_progress').length,
+          completed: redistributions.filter((r) => r.status === 'completed').length,
+          pending: redistributions.filter((r) => r.status === 'pending').length,
         },
       });
 
@@ -127,8 +127,8 @@ const useAnalyticsData = (timeRange: string) => {
     timeRange,
     networkMetrics,
     mapHospitals,
-    redistributionSuggestions,
-    staffShortages,
+    redistributions,
+    totalActiveRedistributions,
     jobPostings,
   ]);
 

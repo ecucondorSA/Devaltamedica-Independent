@@ -25,7 +25,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth  } from '@altamedica/auth';;
 import io, { Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const SIGNALING_SERVER_URL = process.env.NEXT_PUBLIC_SIGNALING_URL || 'http://localhost:8888';

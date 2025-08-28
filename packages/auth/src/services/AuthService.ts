@@ -25,21 +25,25 @@ type LogData = unknown;
 const logger = {
   info: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.log(message, data);
     }
   },
   warn: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.warn(message, data);
     }
   },
   error: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.error(message, data);
     }
   },
   debug: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.debug(message, data);
     }
   },

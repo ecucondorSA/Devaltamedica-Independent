@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Activity, AlertCircle, Clock, MapPin, Phone, Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface Message {
   id: string;
   type: 'user' | 'agent' | 'system';

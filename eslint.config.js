@@ -1,4 +1,3 @@
-// eslint.config.js - ESLint v9 Configuration for AltaMedica Root
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
@@ -83,7 +82,12 @@ export default [
         ReactQueryDevtools: 'readonly',
         // Additional browser globals used in legacy/rtc code
         Blob: 'readonly',
-        RTCRtpReceiver: 'readonly'
+        RTCRtpReceiver: 'readonly',
+        React: 'readonly',
+        FormData: 'readonly',
+        SpeechSynthesisUtterance: 'readonly',
+        alert: 'readonly',
+        matchMedia: 'readonly',
       }
     },
     plugins: {
@@ -108,14 +112,12 @@ export default [
     ignores: [
       'node_modules/**',
       '.next/**',
-      'dist/**',
       'build/**',
       'coverage/**',
       '**/*.d.ts',
       'apps/*/node_modules/**',
       'packages/*/node_modules/**',
       'apps/*/.next/**',
-      'packages/*/dist/**',
       // Ignore deprecated/backup legacy hooks
       'apps/**/src/hooks/DEPRECATED_*',
       'apps/**/src/hooks/BACKUP_*',

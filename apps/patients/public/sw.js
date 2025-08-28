@@ -1,4 +1,4 @@
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
 const CACHE_NAME = 'altamedica-v1.0.0';
 const STATIC_CACHE = 'altamedica-static-v1.0.0';

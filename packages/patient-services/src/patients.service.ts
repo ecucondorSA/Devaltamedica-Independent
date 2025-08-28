@@ -156,10 +156,10 @@ export class PatientsService {
     let endpoint = '/api/v1/patients';
     
     if (page || limit) {
-      const params = new URLSearchParams();
-      if (page) params.set('page', page.toString());
-      if (limit) params.set('limit', limit.toString());
-      endpoint += `?${params.toString()}`;
+      const queryParams = [];
+      if (page) queryParams.push(`page=${page}`);
+      if (limit) queryParams.push(`limit=${limit}`);
+      endpoint += `?${queryParams.join('&')}`;
     }
     
     return this.apiClient.get<PatientsResponse>(endpoint);
@@ -333,7 +333,7 @@ export class PatientsService {
       errors.push('Email no válido');
     }
     
-    if ('phone' in data && data.phone && !/^\+?[\d\s\-\(\)]+$/.test(data.phone)) {
+    if ('phone' in data && data.phone && !/^\+?[\d\s\-()]+$/.test(data.phone)) {
       errors.push('Teléfono no válido');
     }
     

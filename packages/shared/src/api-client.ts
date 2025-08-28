@@ -48,7 +48,7 @@ export async function apiRequest<T>(
     const data = await response.json()
     return data
   } catch (error) {
-    logger.error(`API request failed for ${endpoint}:`, error)
+    logger.error(`API request failed for ${endpoint}:`, endpoint, error)
     throw error
   }
 }

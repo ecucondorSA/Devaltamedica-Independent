@@ -13,7 +13,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth  } from '@altamedica/auth';;
 import { Button } from '@altamedica/ui';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { 
   ShieldCheckIcon, 
   CameraIcon, 

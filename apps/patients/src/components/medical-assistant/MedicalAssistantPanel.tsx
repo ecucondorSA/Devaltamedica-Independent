@@ -17,7 +17,7 @@ import { Card, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger } from '@
 import { medicalAssistant, type Diagnosis, type DrugInteraction, type ClinicalNote } from '@/services/medical-assistant.service';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface MedicalAssistantPanelProps {
   patientId?: string;
   consultationId?: string;

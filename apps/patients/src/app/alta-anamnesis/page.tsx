@@ -12,7 +12,7 @@ import { ArrowLeft, CheckCircle, Heart, Info, Shield, Sparkles } from 'lucide-re
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function AltaAnamnesisPage() {
   const { user } = useAuth();
   const router = useRouter();

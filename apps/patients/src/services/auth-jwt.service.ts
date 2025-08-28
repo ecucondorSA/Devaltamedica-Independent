@@ -5,7 +5,7 @@
 
 import { UserRole } from '@altamedica/types';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface LoginCredentials {
   email: string;
   password: string;

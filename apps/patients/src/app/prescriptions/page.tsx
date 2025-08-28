@@ -1,6 +1,6 @@
 'use client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   AlertTriangle,
   CheckCircle,

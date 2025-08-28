@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useUserPreferences } from '../../contexts/UserPreferencesContext';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface DashboardMetricsProps {
   patientId?: string;
   compact?: boolean;

@@ -25,7 +25,7 @@ export const useWebRTCPatientHybrid = useTelemedicineUnified;
 import { useAuth  } from '@altamedica/auth';;
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Configuración WebRTC optimizada para pacientes
 const PATIENT_RTC_CONFIG: RTCConfiguration = {
   iceServers: [

@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Esquemas de validación
 export const SymptomSchema = z.object({
   name: z.string(),

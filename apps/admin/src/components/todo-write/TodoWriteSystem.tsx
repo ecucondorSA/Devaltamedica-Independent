@@ -97,7 +97,7 @@ export const TodoWriteSystem: React.FC = () => {
   // FUNCIONES PRINCIPALES
   // ============================================================================
 
-  const createTask = (taskData: Omit<TodoTask, 'id' | 'createdAt' | 'comments'>) => {
+  const _createTask = (taskData: Omit<TodoTask, 'id' | 'createdAt' | 'comments'>) => {
     const newTask: TodoTask = {
       ...taskData,
       id: `task-${Date.now()}`,
@@ -109,20 +109,20 @@ export const TodoWriteSystem: React.FC = () => {
     updateMetrics();
   };
 
-  const updateTask = (taskId: string, updates: Partial<TodoTask>) => {
+  const _updateTask = (taskId: string, updates: Partial<TodoTask>) => {
     setTasks((prev) => prev.map((task) => (task.id === taskId ? { ...task, ...updates } : task)));
     setShowEditModal(false);
     updateMetrics();
   };
 
   const deleteTask = (taskId: string) => {
-    if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+    if (window.confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
       updateMetrics();
     }
   };
 
-  const addComment = (taskId: string, comment: Omit<TaskComment, 'id' | 'timestamp'>) => {
+  const _addComment = (taskId: string, comment: Omit<TaskComment, 'id' | 'timestamp'>) => {
     const newComment: TaskComment = {
       ...comment,
       id: `comment-${Date.now()}`,

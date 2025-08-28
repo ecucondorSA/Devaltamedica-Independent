@@ -2,7 +2,7 @@
 
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   Activity,
   Search,

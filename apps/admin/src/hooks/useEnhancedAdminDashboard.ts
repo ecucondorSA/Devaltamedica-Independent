@@ -4,9 +4,11 @@
  * Incluye real-time updates, HIPAA compliance, y emergency alerts
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRealTimeUpdates, RealTimeUpdate } from './useRealTimeUpdates';
 import { MetricCardProps } from '@altamedica/ui';
+
+import { useState, useEffect, useCallback } from 'react';
+
+import { useRealTimeUpdates, RealTimeUpdate } from './useRealTimeUpdates';
 
 export interface AdminMetrics {
   totalUsers: number;
@@ -21,16 +23,18 @@ export interface AdminMetrics {
   criticalAlerts: number;
 }
 
+interface ComplianceStatus {
+  hipaa: boolean;
+  uptime: number;
+  lastAudit: Date;
+}
+
 export interface AdminDashboardData {
   metrics: AdminMetrics;
-  recentActivities: any[];
+  recentActivities: unknown[];
   systemStatus: 'healthy' | 'warning' | 'critical';
   emergencyAlerts: string[];
-  complianceStatus: {
-    hipaa: boolean;
-    uptime: number;
-    lastAudit: Date;
-  };
+  complianceStatus: ComplianceStatus;
 }
 
 export const useEnhancedAdminDashboard = () => {
@@ -51,7 +55,7 @@ export const useEnhancedAdminDashboard = () => {
         prevData
           ? {
               ...prevData,
-              ...update.data,
+              ...(update.data as Partial<AdminDashboardData>),
             }
           : null,
       );
@@ -75,15 +79,15 @@ export const useEnhancedAdminDashboard = () => {
         throw new Error('Failed to fetch admin metrics');
       }
 
-      const metrics = await metricsResponse.json();
+      const metrics = await metricsResponse.json() as { data: AdminMetrics };
 
       // Fetch system status
       const statusResponse = await fetch('/api/v1/admin/system-status');
-      const systemStatus = await statusResponse.json();
+      const systemStatus = await statusResponse.json() as { data: { status: 'healthy' | 'warning' | 'critical'; emergencyAlerts?: string[] } };
 
       // Fetch compliance status
       const complianceResponse = await fetch('/api/v1/admin/compliance-status');
-      const complianceStatus = await complianceResponse.json();
+      const complianceStatus = await complianceResponse.json() as { data: ComplianceStatus };
 
       const dashboardData: AdminDashboardData = {
         metrics: metrics.data,
@@ -244,10 +248,10 @@ export const useEnhancedAdminDashboard = () => {
   }, [data]);
 
   useEffect(() => {
-    fetchDashboardData();
+    void fetchDashboardData();
 
     // Refresh every 30 seconds for real-time admin monitoring
-    const interval = setInterval(fetchDashboardData, 30000);
+    const interval = setInterval(() => void fetchDashboardData(), 30000);
 
     return () => clearInterval(interval);
   }, [fetchDashboardData]);

@@ -23,7 +23,7 @@ const useTelemedicineSession = (sessionId: string) => ({
   error: null,
 });
 import TelemedicineMVP from '../../../../components/telemedicine/TelemedicineMVP';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   Clock,
   User,

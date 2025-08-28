@@ -9,7 +9,7 @@ import { services } from '@altamedica/api-client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { dashboardService } from '../services';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import type {
   PatientDashboardDTO,
   UserProfileDTO,

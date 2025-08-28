@@ -10,8 +10,8 @@
     "prebuild": "pnpm --dir ../../packages/types run build && pnpm --dir ../../packages/config-next run build && pnpm --dir ../../packages/shared run build && pnpm --dir ../../packages/firebase run build && pnpm --dir ../../packages/auth run build",
     "build": "npx next build",
     "start": "next start --port 3005",
-    "lint": "eslint . s,.tsx,.js,.jsx --no-error-on-unmatched-pattern",
-    "lint:fix": "eslint . s,.tsx,.js,.jsx --fix --no-error-on-unmatched-pattern",
+    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next dist coverage"
   },

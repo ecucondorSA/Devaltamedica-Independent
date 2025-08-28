@@ -178,7 +178,7 @@ export default function InteractiveMap({ doctors, center }: InteractiveMapProps)
             <Popup>
               <div className="doctor-popup">
                 <h3>
-                  {doctor.firstName} {doctor.lastName}
+                  {doctor.name}
                 </h3>
                 <p>
                   <strong>Especialidad:</strong> {doctor.specialty}

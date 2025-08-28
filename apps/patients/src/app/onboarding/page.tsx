@@ -3,7 +3,7 @@
 import React from "react";
 import { EnhancedPatientOnboarding } from "@altamedica/ui";
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function OnboardingPage() {
   const handleComplete = (data: any) => {
     logger.info("Onboarding completado:", data);

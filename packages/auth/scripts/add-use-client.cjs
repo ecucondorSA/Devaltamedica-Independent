@@ -13,7 +13,8 @@ files.forEach(file => {
     const content = fs.readFileSync(filePath, 'utf8');
     if (!content.startsWith('"use client"')) {
       fs.writeFileSync(filePath, '"use client";\n' + content);
-      console.log(`Added "use client" to ${file}`);
+      // eslint-disable-next-line no-console
+    console.log(`Added "use client" to ${file}`);
     }
   }
 });

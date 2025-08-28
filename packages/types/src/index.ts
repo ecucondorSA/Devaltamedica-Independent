@@ -43,6 +43,7 @@ export {
 
 // ==================== MEDICAL DOMAIN ====================
 export * from './medical';
+export * from './doctor';
 // Re-export específicos de medication para evitar conflictos
 export {
   CreateMedicationSchema,

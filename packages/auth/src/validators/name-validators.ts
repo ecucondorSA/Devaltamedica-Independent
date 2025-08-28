@@ -3,21 +3,25 @@
 const logger = {
   info: (message, data) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.log(message, data);
     }
   },
   warn: (message, data) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.warn(message, data);
     }
   },
   error: (message, data) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.error(message, data);
     }
   },
   debug: (message, data) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.debug(message, data);
     }
   }
@@ -151,7 +155,7 @@ export class NameValidator {
     }
 
     // No debe terminar con espacio, guión o apóstrofe
-    if (/[\s\-']$/.test(name)) {
+    if (/[\s-']$/.test(name)) {
       result.isValid = false;
       result.errors.push(`${type === 'firstName' ? 'El nombre' : 'El apellido'} no puede terminar con espacio, guión o apóstrofe`);
     }
@@ -187,12 +191,12 @@ export class NameValidator {
 
     // Añadir guiones si están permitidos
     if (this.options.allowHyphens) {
-      allowedPattern = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s\-]*$/;
+      allowedPattern = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s-]*$/;
     }
 
     // Añadir apóstrofes si están permitidos
     if (this.options.allowApostrophes) {
-      allowedPattern = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s\-']*$/;
+      allowedPattern = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s-']*$/;
     }
 
     if (!allowedPattern.test(name)) {

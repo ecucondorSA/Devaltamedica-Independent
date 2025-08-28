@@ -8,7 +8,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 export interface RealTimeUpdate {
   type: 'emergency_alert' | 'metric_update' | 'system_status' | 'compliance_update';
-  data: any;
+  data: unknown;
   timestamp: Date;
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
@@ -55,14 +55,14 @@ export const useRealTimeUpdates = (config: RealTimeUpdatesConfig) => {
 
       socket.onmessage = (event) => {
         try {
-          const update: RealTimeUpdate = JSON.parse(event.data);
+          const update: RealTimeUpdate = JSON.parse(event.data as string) as RealTimeUpdate;
           config.onUpdate(update);
 
           setState((prev) => ({
             ...prev,
             lastUpdate: new Date(),
           }));
-        } catch (error) {
+        } catch {
           // Error parsing real-time update - silently handled
         }
       };
@@ -85,7 +85,7 @@ export const useRealTimeUpdates = (config: RealTimeUpdatesConfig) => {
         }
       };
 
-      socket.onerror = (error) => {
+      socket.onerror = () => {
         setState((prev) => ({
           ...prev,
           error: 'WebSocket connection error',
@@ -94,7 +94,7 @@ export const useRealTimeUpdates = (config: RealTimeUpdatesConfig) => {
       };
 
       setWs(socket);
-    } catch (error) {
+    } catch {
       setState((prev) => ({
         ...prev,
         error: 'Failed to create WebSocket connection',
@@ -116,7 +116,7 @@ export const useRealTimeUpdates = (config: RealTimeUpdatesConfig) => {
 
   // Función para enviar mensaje
   const sendMessage = useCallback(
-    (message: any) => {
+    (message: unknown) => {
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message));
       }

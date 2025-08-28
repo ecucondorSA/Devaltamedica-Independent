@@ -19,7 +19,7 @@ import {
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface DashboardData {
   appointments: {
     upcoming: number;

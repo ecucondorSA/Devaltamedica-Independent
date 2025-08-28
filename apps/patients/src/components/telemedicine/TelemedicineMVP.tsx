@@ -20,7 +20,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TelemedicineMVPProps {
   roomId: string;
   doctorId: string;

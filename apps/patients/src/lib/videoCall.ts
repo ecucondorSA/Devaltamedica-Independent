@@ -112,7 +112,7 @@ export async function createConsultationCall(
 // Hook personalizado para React
 import { useState, useEffect } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export function useVideoCall(roomId?: string) {
   const [client] = useState(() => new AltaMedicaVideoCallClient());
   const [status, setStatus] = useState<CallStatus | null>(null);

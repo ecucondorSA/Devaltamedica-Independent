@@ -7,7 +7,7 @@
 import { createApiClient } from '@altamedica/api-client';
 import { auth } from '@altamedica/firebase';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Crear instancia del cliente API
 export const apiClient = createApiClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',

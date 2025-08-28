@@ -1,6 +1,5 @@
 import { AUTH_COOKIES } from '@altamedica/auth';
-import { createCsp } from '@altamedica/config-next';
-import { rateLimiter } from '@altamedica/utils/rate-limiter';
+import { buildCsp } from '@altamedica/config-next';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -12,7 +11,7 @@ function addSecurityHeaders(response: NextResponse, nonce: string) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  const csp = createCsp({
+  const csp = buildCsp({
     nonce,
     overrides: {
         'connect-src': [
@@ -29,7 +28,16 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const clientIP = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
-  const { isAllowed } = await rateLimiter(`companies-app:${clientIP}`, 100, 60);
+  
+  const rateLimitResponse = await fetch(new URL('/api/rate-limit', request.url), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ip: clientIP }),
+  });
+
+  const { isAllowed } = await rateLimitResponse.json();
 
   if (!isAllowed) {
     return new NextResponse('Too Many Requests', { status: 429 });
@@ -40,7 +48,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const authToken = request.cookies.get(AUTH_COOKIES.token);
-  let isAuthenticated = !!authToken;
+  const isAuthenticated = !!authToken;
 
   if (isPublicPath(pathname)) {
     if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {

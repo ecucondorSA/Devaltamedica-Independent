@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Tipos para preferencias de usuario
 export interface UserPreferences {
   theme: 'light' | 'dark' | 'auto';

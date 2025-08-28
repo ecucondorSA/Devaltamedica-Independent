@@ -1,6 +1,6 @@
 'use client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { Camera, Edit, MapPin, Phone, Save, User, X } from 'lucide-react';
 import { useState } from 'react';
 

@@ -31,7 +31,7 @@ import { Badge } from '@altamedica/ui';
 import { useAuth  } from '@altamedica/auth';;
 import { useToast } from '../../hooks/useToast';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TelemedicineCallProps {
   sessionId: string;
   roomId: string;

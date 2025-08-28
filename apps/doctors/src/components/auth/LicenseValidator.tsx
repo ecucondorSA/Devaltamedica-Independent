@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 import { Button } from '@altamedica/ui';
 import { Input } from '@altamedica/ui';
-import { Label } from '@altamedica/ui';
+
 import { Badge } from '@altamedica/ui';
 import { Separator } from '@altamedica/ui';
 import { 

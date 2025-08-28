@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface UpdateCallbacks {
   onVitalSignsUpdate?: (data: any) => void;
   onAlertReceived?: (alert: any) => void;

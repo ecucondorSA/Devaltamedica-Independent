@@ -10,7 +10,7 @@ import { doc, onSnapshot, collection, query, orderBy, limit } from 'firebase/fir
 import { db } from '../lib/firebase';
 import { useAuth  } from '@altamedica/auth';;
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TelemedicineSession {
   id: string;
   roomId: string;

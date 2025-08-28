@@ -5,7 +5,7 @@
 
 import { EventEmitter } from 'events';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export type EmergencyType = 'medical' | 'system' | 'security';
 export type EmergencySeverity = 'low' | 'medium' | 'high' | 'critical';
 

@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface HealthMetric {
   id: string;
   name: string;

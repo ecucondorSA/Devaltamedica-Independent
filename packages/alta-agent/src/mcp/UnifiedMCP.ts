@@ -112,7 +112,7 @@ export class UnifiedMCP {
           results.push({system: key, found: true});
         }
       } else if (system.agent.findFeature) {
-        // Capturar output del agente
+        /* eslint-disable no-console */
         const originalLog = console.log;
         let output = '';
         console.log = (msg: any) => { output += msg + '\n'; };
@@ -120,6 +120,7 @@ export class UnifiedMCP {
         system.agent.findFeature(query);
         
         console.log = originalLog;
+        /* eslint-enable no-console */
         
         if (output.includes('encontrad')) {
           logger.info(`\n🎯 En ${key}:`);

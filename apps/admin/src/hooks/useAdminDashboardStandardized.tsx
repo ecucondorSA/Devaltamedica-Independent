@@ -1,8 +1,8 @@
 // 🏥 ADMIN DASHBOARD HOOK - ALTAMEDICA
 // Hook para gestión de estado del dashboard administrativo
 
-import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@altamedica/shared/services/logger.service';
+import { useState, useEffect, useCallback } from 'react';
 
 // ============================================================================
 // TIPOS
@@ -64,7 +64,7 @@ export const useAdminDashboardStandardized = () => {
   // ============================================================================
 
   useEffect(() => {
-    loadDashboardData();
+    void loadDashboardData();
   }, [loadDashboardData]);
 
   // ============================================================================

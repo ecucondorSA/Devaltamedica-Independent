@@ -7,7 +7,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useAuth  } from '@altamedica/auth';;
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 📝 Interfaces específicas del formulario de login
 export interface LoginFormData {
   email: string;
