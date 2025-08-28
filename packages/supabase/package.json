@@ -2,17 +2,17 @@
   "name": "@altamedica/supabase",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup index.ts --format=cjs,esm --dts --clean",
     "dev": "tsup index.ts --format=esm --watch",

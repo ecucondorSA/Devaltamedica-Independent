@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "build:watch": "tsup --watch",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --no-error-on-unmatched-pattern",

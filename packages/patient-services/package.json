@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "dev": "tsup src/index.ts --format=esm --watch",
     "test": "jest",
     "test:watch": "jest --watch",

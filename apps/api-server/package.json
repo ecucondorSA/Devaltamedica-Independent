@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "cross-env-shell \"pnpm exec tsx --env-file .env src/server.ts\"",
     "prisma:generate": "prisma generate --schema=../../packages/database/schema.prisma",
-    "prebuild": "pnpm run prisma:generate",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "pnpm run prisma:generate && tsc -p tsconfig.build.json",
     "start": "node dist/server.js",
     "start:dev": "cross-env PORT=3001 pnpm exec tsx src/server.ts",
     "setup:env:staging": "powershell -ExecutionPolicy Bypass -File scripts/setup-env.ps1 staging",

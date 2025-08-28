@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "build": "tsup 'src/**/*.ts' '!src/**/*.test.ts' '!src/**/__tests__/*.ts' --format cjs --format esm --dts --clean --silent",
+    "build": "tsup 'src/**/*.ts' '!src/**/*.test.ts' '!src/**/__tests__/*.ts' --format cjs --format esm --dts --clean ",
     "build:watch": "tsup src/index.ts --format=esm --watch",
     "dev": "tsup src/index.ts --format=esm --watch",
     "type-check": "tsc --noEmit",

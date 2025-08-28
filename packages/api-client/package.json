@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "dev": "tsup src/index.ts --format=esm --watch",
     "lint": "eslint src --no-error-on-unmatched-pattern",
     "lint:fix": "eslint src --fix --no-error-on-unmatched-pattern",

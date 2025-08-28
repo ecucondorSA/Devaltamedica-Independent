@@ -70,7 +70,12 @@
       "Bash(timeout:*)",
       "Bash(sed:*)",
       "Bash(turbo lint:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(for:*)",
+      "Bash(do)",
+      "Bash(if [[ ! \"$file\" =~ \"node_modules\" ]])",
+      "Bash(then)",
+      "Bash(echo \"Processed: $file\")"
     ],
     "deny": [],
     "ask": [],

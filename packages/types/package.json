@@ -20,7 +20,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "build:manual": "tsc --project tsconfig.json",
     "build:watch": "tsc --project tsconfig.json --watch",
     "clean": "rimraf dist",
