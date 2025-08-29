@@ -21,47 +21,101 @@ enum TelemedicineStatus {
 enum SenderType {
   PATIENT
   DOCTOR
+  SYSTEM
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
 }
 
 model Patient {
   id       String                @id @default(uuid())
+  email    String?               @unique
   sessions TelemedicineSession[] @relation("SessionPatient")
+  
+  @@index([email])
 }
 
 model Doctor {
   id       String                @id @default(uuid())
+  email    String?               @unique
   sessions TelemedicineSession[] @relation("SessionDoctor")
+  
+  @@index([email])
 }
 
 model TelemedicineSession {
   id           String             @id @default(uuid())
-  roomId       String
+  roomId       String             @unique
   patientId    String
   doctorId     String
-  status       TelemedicineStatus  @default(SCHEDULED)
+  status       TelemedicineStatus @default(SCHEDULED)
   scheduledAt  DateTime
   startedAt    DateTime?
   endedAt      DateTime?
   duration     Int?
   notes        String?
   recordingUrl String?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 
-  patient      Patient             @relation("SessionPatient", fields: [patientId], references: [id])
-  doctor       Doctor              @relation("SessionDoctor", fields: [doctorId], references: [id])
+  patient      Patient            @relation("SessionPatient", fields: [patientId], references: [id])
+  doctor       Doctor             @relation("SessionDoctor", fields: [doctorId], references: [id])
   chatMessages ChatMessage[]
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([patientId, status])
+  @@index([doctorId, status])
+  @@index([scheduledAt])
+  @@index([status, createdAt])
 }
 
 model ChatMessage {
-  id         String   @id @default(uuid())
+  id         String     @id @default(uuid())
   sessionId  String
   senderId   String
   senderType SenderType
   message    String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime   @default(now())
 
   session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
+  @@index([sessionId, createdAt])
+  @@index([senderId, senderType])
+}
+
+model EncryptedField {
+  id        String @id @default(uuid())
+  entityId  String
+  entityType String
+  field     String
+  value     String // Encrypted value
+  iv        String // Initialization vector
+  tag       String // Authentication tag
+  createdAt DateTime @default(now())
+
+  @@index([entityId, entityType])
+  @@index([entityType, field])
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  userId    String
+  action    AuditAction
+  entity    String
+  entityId  String
+  details   Json?
+  createdAt DateTime    @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([action])
+  @@index([createdAt])
 }

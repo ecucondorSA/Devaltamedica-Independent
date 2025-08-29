@@ -1,5 +1,61 @@
 # 🌐 Web App - Gateway Principal de AltaMedica
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO WEB APP
+
+### ✅ Script Start (Next.js Landing)
+```javascript
+import { NextApiRequest, NextApiResponse } from 'next';
+import { z } from 'zod';
+```
+
+### ✅ Contact Form Pattern
+```javascript
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') return res.status(405).end();
+  
+  const result = ContactFormSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: 'Invalid form data' });
+  }
+}
+```
+
+### ✅ Lead Capture Schema
+```javascript
+const ContactFormSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  company: z.string().optional(),
+  message: z.string().min(10),
+  type: z.enum(['demo', 'pricing', 'support', 'partnership'])
+});
+```
+
+### ✅ Test Web App Endpoint
+```javascript
+const testWebAppEndpoint = async (endpoint) => {
+  const testData = {
+    name: 'Test User',
+    email: 'test@example.com',
+    type: 'demo'
+  };
+  
+  try {
+    const response = await fetch(`http://localhost:3000/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testData)
+    });
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+```
+
+---
+
+
 **Aplicación**: Gateway de entrada y autenticación centralizada  
 **Puerto**: 3000  
 **Estado**: 🟢 PRODUCCIÓN (9.2/10)  

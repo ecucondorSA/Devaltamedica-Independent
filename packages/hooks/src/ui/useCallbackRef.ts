@@ -10,7 +10,7 @@ export const useCallbackRef = <T extends Element = Element>(
   callback?: (node: T | null) => void | (() => void)
 ): [T | null, CallbackRefHandler<T>] => {
   const ref = useRef<T | null>(null);
-  const cleanupRef = useRef<(() => void) | void>();
+  const cleanupRef = useRef<(() => void) | void>(undefined);
 
   const setRef = useCallback(
     (node: T | null) => {
@@ -67,7 +67,7 @@ export const useMemoizedCallbackRef = <T extends Element = Element>(
   deps?: React.DependencyList
 ): CallbackRefHandler<T> => {
   const callbackRef = useRef(callback);
-  const cleanupRef = useRef<(() => void) | void>();
+  const cleanupRef = useRef<(() => void) | void>(undefined);
   const nodeRef = useRef<T | null>(null);
 
   // Update callback ref when dependencies change

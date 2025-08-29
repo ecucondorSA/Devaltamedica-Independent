@@ -1,7 +1,7 @@
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 /**
  * Firebase Service para Signaling Server
  * Maneja persistencia de eventos de telemedicina en Firestore

@@ -1,15 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Card } from '@altamedica/ui/components/ui/card';
-import { Progress } from '@altamedica/ui/components/ui/progress';
-import { Badge } from '@altamedica/ui/components/ui/badge';
-import { Alert, AlertDescription } from '@altamedica/ui/components/ui/alert';
-import { 
-  Wifi, WifiOff, Activity, AlertTriangle, 
-  TrendingUp, TrendingDown, Signal 
-} from 'lucide-react';
-import { useWebRTCQoS } from '@altamedica/telemedicine-core/hooks/useWebRTCQoS';
+import { Activity, AlertTriangle, Signal, TrendingUp, Wifi, WifiOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useWebRTCQoS } from '../../telemedicine-core-stub';
+import { Alert, AlertDescription, Badge, Card, Progress } from '../ui-stub';
 
 interface RealtimeQoSMetricsProps {
   peerConnection?: RTCPeerConnection;
@@ -18,14 +12,14 @@ interface RealtimeQoSMetricsProps {
   onQualityChange?: (quality: 'excellent' | 'good' | 'fair' | 'poor') => void;
 }
 
-export function RealtimeQoSMetrics({ 
-  peerConnection, 
-  sessionId, 
+export function RealtimeQoSMetrics({
+  peerConnection,
+  sessionId,
   compact = false,
-  onQualityChange 
+  onQualityChange,
 }: RealtimeQoSMetricsProps) {
   const [isExpanded, setIsExpanded] = useState(!compact);
-  
+
   // Use QoS monitoring hook
   const {
     metrics,
@@ -34,7 +28,7 @@ export function RealtimeQoSMetrics({
     alerts,
     isMonitoring,
     startMonitoring,
-    stopMonitoring
+    stopMonitoring,
   } = useWebRTCQoS({
     sessionId,
     peerConnection,
@@ -42,8 +36,8 @@ export function RealtimeQoSMetrics({
     alertThresholds: {
       latency: 200,
       jitter: 50,
-      packetLoss: 5
-    }
+      packetLoss: 5,
+    },
   });
 
   // Start monitoring when component mounts
@@ -61,26 +55,31 @@ export function RealtimeQoSMetrics({
   // Notify parent of quality changes
   useEffect(() => {
     if (onQualityChange && qualityIndicator) {
-      onQualityChange(qualityIndicator);
+      onQualityChange(qualityIndicator as any);
     }
   }, [qualityIndicator, onQualityChange]);
 
-  const getQualityColor = (indicator: string) => {
-    switch(indicator) {
-      case 'excellent': return 'text-green-600';
-      case 'good': return 'text-yellow-600';
-      case 'fair': return 'text-orange-600';
-      case 'poor': return 'text-red-600';
-      default: return 'text-gray-600';
+  const getQualityColor = (indicator: string | undefined) => {
+    switch (indicator) {
+      case 'excellent':
+        return 'text-green-600';
+      case 'good':
+        return 'text-yellow-600';
+      case 'fair':
+        return 'text-orange-600';
+      case 'poor':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
   const getConnectionIcon = () => {
     if (!metrics) return <WifiOff className="h-4 w-4 text-gray-400" />;
-    
-    if (metrics.connection.type === 'stable') {
+
+    if ((metrics as any).connection.type === 'stable') {
       return <Wifi className="h-4 w-4 text-green-600" />;
-    } else if (metrics.connection.type === 'unstable') {
+    } else if ((metrics as any).connection.type === 'unstable') {
       return <Wifi className="h-4 w-4 text-yellow-600" />;
     } else {
       return <WifiOff className="h-4 w-4 text-red-600" />;
@@ -89,16 +88,20 @@ export function RealtimeQoSMetrics({
 
   if (compact && !isExpanded) {
     return (
-      <div 
+      <div
         className="flex items-center gap-2 p-2 bg-background/80 backdrop-blur rounded-lg cursor-pointer"
         onClick={() => setIsExpanded(true)}
       >
         {getConnectionIcon()}
-        <Badge variant={qualityIndicator === 'excellent' || qualityIndicator === 'good' ? 'success' : 'warning'}>
+        <Badge
+          variant={
+            qualityIndicator === 'excellent' || qualityIndicator === 'good' ? 'success' : 'warning'
+          }
+        >
           {qualityScore ? `${qualityScore}%` : '--'}
         </Badge>
         <span className="text-xs text-muted-foreground">
-          {metrics?.latency ? `${metrics.latency}ms` : '--'}
+          {(metrics as any)?.latency ? `${(metrics as any).latency}ms` : '--'}
         </span>
       </div>
     );
@@ -112,7 +115,7 @@ export function RealtimeQoSMetrics({
           Connection Quality
         </h3>
         {compact && (
-          <button 
+          <button
             onClick={() => setIsExpanded(false)}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
@@ -132,8 +135,16 @@ export function RealtimeQoSMetrics({
         <Progress value={qualityScore || 0} className="h-2" />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>Poor</span>
-          <Badge variant={qualityIndicator === 'excellent' || qualityIndicator === 'good' ? 'default' : 'secondary'}>
-            {qualityIndicator ? qualityIndicator.charAt(0).toUpperCase() + qualityIndicator.slice(1) : 'Unknown'}
+          <Badge
+            variant={
+              qualityIndicator === 'excellent' || qualityIndicator === 'good'
+                ? 'default'
+                : 'secondary'
+            }
+          >
+            {qualityIndicator
+              ? qualityIndicator.charAt(0).toUpperCase() + qualityIndicator.slice(1)
+              : 'Unknown'}
           </Badge>
           <span>Excellent</span>
         </div>
@@ -148,12 +159,10 @@ export function RealtimeQoSMetrics({
             <span className="text-xs text-muted-foreground">Latency</span>
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-semibold">
-              {metrics?.latency || '--'}
-            </span>
+            <span className="text-lg font-semibold">{(metrics as any)?.latency || '--'}</span>
             <span className="text-xs text-muted-foreground">ms</span>
           </div>
-          {metrics?.latency && metrics.latency > 150 && (
+          {(metrics as any)?.latency && (metrics as any).latency > 150 && (
             <TrendingUp className="h-3 w-3 text-yellow-600" />
           )}
         </div>
@@ -165,12 +174,10 @@ export function RealtimeQoSMetrics({
             <span className="text-xs text-muted-foreground">Packet Loss</span>
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-semibold">
-              {metrics?.packetLoss?.toFixed(1) || '0'}
-            </span>
+            <span className="text-lg font-semibold">{(metrics as any)?.packetLoss?.toFixed(1) || '0'}</span>
             <span className="text-xs text-muted-foreground">%</span>
           </div>
-          {metrics?.packetLoss && metrics.packetLoss > 2 && (
+          {(metrics as any)?.packetLoss && (metrics as any).packetLoss > 2 && (
             <AlertTriangle className="h-3 w-3 text-yellow-600" />
           )}
         </div>
@@ -182,9 +189,7 @@ export function RealtimeQoSMetrics({
             <span className="text-xs text-muted-foreground">Jitter</span>
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-semibold">
-              {metrics?.jitter || '--'}
-            </span>
+            <span className="text-lg font-semibold">{(metrics as any)?.jitter || '--'}</span>
             <span className="text-xs text-muted-foreground">ms</span>
           </div>
         </div>
@@ -197,8 +202,7 @@ export function RealtimeQoSMetrics({
           </div>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-semibold">
-              {metrics?.bandwidth?.download ? 
-                (metrics.bandwidth.download / 1000).toFixed(1) : '--'}
+              {(metrics as any)?.bandwidth?.download ? ((metrics as any).bandwidth.download / 1000).toFixed(1) : '--'}
             </span>
             <span className="text-xs text-muted-foreground">Mbps</span>
           </div>
@@ -206,18 +210,20 @@ export function RealtimeQoSMetrics({
       </div>
 
       {/* Video/Audio Stats */}
-      {(metrics?.video || metrics?.audio) && (
+      {((metrics as any)?.video || (metrics as any)?.audio) && (
         <div className="space-y-2 pt-2 border-t">
-          {metrics.video && (
+          {(metrics as any).video && (
             <div className="flex justify-between text-xs">
               <span className="text-muted-foreground">Video</span>
-              <span>{metrics.video.resolution} @ {metrics.video.frameRate}fps</span>
+              <span>
+                {(metrics as any).video.resolution} @ {(metrics as any).video.frameRate}fps
+              </span>
             </div>
           )}
-          {metrics.audio && (
+          {(metrics as any).audio && (
             <div className="flex justify-between text-xs">
               <span className="text-muted-foreground">Audio</span>
-              <span>{(metrics.audio.bitrate / 1000).toFixed(0)}kbps</span>
+              <span>{((metrics as any).audio.bitrate / 1000).toFixed(0)}kbps</span>
             </div>
           )}
         </div>
@@ -226,12 +232,10 @@ export function RealtimeQoSMetrics({
       {/* Alerts */}
       {alerts && alerts.length > 0 && (
         <div className="space-y-2">
-          {alerts.map((alert, index) => (
+          {alerts.map((alert: any, index) => (
             <Alert key={index} variant="warning">
               <AlertTriangle className="h-4 w-4" />
-              <AlertDescription className="text-xs">
-                {alert.message}
-              </AlertDescription>
+              <AlertDescription className="text-xs">{alert.message}</AlertDescription>
             </Alert>
           ))}
         </div>
@@ -241,9 +245,9 @@ export function RealtimeQoSMetrics({
       <div className="flex items-center gap-2 pt-2 border-t">
         {getConnectionIcon()}
         <span className="text-xs text-muted-foreground">
-          {metrics?.connection?.type ? 
-            `Connection: ${metrics.connection.type}` : 
-            'Waiting for connection...'}
+          {(metrics as any)?.connection?.type
+            ? `Connection: ${(metrics as any).connection.type}`
+            : 'Waiting for connection...'}
         </span>
       </div>
     </Card>

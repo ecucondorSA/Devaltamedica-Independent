@@ -4,33 +4,12 @@
  * @description Componente React que proporciona contexto de autenticación a toda la app
  */
 
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
-import { useAuth } from './useAuth';
-import type { AuthState, User, AuthTokens } from './types';
+import { createContext, ReactNode, useContext, useEffect } from 'react';
+import { logger } from '@altamedica/shared';
+import { useAuth, User } from '@altamedica/auth';
+import type { AuthState, AuthTokens } from './types';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+// Unificar logging con logger compartido (Edge-safe)
 // ==========================================
 // CONTEXTO DE AUTENTICACIÓN
 // ==========================================
@@ -75,12 +54,7 @@ export function AuthProvider({
   children, 
   config = {} 
 }: AuthProviderProps) {
-  const auth = useAuth({
-    autoInitialize: config.autoInitialize ?? true,
-    autoRedirect: config.autoRedirect ?? true,
-    persistSession: config.persistSession ?? true,
-    enableMedicalContext: config.enableMedicalContext ?? true,
-  });
+  const auth = useAuth();
 
   // Inicialización automática
   useEffect(() => {
@@ -106,7 +80,7 @@ export function AuthProvider({
     },
     logout: auth.logout,
     register: async (data: any) => { 
-      await auth.register(data); 
+      await auth.signUp(data); 
       return auth.user!;
     },
     refreshToken: (auth as any).refreshTokens || (() => Promise.resolve()),

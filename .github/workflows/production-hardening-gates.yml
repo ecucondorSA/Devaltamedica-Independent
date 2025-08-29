@@ -2,9 +2,9 @@ name: 🔒 Production Hardening Gates
 
 on:
   push:
-    branches: [auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, production]
+    branches: [main, production]
   pull_request:
-    branches: [auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, production]
+    branches: [main, production]
   workflow_dispatch:
 
 env:
@@ -316,7 +316,7 @@ jobs:
   production-deployment-check:
     name: 🚀 Production Deployment Check
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps' || github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
     needs: [
       security-scan,
       lint-and-type-check,

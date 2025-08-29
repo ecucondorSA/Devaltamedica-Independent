@@ -6,12 +6,12 @@
 'use client';
 
 import { PatientCrystalBall } from '@/components/patient-predictor/PatientCrystalBall';
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { Button } from '@altamedica/ui';
 import { ArrowLeft, Brain, Download, Share2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function PatientCrystalBallPage() {
   const params = useParams();
   const router = useRouter();

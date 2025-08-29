@@ -3,14 +3,15 @@
 // en web-app (/auth/login). Nunca debe existir un formulario de credenciales
 // duplicado aquí para evitar bypass o divergencia de flujos SSO.
 
-import { redirect } from 'next/navigation'
+// eslint-disable-next-line import/no-internal-modules
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'Login Centralizado - Redirección',
-  robots: 'noindex'
-}
+  robots: 'noindex',
+};
 
 export default function AdminLoginRedirectPage() {
   // Preservar intención de origen
-  redirect('http://localhost:3000/auth/login?from=admin')
+  redirect('http://localhost:3000/auth/login?from=admin');
 }

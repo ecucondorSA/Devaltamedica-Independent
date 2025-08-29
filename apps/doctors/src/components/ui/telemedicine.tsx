@@ -2,7 +2,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import React from 'react';
 
 // Componente Card básico
-export const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
+export const TelemedicineCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = "" 
 }) => (
@@ -12,7 +12,7 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string }> =
 );
 
 // Componente CardHeader básico
-export const CardHeader: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
+export const TelemedicineCardHeader: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = "" 
 }) => (
@@ -22,7 +22,7 @@ export const CardHeader: React.FC<{ children: React.ReactNode; className?: strin
 );
 
 // Componente CardContent básico
-export const CardContent: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
+export const TelemedicineCardContent: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = "" 
 }) => (
@@ -32,7 +32,7 @@ export const CardContent: React.FC<{ children: React.ReactNode; className?: stri
 );
 
 // Componente CardTitle básico
-export const CardTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
+export const TelemedicineCardTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = "" 
 }) => (

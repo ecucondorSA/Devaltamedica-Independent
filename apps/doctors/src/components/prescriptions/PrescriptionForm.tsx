@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import {
   CreatePrescription,
   CreatePrescriptionSchema,
@@ -30,7 +30,7 @@ import { AlertCircle, CheckCircle, FileText, Loader2, Pill, Plus, User } from 'l
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 /**
  * Prescription Form Component
  * Allows doctors to create digital prescriptions
@@ -76,11 +76,11 @@ export function PrescriptionForm({
       patientName,
       patientDni,
       patientAge,
-      doctorLicense: user?.licenseNumber || '',
-      doctorSpecialty: user?.specialty || '',
+      doctorLicense: (user as any)?.licenseNumber || '',
+      doctorSpecialty: (user as any)?.specialty || '',
       route: 'oral',
       refills: 0,
-      issuedAt: new Date().toISOString(),
+      issuedAt: new Date() as any,
     },
   });
 
@@ -111,7 +111,7 @@ export function PrescriptionForm({
           setMedications(data.data.medications || []);
         }
       } catch (error) {
-        logger.error('Error searching medications:', error);
+        logger.error('Error searching medications:', String(error));
       } finally {
         setSearchingMedications(false);
       }
@@ -158,7 +158,7 @@ export function PrescriptionForm({
         setSubmitError(result.error || 'Error al crear la prescripción');
       }
     } catch (error) {
-      logger.error('Error submitting prescription:', error);
+      logger.error('Error submitting prescription:', String(error));
       setSubmitError('Error de conexión. Por favor, intente nuevamente.');
     } finally {
       setIsSubmitting(false);
@@ -261,7 +261,7 @@ export function PrescriptionForm({
                     >
                       <div className="font-medium">{med.genericName}</div>
                       <div className="text-sm text-gray-600">
-                        {med.brandName} - {med.strength} - {med.dosageForm}
+                        {(med as any).brandName} - {med.strength} - {med.dosageForm}
                       </div>
                     </button>
                   ))}
@@ -274,7 +274,7 @@ export function PrescriptionForm({
               <Alert>
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>{selectedMedication.genericName}</strong> ({selectedMedication.brandName})
+                  <strong>{selectedMedication.genericName}</strong> ({(selectedMedication as any).brandName})
                   -{selectedMedication.strength} - {selectedMedication.manufacturer}
                 </AlertDescription>
               </Alert>
@@ -298,7 +298,7 @@ export function PrescriptionForm({
                 <Label htmlFor="route">Vía de administración *</Label>
                 <Select
                   value={watch('route')}
-                  onValueChange={(value: DrugRoute) => setValue('route', value)}
+                  onValueChange={(value) => setValue('route', value as any)}
                 >
                   <SelectTrigger className={errors.route ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Seleccionar vía" />

@@ -1,3 +1,14 @@
+// ==================== COMMON TYPES ====================
+export type { User, UserWithName } from './types/base';
+export { userToNameFormat, normalizeUser } from './types/base';
+// Location se exporta más abajo para evitar duplicación
+
+export type Hospital = {
+  id: string;
+  name: string;
+};
+
+
 /**
  * @fileoverview Punto de entrada simplificado para @altamedica/types
  * @module @altamedica/types
@@ -6,6 +17,8 @@
 
 // ==================== CORE TYPES ====================
 export * from './core';
+// Exportar solo Location desde common para evitar conflictos
+export type { Location } from './common';
 
 // ==================== AUTH TYPES (exports explícitos para evitar conflictos) ====================
 export type {
@@ -24,11 +37,13 @@ export {
   isPatientRole,
   normalizeUserRole,
   Roles,
-  UserRole,
+  UserRole, // Solo exportar UserRole desde auth/roles
 } from './auth/roles';
+// Removido: export type { UserRole } from './auth/roles'; - ya exportado arriba
 
 // ==================== MEDICAL DOMAIN ====================
 export * from './medical';
+export * from './doctor';
 // Re-export específicos de medication para evitar conflictos
 export {
   CreateMedicationSchema,
@@ -36,7 +51,7 @@ export {
   MedicationSearchSchema,
   UpdateMedicationSchema,
 } from './medical/medication.types';
-export type { DosageForm, MedicationCategory, MedicationSearch } from './medical/medication.types';
+export type { DosageForm, MedicationCategory, MedicationSearch, MedicationProfile } from './medical/medication.types';
 
 // ==================== TYPE ALIASES FOR BACKWARD COMPATIBILITY ====================
 // These re-exports provide compatibility for hooks that expect specific named exports

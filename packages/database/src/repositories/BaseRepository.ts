@@ -414,7 +414,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
             : db.collection(this.collectionName).doc();
 
           switch (operation.type) {
-            case 'create':
+            case 'create': {
               const validatedCreateData = this.validateData(operation.data);
               batch.set(docRef, {
                 ...validatedCreateData,
@@ -425,8 +425,8 @@ export abstract class BaseRepository<T extends BaseEntity> {
                 status: 'active'
               });
               break;
-
-            case 'update':
+            }
+            case 'update': {
               const validatedUpdateData = this.validateData(operation.data, true);
               batch.update(docRef, {
                 ...validatedUpdateData,
@@ -434,7 +434,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
                 updatedBy: context.userId
               });
               break;
-
+            }
             case 'delete':
               batch.update(docRef, {
                 status: 'archived',

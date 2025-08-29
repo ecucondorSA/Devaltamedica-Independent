@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@altamedica/*": ["./packages/*/src", "./packages/*/dist"]
+      "@/types": ["apps/doctors/src/types"],
+      "@altamedica/*": ["./packages/*/src"]
     },
     "types": ["node"],
     "noUncheckedIndexedAccess": false,

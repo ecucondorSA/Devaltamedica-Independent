@@ -5,9 +5,9 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 📝 Interfaces específicas del formulario de login
 export interface LoginFormData {
   email: string;
@@ -148,7 +148,7 @@ export const useLoginForm = () => {
       return 'La contraseña debe contener al menos un número';
     }
 
-    if (PASSWORD_REQUIREMENTS.requireSpecial && !/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
+    if (PASSWORD_REQUIREMENTS.requireSpecial && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       return 'La contraseña debe contener al menos un carácter especial';
     }
 

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { PatientDataPackage, ExportGenerator, ExportResult } from '../types';
+import { logger } from '../../logger.service';
 
 /**
  * Base Export Generator
@@ -213,7 +214,7 @@ export abstract class BaseExportGenerator implements ExportGenerator {
       const stats = fs.statSync(filePath);
       return stats.size;
     } catch (error) {
-      console.warn(`Could not get file size for ${filePath}:`, error);
+      logger.warn(`Could not get file size for ${filePath}`, this.constructor.name, error);
       return 0;
     }
   }
@@ -314,7 +315,7 @@ ${t.copyright}
    * Handle generation errors with context
    */
   protected handleGenerationError(error: any, context: string): never {
-    console.error(`[${this.constructor.name}] Error in ${context}:`, error);
+    logger.error(`Error in ${context}`, this.constructor.name, error);
     throw new Error(`Export generation failed in ${context}: ${error.message || error}`);
   }
 
@@ -334,7 +335,7 @@ ${t.copyright}
    */
   protected logProgress(message: string, data?: any): void {
     if (process.env.NODE_ENV !== 'production') {
-      console.log(`[${this.constructor.name}] ${message}`, data || '');
+      logger.info(message, this.constructor.name, data);
     }
   }
 }

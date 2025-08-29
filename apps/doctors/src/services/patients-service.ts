@@ -4,7 +4,7 @@
  */
 
 import { createPatientsService } from '@altamedica/patient-services';
-import { apiClient  } from '@altamedica/api-client';;
+import { apiClient } from '../lib/api-client';
 
 // Crear instancia del servicio de pacientes usando el adaptador de axios
 export const patientsService = createPatientsService(apiClient);

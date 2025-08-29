@@ -1,19 +1,17 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React from 'react';
+import { User } from '@altamedica/types';
 import {
-  Users,
-  Building2,
   Activity,
-  Shield,
-  TrendingUp,
-  TrendingDown,
-  RefreshCw,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Clock,
+  RefreshCw,
+  TrendingDown,
+  TrendingUp,
+  Users,
 } from 'lucide-react';
+import React from 'react';
 
 interface Stats {
   totalUsers: number;
@@ -23,8 +21,6 @@ interface Stats {
   systemUptime: string;
   recentActivity: number;
 }
-
-import { User } from '@altamedica/types';
 
 interface SystemHealth {
   status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
@@ -47,48 +43,62 @@ interface AdminStatsProps {
   onRefresh: () => void;
 }
 
-const AdminStats: React.FC<AdminStatsProps> = ({
-  stats,
-  recentUsers,
-  systemHealth,
-  onRefresh
-}) => {
+const AdminStats: React.FC<AdminStatsProps> = ({ stats, recentUsers, systemHealth, onRefresh }) => {
   const getHealthColor = (status: string) => {
     switch (status) {
-      case 'EXCELLENT': return 'text-green-600 bg-green-100';
-      case 'GOOD': return 'text-blue-600 bg-blue-100';
-      case 'WARNING': return 'text-yellow-600 bg-yellow-100';
-      case 'CRITICAL': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'EXCELLENT':
+        return 'text-green-600 bg-green-100';
+      case 'GOOD':
+        return 'text-blue-600 bg-blue-100';
+      case 'WARNING':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'CRITICAL':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getHealthIcon = (status: string) => {
     switch (status) {
-      case 'EXCELLENT': return <CheckCircle className="w-5 h-5" />;
-      case 'GOOD': return <CheckCircle className="w-5 h-5" />;
-      case 'WARNING': return <AlertTriangle className="w-5 h-5" />;
-      case 'CRITICAL': return <AlertTriangle className="w-5 h-5" />;
-      default: return <Activity className="w-5 h-5" />;
+      case 'EXCELLENT':
+        return <CheckCircle className="w-5 h-5" />;
+      case 'GOOD':
+        return <CheckCircle className="w-5 h-5" />;
+      case 'WARNING':
+        return <AlertTriangle className="w-5 h-5" />;
+      case 'CRITICAL':
+        return <AlertTriangle className="w-5 h-5" />;
+      default:
+        return <Activity className="w-5 h-5" />;
     }
   };
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'admin': return 'bg-red-100 text-red-800';
-      case 'doctor': return 'bg-blue-100 text-blue-800';
-      case 'patient': return 'bg-green-100 text-green-800';
-      case 'company': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'admin':
+        return 'bg-red-100 text-red-800';
+      case 'doctor':
+        return 'bg-blue-100 text-blue-800';
+      case 'patient':
+        return 'bg-green-100 text-green-800';
+      case 'company':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-gray-100 text-gray-800';
-      case 'suspended': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'inactive':
+        return 'bg-gray-100 text-gray-800';
+      case 'suspended':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -100,7 +110,9 @@ const AdminStats: React.FC<AdminStatsProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Usuarios Totales</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalUsers.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalUsers.toLocaleString()}
+              </p>
             </div>
             <div className="p-3 bg-blue-100 rounded-full">
               <Users className="w-6 h-6 text-blue-600" />
@@ -117,7 +129,9 @@ const AdminStats: React.FC<AdminStatsProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Usuarios Activos</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.activeUsers.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.activeUsers.toLocaleString()}
+              </p>
             </div>
             <div className="p-3 bg-green-100 rounded-full">
               <Activity className="w-6 h-6 text-green-600" />
@@ -178,29 +192,34 @@ const AdminStats: React.FC<AdminStatsProps> = ({
               <RefreshCw className="w-4 h-4" />
             </button>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Salud General</span>
-              <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${getHealthColor(systemHealth.status)}`}>
+              <div
+                className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${getHealthColor(systemHealth.status)}`}
+              >
                 {getHealthIcon(systemHealth.status)}
                 <span className="ml-1">{systemHealth.status}</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Uptime</span>
               <span className="text-sm font-medium text-green-600">{systemHealth.uptime}</span>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">CPU</span>
               <div className="flex items-center space-x-2">
                 <div className="w-16 bg-gray-200 rounded-full h-2">
-                  <div 
+                  <div
                     className={`h-2 rounded-full ${
-                      systemHealth.cpuUsage > 80 ? 'bg-red-500' : 
-                      systemHealth.cpuUsage > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                      systemHealth.cpuUsage > 80
+                        ? 'bg-red-500'
+                        : systemHealth.cpuUsage > 60
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
                     }`}
                     style={{ width: `${systemHealth.cpuUsage}%` }}
                   />
@@ -208,31 +227,39 @@ const AdminStats: React.FC<AdminStatsProps> = ({
                 <span className="text-sm font-medium text-gray-900">{systemHealth.cpuUsage}%</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Memoria</span>
               <div className="flex items-center space-x-2">
                 <div className="w-16 bg-gray-200 rounded-full h-2">
-                  <div 
+                  <div
                     className={`h-2 rounded-full ${
-                      systemHealth.memoryUsage > 80 ? 'bg-red-500' : 
-                      systemHealth.memoryUsage > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                      systemHealth.memoryUsage > 80
+                        ? 'bg-red-500'
+                        : systemHealth.memoryUsage > 60
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
                     }`}
                     style={{ width: `${systemHealth.memoryUsage}%` }}
                   />
                 </div>
-                <span className="text-sm font-medium text-gray-900">{systemHealth.memoryUsage}%</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {systemHealth.memoryUsage}%
+                </span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Disco</span>
               <div className="flex items-center space-x-2">
                 <div className="w-16 bg-gray-200 rounded-full h-2">
-                  <div 
+                  <div
                     className={`h-2 rounded-full ${
-                      systemHealth.diskUsage > 80 ? 'bg-red-500' : 
-                      systemHealth.diskUsage > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                      systemHealth.diskUsage > 80
+                        ? 'bg-red-500'
+                        : systemHealth.diskUsage > 60
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
                     }`}
                     style={{ width: `${systemHealth.diskUsage}%` }}
                   />
@@ -241,12 +268,12 @@ const AdminStats: React.FC<AdminStatsProps> = ({
               </div>
             </div>
           </div>
-          
+
           {systemHealth.issues.length > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-200">
               <h4 className="text-sm font-medium text-gray-900 mb-2">Problemas Detectados</h4>
               <div className="space-y-2">
-                {systemHealth.issues.map(issue => (
+                {systemHealth.issues.map((issue) => (
                   <div key={issue.id} className="flex items-start space-x-2">
                     <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
@@ -266,14 +293,15 @@ const AdminStats: React.FC<AdminStatsProps> = ({
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Usuarios Recientes</h3>
-            <button className="text-sm text-blue-600 hover:text-blue-800">
-              Ver todos
-            </button>
+            <button className="text-sm text-blue-600 hover:text-blue-800">Ver todos</button>
           </div>
-          
+
           <div className="space-y-4">
-            {recentUsers.map(user => (
-              <div key={user.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            {recentUsers.map((user) => (
+              <div
+                key={user.id}
+                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+              >
                 <div className="flex items-center space-x-3">
                   <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-gray-600">
@@ -287,13 +315,17 @@ const AdminStats: React.FC<AdminStatsProps> = ({
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}
+                  >
                     {user.role}
                   </span>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
-                    {user.status}
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status || 'unknown')}`}
+                  >
+                    {user.status || 'unknown'}
                   </span>
                 </div>
               </div>
@@ -305,4 +337,4 @@ const AdminStats: React.FC<AdminStatsProps> = ({
   );
 };
 
-export default AdminStats; 
+export default AdminStats;

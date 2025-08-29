@@ -1,0 +1,110 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Ejecutar diariamente a las 3 AM UTC
+    - cron: '0 3 * * *'
+
+jobs:
+  snyk-security:
+    name: Snyk Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --fail-on=high
+
+      - name: Upload Snyk results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: snyk.sarif
+
+      - name: Comment PR with Snyk results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 🔒 Snyk Security Scan Results\n\n';
+            
+            try {
+              if (fs.existsSync('snyk.sarif')) {
+                const sarif = JSON.parse(fs.readFileSync('snyk.sarif', 'utf8'));
+                const results = sarif.runs?.[0]?.results || [];
+                
+                if (results.length === 0) {
+                  comment += '✅ **No se encontraron vulnerabilidades de seguridad**\n\n';
+                  comment += 'El código está libre de vulnerabilidades conocidas.';
+                } else {
+                  comment += `⚠️ **Se encontraron ${results.length} vulnerabilidades**\n\n`;
+                  
+                  results.forEach((result, index) => {
+                    const severity = result.level || 'unknown';
+                    const message = result.message?.text || 'Sin descripción';
+                    const rule = result.rule?.id || 'unknown';
+                    
+                    comment += `${index + 1}. **${severity.toUpperCase()}**: ${message}\n`;
+                    comment += `   - Regla: \`${rule}\`\n\n`;
+                  });
+                  
+                  comment += '**Recomendación**: Revisar y actualizar dependencias vulnerables.';
+                }
+              } else {
+                comment += '❌ **Error**: No se pudieron obtener resultados de Snyk';
+              }
+            } catch (error) {
+              comment += `❌ **Error**: ${error.message}`;
+            }
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  snyk-monitor:
+    name: Snyk Monitor
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Monitor project for new vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --monitor

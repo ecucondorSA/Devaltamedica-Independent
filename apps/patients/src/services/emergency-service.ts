@@ -5,7 +5,7 @@
 
 import { EventEmitter } from 'events';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export type EmergencyType = 'medical' | 'system' | 'security';
 export type EmergencySeverity = 'low' | 'medium' | 'high' | 'critical';
 
@@ -70,7 +70,7 @@ class EmergencyService extends EventEmitter {
       };
 
       this.ws.onerror = (error) => {
-        logger.error('Emergency WebSocket error:', error);
+        logger.error('Emergency WebSocket error:', String(error));
       };
 
       this.ws.onclose = () => {
@@ -78,7 +78,7 @@ class EmergencyService extends EventEmitter {
         setTimeout(() => this.initializeWebSocket(), 5000);
       };
     } catch (error) {
-      logger.error('Failed to initialize emergency WebSocket:', error);
+      logger.error('Failed to initialize emergency WebSocket:', String(error));
     }
   }
 
@@ -159,7 +159,7 @@ class EmergencyService extends EventEmitter {
         
         return response.ok;
       } catch (error) {
-        logger.error(`Failed to notify contact ${contact.id}:`, error);
+        logger.error(`Failed to notify contact ${contact.id}:`, String(error));
         return false;
       }
     });

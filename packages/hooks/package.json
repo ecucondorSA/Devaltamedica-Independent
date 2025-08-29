@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "React hooks centralizados para la plataforma AltaMedica - Medical, Auth, API, Realtime, UI, Performance y más",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
@@ -14,12 +14,17 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./medical/usePrescriptions": {
+      "types": "./dist/medical/usePrescriptions.d.ts",
+      "require": "./dist/medical/usePrescriptions.cjs",
+      "import": "./dist/medical/usePrescriptions.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup 'src/**/*.ts' '!src/**/*.test.ts' '!src/**/__tests__/*.ts' --format cjs --format esm --dts --clean ",
     "build:watch": "tsup src/index.ts --format=esm --watch",
     "dev": "tsup src/index.ts --format=esm --watch",
     "type-check": "tsc --noEmit",

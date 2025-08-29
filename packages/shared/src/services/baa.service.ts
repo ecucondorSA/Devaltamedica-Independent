@@ -1,41 +1,89 @@
 // TODO: Definir estos tipos en @altamedica/types
 // Stubs temporales para permitir el build
+interface BAAHistoryEntry {
+  action: string;
+  timestamp: Date;
+  userId: string;
+  changes: Record<string, unknown>;
+}
+
+interface BAAVersion {
+  number: number;
+  effectiveDate: Date;
+  expirationDate: Date | null;
+}
+
 interface BAA {
   id: string;
   status: string;
   createdAt: Date;
   updatedAt: Date;
-  history: any[];
-  version: any;
-  [key: string]: any;
+  history: BAAHistoryEntry[];
+  version: BAAVersion;
+  businessAssociateId?: string;
+  createdBy?: string;
+  updatedBy?: string;
+  [key: string]: unknown;
 }
 
 interface BAAStatus {
-  [key: string]: any;
+  compliant: boolean;
+  issues?: string[];
+  lastChecked?: Date;
 }
 
 interface CreateBAA {
   createdBy: string;
-  [key: string]: any;
+  businessAssociateId?: string;
+  organizationName?: string;
+  contactInfo?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 interface UpdateBAA {
-  [key: string]: any;
+  status?: string;
+  businessAssociateId?: string;
+  organizationName?: string;
+  contactInfo?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 interface SignBAA {
-  [key: string]: any;
+  signerId: string;
+  signerName: string;
+  signerRole: string;
+  signatureDate: Date;
+  ipAddress?: string;
+  [key: string]: unknown;
 }
 
 interface BAATemplate {
-  [key: string]: any;
+  id: string;
+  name: string;
+  version: string;
+  content: string;
+  effectiveDate: Date;
+  isActive: boolean;
+  [key: string]: unknown;
 }
 
-// Funciones stub temporales
+// Funciones utilitarias
 const generateBAAId = (): string => `baa_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-const isBAAActive = (): boolean => true;
-const isBAASignedByBothParties = (): boolean => false;
-const getBAAComplianceStatus = (): any => ({ compliant: true });
+const isBAAActive = (baa: BAA): boolean => {
+  const now = new Date();
+  const effective = baa.version?.effectiveDate instanceof Date ? baa.version.effectiveDate : new Date(baa.version?.effectiveDate as any);
+  const expiration = baa.version?.expirationDate ? (baa.version.expirationDate instanceof Date ? baa.version.expirationDate : new Date(baa.version.expirationDate as any)) : null;
+  const statusOk = baa.status === 'active' || baa.status === 'pending_signature';
+  const timeOk = (!!effective && effective <= now) && (!expiration || expiration > now);
+  return statusOk && timeOk;
+};
+const isBAASignedByBothParties = (baa: BAA): boolean => !!(baa as any).coveredEntitySignature && !!(baa as any).businessAssociateSignature;
+const getBAAComplianceStatus = (baa: BAA): BAAStatus => {
+  const issues: string[] = [];
+  if (!isBAASignedByBothParties(baa)) issues.push('Both parties must sign the BAA');
+  if (!isBAAActive(baa)) issues.push('BAA not active or outside effective window');
+  return { compliant: issues.length === 0, issues, lastChecked: new Date() };
+};
 import * as crypto from 'crypto';
 import {
   collection,
@@ -190,9 +238,9 @@ export class BAAService {
       const baa = this.formatBAAFromFirestore(data);
 
       // Verificar que realmente esté activo
-      if (!isBAAActive()) {
+      if (!isBAAActive(baa)) {
         // Si expiró, actualizar estado
-        await this.updateBAAStatus(baa.id, 'expired' as any);
+        await this.updateBAAStatus(baa.id, 'expired');
         return null;
       }
 
@@ -219,7 +267,7 @@ export class BAAService {
       const now = new Date();
 
       // Preparar actualizaciones
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         ...updates,
         updatedAt: serverTimestamp(),
         updatedBy,
@@ -296,8 +344,8 @@ export class BAAService {
       }
 
       // Si ambas partes han firmado, activar el BAA
-      const updatedBAA = { ...baa, ...updates };
-      if (isBAASignedByBothParties()) {
+      const updatedBAA = { ...baa, ...updates } as BAA;
+      if (isBAASignedByBothParties(updatedBAA)) {
         updates.status = 'active';
 
         // Establecer fecha de revisión
@@ -331,7 +379,7 @@ export class BAAService {
    */
   async startBAAOnboarding(
     companyId: string,
-    companyInfo: any,
+    companyInfo: Record<string, unknown>,
   ): Promise<{
     onboardingId: string;
     baaId: string;
@@ -454,7 +502,7 @@ export class BAAService {
   async progressOnboarding(
     onboardingId: string,
     currentStep: string,
-    stepData: any,
+    stepData: Record<string, unknown>,
     userId: string,
   ): Promise<{
     nextStep: string | null;
@@ -473,7 +521,7 @@ export class BAAService {
       const steps = onboarding.steps;
 
       // Encontrar y actualizar el paso actual
-      const currentIndex = steps.findIndex((s: any) => s.name === currentStep);
+      const currentIndex = steps.findIndex((s) => s.name === currentStep);
       if (currentIndex === -1) {
         throw new Error('Paso de onboarding inválido');
       }
@@ -683,7 +731,7 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
   /**
    * Actualiza el estado de un BAA
    */
-  private async updateBAAStatus(baaId: string, status: BAAStatus): Promise<void> {
+  private async updateBAAStatus(baaId: string, status: string): Promise<void> {
     try {
       const baaRef = doc(this.db, this.COLLECTION, baaId);
       await updateDoc(baaRef, {
@@ -698,7 +746,7 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
   /**
    * Genera hash de firma
    */
-  private generateSignatureHash(signData: SignBAA, signerInfo: any): string {
+  private generateSignatureHash(signData: SignBAA, signerInfo: Record<string, unknown>): string {
     const data = JSON.stringify({
       baaId: signData.baaId,
       userId: signerInfo.userId,
@@ -712,7 +760,7 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
   /**
    * Formatea BAA desde Firestore
    */
-  private formatBAAFromFirestore(data: any): BAA {
+  private formatBAAFromFirestore(data: Record<string, unknown>): BAA {
     return {
       ...data,
       createdAt: data.createdAt?.toDate() || new Date(),
@@ -737,7 +785,7 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
       lastReviewDate: data.lastReviewDate?.toDate(),
       nextReviewDate: data.nextReviewDate?.toDate(),
       history:
-        data.history?.map((h: any) => ({
+        data.history?.map((h: Record<string, unknown>) => ({
           ...h,
           timestamp: h.timestamp?.toDate() || h.timestamp,
         })) || [],
@@ -751,7 +799,7 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
     baaId: string,
     action: string,
     userId: string,
-    metadata?: any,
+    metadata?: Record<string, unknown>,
   ): Promise<void> {
     try {
       const auditRef = doc(collection(this.db, 'baa_audit_logs'));
@@ -791,13 +839,14 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
         throw new Error('BAA no encontrado');
       }
 
-      const complianceStatus = getBAAComplianceStatus();
+      const complianceStatus = getBAAComplianceStatus(baa);
       let score = 100;
       const recommendations: string[] = [];
 
       // Calcular puntuación
-      if (!complianceStatus.isCompliant) {
-        score -= complianceStatus.issues.length * 10;
+      const issues = complianceStatus.issues || [];
+      if (!complianceStatus.compliant) {
+        score -= issues.length * 10;
       }
 
       // Verificaciones adicionales
@@ -827,9 +876,9 @@ Al firmar electrónicamente, ambas partes aceptan los términos y condiciones es
       );
 
       return {
-        isCompliant: complianceStatus.isCompliant && score >= 80,
+        isCompliant: complianceStatus.compliant && score >= 80,
         score: Math.max(0, score),
-        issues: complianceStatus.issues,
+        issues,
         recommendations,
       };
     } catch (error) {

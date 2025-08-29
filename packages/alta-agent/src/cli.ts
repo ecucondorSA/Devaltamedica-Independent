@@ -5,34 +5,13 @@
  * Uso: alta-agent [comando] [argumentos]
  */
 
+import { logger } from './logger';
 import { program } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { packageExpert } from './PackageExpertAgent';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 program
   .name('alta-agent')
   .description('🤖 Experto en packages de AltaMedica')
@@ -126,7 +105,7 @@ program
       ]);
 
       switch (action) {
-        case 'info':
+        case 'info': {
           const { packageName } = await inquirer.prompt([
             {
               type: 'input',
@@ -141,8 +120,9 @@ program
           ]);
           packageExpert.explainUsage(packageName);
           break;
+        }
 
-        case 'recommend':
+        case 'recommend': {
           const { need } = await inquirer.prompt([
             {
               type: 'input',
@@ -159,12 +139,14 @@ program
             });
           }
           break;
+        }
 
-        case 'list':
+        case 'list': {
           packageExpert.listAllPackages();
           break;
+        }
 
-        case 'check':
+        case 'check': {
           const { functionality } = await inquirer.prompt([
             {
               type: 'input',
@@ -174,8 +156,9 @@ program
           ]);
           packageExpert.checkDuplication(functionality);
           break;
+        }
 
-        case 'troubleshoot':
+        case 'troubleshoot': {
           const { problem } = await inquirer.prompt([
             {
               type: 'input',
@@ -185,15 +168,18 @@ program
           ]);
           packageExpert.troubleshoot(problem);
           break;
+        }
 
-        case 'hierarchy':
+        case 'hierarchy': {
           packageExpert.showDependencyHierarchy();
           break;
+        }
 
-        case 'exit':
+        case 'exit': {
           continuar = false;
           logger.info(chalk.green('\n👋 ¡Hasta luego!\n'));
           break;
+        }
       }
 
       if (action !== 'exit') {

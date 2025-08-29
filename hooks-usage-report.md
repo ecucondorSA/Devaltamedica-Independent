@@ -1,7 +1,7 @@
-
 # 📊 REPORTE DE ANÁLISIS DE HOOKS
 
 ## 📈 Métricas Generales
+
 - **Total hooks disponibles**: 213
 - **Hooks utilizados**: 22
 - **Hooks no utilizados**: 191
@@ -9,6 +9,7 @@
 - **Hooks duplicados**: 43
 
 ## 🎯 Hooks Utilizados
+
 - **useDebounce** (doctors) - direct
 - **useDebounce** (doctors) - direct
 - **useAccessibility** (patients) - reexport
@@ -33,6 +34,7 @@
 - **useDebounce** (patients) - reexport
 
 ## ❌ Hooks No Utilizados (191)
+
 - **useAltamedicaAPI** [other] - packages\hooks\src\api\index.ts
 - **useAPIRequest** [other] - packages\hooks\src\api\index.ts
 - **useConnectionTest** [other] - packages\hooks\src\api\index.ts
@@ -246,477 +248,524 @@
 - **useToggle** [other] - packages\hooks\src\utils\useToggle.ts
 
 ## 🔄 Hooks Duplicados (43)
+
 ### useToast
-  - admin: apps\admin\src\hooks\use-toast.ts
+
+- admin: apps\admin\src\hooks\use-toast.ts
 
 ### useAdminDashboard
-  - admin: apps\admin\src\hooks\useAdminDashboard.ts
+
+- admin: apps\admin\src\hooks\useAdminDashboard.ts
 
 ### useRealTimeUpdates
-  - admin: apps\admin\src\hooks\useEnhancedAdminDashboard.ts
-  - admin: apps\admin\src\hooks\useEnhancedAdminDashboard.ts
-  - admin: apps\admin\src\hooks\useRealTimeUpdates.ts
-  - patients: apps\patients\src\hooks\useRealTimeUpdates.ts
+
+- admin: apps\admin\src\hooks\useEnhancedAdminDashboard.ts
+- admin: apps\admin\src\hooks\useEnhancedAdminDashboard.ts
+- admin: apps\admin\src\hooks\useRealTimeUpdates.ts
+- patients: apps\patients\src\hooks\useRealTimeUpdates.ts
 
 ### useAuth
-  - admin: apps\admin\src\hooks\useRequireAuth.ts
-  - admin: apps\admin\src\hooks\useRequireAuth.ts
-  - companies: apps\companies\src\hooks\useAuth.ts
-  - companies: apps\companies\src\hooks\useAuth.ts
-  - companies: apps\companies\src\hooks\useMarketplaceNotifications.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\useAuth.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\useDashboardData.ts
-  - doctors: apps\doctors\src\hooks\useMarketplaceNotifications.ts
-  - doctors: apps\doctors\src\hooks\useTelemedicineWebSocket.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\useAuth.ts
-  - patients: apps\patients\src\hooks\firebase-auth-adapter.tsx
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useAnamnesis.ts
-  - patients: apps\patients\src\hooks\useAnamnesis.ts
-  - patients: apps\patients\src\hooks\useAppointmentService.ts
-  - patients: apps\patients\src\hooks\useLoginForm.tsx
-  - patients: apps\patients\src\hooks\useLoginForm.tsx
-  - patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
-  - patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
-  - patients: apps\patients\src\hooks\useWebRTCHybrid.ts
-  - patients: apps\patients\src\hooks\useWebRTCHybrid.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\useProtectedRoute.ts
-  - web-app: apps\web-app\src\hooks\useRedirection.ts
+
+- admin: apps\admin\src\hooks\useRequireAuth.ts
+- admin: apps\admin\src\hooks\useRequireAuth.ts
+- companies: apps\companies\src\hooks\useAuth.ts
+- companies: apps\companies\src\hooks\useAuth.ts
+- companies: apps\companies\src\hooks\useMarketplaceNotifications.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\useAuth.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\useDashboardData.ts
+- doctors: apps\doctors\src\hooks\useMarketplaceNotifications.ts
+- doctors: apps\doctors\src\hooks\useTelemedicineWebSocket.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\useAuth.ts
+- patients: apps\patients\src\hooks\firebase-auth-adapter.tsx
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useAnamnesis.ts
+- patients: apps\patients\src\hooks\useAnamnesis.ts
+- patients: apps\patients\src\hooks\useAppointmentService.ts
+- patients: apps\patients\src\hooks\useLoginForm.tsx
+- patients: apps\patients\src\hooks\useLoginForm.tsx
+- patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
+- patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
+- patients: apps\patients\src\hooks\useWebRTCHybrid.ts
+- patients: apps\patients\src\hooks\useWebRTCHybrid.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\useProtectedRoute.ts
+- web-app: apps\web-app\src\hooks\useRedirection.ts
 
 ### useQuery
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useCompanies.ts
-  - companies: apps\companies\src\hooks\useMatching.ts
-  - companies: apps\companies\src\hooks\useMatching.ts
-  - companies: apps\companies\src\hooks\useMatching.ts
-  - companies: apps\companies\src\hooks\useMatching.ts
-  - companies: apps\companies\src\hooks\useMatching.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\usePatients.ts
-  - doctors: apps\doctors\src\hooks\queries\usePatients.ts
-  - doctors: apps\doctors\src\hooks\queries\usePatients.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\gateway-hooks.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useCompanies.ts
+- companies: apps\companies\src\hooks\useMatching.ts
+- companies: apps\companies\src\hooks\useMatching.ts
+- companies: apps\companies\src\hooks\useMatching.ts
+- companies: apps\companies\src\hooks\useMatching.ts
+- companies: apps\companies\src\hooks\useMatching.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\usePatients.ts
+- doctors: apps\doctors\src\hooks\queries\usePatients.ts
+- doctors: apps\doctors\src\hooks\queries\usePatients.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\gateway-hooks.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### useLocalStorage
-  - companies: apps\companies\src\hooks\useHydrationSafe.ts
+
+- companies: apps\companies\src\hooks\useHydrationSafe.ts
 
 ### useSessionStorage
-  - companies: apps\companies\src\hooks\useHydrationSafe.ts
+
+- companies: apps\companies\src\hooks\useHydrationSafe.ts
 
 ### usePatients
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\usePatients.ts
-  - doctors: apps\doctors\src\hooks\api\usePatients.ts
-  - doctors: apps\doctors\src\hooks\queries\index.ts
-  - doctors: apps\doctors\src\hooks\queries\usePatients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\usePatients.ts
-  - patients: apps\patients\src\hooks\api\usePatients.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\usePatients.ts
-  - patients: apps\patients\src\hooks\usePatients.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\usePatients.ts
+- doctors: apps\doctors\src\hooks\api\usePatients.ts
+- doctors: apps\doctors\src\hooks\queries\index.ts
+- doctors: apps\doctors\src\hooks\queries\usePatients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\usePatients.ts
+- patients: apps\patients\src\hooks\api\usePatients.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\usePatients.ts
+- patients: apps\patients\src\hooks\usePatients.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### useAppointments
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\api\useAppointments.ts
-  - doctors: apps\doctors\src\hooks\queries\index.ts
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\useAppointments.ts
-  - patients: apps\patients\src\hooks\api\useAppointments.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
-  - patients: apps\patients\src\hooks\useAppointments.ts
-  - patients: apps\patients\src\hooks\useAppointments.ts
-  - patients: apps\patients\src\hooks\useAppointmentService.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\usePatientData.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - patients: apps\patients\src\hooks\__tests__\useAppointments.test.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\useAppointments.ts
+- doctors: apps\doctors\src\hooks\api\useAppointments.ts
+- doctors: apps\doctors\src\hooks\queries\index.ts
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\useAppointments.ts
+- patients: apps\patients\src\hooks\api\useAppointments.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+- patients: apps\patients\src\hooks\useAppointments.ts
+- patients: apps\patients\src\hooks\useAppointments.ts
+- patients: apps\patients\src\hooks\useAppointmentService.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\usePatientData.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- patients: apps\patients\src\hooks\_\_tests\_\_\useAppointments.test.ts
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### useVideoCall
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\index.ts
-  - doctors: apps\doctors\src\hooks\api\useVideoCall.ts
-  - doctors: apps\doctors\src\hooks\api\useVideoCall.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\index.ts
-  - patients: apps\patients\src\hooks\api\useVideoCall.ts
-  - patients: apps\patients\src\hooks\api\useVideoCall.ts
+
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\index.ts
+- doctors: apps\doctors\src\hooks\api\useVideoCall.ts
+- doctors: apps\doctors\src\hooks\api\useVideoCall.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\index.ts
+- patients: apps\patients\src\hooks\api\useVideoCall.ts
+- patients: apps\patients\src\hooks\api\useVideoCall.ts
 
 ### usePatientsSearch
-  - doctors: apps\doctors\src\hooks\api\usePatients.ts
-  - patients: apps\patients\src\hooks\api\usePatients.ts
+
+- doctors: apps\doctors\src\hooks\api\usePatients.ts
+- patients: apps\patients\src\hooks\api\usePatients.ts
 
 ### usePrescriptions
-  - doctors: apps\doctors\src\hooks\queries\index.ts
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\usePrescriptions.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- doctors: apps\doctors\src\hooks\queries\index.ts
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\usePrescriptions.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### useAppointment
-  - doctors: apps\doctors\src\hooks\queries\useAppointments.ts
-  - patients: apps\patients\src\hooks\useAppointmentService.ts
-  - patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
+
+- doctors: apps\doctors\src\hooks\queries\useAppointments.ts
+- patients: apps\patients\src\hooks\useAppointmentService.ts
+- patients: apps\patients\src\hooks\useAppointmentsIntegrated.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
 
 ### usePatient
-  - doctors: apps\doctors\src\hooks\queries\usePatients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - doctors: apps\doctors\src\hooks\use-patients.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\usePatients.ts
-  - patients: apps\patients\src\hooks\usePatientsIntegrated.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.test.tsx
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- doctors: apps\doctors\src\hooks\queries\usePatients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- doctors: apps\doctors\src\hooks\use-patients.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\usePatients.ts
+- patients: apps\patients\src\hooks\usePatientsIntegrated.ts
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.test.tsx
+- web-app: apps\web-app\src\hooks\api-hooks.ts
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### usePrescription
-  - doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
-  - patients: apps\patients\src\hooks\usePrescriptions.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
+
+- doctors: apps\doctors\src\hooks\queries\usePrescriptions.ts
+- patients: apps\patients\src\hooks\usePrescriptions.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
 
 ### useTelemedicineSession
-  - doctors: apps\doctors\src\hooks\useTelemedicineWebSocket.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
-  - patients: apps\patients\src\hooks\useTelemedicineSession.ts
-  - patients: apps\patients\src\hooks\useTelemedicineSession.ts
-  - patients: apps\patients\src\hooks\useTelemedicineSession.tsx
+
+- doctors: apps\doctors\src\hooks\useTelemedicineWebSocket.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useTelemedicineIntegrated.ts
+- patients: apps\patients\src\hooks\useTelemedicineSession.ts
+- patients: apps\patients\src\hooks\useTelemedicineSession.ts
+- patients: apps\patients\src\hooks\useTelemedicineSession.tsx
 
 ### useWebRTC
-  - doctors: apps\doctors\src\hooks\useWebRTC.ts
-  - doctors: apps\doctors\src\hooks\useWebRTC.ts
-  - patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
-  - patients: apps\patients\src\hooks\useWebRTC.ts
-  - patients: apps\patients\src\hooks\useWebRTC.ts
-  - patients: apps\patients\src\hooks\useWebRTC.tsx
-  - patients: apps\patients\src\hooks\useWebRTCHybrid.ts
+
+- doctors: apps\doctors\src\hooks\useWebRTC.ts
+- doctors: apps\doctors\src\hooks\useWebRTC.ts
+- patients: apps\patients\src\hooks\useTelemedicineSessionHybrid.ts
+- patients: apps\patients\src\hooks\useWebRTC.ts
+- patients: apps\patients\src\hooks\useWebRTC.ts
+- patients: apps\patients\src\hooks\useWebRTC.tsx
+- patients: apps\patients\src\hooks\useWebRTCHybrid.ts
 
 ### useMedicalRecords
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
+
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
 
 ### useMedicalDashboard
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
+
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
 
 ### useMedicalAI
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\index.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useMedicalRecords.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
+
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\index.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useMedicalRecords.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
 
 ### useAccessibility
-  - patients: apps\patients\src\hooks\useAccessibility.ts
+
+- patients: apps\patients\src\hooks\useAccessibility.ts
 
 ### useAccessibilityCapabilities
-  - patients: apps\patients\src\hooks\useAccessibility.ts
+
+- patients: apps\patients\src\hooks\useAccessibility.ts
 
 ### useWCAGCompliance
-  - patients: apps\patients\src\hooks\useAccessibility.ts
+
+- patients: apps\patients\src\hooks\useAccessibility.ts
 
 ### useAltamedicaAPI
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
 
 ### useAPIRequest
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
+
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
 
 ### useConnectionTest
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
 
 ### useDashboardStats
-  - patients: apps\patients\src\hooks\useAltamedicaAPI.ts
-  - patients: apps\patients\src\hooks\useDashboardData.tsx
-  - patients: apps\patients\src\hooks\useDashboardData.tsx
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- patients: apps\patients\src\hooks\useAltamedicaAPI.ts
+- patients: apps\patients\src\hooks\useDashboardData.tsx
+- patients: apps\patients\src\hooks\useDashboardData.tsx
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ### useMedicalRecord
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useMedicalHistory.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
+
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useMedicalHistory.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
 
 ### useVitalSigns
-  - patients: apps\patients\src\hooks\useIntegratedServices.ts
-  - patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
+
+- patients: apps\patients\src\hooks\useIntegratedServices.ts
+- patients: apps\patients\src\hooks\useMedicalRecordsIntegrated.ts
 
 ### useNotifications
-  - patients: apps\patients\src\hooks\useNotifications.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
-  - web-app: apps\web-app\src\hooks\api-hooks.ts
+
+- patients: apps\patients\src\hooks\useNotifications.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
+- web-app: apps\web-app\src\hooks\api-hooks.ts
 
 ### useLazyComponent
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useIntersectionObserver
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useOptimizedState
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### usePrefetch
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### usePerformanceMonitor
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useThrottle
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useWhyDidYouUpdate
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useLazyLoad
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useImageOptimization
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
 
 ### useDebounce
-  - patients: apps\patients\src\hooks\useOptimizedPerformance.ts
-  - patients: apps\patients\src\hooks\useSpecializedHooks.ts
+
+- patients: apps\patients\src\hooks\useOptimizedPerformance.ts
+- patients: apps\patients\src\hooks\useSpecializedHooks.ts
 
 ### useRouter
-  - patients: apps\patients\src\hooks\useSSO.tsx
-  - patients: apps\patients\src\hooks\useSSO.tsx
-  - patients: apps\patients\src\hooks\useSSO.tsx
-  - patients: apps\patients\src\hooks\useSSO.tsx
-  - web-app: apps\web-app\src\hooks\useProtectedRoute.ts
-  - web-app: apps\web-app\src\hooks\useProtectedRoute.ts
-  - web-app: apps\web-app\src\hooks\useRedirection.ts
-  - web-app: apps\web-app\src\hooks\useRedirection.ts
+
+- patients: apps\patients\src\hooks\useSSO.tsx
+- patients: apps\patients\src\hooks\useSSO.tsx
+- patients: apps\patients\src\hooks\useSSO.tsx
+- patients: apps\patients\src\hooks\useSSO.tsx
+- web-app: apps\web-app\src\hooks\useProtectedRoute.ts
+- web-app: apps\web-app\src\hooks\useProtectedRoute.ts
+- web-app: apps\web-app\src\hooks\useRedirection.ts
+- web-app: apps\web-app\src\hooks\useRedirection.ts
 
 ### useTelemedicine
-  - patients: apps\patients\src\hooks\useTelemedicine.ts
+
+- patients: apps\patients\src\hooks\useTelemedicine.ts
 
 ### useSymptomAnalysis
-  - web-app: apps\web-app\src\hooks\useAPI.ts
+
+- web-app: apps\web-app\src\hooks\useAPI.ts
 
 ## ⚠️ Problemas de Dependencias
+
 - **admin**: App usa React hooks pero no tiene @altamedica/hooks como dependencia
 - **api-server**: App usa React hooks pero no tiene @altamedica/hooks como dependencia
 - **patients**: App usa React hooks pero no tiene @altamedica/hooks como dependencia
 - **web-app**: App usa React hooks pero no tiene @altamedica/hooks como dependencia
 
 ## 💡 Recomendaciones de Acción
+
 1. **Eliminar hooks no utilizados** para reducir bundle size
 2. **Migrar hooks duplicados** hacia el paquete central
 3. **Agregar dependencias faltantes** en apps que necesitan hooks
 4. **Implementar testing automatizado** para prevenir regresiones
 
 ---
-*Generado el 2025-08-07T07:02:15.929Z*
+
+_Generado el 2025-08-07T07:02:15.929Z_

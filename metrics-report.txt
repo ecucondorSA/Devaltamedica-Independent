@@ -1,0 +1,14 @@
+=== ALTAMEDICA METRICS REPORT ===
+Timestamp: lun 25 ago 2025 12:01:57 -03
+Packages Status: 6/26 critical working
+Apps Status: 1/7 type-check success
+60K	packages/ai-agents/dist
+908K	packages/alta-agent/dist
+480K	packages/anamnesis/dist
+728K	packages/api-client/dist
+72K	packages/api-helpers/dist
+1,9M	packages/auth/dist
+84K	packages/config-next/dist
+1,9M	packages/database/dist
+28K	packages/diagnostic-engine/dist
+60K	packages/e2e-tests/dist

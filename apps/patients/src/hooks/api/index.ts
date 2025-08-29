@@ -7,8 +7,8 @@ export { useApiBridge, useServiceHealth } from './useApiBridge';
 export type { ApiResponse, UseApiOptions } from './useApiBridge';
 
 // 🔐 Autenticación
-export { useAuth } from "@altamedica/auth';
-export type { User } from "@altamedica/auth';
+export { useAuth } from '@altamedica/auth';
+export type { User } from '@altamedica/auth';
 
 // 👥 Pacientes
 export { usePatients, usePatientsSearch } from './usePatients';

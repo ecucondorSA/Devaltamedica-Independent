@@ -10,9 +10,9 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Button } from '@altamedica/ui';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { 
   ShieldCheckIcon,
   DevicePhoneMobileIcon,
@@ -115,7 +115,7 @@ export function MFAChallenge({
       }
 
     } catch (error) {
-      logger.error('Error getting MFA methods:', error);
+      logger.error('Error getting MFA methods:', String(error));
       setState(prev => ({ ...prev, error: 'Error al cargar métodos de autenticación' }));
     }
   }, [user, getToken]);
@@ -165,7 +165,7 @@ export function MFAChallenge({
       }, 100);
 
     } catch (error) {
-      logger.error('Error sending MFA code:', error);
+      logger.error('Error sending MFA code:', String(error));
       setState(prev => ({
         ...prev,
         loading: false,
@@ -215,7 +215,7 @@ export function MFAChallenge({
       onSuccess(result.mfaToken);
 
     } catch (error) {
-      logger.error('Error verifying MFA code:', error);
+      logger.error('Error verifying MFA code:', String(error));
       setState(prev => ({
         ...prev,
         loading: false,
@@ -309,7 +309,7 @@ export function MFAChallenge({
       onSuccess(result.mfaToken);
 
     } catch (error) {
-      logger.error('Error with biometric authentication:', error);
+      logger.error('Error with biometric authentication:', String(error));
       setState(prev => ({
         ...prev,
         loading: false,

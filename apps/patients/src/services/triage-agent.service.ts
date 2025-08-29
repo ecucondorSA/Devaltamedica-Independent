@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Esquemas de validación
 export const SymptomSchema = z.object({
   name: z.string(),
@@ -98,7 +98,7 @@ export class TriageAgentService {
       
       return TriageResultSchema.parse(result);
     } catch (error) {
-      logger.error('Error en evaluación de triaje:', error);
+      logger.error('Error en evaluación de triaje:', String(error));
       throw new Error('No se pudo completar la evaluación de triaje');
     }
   }
@@ -328,7 +328,7 @@ export class TriageAgentService {
         }
       });
     } catch (error) {
-      logger.error('Error al registrar triaje:', error);
+      logger.error('Error al registrar triaje:', String(error));
       // No fallar la operación principal por error de logging
     }
   }

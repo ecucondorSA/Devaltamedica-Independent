@@ -17,6 +17,7 @@ import { Button } from '@altamedica/ui'
 import { useCreatePrescription, type Medication } from '@/hooks/queries/usePrescriptions'
 import { usePatients } from '@/hooks/queries/usePatients'
 import { z } from 'zod'
+import { SimplePatient } from '@/types'
 
 // Form validation schema
 const prescriptionFormSchema = z.object({
@@ -60,12 +61,13 @@ export default function NewPrescriptionPage() {
   const [showPatientDropdown, setShowPatientDropdown] = useState(false)
 
   // Filter patients based on search
-  const filteredPatients = patients.filter(patient => 
-    patient.name.toLowerCase().includes(patientSearch.toLowerCase()) ||
+  const filteredPatients = patients.filter((patient: SimplePatient) => 
+    patient.firstName.toLowerCase().includes(patientSearch.toLowerCase()) ||
+    patient.lastName.toLowerCase().includes(patientSearch.toLowerCase()) ||
     patient.email.toLowerCase().includes(patientSearch.toLowerCase())
   )
 
-  const selectedPatient = patients.find(p => p.id === selectedPatientId)
+  const selectedPatient = patients.find((p: SimplePatient) => p.id === selectedPatientId)
 
   const addMedication = () => {
     setMedications([...medications, { name: '', dosage: '', frequency: '', duration: '', instructions: '' }])
@@ -170,18 +172,18 @@ export default function NewPrescriptionPage() {
               
               {showPatientDropdown && filteredPatients.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto">
-                  {filteredPatients.map(patient => (
+                  {filteredPatients.map((patient: SimplePatient) => (
                     <button
                       key={patient.id}
                       type="button"
                       onClick={() => {
                         setSelectedPatientId(patient.id)
-                        setPatientSearch(patient.name)
+                        setPatientSearch(`${patient.firstName} ${patient.lastName}`)
                         setShowPatientDropdown(false)
                       }}
                       className="w-full text-left px-4 py-2 hover:bg-gray-50 border-b last:border-b-0"
                     >
-                      <div className="font-medium">{patient.name}</div>
+                      <div className="font-medium">{`${patient.firstName} ${patient.lastName}`}</div>
                       <div className="text-sm text-gray-600">{patient.email}</div>
                     </button>
                   ))}
@@ -195,7 +197,7 @@ export default function NewPrescriptionPage() {
 
             {selectedPatient && (
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="font-medium">{selectedPatient.name}</p>
+                <p className="font-medium">{`${selectedPatient.firstName} ${selectedPatient.lastName}`}</p>
                 <p className="text-sm text-gray-600">{selectedPatient.email}</p>
                 {selectedPatient.phoneNumber && (
                   <p className="text-sm text-gray-600">{selectedPatient.phoneNumber}</p>

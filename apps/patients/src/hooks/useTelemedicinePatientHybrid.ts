@@ -22,10 +22,10 @@ import { useTelemedicineUnified } from '@altamedica/telemedicine-core';
 export const useTelemedicinePatientHybrid = useTelemedicineUnified;
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import io, { Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const SIGNALING_SERVER_URL = process.env.NEXT_PUBLIC_SIGNALING_URL || 'http://localhost:8888';
@@ -128,7 +128,7 @@ interface TelemedicineHookActions {
   giveConsent: (consentType: keyof PatientTelemedicineSession['consents']) => Promise<void>;
 }
 
-export function useTelemedicinePatientHybrid(): [TelemedicineHookState, TelemedicineHookActions] {
+function useTelemedicinePatientHybridImpl(): [TelemedicineHookState, TelemedicineHookActions] {
   const { user, getToken } = useAuth();
   
   // State management
@@ -197,14 +197,14 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       });
 
       socketRef.current.on('error', (error) => {
-        logger.error('Signaling server error:', error);
+        logger.error('Signaling server error:', String(error));
         setState(prev => ({ ...prev, error: error.message }));
       });
 
       socketRef.current.connect();
 
     } catch (error) {
-      logger.error('Error connecting to signaling server:', error);
+      logger.error('Error connecting to signaling server:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to connect to signaling server' }));
     }
   }, [user, getToken]);
@@ -287,7 +287,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       sessionRef.current = result.data;
 
     } catch (error) {
-      logger.error('Error joining session:', error);
+      logger.error('Error joining session:', String(error));
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to join session',
@@ -327,7 +327,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       }));
 
     } catch (error) {
-      logger.error('Error sharing vital signs:', error);
+      logger.error('Error sharing vital signs:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to share vital signs' }));
     }
   }, [user]);
@@ -356,7 +356,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       }));
 
     } catch (error) {
-      logger.error('Error updating symptoms:', error);
+      logger.error('Error updating symptoms:', String(error));
     }
   }, [user]);
 
@@ -390,7 +390,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       });
 
     } catch (error) {
-      logger.error('Error reporting emergency:', error);
+      logger.error('Error reporting emergency:', String(error));
     }
   }, [user, getToken]);
 
@@ -408,7 +408,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       });
 
     } catch (error) {
-      logger.error('Error sending chat message:', error);
+      logger.error('Error sending chat message:', String(error));
     }
   }, [user]);
 
@@ -447,7 +447,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       }));
 
     } catch (error) {
-      logger.error('Error giving consent:', error);
+      logger.error('Error giving consent:', String(error));
     }
   }, [getToken]);
 
@@ -471,7 +471,7 @@ export function useTelemedicinePatientHybrid(): [TelemedicineHookState, Telemedi
       sessionRef.current = null;
 
     } catch (error) {
-      logger.error('Error leaving session:', error);
+      logger.error('Error leaving session:', String(error));
     }
   }, []);
 

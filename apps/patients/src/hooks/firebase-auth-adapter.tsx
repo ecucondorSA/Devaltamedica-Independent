@@ -11,7 +11,7 @@
 import { useState, useEffect, useCallback } from "react";
 import dynamic from 'next/dynamic';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Lazy loading para Firebase Auth - solo se carga cuando sea necesario
 const FirebaseAuth = dynamic(() => import('firebase/auth'), {
   ssr: false
@@ -30,7 +30,7 @@ import type {
   AuthState,
   LoginCredentials,
   RegisterData,
-} from "@altamedica/auth';
+} from '@altamedica/auth';
 
 /**
  * Servicio adaptador que conecta Firebase con el sistema existente

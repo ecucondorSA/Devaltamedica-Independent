@@ -1,0 +1,17 @@
+apps/doctors/src/lib/auth-stub.ts
+apps/doctors/src/lib/firestore-stub.ts
+apps/doctors/src/types-stub.ts
+apps/doctors/src/components/ui-stub.tsx
+apps/doctors/src/marketplace-hooks-stub.ts
+apps/doctors/src/api-client-stub.ts
+apps/doctors/src/firebase-stub.ts
+apps/doctors/src/telemedicine-core-stub.ts
+apps/doctors/src/hooks-stub.ts
+apps/doctors/src/medical-stub.ts
+apps/doctors/src/utils-stub.ts
+apps/patients/src/types-stub.ts
+apps/patients/src/shared-stub.ts
+apps/patients/src/auth-stub.tsx
+apps/patients/src/hooks/ai/useDiagnosisQuickAnalysis.stub.ts
+apps/patients/src/hooks/ai/useDiagnosisRestrictions.stub.ts
+apps/patients/src/ui-stub.tsx

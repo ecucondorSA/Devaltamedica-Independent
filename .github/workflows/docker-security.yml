@@ -1,0 +1,167 @@
+name: Docker Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Ejecutar diariamente a las 5 AM UTC
+    - cron: '0 5 * * *'
+
+jobs:
+  docker-security:
+    name: Docker Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: |
+          docker build -t altamedica-admin:latest -f apps/admin/Dockerfile .
+          docker build -t altamedica-api:latest -f apps/api-server/Dockerfile .
+          docker build -t altamedica-doctors:latest -f apps/doctors/Dockerfile .
+          docker build -t altamedica-patients:latest -f apps/patients/Dockerfile .
+          docker build -t altamedica-web:latest -f apps/web-app/Dockerfile .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'altamedica-admin:latest'
+          format: 'sarif'
+          output: 'trivy-results-admin.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Run Trivy on API image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'altamedica-api:latest'
+          format: 'sarif'
+          output: 'trivy-results-api.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Run Trivy on Doctors image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'altamedica-doctors:latest'
+          format: 'sarif'
+          output: 'trivy-results-doctors.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Run Trivy on Patients image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'altamedica-patients:latest'
+          format: 'sarif'
+          output: 'trivy-results-patients.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Run Trivy on Web image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'altamedica-web:latest'
+          format: 'sarif'
+          output: 'trivy-results-web.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results-admin.sarif
+
+      - name: Upload API scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results-api.sarif
+
+      - name: Upload Doctors scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results-doctors.sarif
+
+      - name: Upload Patients scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results-patients.sarif
+
+      - name: Upload Web scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results-web.sarif
+
+      - name: Comment PR with Docker security results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 🐳 Docker Security Scan Results\n\n';
+            
+            try {
+              const images = ['admin', 'api', 'doctors', 'patients', 'web'];
+              let totalVulnerabilities = 0;
+              let criticalVulnerabilities = 0;
+              let highVulnerabilities = 0;
+              
+              images.forEach(image => {
+                const sarifFile = `trivy-results-${image}.sarif`;
+                
+                if (fs.existsSync(sarifFile)) {
+                  try {
+                    const sarif = JSON.parse(fs.readFileSync(sarifFile, 'utf8'));
+                    const results = sarif.runs?.[0]?.results || [];
+                    
+                    const critical = results.filter(r => r.level === 'error').length;
+                    const high = results.filter(r => r.level === 'warning').length;
+                    
+                    criticalVulnerabilities += critical;
+                    highVulnerabilities += high;
+                    totalVulnerabilities += results.length;
+                    
+                    comment += `### ${image.charAt(0).toUpperCase() + image.slice(1)} Image\n`;
+                    comment += `- 🔴 **Críticas**: ${critical}\n`;
+                    comment += `- 🟠 **Altas**: ${high}\n`;
+                    comment += `- 📊 **Total**: ${results.length}\n\n`;
+                    
+                  } catch (parseError) {
+                    comment += `### ${image.charAt(0).toUpperCase() + image.slice(1)} Image\n`;
+                    comment += `- ❌ **Error**: No se pudieron parsear resultados\n\n`;
+                  }
+                }
+              });
+              
+              comment += `## 📊 Resumen Total\n`;
+              comment += `- 🔴 **Vulnerabilidades Críticas**: ${criticalVulnerabilities}\n`;
+              comment += `- 🟠 **Vulnerabilidades Altas**: ${highVulnerabilities}\n`;
+              comment += `- 📊 **Total de Vulnerabilidades**: ${totalVulnerabilities}\n\n`;
+              
+              if (criticalVulnerabilities > 0) {
+                comment += `🚨 **CRÍTICO**: Se encontraron vulnerabilidades críticas en las imágenes Docker.`;
+                comment += ` Revisar y actualizar inmediatamente.`;
+              } else if (highVulnerabilities > 0) {
+                comment += `⚠️ **Advertencia**: Se encontraron vulnerabilidades altas. Revisar antes del merge.`;
+              } else {
+                comment += `✅ **Estado**: Todas las imágenes Docker están libres de vulnerabilidades críticas y altas.`;
+              }
+              
+            } catch (error) {
+              comment += `❌ **Error**: ${error.message}`;
+            }
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

@@ -19,24 +19,29 @@ import {
 } from '../services/AuthService';
 
 // Simple logger implementation to avoid circular dependencies
+type LogData = unknown;
 const logger = {
-  info: (message, data) => {
+  info: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message: string, data?: LogData) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.debug(message, data);
     }
   },
@@ -522,3 +527,4 @@ export function useRole(requiredRole: any): any {
 // Exportar todo
 export { AuthContext };
 export type { AuthState, LoginCredentials, RegisterData, User };
+

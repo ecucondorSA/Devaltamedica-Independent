@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ACTION_TYPE=$1
+FILE_PATH=$2
+COMMAND=$3
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+
+LOG_ENTRY="[GEMINI] [$TIMESTAMP] ACTION: $ACTION_TYPE"
+
+if [ -n "$FILE_PATH" ]; then
+    LOG_ENTRY="$LOG_ENTRY FILE: $FILE_PATH"
+fi
+
+if [ -n "$COMMAND" ]; then
+    LOG_ENTRY="$LOG_ENTRY COMMAND: \"$COMMAND\""
+fi
+
+echo "$LOG_ENTRY" >> GEMINI-CLAUDE-SYNC.md

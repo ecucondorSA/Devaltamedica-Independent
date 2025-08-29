@@ -1,3 +1,4 @@
+import { logger } from '@altamedica/shared/services/logger.service';
 /**
  * Custom Hook: Emergency Mode Logic
  * Extracted from HospitalNetworkDashboard.tsx for better separation of concerns
@@ -48,7 +49,7 @@ export const useEmergencyModeLogic = () => {
       externalSupport: emergencyType === 'mass_casualty'
     };
 
-    console.log(`🚨 Emergency protocol activated for ${hospitalId}:`, actions);
+    logger.info(`🚨 Emergency protocol activated for ${hospitalId}:`, actions);
     
     return actions;
   }, []);
@@ -94,7 +95,7 @@ export const useEmergencyModeLogic = () => {
     };
 
     const actions = responseActions[priority] || [];
-    console.log(`🚨 Emergency response activated for ${hospitalId} (${priority}):`, actions);
+    logger.info(`🚨 Emergency response activated for ${hospitalId} (${priority}):`, actions);
     
     return actions;
   }, []);

@@ -9,7 +9,7 @@ import { services } from '@altamedica/api-client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { dashboardService } from '../services';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import type {
   PatientDashboardDTO,
   UserProfileDTO,
@@ -95,7 +95,7 @@ export const useDashboardData = () => {
       }
 
     } catch (error) {
-      logger.error('❌ Error cargando dashboard:', error);
+      logger.error('❌ Error cargando dashboard:', String(error));
 
       if (!mountedRef.current) return;
 
@@ -151,7 +151,7 @@ export const useDashboardData = () => {
       }
 
     } catch (error) {
-      logger.error('❌ Error cargando perfil:', error);
+      logger.error('❌ Error cargando perfil:', String(error));
       
       if (mountedRef.current) {
         setErrorStates(prev => ({
@@ -230,7 +230,7 @@ export const useDashboardData = () => {
         }
       }
     } catch (error) {
-      logger.error(`❌ Error refrescando sección ${section}:`, error);
+      logger.error(`❌ Error refrescando sección ${section}:`, String(error));
       
       if (mountedRef.current) {
         setErrorStates(prev => ({
@@ -289,7 +289,7 @@ export const useDashboardData = () => {
         throw new Error(errorResponse.error.message || 'Error actualizando preferencias');
       }
     } catch (error) {
-      logger.error('❌ Error actualizando preferencias:', error);
+      logger.error('❌ Error actualizando preferencias:', String(error));
       throw error; // Re-lanzar para manejo en componente
     }
   }, []);

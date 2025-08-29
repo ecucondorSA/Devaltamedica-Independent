@@ -1,4 +1,4 @@
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 import { useEffect } from 'react';
 
 // Hook específico para admin que redirige a web-app

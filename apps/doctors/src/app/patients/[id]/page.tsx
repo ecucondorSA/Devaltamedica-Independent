@@ -21,7 +21,7 @@ import {
 import { Button } from '@altamedica/ui'
 import { useHealthMetrics, calculateAge } from '@altamedica/medical'
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface PatientDetail {
   id: string
   name: string
@@ -84,7 +84,7 @@ export default function PatientDetailPage() {
         }
       })
     } catch (error) {
-      logger.error('Error fetching patient:', error)
+      logger.error('Error fetching patient:', String(error))
     } finally {
       setLoading(false)
     }

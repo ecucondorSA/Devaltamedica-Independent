@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Socket } from 'socket.io-client';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   doc,
   updateDoc,
@@ -325,7 +325,7 @@ export function useWebRTCDoctorHybrid(
       try {
         firestore.current = getFirestore();
       } catch (err) {
-        logger.warn('Firebase no disponible para WebRTC:', err);
+        logger.warn('Firebase no disponible para WebRTC:', err as any);
       }
     }
   }, [firebase.enabled]);
@@ -617,8 +617,8 @@ export function useWebRTCDoctorHybrid(
             timestamp: new Date().toISOString(),
             type: 'connection',
             severity: 'critical',
-            message: `Error al iniciar llamada: ${err}`,
-            technicalDetails: { error: err },
+            message: `Error al iniciar llamada: ${err as any}`,
+            technicalDetails: { error: err as any },
             resolved: false,
           },
         ],
@@ -755,7 +755,7 @@ export function useWebRTCDoctorHybrid(
           sessionRecorded: true,
         }));
       } catch (err) {
-        throw new Error(`Error al iniciar grabación: ${err}`);
+        throw new Error(`Error al iniciar grabación: ${err as any}`);
       }
     },
     [
@@ -790,7 +790,7 @@ export function useWebRTCDoctorHybrid(
 
       return isEncrypted;
     } catch (err) {
-      logger.error('Error verificando cifrado:', err);
+      logger.error('Error verificando cifrado:', err as any);
       return false;
     }
   }, []);
@@ -846,7 +846,7 @@ export function useWebRTCDoctorHybrid(
         isScreenSharing: true,
       }));
     } catch (err) {
-      logger.error('Error sharing screen:', err);
+      logger.error('Error sharing screen:', err as any);
     }
   }, []);
 
@@ -933,7 +933,7 @@ export function useWebRTCDoctorHybrid(
 
   const enableMedicalFilters = useCallback(async (filters: string[]) => {
     // Implementar filtros médicos específicos
-    logger.info('Enabling medical filters:', filters);
+    logger.info('Enabling medical filters:', JSON.stringify(filters, null, 2));
   }, []);
 
   const adjustForMedicalExam = useCallback(async (examType: string) => {

@@ -4,6 +4,7 @@
  */
 
 import { BaseMCP, MCPConfig, AppKnowledge } from './BaseMCP';
+import { logger } from '../logger';
 
 const apiConfig: MCPConfig = {
   name: 'APIMCP',

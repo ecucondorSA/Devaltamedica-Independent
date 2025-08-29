@@ -1,0 +1,216 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: altamedica-prod
+        environment: production
+    
+    rule_files:
+      - /etc/prometheus/rules/*.yml
+    
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+              - alertmanager:9093
+    
+    scrape_configs:
+      - job_name: 'kubernetes-apiservers'
+        kubernetes_sd_configs:
+          - role: endpoints
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: default;kubernetes;https
+    
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /api/v1/nodes/${1}/proxy/metrics
+    
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+    
+      - job_name: 'altamedica-api-server'
+        static_configs:
+          - targets: ['altamedica-api-server-service:80']
+        metrics_path: /metrics
+        scrape_interval: 30s
+        scrape_timeout: 10s
+    
+      - job_name: 'altamedica-web-app'
+        static_configs:
+          - targets: ['altamedica-web-app-service:80']
+        metrics_path: /api/metrics
+        scrape_interval: 30s
+        scrape_timeout: 10s
+    
+      - job_name: 'redis'
+        static_configs:
+          - targets: ['altamedica-redis:6379']
+        metrics_path: /metrics
+        scrape_interval: 30s
+    
+      - job_name: 'postgresql'
+        static_configs:
+          - targets: ['altamedica-postgresql:5432']
+        metrics_path: /metrics
+        scrape_interval: 30s
+    
+      - job_name: 'nginx-ingress'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /metrics
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: altamedica-alerts
+  namespace: monitoring
+  labels:
+    prometheus: kube-prometheus
+    role: alert-rules
+spec:
+  groups:
+    - name: altamedica.rules
+      rules:
+        - alert: HighErrorRate
+          expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High error rate detected"
+            description: "Error rate is {{ $value }} errors per second"
+        
+        - alert: HighResponseTime
+          expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High response time detected"
+            description: "95th percentile response time is {{ $value }} seconds"
+        
+        - alert: HighMemoryUsage
+          expr: (container_memory_usage_bytes{container!=""} / container_spec_memory_limit_bytes{container!=""}) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage detected"
+            description: "Container {{ $labels.container }} is using {{ $value | humanizePercentage }} of memory"
+        
+        - alert: HighCPUUsage
+          expr: (rate(container_cpu_usage_seconds_total{container!=""}[5m]) / container_spec_cpu_quota{container!=""}) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage detected"
+            description: "Container {{ $labels.container }} is using {{ $value | humanizePercentage }} of CPU"
+        
+        - alert: PodRestarting
+          expr: increase(kube_pod_container_status_restarts_total[1h]) > 5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod restarting frequently"
+            description: "Pod {{ $labels.pod }} has restarted {{ $value }} times in the last hour"
+        
+        - alert: DatabaseConnectionFailing
+          expr: up{job="postgresql"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Database connection failing"
+            description: "Cannot connect to PostgreSQL database"
+        
+        - alert: RedisConnectionFailing
+          expr: up{job="redis"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Redis connection failing"
+            description: "Cannot connect to Redis cache"
+        
+        - alert: APIServerDown
+          expr: up{job="altamedica-api-server"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "API Server is down"
+            description: "API Server is not responding to health checks"
+        
+        - alert: WebAppDown
+          expr: up{job="altamedica-web-app"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Web App is down"
+            description: "Web App is not responding to health checks"

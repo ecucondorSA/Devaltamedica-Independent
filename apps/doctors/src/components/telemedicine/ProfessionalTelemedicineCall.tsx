@@ -7,22 +7,22 @@ import { useWebRTCDoctorHybrid } from '../../hooks/useWebRTCDoctorHybrid';
 import { MedicalNotesSystem } from '../medical-notes/MedicalNotesSystem';
 import { Video, Mic, PhoneOff, MessageSquare, User, Bot, Clipboard, Shield, Wifi, Settings } from 'lucide-react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // --- Sub-componentes de la UI ---
 
-const VideoPanel = ({ localStream, remoteStream, connectionState, isConnected }) => {
+const VideoPanel = ({ localStream, remoteStream, connectionState, isConnected }: any) => {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
   useEffect(() => {
     if (localVideoRef.current && localStream) {
-      localVideoRef.current.srcObject = localStream;
+      (localVideoRef.current as any).srcObject = localStream;
     }
   }, [localStream]);
 
   useEffect(() => {
     if (remoteVideoRef.current && remoteStream) {
-      remoteVideoRef.current.srcObject = remoteStream;
+      (remoteVideoRef.current as any).srcObject = remoteStream;
     }
   }, [remoteStream]);
 
@@ -38,12 +38,12 @@ const VideoPanel = ({ localStream, remoteStream, connectionState, isConnected })
   );
 };
 
-const ChatPanel = ({ messages, onSendMessage }) => {
+const ChatPanel = ({ messages, onSendMessage }: any) => {
   const [newMessage, setNewMessage] = useState('');
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    (messageEndRef.current as any)?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSend = () => {
@@ -57,7 +57,7 @@ const ChatPanel = ({ messages, onSendMessage }) => {
     <div className="flex flex-col h-full bg-gray-800 p-4">
       <h3 className="text-lg font-bold mb-4 text-white">Chat de Consulta</h3>
       <div className="flex-grow overflow-y-auto mb-4 pr-2">
-        {messages.map((msg) => (
+        {messages.map((msg: any) => (
           <div key={msg.id} className={`flex items-start mb-3 ${msg.senderRole === 'doctor' ? 'justify-end' : ''}`}>
             <div className={`p-3 rounded-lg max-w-xs ${
               msg.senderRole === 'doctor' 
@@ -93,7 +93,7 @@ const ChatPanel = ({ messages, onSendMessage }) => {
   );
 };
 
-const MedicalNotesPanel = ({ notes, onNotesChange }) => (
+const MedicalNotesPanel = ({ notes, onNotesChange }: any) => (
   <div className="h-full bg-gray-800 p-4">
     <h3 className="text-lg font-bold mb-4 text-white">Notas Médicas (Privadas)</h3>
     <textarea
@@ -105,7 +105,7 @@ const MedicalNotesPanel = ({ notes, onNotesChange }) => (
   </div>
 );
 
-const AIDiagnosticsPanel = ({ aiAnalysis, onAnalyze, isAnalyzing }) => (
+const AIDiagnosticsPanel = ({ aiAnalysis, onAnalyze, isAnalyzing }: any) => (
   <div className="h-full bg-gray-800 p-4">
     <div className="flex justify-between items-center mb-4">
       <h3 className="text-lg font-bold text-white">Asistente de Diagnóstico IA</h3>
@@ -117,7 +117,7 @@ const AIDiagnosticsPanel = ({ aiAnalysis, onAnalyze, isAnalyzing }) => (
       <div className="overflow-y-auto h-5/6 pr-2 text-sm">
         <h4 className="font-bold text-blue-400">Posibles Condiciones (Confianza: {Math.round(aiAnalysis.confidence * 100)}%)</h4>
         <ul className="list-disc list-inside mb-3">
-          {aiAnalysis.possibleConditions.map(c => <li key={c.condition} className="text-gray-300">{c.condition} ({Math.round(c.probability * 100)}%)</li>)}
+          {aiAnalysis.possibleConditions.map((c: any) => <li key={c.condition} className="text-gray-300">{c.condition} ({Math.round(c.probability * 100)}%)</li>)}
         </ul>
         <h4 className="font-bold text-blue-400">Recomendaciones</h4>
         <p className="text-gray-300 bg-gray-700 p-2 rounded">{aiAnalysis.recommendations.join(', ')}</p>
@@ -128,7 +128,7 @@ const AIDiagnosticsPanel = ({ aiAnalysis, onAnalyze, isAnalyzing }) => (
   </div>
 );
 
-const CallControls = ({ onHangUp, onToggleAudio, onToggleVideo, isAudioMuted, isVideoMuted }) => (
+const CallControls = ({ onHangUp, onToggleAudio, onToggleVideo, isAudioMuted, isVideoMuted }: any) => (
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-gray-800 bg-opacity-80 p-3 rounded-full">
         <button onClick={onToggleAudio} className={`p-3 rounded-full ${isAudioMuted ? 'bg-red-500' : 'bg-gray-600'} text-white hover:bg-gray-500`}>
             <Mic className="w-6 h-6" />
@@ -145,14 +145,14 @@ const CallControls = ({ onHangUp, onToggleAudio, onToggleVideo, isAudioMuted, is
 
 // --- Componente Principal ---
 
-export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId }) => {
+export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId }: any) => {
   const [activeTab, setActiveTab] = useState('chat');
   const [medicalNotes, setMedicalNotes] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState(null);
   
   // Hook híbrido de telemedicina
-  const telemedicineHook = useTelemedicineDoctorHybrid({
+  const telemedicineHook: any = useTelemedicineDoctorHybrid({
     doctorId,
     doctorName: 'Dr. Usuario', // TODO: obtener del contexto de auth
     specialty: 'Medicina General', // TODO: obtener del contexto de auth
@@ -164,14 +164,14 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
       enableAuditTrail: true,
       hipaaMode: true
     }
-  });
+  } as any);
 
   // Hook híbrido WebRTC
-  const webrtcHook = useWebRTCDoctorHybrid({
+  const webrtcHook: any = useWebRTCDoctorHybrid({
     sessionId,
     doctorId,
     patientId,
-    socket: telemedicineHook.socket,
+    socket: (telemedicineHook as any).socket,
     firebase: { enabled: true },
     medical: {
       enableRecording: true,
@@ -187,10 +187,10 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
   useEffect(() => {
     const initializeSession = async () => {
       try {
-        await telemedicineHook.joinSession(sessionId);
-        await webrtcHook.startCall();
+        await (telemedicineHook as any).joinSession();
+        await (webrtcHook as any).startCall();
       } catch (error) {
-        logger.error('Error inicializando sesión:', error);
+        logger.error('Error inicializando sesión:', String(error));
       }
     };
 
@@ -222,7 +222,7 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
         ]
       };
       
-      setAiAnalysis(mockAnalysis);
+      setAiAnalysis(mockAnalysis as any);
       setIsAnalyzing(false);
     }, 2000);
   }, []);
@@ -240,7 +240,7 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
       await telemedicineHook.endSession(sessionId, sessionSummary);
       await webrtcHook.endCall();
     } catch (error) {
-      logger.error('Error finalizando llamada:', error);
+      logger.error('Error finalizando llamada:', String(error));
     }
   }, [sessionId, medicalNotes, telemedicineHook, webrtcHook]);
 
@@ -262,12 +262,12 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
         doctorName="Dr. Usuario" // TODO: obtener del contexto
         specialty="Medicina General" // TODO: obtener del contexto
         compactMode={true}
-        onNoteCreated={(note) => {
-          logger.info('Nueva nota médica creada:', note);
+        onNoteCreated={(note: any) => {
+          logger.info('Nueva nota médica creada:', JSON.stringify(note, null, 2));
           // Integrar con el sistema de telemedicina si es necesario
         }}
-        onNoteUpdated={(note) => {
-          logger.info('Nota médica actualizada:', note);
+        onNoteUpdated={(note: any) => {
+          logger.info('Nota médica actualizada:', JSON.stringify(note, null, 2));
           // Actualizar datos de la sesión si es necesario
         }}
       />
@@ -308,9 +308,11 @@ export const ProfessionalTelemedicineCall = ({ sessionId, doctorId, patientId })
           ))}
         </div>
         <div className="flex-grow">
-          {tabs[activeTab]}
+          {(tabs as any)[activeTab]}
         </div>
       </div>
     </div>
   );
 };
+
+export default ProfessionalTelemedicineCall;

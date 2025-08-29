@@ -1,24 +1,31 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { 
-  Search, 
-  Filter, 
-  Plus, 
-  Edit, 
-  Trash2, 
+import { useCallback, useEffect, useState } from 'react';
+import {
+  Download,
+  Edit,
   MoreVertical,
+  Plus,
+  Search,
+  Trash2,
   UserCheck,
   UserX,
-  Download
-} from 'lucide-react'
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle,
+} from 'lucide-react';
+// eslint-disable-next-line import/no-internal-modules
+import { useRouter } from 'next/navigation';
+
+import { useToast } from '@altamedica/ui';
+import { User } from '@altamedica/types';
+import {
+  Badge,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Input,
   Table,
   TableBody,
@@ -26,142 +33,137 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Badge
-} from '@altamedica/ui'
-import { useToast } from '@/hooks/use-toast'
-
-import { User } from '@altamedica/types';
+} from '@altamedica/ui';
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [roleFilter, setRoleFilter] = useState<string>('all')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const { toast } = useToast()
+  const [users, setUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch('http://localhost:3001/api/v1/users', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      
-      if (!response.ok) throw new Error('Failed to fetch users')
-      
-      const data = await response.json()
-      setUsers(data.users || [])
-    } catch (error) {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch users');
+
+      const data: { users: User[] } = await response.json();
+      setUsers(data.users || []);
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to load users',
-        variant: 'destructive'
-      })
+        variant: 'destructive',
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    void fetchUsers();
+  }, [fetchUsers]);
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return
-
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
 
-      if (!response.ok) throw new Error('Failed to delete user')
+      if (!response.ok) throw new Error('Failed to delete user');
 
       toast({
         title: 'Success',
-        description: 'User deleted successfully'
-      })
-      
-      fetchUsers()
-    } catch (error) {
+        description: 'User deleted successfully',
+      });
+
+      await fetchUsers();
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to delete user',
-        variant: 'destructive'
-      })
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
-  const handleToggleStatus = async (userId: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    
+  const handleToggleStatus = async (userId: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
+
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}/status`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus })
-      })
+        body: JSON.stringify({ isActive: newStatus }),
+      });
 
-      if (!response.ok) throw new Error('Failed to update user status')
+      if (!response.ok) throw new Error('Failed to update user status');
 
       toast({
         title: 'Success',
-        description: `User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`
-      })
-      
-      fetchUsers()
-    } catch (error) {
+        description: `User ${newStatus ? 'activated' : 'deactivated'} successfully`,
+      });
+
+      await fetchUsers();
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to update user status',
-        variant: 'destructive'
-      })
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter
-    
-    return matchesSearch && matchesRole && matchesStatus
-  })
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    const userStatus = user.isActive ? 'active' : 'inactive';
+    const matchesStatus = statusFilter === 'all' || userStatus === statusFilter;
+
+    return matchesSearch && matchesRole && matchesStatus;
+  });
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'super-admin': return 'bg-red-100 text-red-800'
-      case 'admin': return 'bg-orange-100 text-orange-800'
-      case 'doctor': return 'bg-blue-100 text-blue-800'
-      case 'company': return 'bg-purple-100 text-purple-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'super-admin':
+        return 'bg-red-100 text-red-800';
+      case 'admin':
+        return 'bg-orange-100 text-orange-800';
+      case 'doctor':
+        return 'bg-blue-100 text-blue-800';
+      case 'company':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
-  const getStatusBadgeColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800'
-      case 'inactive': return 'bg-gray-100 text-gray-800'
-      case 'suspended': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+  const getStatusBadgeColor = (status: boolean) => {
+    if (status) {
+      return 'bg-green-100 text-green-800';
     }
-  }
+    return 'bg-gray-100 text-gray-800';
+  };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
           <p className="text-muted-foreground">
@@ -176,9 +178,9 @@ export default function UsersPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 placeholder="Search users..."
                 value={searchTerm}
@@ -190,7 +192,7 @@ export default function UsersPage() {
               <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="px-3 py-2 border rounded-md"
+                className="rounded-md border px-3 py-2"
               >
                 <option value="all">All Roles</option>
                 <option value="patient">Patient</option>
@@ -202,15 +204,14 @@ export default function UsersPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border rounded-md"
+                className="rounded-md border px-3 py-2"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
-                <option value="suspended">Suspended</option>
               </select>
               <Button variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 Export
               </Button>
             </div>
@@ -218,7 +219,7 @@ export default function UsersPage() {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8">Loading users...</div>
+            <div className="py-8 text-center">Loading users...</div>
           ) : (
             <Table>
               <TableHeader>
@@ -234,21 +235,21 @@ export default function UsersPage() {
               </TableHeader>
               <TableBody>
                 {filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableRow key={user.uid}>
+                    <TableCell className="font-medium">{`${user.firstName} ${user.lastName}`}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <Badge className={getRoleBadgeColor(user.role)}>
-                        {user.role}
-                      </Badge>
+                      <Badge className={getRoleBadgeColor(user.role)}>{user.role}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge className={getStatusBadgeColor(user.status)}>
-                        {user.status}
+                      <Badge className={getStatusBadgeColor(user.isActive)}>
+                        {user.isActive ? 'Active' : 'Inactive'}
                       </Badge>
                     </TableCell>
                     <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
-                    <TableCell>{new Date(user.lastLogin).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : 'N/A'}
+                    </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -257,12 +258,16 @@ export default function UsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => router.push(`/users/${user.id}`)}>
+                          <DropdownMenuItem onClick={() => router.push(`/users/${user.uid}`)}>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(user.id, user.status)}>
-                            {user.status === 'active' ? (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              user.uid && handleToggleStatus(user.uid, user.isActive)
+                            }
+                          >
+                            {user.isActive ? (
                               <>
                                 <UserX className="mr-2 h-4 w-4" />
                                 Deactivate
@@ -274,8 +279,8 @@ export default function UsersPage() {
                               </>
                             )}
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
-                            onClick={() => handleDeleteUser(user.id)}
+                          <DropdownMenuItem
+                            onClick={() => user.uid && handleDeleteUser(user.uid)}
                             className="text-red-600"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
@@ -289,14 +294,14 @@ export default function UsersPage() {
               </TableBody>
             </Table>
           )}
-          
+
           {!loading && filteredUsers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
+            <div className="py-8 text-center text-gray-500">
               No users found matching your filters
             </div>
           )}
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

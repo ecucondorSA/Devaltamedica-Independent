@@ -5,11 +5,7 @@
     "api-server": {
       "app": "api-server",
       "packageJsonExists": true,
-      "expected": [
-        "@altamedica/types",
-        "@altamedica/database",
-        "@altamedica/auth"
-      ],
+      "expected": ["@altamedica/types", "@altamedica/database", "@altamedica/auth"],
       "actual": [
         "@altamedica/ai-agents",
         "@altamedica/api-helpers",

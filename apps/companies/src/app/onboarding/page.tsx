@@ -45,7 +45,9 @@ export default function CompaniesOnboardingPage() {
         const done = localStorage.getItem('companies_onboarding_done');
         if (done) router.replace('/operations-hub');
       }
-    } catch {}
+    } catch {
+      // localStorage can throw errors in some environments
+    }
   }, [router]);
 
   useEffect(() => {
@@ -58,20 +60,32 @@ export default function CompaniesOnboardingPage() {
     if (!current.target) return null;
     const el = document.querySelector(current.target) as HTMLElement | null;
     if (el) {
-      try { el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' }); } catch {}
+      try {
+        el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+      } catch {
+        // scrollIntoView can fail in some cases
+      }
     }
     return el ? el.getBoundingClientRect() : null;
   }, [mounted, current]);
 
   // Forzar reflow del mapa al cambiar paso
   useEffect(() => {
-    try { window.dispatchEvent(new Event('map:invalidate-size')); } catch {}
+    try {
+      window.dispatchEvent(new Event('map:invalidate-size'));
+    } catch {
+      // dispatchEvent can fail in some cases
+    }
   }, [currentIndex]);
 
   const next = () => setCurrentIndex((i) => Math.min(STEPS.length - 1, i + 1));
   const prev = () => setCurrentIndex((i) => Math.max(0, i - 1));
   const skip = () => {
-    try { localStorage.setItem('companies_onboarding_done', '1'); } catch {}
+    try {
+      localStorage.setItem('companies_onboarding_done', '1');
+    } catch {
+      // localStorage can throw errors in some environments
+    }
     router.replace('/operations-hub');
   };
   const finish = () => skip();

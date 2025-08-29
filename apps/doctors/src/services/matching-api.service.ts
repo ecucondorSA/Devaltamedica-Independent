@@ -1,5 +1,5 @@
 // Servicio para integración con Medical Matching Engine API
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
 interface MatchRequest {
   company_id: string;
@@ -133,7 +133,7 @@ class MatchingApiService {
       const data = await response.json();
       return data.matches || [];
     } catch (error) {
-      logger.error('Error finding job opportunities:', error);
+      logger.error('Error finding job opportunities:', String(error));
       return [];
     }
   }
@@ -169,7 +169,7 @@ class MatchingApiService {
 
       return mockJobMatch;
     } catch (error) {
-      logger.error('Error calculating job compatibility:', error);
+      logger.error('Error calculating job compatibility:', String(error));
       throw error;
     }
   }
@@ -199,7 +199,7 @@ class MatchingApiService {
       const data = await response.json();
       return data.recommendations || [];
     } catch (error) {
-      logger.error('Error getting recommendations:', error);
+      logger.error('Error getting recommendations:', String(error));
       return [];
     }
   }
@@ -223,12 +223,12 @@ class MatchingApiService {
         const data = JSON.parse(event.data);
         onUpdate(data);
       } catch (error) {
-        logger.error('Error parsing WebSocket message:', error);
+        logger.error('Error parsing WebSocket message:', String(error));
       }
     };
 
     this.wsConnection.onerror = (error) => {
-      logger.error('WebSocket error:', error);
+      logger.error('WebSocket error:', String(error));
     };
 
     this.wsConnection.onclose = () => {
@@ -266,14 +266,14 @@ class MatchingApiService {
       const applicationId = `app_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
       // Aquí iría la llamada real al API
-      logger.info('Applying to job:', { doctorId, jobId, applicationData });
+      logger.info('Applying to job:', JSON.stringify({ doctorId, jobId, applicationData }, null, 2));
       
       return {
         success: true,
         applicationId
       };
     } catch (error) {
-      logger.error('Error applying to job:', error);
+      logger.error('Error applying to job:', String(error));
       return {
         success: false,
         error: 'Failed to submit application'

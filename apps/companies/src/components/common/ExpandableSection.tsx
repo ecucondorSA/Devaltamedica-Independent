@@ -31,8 +31,9 @@ export function ExpandableSection({
       if (val === 'true' || val === 'false') {
         setOpen(val === 'true');
       }
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } catch {
+      // localStorage can throw in sandboxed environments
+    }
   }, [storageKey]);
 
   // Guardar estado persistido
@@ -40,7 +41,9 @@ export function ExpandableSection({
     if (!storageKey || typeof window === 'undefined') return;
     try {
       window.localStorage.setItem(storageKey, String(open));
-    } catch {}
+    } catch {
+      // localStorage can throw in sandboxed environments
+    }
   }, [open, storageKey]);
 
   // Notificar cambio de layout (útil para Leaflet invalidateSize)
@@ -53,7 +56,9 @@ export function ExpandableSection({
         window.dispatchEvent(evt);
         setTimeout(() => window.dispatchEvent(evt), 120);
       });
-    } catch {}
+    } catch {
+      // dispatchEvent can fail in some environments
+    }
   }, [open]);
 
   return (

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Datos simulados de sesiones de telemedicina
 const telemedicineSessions = [
   {
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error obteniendo sesiones de telemedicina:', error);
+      logger.error('Error obteniendo sesiones de telemedicina:', String(error));
     }
     return NextResponse.json(
       { 
@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error creando sesión de telemedicina:', error);
+      logger.error('Error creando sesión de telemedicina:', String(error));
     }
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },
@@ -253,7 +253,7 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error actualizando sesión de telemedicina:', error);
+      logger.error('Error actualizando sesión de telemedicina:', String(error));
     }
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },

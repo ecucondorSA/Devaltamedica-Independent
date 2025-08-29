@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { ConnectionMetrics, ConnectionStatus } from '@altamedica/ui';
 import {
   AlertCircle,
@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { CallStatus, useVideoCall } from '../../lib/videoCall';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface IntegratedDoctorVideoCallProps {
   sessionId: string;
   patientEmail: string;
@@ -71,6 +71,7 @@ export default function IntegratedDoctorVideoCall({
   });
 
   const [connectionMetrics, setConnectionMetrics] = useState<ConnectionMetrics>({
+    quality: 'excellent',
     latency: 0,
     packetLoss: 0,
     jitter: 0,
@@ -117,7 +118,7 @@ export default function IntegratedDoctorVideoCall({
 
         // Crear la videollamada (doctor inicia la llamada)
         const result = await createCall(user.email, patientEmail, sessionId, {
-          specialty: user.specialty || 'Medicina General',
+          specialty: (user as any).specialty || 'Medicina General',
           duration: 45, // Los doctores suelen tener sesiones más largas
           scheduledTime: new Date().toISOString(),
         });
@@ -145,7 +146,7 @@ export default function IntegratedDoctorVideoCall({
           throw new Error('No se pudo crear la videollamada');
         }
       } catch (error) {
-        logger.error('Error initializing video call:', error);
+        logger.error('Error initializing video call:', String(error));
         setCallState((prev) => ({
           ...prev,
           error: error instanceof Error ? error.message : 'Error desconocido',
@@ -169,15 +170,16 @@ export default function IntegratedDoctorVideoCall({
     statusInterval.current = setInterval(async () => {
       try {
         const status = await getStatus(roomId);
-        if (!status || 'error' in status) {
-          logger.error('Error getting call status:', status);
+        if (!status || 'error' in (status as any)) {
+          logger.error('Error getting call status:', status as any);
           return;
         }
 
-        setCallState((prev) => ({ ...prev, status }));
+        setCallState((prev) => ({ ...prev, status: status as any }));
 
         // Actualizar métricas de conexión simuladas
         setConnectionMetrics({
+          quality: 'excellent',
           latency: Math.floor(Math.random() * 50) + 20,
           packetLoss: Math.random() * 2,
           jitter: Math.floor(Math.random() * 10) + 5,
@@ -188,7 +190,7 @@ export default function IntegratedDoctorVideoCall({
         });
 
         // Si la llamada ha terminado
-        if (status.call_ended_at) {
+        if (status?.call_ended_at) {
           if (statusInterval.current) {
             clearInterval(statusInterval.current);
           }
@@ -197,7 +199,7 @@ export default function IntegratedDoctorVideoCall({
           }
         }
       } catch (error) {
-        logger.error('Error monitoring call status:', error);
+        logger.error('Error monitoring call status:', String(error));
       }
     }, 5000);
   };
@@ -207,9 +209,9 @@ export default function IntegratedDoctorVideoCall({
     if (Object.values(medicalNotes).some((note) => note.trim())) {
       try {
         // TODO: Enviar notas médicas a la API
-        logger.info('Saving medical notes:', medicalNotes);
+        logger.info('Saving medical notes:', JSON.stringify(medicalNotes, null, 2));
       } catch (error) {
-        logger.error('Error saving medical notes:', error);
+        logger.error('Error saving medical notes:', String(error));
       }
     }
 
@@ -308,8 +310,6 @@ export default function IntegratedDoctorVideoCall({
               <ConnectionStatus
                 status={callState.isConnected ? 'connected' : 'connecting'}
                 metrics={connectionMetrics}
-                onRetry={() => window.location.reload()}
-                showMetrics={true}
               />
 
               {/* Duración */}

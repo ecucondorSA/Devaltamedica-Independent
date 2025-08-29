@@ -18,8 +18,13 @@ export default defineConfig({
     '**/compliance/**/*.spec.ts', 
     '**/performance/**/*.spec.ts',
     '**/integration/**/*.spec.ts',
-    '**/critical-paths/**/*.spec.ts'
+    '**/critical-paths/**/*.spec.ts',
+    '**/security/**/*.spec.ts',
+    '**/*.spec.ts'
   ],
+
+  // Snapshot directory
+  snapshotDir: './snapshots',
 
   // Global test timeout (medical emergency requirement: <3s)
   timeout: 30000,
@@ -81,6 +86,9 @@ export default defineConfig({
       snapshots: true,
       sources: true
     },
+
+    // Update snapshots
+    updateSnapshots: 'missing',
 
     // Medical-specific context options
     extraHTTPHeaders: {

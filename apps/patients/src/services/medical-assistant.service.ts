@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Esquemas de validación
 export const DiagnosisSchema = z.object({
   code: z.string(), // ICD-10
@@ -172,7 +172,7 @@ export class MedicalAssistantService {
       // Limitar a top 5
       return suggestions.slice(0, 5);
     } catch (error) {
-      logger.error('Error al sugerir diagnósticos:', error);
+      logger.error('Error al sugerir diagnósticos:', String(error));
       throw new Error('No se pudieron generar sugerencias diagnósticas');
     }
   }
@@ -221,7 +221,7 @@ export class MedicalAssistantService {
       
       return interactions;
     } catch (error) {
-      logger.error('Error al verificar interacciones:', error);
+      logger.error('Error al verificar interacciones:', String(error));
       throw new Error('No se pudieron verificar las interacciones medicamentosas');
     }
   }
@@ -261,7 +261,7 @@ export class MedicalAssistantService {
         timestamp: new Date(),
       };
     } catch (error) {
-      logger.error('Error al generar notas clínicas:', error);
+      logger.error('Error al generar notas clínicas:', String(error));
       throw new Error('No se pudieron generar las notas clínicas');
     }
   }
@@ -292,7 +292,7 @@ export class MedicalAssistantService {
         'Programar seguimiento',
       ];
     } catch (error) {
-      logger.error('Error al obtener protocolo:', error);
+      logger.error('Error al obtener protocolo:', String(error));
       throw new Error('No se pudo obtener el protocolo clínico');
     }
   }
@@ -356,7 +356,7 @@ export class MedicalAssistantService {
         redFlags,
       };
     } catch (error) {
-      logger.error('Error al analizar conversación:', error);
+      logger.error('Error al analizar conversación:', String(error));
       throw new Error('No se pudo analizar la conversación');
     }
   }

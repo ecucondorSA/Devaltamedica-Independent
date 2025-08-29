@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   collection,
   doc,
@@ -303,7 +303,7 @@ export function useTelemedicineDoctorHybrid(
       try {
         firestore.current = getFirestore();
       } catch (err) {
-        logger.warn('Firebase no disponible, usando solo Socket.IO:', err);
+        logger.warn('Firebase no disponible, usando solo Socket.IO:', err as any);
       }
     }
   }, [firebase.enabled]);
@@ -338,7 +338,7 @@ export function useTelemedicineDoctorHybrid(
       });
 
       socketInstance.on('connect_error', (err: any) => {
-        setError(`Error de conexión: ${err.message}`);
+        setError(`Error de conexión: ${(err as any).message}`);
         setIsConnected(false);
       });
 
@@ -411,7 +411,7 @@ export function useTelemedicineDoctorHybrid(
         socketRef.current = null;
       };
     } catch (err) {
-      setError(`Error al inicializar Socket.IO: ${err}`);
+      setError(`Error al inicializar Socket.IO: ${err as any}`);
     }
   }, [config.doctorId, config.specialty, signaling.url]);
 
@@ -469,7 +469,7 @@ export function useTelemedicineDoctorHybrid(
       setError(null);
 
       try {
-        const newSession: DoctorTelemedicineSession = {
+        const newSession: any = {
           id: `session_${Date.now()}_${config.doctorId}`,
           doctorId: config.doctorId,
           doctorName: config.doctorName,
@@ -527,7 +527,7 @@ export function useTelemedicineDoctorHybrid(
 
         return newSession.id;
       } catch (err) {
-        const errorMsg = `Error al crear sesión médica: ${err}`;
+        const errorMsg = `Error al crear sesión médica: ${err as any}`;
         setError(errorMsg);
         throw new Error(errorMsg);
       } finally {
@@ -561,9 +561,9 @@ export function useTelemedicineDoctorHybrid(
             orderBy('timestamp', 'asc'),
           );
 
-          const messagesSnapshot = await messagesQuery.get();
+          const messagesSnapshot = await (messagesQuery as any).get();
           const messages = messagesSnapshot.docs.map(
-            (doc) =>
+            (doc: any) =>
               ({
                 id: doc.id,
                 ...doc.data(),
@@ -579,9 +579,9 @@ export function useTelemedicineDoctorHybrid(
             orderBy('timestamp', 'desc'),
           );
 
-          const vitalSignsSnapshot = await vitalSignsQuery.get();
+          const vitalSignsSnapshot = await (vitalSignsQuery as any).get();
           const vitalSigns = vitalSignsSnapshot.docs.map(
-            (doc) =>
+            (doc: any) =>
               ({
                 id: doc.id,
                 ...doc.data(),
@@ -596,7 +596,7 @@ export function useTelemedicineDoctorHybrid(
 
         await logMedicalAction('session_joined', { sessionId });
       } catch (err) {
-        setError(`Error al unirse a la sesión: ${err}`);
+        setError(`Error al unirse a la sesión: ${err as any}`);
       } finally {
         setIsLoading(false);
       }
@@ -765,7 +765,7 @@ export function useTelemedicineDoctorHybrid(
 
         await logMedicalAction('session_ended', { sessionId, duration: updatedSession.duration });
       } catch (err) {
-        setError(`Error al finalizar sesión: ${err}`);
+        setError(`Error al finalizar sesión: ${String(err)}`);
       } finally {
         setIsLoading(false);
       }
@@ -789,7 +789,7 @@ export function useTelemedicineDoctorHybrid(
         try {
           await addDoc(collection(firestore.current, collections.auditLogs!), auditEntry);
         } catch (err) {
-          logger.error('Error logging medical action:', err);
+          logger.error('Error logging medical action:', err as any);
         }
       }
     },
@@ -966,10 +966,10 @@ export function useTelemedicineDoctorHybrid(
         orderBy('timestamp', 'desc'),
       );
 
-      const snapshot = await auditQuery.get();
-      return snapshot.docs.map((doc) => doc.data() as AuditLogEntry);
+      const snapshot = await (auditQuery as any).get();
+      return snapshot.docs.map((doc: any) => doc.data() as AuditLogEntry);
     } catch (err) {
-      logger.error('Error fetching audit trail:', err);
+      logger.error('Error fetching audit trail:', err as any);
       return [];
     }
   }, []);

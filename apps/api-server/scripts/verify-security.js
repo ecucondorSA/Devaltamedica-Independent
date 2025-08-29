@@ -1,13 +1,12 @@
-import { logger } from '@altamedica/shared/services/logger.service';
-
 #!/usr/bin/env node
+import { logger } from '@altamedica/shared/services/logger.service';
 /**
  * 🛡️ ALTAMEDICA - SECURITY VERIFICATION SCRIPT
  * Verifica que las mejoras de seguridad estén correctamente implementadas
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 logger.info('🔍 ALTAMEDICA SECURITY VERIFICATION');
 logger.info('===================================');
@@ -60,7 +59,7 @@ test(
 
 // 3. Verificar configuración de Next.js
 logger.info('\n⚙️ 3. VERIFICACIÓN DE CONFIGURACIÓN');
-const nextConfig = fs.readFileSync('next.config.js', 'utf8');
+const nextConfig = fs.readFileSync('next.config.mjs', 'utf8');
 test(
   'React Strict Mode habilitado',
   nextConfig.includes('reactStrictMode: true'),

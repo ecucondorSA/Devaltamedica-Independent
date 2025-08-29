@@ -6,7 +6,7 @@
 
 import { ApiService, apiService } from './ApiService';
 import { medicalService } from './MedicalService';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import type {
   PatientDashboardDTO,
   UserProfileDTO,
@@ -55,7 +55,7 @@ export class DashboardService {
         return await this.getDashboardFromMock();
       }
     } catch (error) {
-      logger.warn('⚠️ Error en API real, fallback a mock:', error);
+      logger.warn('⚠️ Error en API real, fallback a mock:', String(error));
       return await this.getDashboardFromMock();
     }
   }
@@ -83,7 +83,7 @@ export class DashboardService {
         return await this.getUserProfileFromMock();
       }
     } catch (error) {
-      logger.warn('⚠️ Error obteniendo perfil, fallback a mock:', error);
+      logger.warn('⚠️ Error obteniendo perfil, fallback a mock:', String(error));
       return await this.getUserProfileFromMock();
     }
   }
@@ -119,7 +119,7 @@ export class DashboardService {
         };
       }
     } catch (error) {
-      logger.error('❌ Error actualizando preferencias:', error);
+      logger.error('❌ Error actualizando preferencias:', String(error));
       
       return {
         success: false,
@@ -159,7 +159,7 @@ export class DashboardService {
         return await this.refreshSectionFromMock(section);
       }
     } catch (error) {
-      logger.warn(`⚠️ Error refrescando sección ${section}, fallback a mock:`, error);
+      logger.warn(`⚠️ Error refrescando sección ${section}, fallback a mock:`, String(error));
       return await this.refreshSectionFromMock(section);
     }
   }
@@ -479,7 +479,7 @@ export class DashboardService {
       await this.api.get('/health');
       return true;
     } catch (error) {
-      logger.warn('❌ Test de conexión API falló:', error);
+      logger.warn('❌ Test de conexión API falló:', String(error));
       return false;
     }
   }

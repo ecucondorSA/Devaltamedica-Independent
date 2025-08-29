@@ -1,9 +1,8 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface Message {
   id: string;
   sender: string;
@@ -35,7 +34,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
   patientId,
   compact = false,
   onSendMessage,
-  onEmergencyContact
+  onEmergencyContact,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -49,7 +48,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
     const loadData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Simular carga de datos
         const mockTeamMembers: TeamMember[] = [
           {
@@ -58,7 +57,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             role: 'Médico Principal',
             specialty: 'Medicina Interna',
             isOnline: true,
-            avatar: '👩‍⚕️'
+            avatar: '👩‍⚕️',
           },
           {
             id: '2',
@@ -67,7 +66,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             specialty: 'Cardiología',
             isOnline: false,
             lastSeen: new Date(Date.now() - 2 * 3600000),
-            avatar: '👨‍⚕️'
+            avatar: '👨‍⚕️',
           },
           {
             id: '3',
@@ -75,7 +74,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             role: 'Enfermera',
             specialty: 'Cuidados Intensivos',
             isOnline: true,
-            avatar: '👩‍⚕️'
+            avatar: '👩‍⚕️',
           },
           {
             id: '4',
@@ -83,8 +82,8 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             role: 'Endocrinólogo',
             specialty: 'Endocrinología',
             isOnline: true,
-            avatar: '👨‍⚕️'
-          }
+            avatar: '👨‍⚕️',
+          },
         ];
 
         const mockMessages: Message[] = [
@@ -94,23 +93,25 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             senderType: 'doctor',
             content: 'Hola, ¿cómo se siente hoy? ¿Ha notado algún cambio en sus síntomas?',
             timestamp: new Date(Date.now() - 30 * 60000),
-            isRead: true
+            isRead: true,
           },
           {
             id: '2',
             sender: 'Paciente',
             senderType: 'patient',
-            content: 'Buenos días doctora. Me siento un poco mejor, pero aún tengo dolor de cabeza.',
+            content:
+              'Buenos días doctora. Me siento un poco mejor, pero aún tengo dolor de cabeza.',
             timestamp: new Date(Date.now() - 25 * 60000),
-            isRead: true
+            isRead: true,
           },
           {
             id: '3',
             sender: 'Dr. María García',
             senderType: 'doctor',
-            content: 'Entiendo. ¿El dolor es constante o intermitente? ¿Ha tomado el medicamento que le receté?',
+            content:
+              'Entiendo. ¿El dolor es constante o intermitente? ¿Ha tomado el medicamento que le receté?',
             timestamp: new Date(Date.now() - 20 * 60000),
-            isRead: false
+            isRead: false,
           },
           {
             id: '4',
@@ -118,14 +119,14 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             senderType: 'nurse',
             content: 'Le envío un recordatorio: su próxima cita es mañana a las 10:00 AM.',
             timestamp: new Date(Date.now() - 10 * 60000),
-            isRead: false
-          }
+            isRead: false,
+          },
         ];
 
         setTeamMembers(mockTeamMembers);
         setMessages(mockMessages);
       } catch (error) {
-        logger.error('Error cargando datos:', error);
+        logger.error('Error cargando datos:', error as string);
       } finally {
         setIsLoading(false);
       }
@@ -144,30 +145,30 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
       senderType: 'patient',
       content: newMessage,
       timestamp: new Date(),
-      isRead: false
+      isRead: false,
     };
 
-    setMessages(prev => [message, ...prev]);
+    setMessages((prev) => [message, ...prev]);
     setNewMessage('');
     onSendMessage?.(newMessage, selectedMember ? [selectedMember] : []);
   };
 
   // Obtener icono según tipo de remitente
-  const getSenderIcon = (senderType: string) => {
-    const icons = {
+  const getSenderIcon = (senderType: 'doctor' | 'nurse' | 'admin' | 'patient') => {
+    const icons: Record<'doctor' | 'nurse' | 'admin' | 'patient', string> = {
       doctor: '👨‍⚕️',
       nurse: '👩‍⚕️',
       admin: '👨‍💼',
-      patient: '👤'
+      patient: '👤',
     };
     return icons[senderType] || '👤';
   };
 
   // Vista compacta
   if (compact) {
-    const unreadCount = messages.filter(m => !m.isRead && m.senderType !== 'patient').length;
+    const unreadCount = messages.filter((m) => !m.isRead && m.senderType !== 'patient').length;
     const recentMessages = messages.slice(0, 3);
-    
+
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
@@ -187,7 +188,10 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
         ) : (
           <div className="space-y-3">
             {recentMessages.map((message) => (
-              <div key={message.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div
+                key={message.id}
+                className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
+              >
                 <span className="text-xl">{getSenderIcon(message.senderType)}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
@@ -198,15 +202,15 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
                   </div>
                   <p className="text-sm text-gray-600 truncate">{message.content}</p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {message.timestamp.toLocaleTimeString('es-MX', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                    {message.timestamp.toLocaleTimeString('es-MX', {
+                      hour: '2-digit',
+                      minute: '2-digit',
                     })}
                   </p>
                 </div>
               </div>
             ))}
-            
+
             {messages.length > 3 && (
               <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                 Ver {messages.length - 3} mensajes más...
@@ -227,10 +231,10 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
           <div>
             <h2 className="text-xl font-bold text-gray-900">Comunicación con el Equipo</h2>
             <p className="text-sm text-gray-600 mt-1">
-              {teamMembers.filter(m => m.isOnline).length} miembros en línea
+              {teamMembers.filter((m) => m.isOnline).length} miembros en línea
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             {onEmergencyContact && (
               <button
@@ -251,7 +255,7 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
           <div className="p-4 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900">Miembros del Equipo</h3>
           </div>
-          
+
           <div className="overflow-y-auto h-full">
             {teamMembers.map((member) => (
               <button
@@ -264,9 +268,11 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
                 <div className="flex items-center space-x-3">
                   <div className="relative">
                     <span className="text-2xl">{member.avatar}</span>
-                    <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
-                      member.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                    }`}></span>
+                    <span
+                      className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
+                        member.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                      }`}
+                    ></span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{member.name}</p>
@@ -276,9 +282,10 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
                     )}
                     {!member.isOnline && member.lastSeen && (
                       <p className="text-xs text-gray-400">
-                        Última vez: {member.lastSeen.toLocaleTimeString('es-MX', { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
+                        Última vez:{' '}
+                        {member.lastSeen.toLocaleTimeString('es-MX', {
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </p>
                     )}
@@ -295,13 +302,15 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
           {selectedMember && (
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center space-x-3">
-                <span className="text-2xl">{teamMembers.find(m => m.id === selectedMember)?.avatar}</span>
+                <span className="text-2xl">
+                  {teamMembers.find((m) => m.id === selectedMember)?.avatar}
+                </span>
                 <div>
                   <p className="font-semibold text-gray-900">
-                    {teamMembers.find(m => m.id === selectedMember)?.name}
+                    {teamMembers.find((m) => m.id === selectedMember)?.name}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {teamMembers.find(m => m.id === selectedMember)?.role}
+                    {teamMembers.find((m) => m.id === selectedMember)?.role}
                   </p>
                 </div>
               </div>
@@ -320,35 +329,39 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
             ) : (
               <div className="space-y-4">
                 {messages
-                  .filter(m => m.senderType !== 'patient' || selectedMember === 'all')
+                  .filter((m) => m.senderType !== 'patient' || selectedMember === 'all')
                   .slice(0, showAllMessages ? undefined : 10)
                   .map((message) => (
                     <div
                       key={message.id}
                       className={`flex ${message.senderType === 'patient' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                        message.senderType === 'patient'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-900'
-                      }`}>
+                      <div
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                          message.senderType === 'patient'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-100 text-gray-900'
+                        }`}
+                      >
                         <div className="flex items-center space-x-2 mb-1">
                           <span className="text-sm">{getSenderIcon(message.senderType)}</span>
                           <span className="text-xs opacity-75">{message.sender}</span>
                         </div>
                         <p className="text-sm">{message.content}</p>
-                        <p className={`text-xs mt-1 ${
-                          message.senderType === 'patient' ? 'text-blue-100' : 'text-gray-500'
-                        }`}>
-                          {message.timestamp.toLocaleTimeString('es-MX', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                        <p
+                          className={`text-xs mt-1 ${
+                            message.senderType === 'patient' ? 'text-blue-100' : 'text-gray-500'
+                          }`}
+                        >
+                          {message.timestamp.toLocaleTimeString('es-MX', {
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                         </p>
                       </div>
                     </div>
                   ))}
-                
+
                 {messages.length > 10 && !showAllMessages && (
                   <button
                     onClick={() => setShowAllMessages(true)}
@@ -389,4 +402,4 @@ const TeamCommunication: React.FC<TeamCommunicationProps> = ({
   );
 };
 
-export default TeamCommunication; 
+export default TeamCommunication;

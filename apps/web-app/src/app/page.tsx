@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // 🚀 OPTIMIZED LAZY LOADING - Componentes críticos diferidos
-const VideoCarousel = dynamic(() => import('@/components/home/VideoCarouselOptimized'), {
+const VideoCarousel = dynamic(() => import('@/components/home/VideoCarousel'), {
   loading: () => <OptimizedSkeleton icon={Video} text="Cargando demos..." />,
   ssr: false,
 });
@@ -68,65 +68,72 @@ export default function HomePage() {
 
       <main>
         {/* Hero Section */}
-        <section 
-          className="relative pt-20 pb-32 overflow-hidden bg-neutral-50" 
+        <section
+          className="relative pt-20 pb-32 overflow-hidden bg-neutral-50"
           aria-label="Sección principal"
         >
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center xl:text-left xl:max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-display font-bold text-neutral-900 mb-6">
-              Gestión Inteligente de Salud
-              <span className="text-primary-500 block mt-2">Digitalización Médica Integral</span>
-            </h1>
-            <p className="text-xl text-neutral-600 mb-8 max-w-3xl mx-auto">
-              Sistema completo de gestión sanitaria que centraliza historiales clínicos, optimiza
-              procesos médicos y facilita la coordinación entre profesionales de la salud.
-            </p>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center xl:text-left xl:max-w-3xl">
+              <h1 className="text-5xl md:text-6xl font-display font-bold text-neutral-900 mb-6">
+                Gestión Inteligente de Salud
+                <span className="text-primary-500 block mt-2">Digitalización Médica Integral</span>
+              </h1>
+              <p className="text-xl text-neutral-600 mb-8 max-w-3xl mx-auto">
+                Sistema completo de gestión sanitaria que centraliza historiales clínicos, optimiza
+                procesos médicos y facilita la coordinación entre profesionales de la salud.
+              </p>
 
-            {/* Onboarding Cards */}
-            <div className="grid md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto xl:mx-0" role="group" aria-label="Selecciona tu tipo de cuenta">
-              <button
-                onClick={() => handleRoleSelect('patient')}
-                className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                aria-label="Registrarse como Paciente"
+              {/* Onboarding Cards */}
+              <div
+                className="grid md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto xl:mx-0"
+                role="group"
+                aria-label="Selecciona tu tipo de cuenta"
               >
-                <Heart className="w-12 h-12 text-primary-500 mb-4 mx-auto" aria-hidden="true" />
-                <h3 className="font-display font-semibold text-lg mb-2">Soy Paciente</h3>
-                <p className="text-neutral-600 text-sm">
-                  Accede a consultas médicas, gestiona tu historial y recibe atención 24/7
-                </p>
-                <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <button
+                  onClick={() => handleRoleSelect('patient')}
+                  className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Registrarse como Paciente"
+                >
+                  <Heart className="w-12 h-12 text-primary-500 mb-4 mx-auto" aria-hidden="true" />
+                  <h3 className="font-display font-semibold text-lg mb-2">Soy Paciente</h3>
+                  <p className="text-neutral-600 text-sm">
+                    Accede a consultas médicas, gestiona tu historial y recibe atención 24/7
+                  </p>
+                  <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
+                </button>
 
-              <button
-                onClick={() => handleRoleSelect('doctor')}
-                className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                aria-label="Registrarse como Médico"
-              >
-                <Stethoscope className="w-12 h-12 text-primary-500 mb-4 mx-auto" aria-hidden="true" />
-                <h3 className="font-display font-semibold text-lg mb-2">Soy Médico</h3>
-                <p className="text-neutral-600 text-sm">
-                  Gestiona pacientes, realiza teleconsultas y accede a herramientas de IA
-                </p>
-                <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <button
+                  onClick={() => handleRoleSelect('doctor')}
+                  className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Registrarse como Médico"
+                >
+                  <Stethoscope
+                    className="w-12 h-12 text-primary-500 mb-4 mx-auto"
+                    aria-hidden="true"
+                  />
+                  <h3 className="font-display font-semibold text-lg mb-2">Soy Médico</h3>
+                  <p className="text-neutral-600 text-sm">
+                    Gestiona pacientes, realiza teleconsultas y accede a herramientas de IA
+                  </p>
+                  <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
+                </button>
 
-              <button
-                onClick={() => handleRoleSelect('company')}
-                className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                aria-label="Registrarse como Empresa"
-              >
-                <Users className="w-12 h-12 text-primary-500 mb-4 mx-auto" aria-hidden="true" />
-                <h3 className="font-display font-semibold text-lg mb-2">Soy Empresa</h3>
-                <p className="text-neutral-600 text-sm">
-                  Planes de salud, gestión de empleados y beneficios corporativos
-                </p>
-                <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <button
+                  onClick={() => handleRoleSelect('company')}
+                  className="group bg-white p-6 rounded-xl shadow-altamedica hover:shadow-altamedica-xl transition-all transform hover:scale-105 border-2 border-transparent hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Registrarse como Empresa"
+                >
+                  <Users className="w-12 h-12 text-primary-500 mb-4 mx-auto" aria-hidden="true" />
+                  <h3 className="font-display font-semibold text-lg mb-2">Soy Empresa</h3>
+                  <p className="text-neutral-600 text-sm">
+                    Planes de salud, gestión de empleados y beneficios corporativos
+                  </p>
+                  <ArrowRight className="w-5 h-5 mt-4 mx-auto text-primary-500 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Video Demos */}
         <section className="py-16 bg-white" aria-label="Videos demostrativos">

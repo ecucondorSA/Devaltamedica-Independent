@@ -7,12 +7,12 @@
 
 import { Button, Card, Input } from '@altamedica/ui';
 import { AltaChat } from '@altamedica/alta-agent';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 import { ArrowLeft, CheckCircle, Heart, Info, Shield, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function AltaAnamnesisPage() {
   const { user } = useAuth();
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function AltaAnamnesisPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          patientId: user?.id,
+          patientId: (user as any)?.id || '',
           summary: JSON.parse(summary),
           completedAt: new Date().toISOString(),
         }),
@@ -44,7 +44,7 @@ export default function AltaAnamnesisPage() {
         router.push('/dashboard?anamnesis=completed');
       }
     } catch (error) {
-      logger.error('Error guardando anamnesis:', error);
+      logger.error('Error guardando anamnesis:', error as any);
     }
   };
 

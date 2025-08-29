@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
 // Página de inicio que vive dentro del nuevo shell del layout.
 // Incluye: bienvenida, panel de video (placeholder) plegable y actualización de historial.
 import { Button, Card, Input } from '@altamedica/ui';
-import DiagnosisPresuntivo from '@/components/ai-diagnosis/DiagnosisPresuntivo';
-import TelemedicineMVP from '@/components/telemedicine/TelemedicineClient';
-import { useLabResults } from '@/hooks/useLabResults';
-import { usePrescriptions } from '@/hooks/usePrescriptions';
+import DiagnosisPresuntivo from '../components/ai-diagnosis/DiagnosisPresuntivo';
+import TelemedicineMVP from '../components/telemedicine/TelemedicineClient';
+import { useLabResults } from '../hooks/useLabResults';
+import { usePrescriptions } from '@altamedica/hooks';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -16,7 +16,12 @@ export default function Home() {
   const [isInCall, setIsInCall] = useState(false);
   const searchParams = useSearchParams();
   const { labResults, loading: labsLoading, error: labsError, searchLabResults } = useLabResults();
-  const { prescriptions, loading: rxLoading, error: rxError, searchPrescriptions } = usePrescriptions();
+  const {
+    prescriptions,
+    isLoading: rxLoading,
+    error: rxError,
+    refetch: searchPrescriptions,
+  } = usePrescriptions();
   const hasEmergency = useMemo(() => searchParams.get('emergency') === '1', [searchParams]);
 
   useEffect(() => {
@@ -70,8 +75,12 @@ export default function Home() {
       </section>
       {/* Título principal según boceto */}
       <section className="bg-white rounded-xl border shadow-sm p-4">
-        <h1 className="text-lg sm:text-xl font-semibold">Centro de monitoreo personal y atención médica prioritaria</h1>
-        <p className="text-sm text-neutral-600 mt-1">Sistema listo para telemedicina y seguimiento.</p>
+        <h1 className="text-lg sm:text-xl font-semibold">
+          Centro de monitoreo personal y atención médica prioritaria
+        </h1>
+        <p className="text-sm text-neutral-600 mt-1">
+          Sistema listo para telemedicina y seguimiento.
+        </p>
       </section>
 
       {/* Telemedicina (plegable) */}
@@ -82,13 +91,16 @@ export default function Home() {
             type="button"
             aria-expanded={teleOpen}
             aria-controls="tele-body"
-            onClick={() => setTeleOpen(o => !o)}
+            onClick={() => setTeleOpen((o) => !o)}
             className="text-xs rounded-md border px-2 py-1 hover:bg-neutral-50"
           >
             {teleOpen ? 'Ocultar' : 'Mostrar'}
           </button>
         </div>
-        <div id="tele-body" className={`${teleOpen ? 'max-h-[1000px]' : 'max-h-0'} transition-[max-height] duration-300 ease-in-out overflow-hidden` }>
+        <div
+          id="tele-body"
+          className={`${teleOpen ? 'max-h-[1000px]' : 'max-h-0'} transition-[max-height] duration-300 ease-in-out overflow-hidden`}
+        >
           <div className="p-4">
             {isInCall ? (
               <TelemedicineMVP
@@ -104,14 +116,14 @@ export default function Home() {
                   <div className="text-center space-y-4">
                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
                       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
+                        <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" />
                       </svg>
                     </div>
                     <h3 className="text-lg font-semibold">Sistema de Telemedicina</h3>
                     <p className="text-sm text-white/80 max-w-sm">
                       Conecta directamente con médicos especialistas a través de videollamada segura
                     </p>
-                    <button 
+                    <button
                       onClick={() => setIsInCall(true)}
                       className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                     >
@@ -119,7 +131,7 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Indicadores de estado en las esquinas */}
                 <div className="absolute top-4 right-4">
                   <div className="bg-green-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
@@ -131,7 +143,9 @@ export default function Home() {
             )}
           </div>
         </div>
-  <div className="border-t px-4 py-2 text-xs text-neutral-500">Sistema único de videomedicina</div>
+        <div className="border-t px-4 py-2 text-xs text-neutral-500">
+          Sistema único de videomedicina
+        </div>
       </section>
 
       {/* Diagnóstico presuntivo y actualización de historial */}
@@ -141,9 +155,13 @@ export default function Home() {
         </section>
         <section className="bg-white rounded-xl border shadow-sm p-4">
           <h3 className="text-sm font-semibold">Actualización de Historial</h3>
-          <p className="text-xs text-neutral-500 mt-2">Panel de actualización de historial médico</p>
+          <p className="text-xs text-neutral-500 mt-2">
+            Panel de actualización de historial médico
+          </p>
           <div className="mt-3">
-            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">Actualizar datos</button>
+            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">
+              Actualizar datos
+            </button>
           </div>
         </section>
       </div>
@@ -154,44 +172,53 @@ export default function Home() {
         <section className="bg-white rounded-xl border shadow-sm p-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">Resultados de laboratorio</h3>
-            <Link href="/lab-results" className="text-xs text-primary-700 hover:underline">Ver todos</Link>
+            <Link href="/lab-results" className="text-xs text-primary-700 hover:underline">
+              Ver todos
+            </Link>
           </div>
           {labsLoading && <p className="text-xs text-neutral-500 mt-2">Cargando…</p>}
           {labsError && <p className="text-xs text-red-600 mt-2">{labsError}</p>}
-          {!labsLoading && !labsError && (
-            labResults.length > 0 ? (
+          {!labsLoading &&
+            !labsError &&
+            (labResults.length > 0 ? (
               <ul className="mt-3 space-y-2">
-        {labResults.slice(0,2).map(l => (
+                {labResults.slice(0, 2).map((l) => (
                   <li key={l.id} className="text-xs border rounded-md p-2 hover:bg-neutral-50">
                     <div className="font-medium">{l.testName}</div>
-          <div className="text-neutral-600">{l.result}</div>
-          <div className="text-[10px] text-neutral-500 mt-1">{l.reportDate}</div>
+                    <div className="text-neutral-600">{l.result}</div>
+                    <div className="text-[10px] text-neutral-500 mt-1">{l.reportDate}</div>
                   </li>
                 ))}
               </ul>
             ) : (
               <p className="text-xs text-neutral-500 mt-2">Sin datos recientes</p>
-            )
-          )}
+            ))}
           <div className="mt-3">
-            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">Subir resultado</button>
+            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">
+              Subir resultado
+            </button>
           </div>
         </section>
 
-        {/* Recetas médicas */}
-        <section className="bg-white rounded-xl border shadow-sm p-4">
+        {/* Recetas médicas - Temporalmente comentado por incompatibilidad de tipos */}
+        {/* <section className="bg-white rounded-xl border shadow-sm p-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">Recetas médicas</h3>
-            <Link href="/prescriptions" className="text-xs text-primary-700 hover:underline">Ver todas</Link>
+            <Link href="/prescriptions" className="text-xs text-primary-700 hover:underline">
+              Ver todas
+            </Link>
           </div>
           {rxLoading && <p className="text-xs text-neutral-500 mt-2">Cargando…</p>}
           {rxError && <p className="text-xs text-red-600 mt-2">{rxError}</p>}
-          {!rxLoading && !rxError && (
-            prescriptions.length > 0 ? (
+          {!rxLoading &&
+            !rxError &&
+            (prescriptions.length > 0 ? (
               <ul className="mt-3 space-y-2">
-                {prescriptions.slice(0,2).map(r => (
+                {prescriptions.slice(0, 2).map((r) => (
                   <li key={r.id} className="text-xs border rounded-md p-2 hover:bg-neutral-50">
-                    <div className="font-medium">{r.medicationName} {r.dosage} • {r.frequency}</div>
+                    <div className="font-medium">
+                      {r.medicationName} {r.dosage} • {r.frequency}
+                    </div>
                     <div className="text-neutral-600">{r.instructions}</div>
                     <div className="text-[10px] text-neutral-500 mt-1">{r.date}</div>
                   </li>
@@ -199,13 +226,16 @@ export default function Home() {
               </ul>
             ) : (
               <p className="text-xs text-neutral-500 mt-2">Sin datos recientes</p>
-            )
-          )}
+            ))}
           <div className="mt-3 flex items-center gap-2">
-            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">Descargar</button>
-            <button className="rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm px-3 py-2">Ver QR</button>
+            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">
+              Descargar
+            </button>
+            <button className="rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm px-3 py-2">
+              Ver QR
+            </button>
           </div>
-        </section>
+        </section> */}
 
         {/* Recomendaciones de descanso */}
         <section className="bg-white rounded-xl border shadow-sm p-4">
@@ -226,7 +256,9 @@ export default function Home() {
           </div>
           <p className="text-xs text-neutral-500 mt-2">Sin datos recientes</p>
           <div className="mt-3">
-            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">Actualizar historial</button>
+            <button className="rounded-lg border bg-white hover:bg-neutral-50 text-sm px-3 py-2">
+              Actualizar historial
+            </button>
           </div>
         </section>
       </div>

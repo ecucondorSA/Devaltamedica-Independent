@@ -1,121 +1,18 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**",
-        "lib/**",
-        ".next/**",
-        "!.next/cache/**",
-        "build/**"
-      ],
-      "cache": true,
-      "env": [
-        "NODE_ENV",
-        "NEXT_PUBLIC_*"
-      ]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true,
-      "env": [
-        "NODE_ENV",
-        "NEXT_PUBLIC_*",
-        "FIREBASE_*",
-        "DATABASE_URL"
-      ]
+      "outputs": ["dist/**", ".next/**"],
+      "cache": true
     },
     "lint": {
-      "outputs": ["eslint-report.json", "eslint-report.html"],
-      "cache": true,
-      "dependsOn": []
-    },
-    "type-check": {
-      "outputs": ["tsconfig.tsbuildinfo"],
-      "cache": true,
-      "dependsOn": ["^build"]
+      "cache": true
     },
     "test": {
-      "outputs": ["coverage/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
-    },
-    "test:unit": {
-      "outputs": ["coverage/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
-    },
-    "test:integration": {
-      "outputs": ["coverage/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI",
-        "DATABASE_URL"
-      ]
-    },
-    "test:e2e": {
-      "outputs": ["playwright-report/**", "test-results/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI",
-        "E2E_USE_MOCK_LOGIN"
-      ]
-    },
-    "test:hipaa": {
-      "outputs": ["coverage/hipaa/**", "hipaa-report.json"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
-    },
-    "test:a11y": {
-      "outputs": ["a11y-report/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
-    },
-    "test:coverage": {
-      "outputs": ["coverage/**"],
-      "cache": false,
-      "dependsOn": ["test:unit", "test:integration", "test:hipaa"]
-    },
-    "test:performance": {
-      "outputs": ["performance-report/**"],
-      "cache": false,
-      "dependsOn": ["build"],
-      "env": [
-        "NODE_ENV",
-        "CI"
-      ]
-    },
-    "clean": {
-      "cache": false
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": true
     }
-  },
-  "globalEnv": [
-    "TURBO_TOKEN",
-    "TURBO_TEAM",
-    "VERCEL_URL",
-    "PORT",
-    "NODE_ENV"
-  ]
+  }
 }

@@ -6,7 +6,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { Button } from '../Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../Card';
 import { Input } from '../Input';
-import { Alert, AlertDescription } from '../alert';
+import { Alert, AlertDescription } from '../../alert';
 import { Loader2, CreditCard, Check, X, Shield } from 'lucide-react';
 
 // Simple logger implementation to avoid circular dependencies
@@ -30,7 +30,7 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 /**
  * Payment Method Form Component

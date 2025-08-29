@@ -1,28 +1,80 @@
-// ==================== BASE TYPES ====================
+// ==================== UNIFIED USER TYPE ====================
+// NOTA: Este es el tipo User unificado para resolver conflictos
+// Compatible con apps/admin y todas las apps
 
-export interface User {
-  uid: string;
+import { UserRole } from '../auth/roles';
+
+export interface BaseEntity {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface User extends BaseEntity {
+  // IDs compatibles
+  id: string; // Para apps que usan 'id'
+  uid?: string; // Para apps que usan 'uid' (Firebase)
+
+  // Info personal
   email: string;
   firstName: string;
   lastName: string;
+  name?: string; // Para compatibilidad con apps que usan 'name'
+  displayName?: string; // Para componentes admin
+
+  // Contacto
   phone?: string;
+  phoneNumber?: string; // Para compatibilidad
   avatar?: string;
+
+  // Role y permisos
   role: UserRole;
+
+  // Estados
   isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  status?: 'active' | 'inactive' | 'pending' | 'suspended'; // Para componentes admin
+  profileComplete?: boolean;
+
+  // Timestamps
+  lastLogin?: string;
   lastLoginAt?: Date;
-  profileComplete: boolean;
 }
 
-export type UserRole = "admin" | "doctor" | "patient" | "staff";
+// Removido: export type UserRole = 'admin' | 'doctor' | 'patient' | 'staff'; - ahora importado desde auth/roles
+
+// Export tambien como 'name' para compatibilidad
+export type UserWithName = User & {
+  name: string;
+};
+
+// Helper para convertir User a formato con name
+export function userToNameFormat(user: User): UserWithName {
+  return {
+    ...user,
+    name: `${user.firstName} ${user.lastName}`,
+  };
+}
+
+// Helper para asegurar compatibilidad uid/id
+export function normalizeUser(user: any): User {
+  return {
+    ...user,
+    id: user.id || user.uid,
+    uid: user.uid || user.id,
+    phone: user.phone || user.phoneNumber,
+    phoneNumber: user.phoneNumber || user.phone,
+    name: user.name || `${user.firstName} ${user.lastName}`,
+  };
+}
+
+// ==================== OTHER BASE TYPES ====================
 
 export interface SearchFilters {
   search?: string;
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface DateRange {
@@ -40,20 +92,15 @@ export interface Location {
   zipCode?: string;
 }
 
-export type AppointmentType =
-  | "consultation"
-  | "follow-up"
-  | "emergency"
-  | "routine"
-  | "specialist";
+export type AppointmentType = 'consultation' | 'follow-up' | 'emergency' | 'routine' | 'specialist';
 
 export type AppointmentStatus =
-  | "scheduled"
-  | "confirmed"
-  | "in-progress"
-  | "completed"
-  | "cancelled"
-  | "no-show";
+  | 'scheduled'
+  | 'confirmed'
+  | 'in-progress'
+  | 'completed'
+  | 'cancelled'
+  | 'no-show';
 
 export interface Medication {
   name: string;
@@ -64,79 +111,4 @@ export interface Medication {
   sideEffects?: string[];
 }
 
-export type MedicalRecordType =
-  | "consultation"
-  | "diagnosis"
-  | "treatment"
-  | "lab_result"
-  | "imaging"
-  | "prescription"
-  | "vaccination"
-  | "surgery"
-  | "allergy"
-  | "family_history";
-
-export type Priority = "low" | "medium" | "high" | "critical";
-
-export interface LabTestResult {
-  testName: string;
-  value: string | number;
-  unit?: string;
-  referenceRange?: {
-    min: number;
-    max: number;
-  };
-  status: "normal" | "high" | "low" | "critical";
-  notes?: string;
-}
-
-export interface FileUpload {
-  id: string;
-  filename: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
-  url: string;
-  uploadedAt: Date;
-  metadata?: Record<string, any>;
-}
-
-export interface AnalyticsData {
-  appointments: {
-    total: number;
-    completed: number;
-    cancelled: number;
-    byType: Record<string, number>;
-    byStatus: Record<string, number>;
-    trend: Array<{
-      date: string;
-      count: number;
-    }>;
-  };
-  patients: {
-    total: number;
-    new: number;
-    active: number;
-    trend: Array<{
-      date: string;
-      count: number;
-    }>;
-  };
-  revenue: {
-    total: number;
-    byMonth: Array<{
-      month: string;
-      amount: number;
-    }>;
-    byDoctor: Array<{
-      doctorId: string;
-      doctorName: string;
-      amount: number;
-    }>;
-  };
-  performance: {
-    averageAppointmentDuration: number;
-    patientSatisfaction: number;
-    doctorUtilization: number;
-  };
-}
+export type Priority = 'low' | 'medium' | 'high' | 'critical';

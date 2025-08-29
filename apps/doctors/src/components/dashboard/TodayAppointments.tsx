@@ -9,7 +9,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState } from 'react';
 import { TodayAppointment } from '@/hooks/useDashboard';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TodayAppointmentsProps {
   appointments: TodayAppointment[];
   isLoading: boolean;
@@ -57,7 +57,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     try {
       await onMarkComplete(appointment.id);
     } catch (error) {
-      logger.error('Error completando cita:', error);
+      logger.error('Error completando cita:', String(error));
     } finally {
       setIsUpdating(false);
     }

@@ -8,9 +8,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { doc, onSnapshot, collection, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TelemedicineSession {
   id: string;
   roomId: string;
@@ -132,7 +132,7 @@ export function useTelemedicineSessionHybrid(): UseTelemedicineSessionHybridRetu
         } as TelemedicineSession);
       }
     }, (error) => {
-      logger.error('Error listening to session:', error);
+      logger.error('Error listening to session:', String(error));
       setError(`Error de sincronización: ${error.message}`);
     });
 
@@ -155,7 +155,7 @@ export function useTelemedicineSessionHybrid(): UseTelemedicineSessionHybridRetu
       });
       setChatMessages(messages);
     }, (error) => {
-      logger.error('Error listening to messages:', error);
+      logger.error('Error listening to messages:', String(error));
     });
 
     firebaseUnsubscribes.current.push(unsubscribeSession, unsubscribeMessages);
@@ -195,7 +195,7 @@ export function useTelemedicineSessionHybrid(): UseTelemedicineSessionHybridRetu
       });
 
       newSocket.on('connect_error', (error) => {
-        logger.error('Error de conexión:', error);
+        logger.error('Error de conexión:', String(error));
         setError(`Error de conexión: ${error.message}`);
         setIsConnected(false);
       });
@@ -268,7 +268,7 @@ export function useTelemedicineSessionHybrid(): UseTelemedicineSessionHybridRetu
       setSocket(newSocket);
       
     } catch (error) {
-      logger.error('Error inicializando socket:', error);
+      logger.error('Error inicializando socket:', String(error));
       setError(`Error de inicialización: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     }
   }, [authState?.token]);
@@ -321,7 +321,7 @@ export function useTelemedicineSessionHybrid(): UseTelemedicineSessionHybridRetu
       await waitForConnection;
       
     } catch (error) {
-      logger.error('Error joining session:', error);
+      logger.error('Error joining session:', String(error));
       setError(error instanceof Error ? error.message : 'Error desconocido');
     } finally {
       setLoading(false);

@@ -4,7 +4,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Phone } from 'lucide-react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
@@ -28,11 +28,11 @@ export class TelemedicineErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    logger.error('🚨 Error en componente de telemedicina:', error);
+    logger.error('🚨 Error en componente de telemedicina:', String(error));
     
     // Solo logs detallados en desarrollo (HIPAA compliance)
     if (process.env.NODE_ENV === 'development') {
-      logger.error('ErrorInfo:', errorInfo);
+      logger.error('ErrorInfo:', JSON.stringify(errorInfo));
     } else {
       // En producción, solo el tipo de error
       logger.error('Telemedicine error type:', error.name);

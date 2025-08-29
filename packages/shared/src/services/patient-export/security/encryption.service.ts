@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
+import { logger } from '../../logger.service';
 
 /**
  * Encryption Service for Patient Data Export
@@ -76,13 +77,13 @@ export class EncryptionService {
           throw new Error(`Invalid key size: expected ${this.defaultConfig.keySize} bytes`);
         }
       } catch (error) {
-        console.error('[Encryption] Invalid encryption key in environment:', error);
+        logger.error('Invalid encryption key in environment', 'Encryption', error);
         this.encryptionKey = null;
       }
     }
 
     if (!this.encryptionKey) {
-      console.warn('[Encryption] No valid encryption key found, encryption will be disabled');
+      logger.warn('No valid encryption key found, encryption will be disabled', 'Encryption');
     }
   }
 
@@ -171,7 +172,7 @@ export class EncryptionService {
         metadata,
       };
     } catch (error) {
-      console.error('[Encryption] Error encrypting file:', error);
+      logger.error('Error encrypting file', 'Encryption', error);
       throw new Error(`File encryption failed: ${error}`);
     }
   }
@@ -221,7 +222,7 @@ export class EncryptionService {
 
       return outputPath;
     } catch (error) {
-      console.error('[Encryption] Error decrypting file:', error);
+      logger.error('Error decrypting file', 'Encryption', error);
       throw new Error(`File decryption failed: ${error}`);
     }
   }
@@ -257,7 +258,7 @@ export class EncryptionService {
         algorithm,
       };
     } catch (error) {
-      console.error('[Encryption] Error encrypting data:', error);
+      logger.error('Error encrypting data', 'Encryption', error);
       throw new Error(`Data encryption failed: ${error}`);
     }
   }
@@ -287,7 +288,7 @@ export class EncryptionService {
 
       return decrypted;
     } catch (error) {
-      console.error('[Encryption] Error decrypting data:', error);
+      logger.error('Error decrypting data', 'Encryption', error);
       throw new Error(`Data decryption failed: ${error}`);
     }
   }
@@ -328,7 +329,7 @@ export class EncryptionService {
 
       return { key, salt, metadata };
     } catch (error) {
-      console.error('[Encryption] Error deriving key from password:', error);
+      logger.error('Error deriving key from password', 'Encryption', error);
       throw new Error(`Key derivation failed: ${error}`);
     }
   }
@@ -355,7 +356,7 @@ export class EncryptionService {
       const actualChecksum = await this.calculateFileChecksum(filePath);
       return actualChecksum === expectedChecksum;
     } catch (error) {
-      console.error('[Encryption] Error verifying file integrity:', error);
+      logger.error('Error verifying file integrity', 'Encryption', error);
       return false;
     }
   }
@@ -389,7 +390,7 @@ export class EncryptionService {
       // Final deletion
       fs.unlinkSync(filePath);
     } catch (error) {
-      console.error('[Encryption] Error in secure file deletion:', error);
+      logger.error('Error in secure file deletion', 'Encryption', error);
       throw new Error(`Secure file deletion failed: ${error}`);
     }
   }
@@ -425,7 +426,7 @@ export class EncryptionService {
       const jsonData = JSON.stringify(metadata);
       return this.encryptData(jsonData);
     } catch (error) {
-      console.error('[Encryption] Error encrypting export metadata:', error);
+      logger.error('Error encrypting export metadata', 'Encryption', error);
       return null;
     }
   }
@@ -442,7 +443,7 @@ export class EncryptionService {
       const jsonData = this.decryptData(encryptedMetadata);
       return JSON.parse(jsonData);
     } catch (error) {
-      console.error('[Encryption] Error decrypting export metadata:', error);
+      logger.error('Error decrypting export metadata', 'Encryption', error);
       return null;
     }
   }

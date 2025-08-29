@@ -5,15 +5,22 @@ export const authVersion = '1.1.0';
 
 // ============== SERVICIOS ==============
 // Servicio de autenticación consolidado (migrado desde auth-service)
-export { AuthService, PublicUserRole, getAuthService } from './services/AuthService';
+export {
+  AuthService,
+  PublicUserRole,
+  getAuthService,
+  type User as AuthUser,
+} from './services/AuthService';
 // Re-export de UserRole desde types para evitar dependencia cruzada
 export { UserRole } from '@altamedica/types';
 
 // Tipos principales
 export type { AuthState, LoginCredentials, RegisterData, User } from './services/AuthService';
+// Types expected by api-server: re-export AuthToken/AuthResult shapes if present in types package
+export type { AuthResult, AuthToken } from '@altamedica/types';
 
 // ============== HOOKS Y COMPONENTES ==============
-// Hooks de React (migrado y mejorado desde auth-service)
+// Re-exportamos desde client para compatibilidad
 export {
   AuthContext,
   AuthProvider,
@@ -21,12 +28,7 @@ export {
   useProtectedRoute,
   useRequireAuth,
   useRole,
-} from './hooks/useAuth';
-
-// ============== LEGACY EXPORTS ==============
-// Re-export todo desde client.ts para mantener compatibilidad con imports existentes
-// Esto permite que el código existente siga funcionando sin cambios inmediatos
-export * from './client';
+} from './client';
 
 // ============== COMPATIBILIDAD ==============
 // Exportaciones adicionales para compatibilidad con auth-service

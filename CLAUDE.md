@@ -1,712 +1,646 @@
-# AltaMedica - Notas Operativas (Claude)
+# @AltaMedica - Manual para Autocompletado Potente
 
-## Migración de Hosting a Vercel
+## 🤖 Cómo Usar Este Autocompletado Correctamente
 
-- Todas las apps Next (`apps/patients`, `apps/doctors`, `apps/companies`, `apps/admin`, `apps/web-app`) se despliegan ahora en Vercel.
-- `firebase.json` ya no define sitios de Hosting; Firebase se usa para Auth, Firestore, Storage y Functions (Node 20).
-- En Vercel configurar variables `NEXT_PUBLIC_FIREBASE_*` (cliente) y `FIREBASE_SERVICE_ACCOUNT_JSON` (server) por entorno.
-- Evitar usar Edge runtime con `firebase-admin`. Para server actions o API handlers con Admin usar `export const runtime = 'nodejs'`.
+Este manual está diseñado para maximizar la efectividad de Claude como autocompletado inteligente, NO como asistente complaciente.
 
-## Versiones alineadas del monorepo
+### ❌ ERRORES COMUNES QUE DEBES EVITAR
 
-- React 19, React DOM 19
-- Next.js 15.3.4
-- TypeScript 5.5.4
-- firebase (web) 11.10.0, firebase-admin 13.4.0
-- Node 20
+**MAL**: "Ayúdame con mi código"  
+**BIEN**: "Tengo 286 archivos con imports incorrectos. Error: 'Cannot find module @altamedica/types'. Hice pnpm install 50 veces. @GitHub Actions falla en build."
 
-## TypeScript y paths
+**MAL**: "Algo no funciona"  
+**BIEN**: "Puerto 3001 ocupado. API server no inicia. Ya maté procesos node. Error persiste después de reiniciar."
 
-- Nueva base `tsconfig.base.json` en la raíz; todas las apps/paquetes la extienden.
-- Paths monorepo: `@altamedica/*` resuelve a `packages/*/src` y `packages/*/dist`.
+**MAL**: "Optimiza mi aplicación"  
+**BIEN**: "React app renderiza lento. useEffect se ejecuta 47 veces por click. Sospecho loop infinito en componente ProductList línea 23-45."
 
-## Deploy
+### ✅ TEMPLATE PARA PROBLEMAS EFECTIVOS
 
-- Vercel: cada app como proyecto apuntando a su subdirectorio `apps/<app>`.
-- Firebase: `firebase deploy --only functions,firestore,storage`.
-
-# 📜 Manual de Operaciones para IA: Desarrollo Full-Stack Acelerado en AltaMedica
-
-## 🚨🚨🚨 ADVERTENCIA CRÍTICA PARA CLAUDE - LEER PRIMERO 🚨🚨🚨
-
-**CLAUDE PARA EMPEZAR NO EJECUTE ACCIONES DE BUILD, LINT, TSC. LA RAZÓN ES QUE TUS TIMEOUT INTERPRETA COMO ERROR Y EMPIEZA A CREAR ARCHIVOS REDUNDANTES, POR LO TANTO LOS PNPM YO LOS EJECUTO MANUALMENTE.**
-
-### ❌ COMANDOS PROHIBIDOS - NUNCA EJECUTAR:
-
-- `pnpm build`, `pnpm lint`, `pnpm type-check`, `pnpm test`
-- `tsc`, `tsup`, `npm run build`
-- `npm install` o `pnpm install`
-- NINGÚN comando de compilación, validación o instalación
-
-### ✅ ÚNICO PERMITIDO:
-
-- Leer archivos con herramientas Read/Grep/LS
-- Escribir/editar código con Edit/Write
-- Crear documentación
-- Análisis y reportes
-
-**Versión 4.6 - Última actualización: 20 de agosto de 2025**
-
-## ✅ INSTALACIÓN DE DEPENDENCIAS COMPLETADA
-
-### 📊 Estado Actual de Dependencias
-
-- **Total dependencias instaladas:** 245+ packages
-- **Apps con testing habilitado:** 6/6 (100%)
-- **Dependencias críticas resueltas:** 100%
-- **Funcionalidades críticas habilitadas:** 100%
-
-### ✅ Dependencias Críticas Instaladas
-
-- **Testing:** vitest, supertest, node-mocks-http, @testing-library/react, @testing-library/jest-dom
-- **Peer Dependencies:** 100% satisfechas (React, Next.js, build tools)
-- **Funcionales:** @sentry/nextjs, @react-three/fiber, three, framer-motion, cypress
-
-### 📋 Reporte Completo
-
-Ver: `DEPENDENCIES_INSTALLATION_PROGRESS.md` - Reporte completo de instalación exitosa
-
-### ✅ Funcionalidades Habilitadas
-
-- **Testing completo** habilitado en 6 apps
-- **Build sin errores** por dependencias
-- **Funcionalidades críticas** operativas (WebRTC, pagos, monitoring)
-
-## 🔧 CORRECCIONES APLICADAS - CI/CD FUNCIONANDO
-
-### 🚨 Problemas Resueltos (20/08/2025)
-
-#### **Error Principal: Lockfile Desincronizado**
-
-- **Package afectado**: `@altamedica/telemedicine-core`
-- **Dependencias faltantes**: `@types/express-rate-limit`, `@types/ioredis`, `@types/minimatch`
-- **Solución**: Agregadas dependencias y sincronizado lockfile
-
-#### **Configuración TypeScript Corregida**
-
-- **Problema**: `"incremental": true` causando fallos en DTS build
-- **Solución**: Removido del tsconfig.json raíz
-- **Archivo corrupto**: `tsconfig.tsbuildinfo` eliminado
-
-#### **Estado Actual**
-
-- ✅ **Build exitoso**: Todos los packages compilan
-- ✅ **Dependencias sincronizadas**: 100%
-- ✅ **Type Check**: Sin errores
-- 🟡 **GitHub Actions**: Listo para re-ejecución
-
-### 📋 Próximos Pasos
-
-1. Commit y push de correcciones
-2. Re-ejecutar GitHub Actions
-3. Verificar que todos los jobs pasen
-
-## 🆕 AGENTES IA: Oportunidades de Alto Valor
-
-### 📊 ROI Proyectado Total
-
-- **Companies**: $350,000 USD/año por empresa
-- **Professionals**: $35,000 USD/año por profesional
-- **Total caso base**: $490,000 USD/año | **ROI**: 1,533% | **Payback**: 2.2 meses
-
-**Análisis detallado**: Ver `docs/AI-AGENTS-ANALYSIS.md`
-
-## 🤖 Configuración GPT-5 Optimizada para AltaMedica
-
-### Parámetros API Recomendados
-
-```yaml
-# Configuración base para desarrollo médico
-reasoning_effort: 'high' # Para features médicas críticas
-verbosity: 'low' # Global para respuestas concisas
-verbosity_override:
-  code_generation: 'high' # Código detallado y legible
-
-# Configuración por contexto
-medical_emergency:
-  reasoning_effort: 'high'
-  tool_budget: unlimited
-  confirmation: false
-
-routine_operations:
-  reasoning_effort: 'medium'
-  tool_budget: 5
-  confirmation: selective
-
-sensitive_operations:
-  reasoning_effort: 'high'
-  tool_budget: 2
-  confirmation: always
+```
+CONTEXTO: Trabajando en [app específica/tecnología]
+SÍNTOMA: Error exacto [copiar/pegar error completo]
+OBJETIVO: Necesito lograr [resultado específico]
+INTENTOS: Ya probé [lista de cosas que NO funcionaron]
+RESTRICCIONES: No puedo [limitaciones específicas]
+FRUSTRACIÓN: Llevo [tiempo] con esto
 ```
 
-### Responses API Integration
+## 🚨 LIMITES REALES - 100% HONESTIDAD
 
-- **Migrar de Chat Completions a Responses API** para persistencia de razonamiento
-- **Mejora esperada**: +25% en tareas médicas complejas, -60% latencia
-- **Use case principal**: Sesiones largas de telemedicina con WebRTC
+### No Puedo Hacer
 
-### Prompts Estructurados XML
+- Ejecutar código en tu máquina directamente
+- Conectarme a bases de datos externas
+- Instalar dependencias automáticamente
+- Corregir errores de red o hardware
+- Acceder a sistemas que requieren autenticación
 
-El proyecto ahora incluye plantillas optimizadas en `/prompts/`:
+### Sí Puedo Hacer (y lo hago bien)
 
-- `medical-features.xml` - Desarrollo de features médicas con HIPAA
-- `telemedicine-webrtc.xml` - WebRTC y videollamadas optimizadas
-- `compliance-hipaa.xml` - Seguridad y cumplimiento regulatorio
+- Generar código Node.js funcional sin comentarios
+- Analizar errores y sugerir soluciones específicas
+- Crear scripts de automatización
+- Revisar código y detectar problemas
+- Proporcionar alternativas cuando algo no funciona
 
-### Tool Preambles Médicos
+### Zona Gris - Pregúntame Directamente
 
-```xml
-<tool_preambles>
-  <before_medical_operation>
-    🏥 Iniciando operación médica segura...
-    Plan: [1] Validar permisos [2] Encriptar PHI [3] Ejecutar [4] Auditar
-  </before_medical_operation>
+Si necesitas algo que no está claro, di exactamente qué quieres lograr y yo te diré si puedo ayudar.
 
-  <progress_update>
-    ✅ Completado: [TAREA]
-    🔄 En progreso: [ACTUAL]
-    ⏭️ Siguiente: [PROXIMA]
-  </progress_update>
-</tool_preambles>
+## 🔧 ARQUITECTURA REAL @ALTAMEDICA
+
+### Apps Funcionales (Estado Honesto)
+
+```
+✅ api-server (3001) - 95% producción
+✅ doctors (3002) - 85% funcional
+✅ patients (3003) - 95% funcional
+✅ companies (3004) - 80% funcional
+⚠️ admin (3005) - 40% funcional
+⚠️ web-app (3000) - 70% funcional
+✅ signaling (8888) - 90% funcional
 ```
 
-### Metaprompting para Optimización
+### Problemas Conocidos
 
-Usar GPT-5 para mejorar sus propios prompts:
+1. **@GitHub Actions falla**: Lockfile desincronizado
+2. **@Admin app**: Necesita 60% más desarrollo
+3. **@Web-app**: Solo landing page, falta todo el contenido
+4. **@Dependencias**: TypeScript versiones inconsistentes
+
+## 📦 COMANDOS QUE FUNCIONAN
+
+### Desarrollo (Verificados)
 
 ```bash
-# Script disponible para metaprompting
-powershell -File scripts/gpt5-metaprompt.ps1 -Prompt "current_prompt.xml"
+pnpm dev:medical
+pnpm dev:core
+cd apps/api-server && npm run dev
 ```
 
-## 🛡️ Compliance y Seguridad
+### Diagnóstico (Útiles)
 
-### Estado Actual
+```bash
+netstat -ano | findstr :3001
+pnpm diagnose:api
+git status
+```
 
-- **Sistema de auditoría con hash chain**: ✅ Implementado y funcionando
-- **Compliance HIPAA**: ✅ 98% cobertura en tests automatizados
-- **Referencias legales**: Ley 25.326, Ley 26.529 Art. 15, Ley 27.706, RG AFIP 4291/2018
+### Build (Problemáticos - Usar con Cuidado)
 
-### Fases de Implementación
+```bash
+pnpm type-check
+```
 
-- **Fase MVP**: Registro mínimo obligatorio (timestamp, userId, action, resource) ✅
-- **Fase Avanzada**: Integridad criptográfica, verificación batch, métricas ✅
+## 🎯 COMO FUNCIONO MEJOR
 
-**Detalles completos**: Ver `CHANGELOG.md` para historial de cambios de seguridad
+### Dame Contexto Específico
 
-## 🎉 ESTADO ACTUAL DEL PROYECTO
+```javascript
+const analyzeError = (error, context, attempts) => {
+  const patterns = detectErrorPatterns(error);
+  const solutions = filterByContext(patterns, context);
+  return solutions.filter((s) => !attempts.includes(s));
+};
+```
 
-### **Progreso de Consolidación Completado**
+### Muestra el Error Real
 
-- **Duplicación reducida**: 25-30% → ~15% ✅
-- **Servicios unificados**: 10/10 completados ✅
-- **Backwards compatibility**: 100% mantenida ✅
-- **Testing coverage**: 1,894 líneas test médico crítico ✅
+```bash
+node altamedica-diagnosis.js
+```
 
-### **Sistemas Unificados Principales**
+### Dime Qué Intentaste
 
-- ✅ **UnifiedTelemedicineService**: 3 servicios → 1 centralizado (365 líneas)
-- ✅ **@altamedica/anamnesis**: Paquete completo historia clínica (630 líneas)
-- ✅ **useMedicalHistoryUnified.ts**: Consolidación hooks médicos (1,074 líneas)
-- ✅ **useTelemedicineUnified.ts**: Telemedicina empresarial (858 líneas)
-- ✅ **UnifiedNotificationSystem**: 90% reducción duplicación servicios
+```javascript
+const avoidRepeating = (previousAttempts) => {
+  return newSolutions.filter((s) => !previousAttempts.includes(s));
+};
+```
 
-**Detalles históricos completos**: Ver `CHANGELOG.md`
+## 🚫 COMANDOS PROHIBIDOS PARA @CLAUDE
 
-Tu rol es ser un **EXPERTO EN CODIFICACIÓN EFICIENTE**. Tu misión principal es:
+```bash
+pnpm install
+pnpm build
+npm run lint
+tsc
+```
 
-1. **BUSCAR** código existente antes de crear nuevo
-2. **REUTILIZAR** componentes, hooks y tipos de packages
-3. **ELIMINAR** duplicaciones inmediatamente al detectarlas
-4. **NUNCA** crear archivos duplicados (layout.tsx, layoutSimple.tsx, etc.)
+**Razón**: Timeout + errores = @Claude crea archivos redundantes
 
-**REGLA DE ORO**: Si ya existe en `packages/*`, REUTILIZAR. Si no existe, verificar 3 veces antes de crear.
+## ✅ COMANDOS PERMITIDOS PARA @CLAUDE
 
-**IMPORTANTE**: Usar el worktree correcto según la tarea:
+```bash
+node
+python
+powershell
+cat
+ls
+grep
+```
 
-- Para eliminar duplicaciones: usar `devaltamedica-audit`
-- Para conectar features: usar `devaltamedica-integrate`
-- Para validar: usar `devaltamedica-validate`
-- NUNCA mezclar tareas entre worktrees
+## 🔍 PATRONES DE DEBUGGING
 
-## Capítulo 1: La Filosofía - Por Qué Trabajamos Así
+### Error de Imports
 
-Entender _por qué_ nuestra base de código está estructurada de esta manera es crucial para tomar las decisiones correctas. Nuestro monorepo (`pnpm` con `turborepo`) no es solo una colección de carpetas; es un sistema diseñado para:
+```javascript
+const fixImports = (file) => {
+  return file.replace(/from ['"]\.\.\//g, "from '@altamedica/");
+};
+```
 
-- **Máxima Reutilización:** El código escrito una vez en un `package` sirve a todas las aplicaciones, presentes y futuras. Esto acelera radicalmente el desarrollo.
-- **Consistencia Absoluta:** Todas nuestras aplicaciones se sienten como una sola plataforma unificada porque comparten los mismos componentes de UI, tipos de datos y lógica de cliente.
-- **Mantenibilidad Centralizada:** Un cambio en una regla de negocio en el `api-server` se aplica instantáneamente a todos. Una corrección de un bug en un componente de `@altamedica/ui` lo arregla en todas partes.
-- **Separación de Intereses Clara:**
-  - `apps/`: Se preocupan de la **presentación** (el "qué ve el usuario").
-  - `packages/`: Proveen las **herramientas** (los "bloques de construcción").
-  - `apps/api-server/`: Impone la **lógica y la verdad** (las "reglas del juego").
+### Error de Puertos
 
-## Capítulo 2: Anatomía del Ecosistema AltaMedica
+```javascript
+const killPort = (port) => {
+  execSync(`netstat -ano | findstr :${port} | taskkill /F /PID`);
+};
+```
 
-Debes tener un mapa mental claro de nuestro territorio.
+### Error de TypeScript
 
-- `apps/`: **Los Consumidores.**
-  - Son los puntos de entrada para los usuarios (`patients`, `doctors`, `admin`, etc.).
-  - Su principal responsabilidad es **orquestar la experiencia del usuario**.
-  - **NO** deben contener lógica de negocio crítica.
-  - **SÍ** deben consumir hooks y componentes de los `packages`.
-  - **SÍ** deben comunicarse exclusivamente con el `api-server` para cualquier operación de datos.
+```javascript
+const checkTypes = () => {
+  const errors = execSync('pnpm type-check').toString();
+  return errors.includes('error TS') ? 'FIX_NEEDED' : 'OK';
+};
+```
 
-- `packages/`: **La Caja de Herramientas Compartida.**
-  - `@altamedica/types`: **EL CONTRATO.** Este es posiblemente el paquete más importante. Define la "verdad" sobre la forma de nuestros datos (`Patient`, `Appointment`, `MedicalRecord`, etc.) usando **TypeScript** y **Zod**. Actúa como un contrato vinculante entre el `api-server` y los frontends. Si el backend envía un `User` y el frontend espera un `User`, ambos deben importar y usar el mismo tipo `User` de este paquete. Esto elimina una clase entera de errores de integración.
-  - `@altamedica/ui`: **EL SISTEMA DE DISEÑO.** La fuente de verdad para todos los elementos visuales, basado en **Tailwind CSS + Radix UI**. Si necesitas un botón, importas `{ Button } from '@altamedica/ui'`. Nunca debes escribir `<button className="...">` manualmente. Esto asegura consistencia visual y de accesibilidad.
-  - `@altamedica/auth`: **EL GUARDIÁN.** Contiene toda la lógica de cliente para la autenticación. Los hooks como `useAuth()`, los proveedores de contexto y las funciones para iniciar/cerrar sesión viven aquí. Ninguna `app` debe implementar su propia lógica de autenticación.
-  - `@altamedica/hooks`: **LA LÓGICA REUTILIZABLE.** Hooks de React que encapsulan lógica de cliente no relacionada con la autenticación pero que puede ser compartida (ej. `useDebounce`, `useLocalStorage`, etc.).
-  - `@altamedica/api-client`: (O similar) Aquí residen las configuraciones del cliente de API (ej. una instancia de `axios` preconfigurada con interceptores) y los hooks de **TanStack Query** que son reutilizables en múltiples aplicaciones.
+## 🎭 MI ROLE REAL
 
-- `apps/api-server/`: **EL CEREBRO CENTRAL.**
-  - Es la **única autoridad** sobre la lógica de negocio y el estado de la base de datos.
-  - **NUNCA confíes en los datos que vienen del cliente.** Valida cada `request` usando los esquemas de Zod definidos en `@altamedica/types`.
-  - Todas las interacciones con la base de datos (Firestore, Postgres) deben ocurrir aquí y solo aquí.
+Soy un **predictor de patrones**, no un "pensador":
 
-## Capítulo 3: Tu Flujo de Trabajo en Acción (Ejemplo Práctico)
+- Dame patrones → predigo soluciones
+- Dame contexto → completo el código
+- Dame síntomas → diagnostico causas
+- Dame restricciones → encuentro alternativas
 
-**Requerimiento:** "Permitir a los usuarios añadir notas privadas."
+## 🔧 SCRIPTS FUNCIONALES ALTAMEDICA
 
-**Tu Proceso Mental y Ejecución (Paso a Paso):**
+### Diagnóstico Rápido
 
-1.  **PRIMERO BUSCAR - NO CREAR:**
-    - _Pensamiento:_ "¿Ya existe algo similar en packages?"
-    - **Acción:** Busco en `packages/@altamedica/types` si ya existe un tipo Note o similar
-    - **Si existe:** REUTILIZAR y extender si es necesario
-    - **Si NO existe:** Definir en el lugar correcto:
-      ```typescript
-      import { z } from 'zod';
-      export const NoteSchema = z.object({
-        id: z.string().uuid(),
-        userId: z.string().uuid(),
-        authorId: z.string().uuid(),
-        content: z.string().min(1),
-        createdAt: z.date(),
-      });
-      export type Note = z.infer<typeof NoteSchema>;
-      ```
+```javascript
+const fs = require('fs');
+const { execSync } = require('child_process');
 
-2.  **Construir el Endpoint del Backend:**
-    - _Pensamiento:_ "Necesito una API para crear y listar estas notas. Será `POST` y `GET` en `/api/v1/patients/{patientId}/notes`."
-    - **Acción:** En `apps/api-server/src/routes/v1/`, creo `notes.routes.ts`. Implemento los controladores que:
-      a. Reciben el `request`.
-      b. Validan el `patientId` de la URL y el `body` del `request` usando `PatientNoteSchema.omit({ id: true, createdAt: true })`.
-      c. Verifican que el usuario autenticado tiene permiso para ver/editar.
-      d. Realizan la operación en la base de datos.
-      e. Devuelven los datos con el formato del tipo `PatientNote`.
-
-3.  **Crear los Componentes de UI Reutilizables:**
-    - _Pensamiento:_ "Necesitaré una lista para mostrar las notas y un formulario para añadirlas. La tarjeta de la nota podría ser reutilizada."
-    - **Acción:** En `packages/@altamedica/ui/src/components/`, creo:
-      - `NoteCard.tsx`: Un componente que recibe un prop `note: Note` y lo muestra de forma bonita.
-      - `NoteForm.tsx`: Un formulario con un `Textarea` y un `Button` (importados de `@altamedica/ui`) que emite un evento `onSubmit` con el contenido.
-
-4.  **Implementar la Lógica de Cliente:**
-    - _Pensamiento:_ "Necesito hooks para interactuar con la nueva API de forma eficiente, con caché y manejo de estado."
-    - **Acción:** PRIMERO busco si ya existe un hook similar. Si no, creo en `@altamedica/api-client`:
-      ```typescript
-      // ... imports de react-query, axios, y el tipo Note
-      export const useGetNotes = (userId: string) => {
-        return useQuery<Note[]>(['notes', userId], fetchNotesFn);
-      };
-      export const useAddNote = () => {
-        const queryClient = useQueryClient();
-        return useMutation(addNoteFn, {
-          onSuccess: (data) => {
-            queryClient.invalidateQueries(['notes', data.userId]);
-          },
-        });
-      };
-      ```
-
-5.  **Ensamblar la Feature en la Aplicación Frontend:**
-    - _Pensamiento:_ "REUTILIZAR componentes existentes, NO crear nuevos."
-    - **Acción:** En la app correspondiente:
-      a. Uso el hook `useGetNotes(userId)`.
-      b. Mapeo los resultados y renderizo una lista de componentes `<NoteCard />`.
-      c. Renderizo el componente `<NoteForm />` y conecto su `onSubmit` al hook `useAddNote`.
-
-## Capítulo 4: Checklist de Finalización de Tarea
-
-Antes de considerar una tarea completada, verifica que has cumplido con lo siguiente:
-
-1.  [ ] **Tipos Centralizados:** ¿Todos los nuevos modelos de datos están definidos en `@altamedica/types` y son usados tanto por el backend como por el frontend?
-2.  [ ] **Lógica en el Backend:** ¿Toda la lógica de negocio, validación y acceso a la base de datos reside en el `api-server`?
-3.  [ ] **UI Reutilizable:** ¿Los nuevos componentes de UI que podrían ser usados en otro lugar están en `@altamedica/ui`?
-4.  [ ] **Sin Duplicación:** ¿He revisado los `packages` existentes para evitar reinventar una función, hook o componente?
-5.  [ ] **Flujo de Datos Unidireccional:** ¿El frontend llama al backend para obtener datos, y el backend es la única fuente de verdad?
-6.  [ ] **Consistencia:** ¿La nueva funcionalidad se ve y se comporta de manera consistente con el resto de la plataforma?
-
-## Documentación y guías
-
-- Nueva política de imports para evitar imports profundos y `.d.ts` ad-hoc: `docs/IMPORTS_POLICY.md`.
-
-## 📦 ESTÁNDARES OBLIGATORIOS PARA PAQUETES - CRÍTICO
-
-### 🔴 TODA CONFIGURACIÓN DE PAQUETE DEBE SER EXACTAMENTE ASÍ:
-
-```json
-{
-  "name": "@altamedica/[nombre]",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+const healthCheck = () => {
+  const ports = [3000, 3001, 3002, 3003];
+  const status = ports.map((p) => {
+    try {
+      execSync(`netstat -ano | findstr :${p}`);
+      return { port: p, status: 'OCCUPIED' };
+    } catch {
+      return { port: p, status: 'FREE' };
     }
-  },
-  "scripts": {
-    "build": "tsup src/index.ts --format=cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format=esm --watch",
-    "type-check": "tsc --noEmit",
-    "clean": "rimraf dist"
-  },
-  "devDependencies": {
-    "typescript": "^5.8.3",
-    "tsup": "^8.0.0",
-    "rimraf": "^5.0.0"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0 || ^19.0.0"
+  });
+  console.log(JSON.stringify(status, null, 2));
+};
+
+healthCheck();
+```
+
+### Fix Imports Automático
+
+```javascript
+const path = require('path');
+const fs = require('fs');
+
+const fixImportsInDir = (dir) => {
+  const files = fs
+    .readdirSync(dir, { recursive: true })
+    .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'));
+
+  files.forEach((file) => {
+    const content = fs.readFileSync(file, 'utf8');
+    const fixed = content.replace(/from ['"]\.\.\/.*?types/g, "from '@altamedica/types");
+    if (content !== fixed) {
+      fs.writeFileSync(file, fixed);
+      console.log(`Fixed: ${file}`);
+    }
+  });
+};
+
+fixImportsInDir('@apps');
+```
+
+### @GitHub Actions Validator
+
+```javascript
+const { execSync } = require('child_process');
+
+const validateBuild = () => {
+  try {
+    execSync('pnpm type-check', { stdio: 'pipe' });
+    return { status: 'PASS', message: 'Types OK' };
+  } catch (error) {
+    return {
+      status: 'FAIL',
+      message: error.stdout.toString(),
+      fix: 'Run: node fix-types.js',
+    };
   }
-}
+};
+
+console.log(JSON.stringify(validateBuild(), null, 2));
 ```
 
-### ❌ SI CLAUDE CREA PAQUETES CON ESTOS ERRORES, RECHAZAR:
+## 🤝 COMO OBTENER AYUDA REAL DE @ALTAMEDICA
 
-1. **TypeScript diferente a `^5.8.3`** → INACEPTABLE
-2. **Sin `"type": "module"`** → INACEPTABLE
-3. **Exportar desde `src/`** → DEBE SER `dist/`
-4. **Versión diferente a `1.0.0`** → INACEPTABLE
-5. **React diferente a `^18.2.0 || ^19.0.0`** → INACEPTABLE
-6. **Sin dual CJS + ESM** → INACEPTABLE
-7. **Build con tsc en lugar de tsup** → INACEPTABLE
-
-### 📊 AUDITORÍA ACTUAL:
-
-- **30 paquetes** con 8 versiones diferentes de TypeScript → PROBLEMA
-- **3 paquetes** exportando desde src/ → PROBLEMA
-- **6 paquetes** sin build real → PROBLEMA
-- Ver `packages/PACKAGES_AUDIT_REPORT.md` para detalles completos
-
-## 🚫 CRITICAL: RESTRICCIONES DE HERRAMIENTAS PARA WINDOWS
-
-Para asegurar la compatibilidad con el entorno de desarrollo nativo de Windows 11, debes seguir estas reglas:
-
-### PROHIBICIÓN DE HERRAMIENTAS BASADAS EN BASH/UNIX
-
-**NUNCA USES LA HERRAMIENTA `bash` O COMANDOS UNIX (`sh`, `ls`, `cp`, etc.) directamente.** Estas herramientas ejecutan en un entorno tipo Linux (como Git Bash o WSL) que es incompatible con las rutas de Windows y causa errores.
-
-### HERRAMIENTAS REQUERIDAS PARA WINDOWS
-
-Debes usar **EXCLUSIVAMENTE** estas herramientas para la ejecución de comandos y manipulación del sistema de archivos:
-
-1.  **`run_in_terminal` con PowerShell**: Para cualquier comando de shell, asume que estás en una terminal de PowerShell (`pwsh.exe`).
-    - **Ejemplo**: `run_in_terminal(command: "Get-ChildItem -Path .\\packages")`
-2.  **Ejecución de Scripts**:
-    - **Node.js**: `run_in_terminal(command: "node .\\scripts\\mi-script.js")`
-    - **Python**: `run_in_terminal(command: "python .\\tools\\python\\mi-script.py")`
-    - **PowerShell**: `run_in_terminal(command: "pwsh -File .\\scripts\\mi-script.ps1")`
-3.  **Herramientas de Archivos Nativas**: Utiliza las herramientas `read_file`, `insert_edit_into_file`, `create_file`, etc., para todas las operaciones de archivos. Estas son compatibles con Windows.
-
-### MANEJO DE RUTAS
-
-- Utiliza siempre rutas absolutas cuando sea posible.
-- Las herramientas internas manejan la conversión de separadores de ruta, pero cuando escribas comandos para `run_in_terminal`, usa el estilo de Windows (ej. `.\\mi\\ruta`).
-
-Tu estricta adherencia a estos principios es lo que nos permitirá construir una plataforma de clase mundial de manera rápida y sostenible. Bienvenido al equipo.
-
-## Cambios recientes destacados
-
-- Web App migrada a `next.config.mjs` con puente en `next.config.js` (ESM listo para Next 15).
-- Billing SaaS E2E (GAP-006 T1–T4) completado: pasarela Stripe + modelos Subscription/Invoice + UI métodos pago + generación automática facturas + webhooks firmados + auditoría estados.
-  - Próximos (no bloqueantes demo): Idempotencia persistente, dunning avanzado, reconciliación contable, tax abstraction multi-región.
-- Script `scripts/gemini-automation-simple.ps1` actualizado a v1.1.0: ahora detecta y prioriza `pnpm dlx` para ejecutar `@google/gemini-cli` (fallback automático a `npx`). Se añadió versión y mensaje de runner para reducir warnings de npm y alinear con el monorepo pnpm.
-- Web App cuenta con `GET /api/health` para el Service Monitor.
-- Middleware de rol en Web App endurecido con fallbacks de cookies (`altamedica_token` y legacy) y parseo defensivo de JWT.
-- Script `pnpm dev` de Web App apunta a `next dev` (wrapper anterior retirado).
-- @altamedica/hooks: entrypoints compilados corregidos para evitar `require('./src')` en `dist/index.js` y habilitar re-exports ESM por submódulo.
-- @altamedica/patient-services: `tsconfig.json` ahora extiende `config/base/tsconfig.base.json` y se añadió `@types/minimatch` a devDependencies para resolver typechecks.
-- **NUEVO**: QueryProvider unificado en `@altamedica/hooks/providers` con configuraciones preestablecidas (medical, standard, stable) y utilidades de caché centralizadas (QUERY_KEYS, cacheUtils).
-- **FASE 2**: Añadidos tests E2E especializados:
-  - `telemedicine/recovery-network.spec.ts` (simulación recuperación de red WebRTC, placeholder selectors pendientes de refinar).
-  - `a11y/a11y-smoke.spec.ts` (barrido accesibilidad multi-app con `@axe-core/playwright`, filtra impactos serious/critical).
-- Instalado `@axe-core/playwright` en `@altamedica/e2e-tests` y navegadores Playwright actualizados.
-- Tasks VS Code nuevas: "🎭 E2E Telemedicina" (`@telemedicine`) y "♿ A11y Sweep" (`@a11y`).
-
-### FASE 2 – Telemedicina & Accesibilidad (En progreso)
-
-| Módulo                  | Test                           | Archivo                    | Estado                                     | Próximo Paso                                               |
-| ----------------------- | ------------------------------ | -------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| WebRTC Resiliencia      | Recuperación tras caída de red | `recovery-network.spec.ts` | ✅ Creado / ⏳ No ejecutado en esta sesión | Ajustar selectores reales y ejecutar con servicios activos |
-| Accesibilidad Multi-App | Smoke WCAG (serious/critical)  | `a11y-smoke.spec.ts`       | ✅ Creado / ⏳ No ejecutado en esta sesión | Ejecutar tras levantar `api-server` + frontends            |
-
-#### Ejecución (manual / tags)
-
-```powershell
-# Instalar deps (si faltan)
-pnpm install --filter @altamedica/e2e-tests
-
-# Instalar navegadores
-pnpm --filter @altamedica/e2e-tests exec playwright install
-
-# Levantar servicios mínimos (en paralelo)
-pnpm dev:medical  # patients + doctors + api-server
-
-# Telemedicina únicamente
-pnpm --filter @altamedica/e2e-tests exec playwright test -g @telemedicine
-
-# Accesibilidad
-pnpm --filter @altamedica/e2e-tests exec playwright test -g @a11y
-```
-
-#### Notas técnicas
-
-- El test de recuperación WebRTC actualmente hace `route.abort()` para simular offline; considerar alternar a `browserContext.setOffline(true)` si se habilita contexto Chromium.
-- Añadir verificación posterior de re-suscripción de tracks (audio/video) cuando existan selectores definitivos (`[data-test=doctor-video]`).
-- A11y: se limita a 4 URLs base; ampliar con rutas críticas (login, dashboard, telemedicina) y generar reporte JSON futuro.
-
-#### Métricas actuales de la sesión
-
-- Dependencias E2E instaladas: ✅ (`@axe-core/playwright` presente)
-- Navegadores Playwright instalados: ✅
-- Ejecución de nuevos tests: ⏳ Pendiente (bloqueado por puertos ocupados en intento de levantar `api-server`).
-
-#### Próximos pasos recomendados
-
-1. Resolver conflicto de puertos (3001–3003) antes de la primera ejecución real (aplicar script de liberación robusto o reiniciar terminal limpia).
-2. Ejecutar suites `@telemedicine` y `@a11y` y guardar salida en `packages/e2e-tests/test-results/` (crear `telemedicine-latest.md` y `a11y-latest.md`).
-3. Refinar selectores WebRTC tras inspección DOM real en `doctors` y `patients`.
-4. Ampliar checklist de accesibilidad para roles ARIA y contraste (posible integración con pa11y en etapa posterior).
-
-### 2025-08-11: Notas de alias/SSR (Doctors) y E2E Multi-Área
-
-- Dev SSR alias para Doctors:
-  - Se añadieron alias en `apps/doctors/next.config.mjs` para resolver `@altamedica/api-client/hooks` y `@altamedica/hooks` durante dev/SSR.
-  - Se ajustó `packages/hooks/src/medical/index.ts` para reexportar desde `@altamedica/api-client/dist/hooks`, evitando problemas de resolución de subpath en Next dev.
-  - Tras cambios en hooks/client, compila: `pnpm -w -r build --filter @altamedica/hooks --filter @altamedica/api-client` y reinicia Doctors.
-
-- Multi-Área MCP/Playwright:
-  - Servicios mínimos: `pnpm dev:min` (api-server, patients, doctors, web-app).
-  - Ejecutar tests: `cd packages/e2e-tests && npx playwright test --project=multi-area`.
-  - Si companies (3004) no corre, los warnings son esperados y no críticos.
-
-## 🧪 Sistema de Testing con IA
-
-### **Stack Completo Implementado**
-
-- ✅ **AI Testing Engine**: Generación de escenarios médicos automática
-- ✅ **MCP Playwright**: Testing E2E multi-área (patients, doctors, companies)
-- ✅ **Vitest**: Testing unitario con cobertura médica (85%+)
-- ✅ **WebRTC Testing**: 5 suites especializadas para telemedicina
-- ✅ **HIPAA Validator**: Validación automática de compliance (98%+)
-
-### **Comandos Principales**
-
-```bash
-# Testing completo
-pnpm test:all                   # Ejecutar todos los tipos de test
-pnpm test:e2e                   # Tests E2E multi-área
-pnpm test:webrtc                # Suite WebRTC telemedicina
-pnpm test:hipaa                 # Validación HIPAA
-
-# Testing con IA
-pnpm test:ai:generate           # Generar escenarios médicos
-pnpm multi:medical-journey      # Workflow médico completo
-```
-
-**Documentación completa**: Ver `docs/TESTING-COMPLETE.md`
-
-## 🤖 Capítulo 6: Flujo de Trabajo IA con Pre-Check y Lint Automático
-
-**IMPORTANTE**: Para garantizar código de calidad y evitar duplicación, el asistente de IA debe seguir este flujo de trabajo obligatorio:
-
-### 📋 Flujo de Trabajo Estándar para IA
-
-#### 1. **PRE-CHECK OBLIGATORIO** (Antes de cualquier operación)
-
-Siempre ejecutar PRIMERO para visualizar el estado actual y prevenir duplicación:
-
-```bash
-# Verificación detallada del estado actual
-powershell -NoProfile -File scripts/pre-operation-check.ps1 -Detailed
-
-# O verificación rápida
-powershell -NoProfile -File scripts/pre-operation-check.ps1
-```
-
-Este script muestra:
-
-- 📁 Estructura del proyecto y archivos recientes
-- 🔄 Estado actual de Git (archivos modificados/nuevos)
-- 🏥 Servicios médicos en ejecución
-- ⚠️ Advertencias sobre posibles duplicaciones
-
-#### 2. **DESARROLLO** (Realizar cambios necesarios)
-
-- Usar herramientas LS/Glob/Grep para explorar archivos
-- Verificar sistemas unificados antes de crear nuevos servicios
-- Seguir patrones establecidos en el proyecto
-
-#### 3. **POST-LINT AUTOMÁTICO** (Después de cambios)
-
-Al finalizar CUALQUIER sesión de desarrollo, ejecutar:
-
-```bash
-# Opción 1: Smart Lint con visualización de archivos
-powershell -NoProfile -File scripts/ai-workflow-automation.ps1 -Operation post_development -Verbose
-
-# Opción 2: Lint rápido con Task Master
-pnpm lint:fix
-```
-
-### 🎯 Comandos Task Master para IA
-
-Estos comandos están preconfigurados en `.vscode/task-master.json`:
-
-| Comando                        | Shortcut     | Descripción                             |
-| ------------------------------ | ------------ | --------------------------------------- |
-| **PRE-Operation File Check**   | `Ctrl+Alt+B` | Verificación detallada antes de cambios |
-| **Quick PRE-Check**            | `Ctrl+Alt+N` | Verificación rápida del estado          |
-| **Smart File + Lint Workflow** | `Ctrl+Alt+W` | Post-desarrollo con lint automático     |
-| **Quick Lint + File Check**    | `Ctrl+Alt+L` | Lint rápido con visualización           |
-| **Project Health Check**       | `Ctrl+Alt+P` | Análisis completo del proyecto          |
-| **Smart Package Lint**         | `Ctrl+Alt+Z` | Lint solo de paquetes modificados       |
-
-### 🚨 Reglas Críticas para IA
-
-1. **SIEMPRE ejecutar pre-check antes de crear/modificar archivos**
-2. **SIEMPRE ejecutar lint después de cambios de código**
-3. **NUNCA crear servicios sin verificar sistemas unificados**
-4. **NUNCA omitir el lint al final de la sesión**
-
-### 📊 Scripts de Automatización Disponibles
-
-#### `pre-operation-check.ps1`
-
-- Muestra estado completo del proyecto
-- Detecta archivos modificados recientemente
-- Advierte sobre posibles duplicaciones
-- Verifica servicios en ejecución
-
-#### `ai-workflow-automation.ps1`
-
-- Automatiza workflows completos
-- Detecta workspace pnpm inteligentemente
-- Ejecuta lint específico por paquete
-- Genera logs detallados
-
-#### `post-code-workflow.ps1`
-
-- Workflow simplificado post-código
-- Muestra contexto del archivo cambiado
-- Ejecuta lint automáticamente
-- Interfaz simple para IA
-
-### 💡 Ejemplo de Sesión IA Completa
-
-```bash
-# 1. Pre-check antes de empezar
-powershell -NoProfile -File scripts/pre-operation-check.ps1 -Detailed
-
-# 2. Desarrollo (crear/editar archivos)
-# ... trabajo de desarrollo ...
-
-# 3. Lint automático al finalizar
-powershell -NoProfile -File scripts/ai-workflow-automation.ps1 -Operation post_development -Verbose
-```
-
-### ⚡ Beneficios del Flujo
-
-- ✅ **Prevención de duplicación**: Pre-check muestra código existente
-- ✅ **Calidad garantizada**: Lint automático corrige estilo
-- ✅ **Visibilidad completa**: Siempre sabes el estado del proyecto
-- ✅ **Conformidad**: Código siempre cumple estándares del proyecto
-
-## 🌳 Capítulo 7: Modelo de Worktrees por Calidad
-
-**CRÍTICO**: Implementamos un modelo de desarrollo usando Git Worktrees separados por calidad para eliminar duplicaciones y garantizar integración perfecta.
-
-### Flujo de Trabajo Obligatorio
+### Para Problemas de Dependencias
 
 ```
-AUDIT → INTEGRATE → VALIDATE → PRODUCTION
+CONTEXTO: @Monorepo pnpm con 7 apps
+SÍNTOMA: [pegar error completo de pnpm/npm]
+OBJETIVO: Build que pase en @GitHub Actions
+INTENTOS: pnpm install, pnpm clean, reinstall node_modules
+RESTRICCIONES: No puedo cambiar estructura del monorepo
+FRUSTRACIÓN: 4 días intentando esto
 ```
 
-### Worktrees Configurados
+### Para Errores de Código
 
-- `../devaltamedica-audit/` - Eliminar duplicaciones y código muerto
-- `../devaltamedica-integrate/` - Conectar features existentes (NO crear nuevas)
-- `../devaltamedica-validate/` - Validar que todo funciona
-- `../devaltamedica/` - Código production-ready
-
-### Reglas por Worktree
-
-#### En AUDIT:
-
-- SOLO eliminar duplicaciones
-- Ejecutar `scripts/find-duplications.ps1` antes de cualquier cambio
-- NO crear código nuevo
-- Consolidar en packages compartidos
-
-#### En INTEGRATE:
-
-- SOLO conectar features existentes
-- NO crear nuevas features
-- Verificar con `scripts/map-existing-features.ps1`
-- Todas las features YA EXISTEN, solo necesitan conexión
-
-#### En VALIDATE:
-
-- SOLO validar, no modificar
-- Ejecutar `scripts/full-validation-suite.ps1`
-- Generar reportes de validación
-- NO pasar a producción sin 100% validación
-
-### Comandos de Navegación
-
-```powershell
-cd ..\devaltamedica-audit      # Para auditoría
-cd ..\devaltamedica-integrate  # Para integración
-cd ..\devaltamedica-validate   # Para validación
-cd ..\devaltamedica           # Para producción
+```
+CONTEXTO: @React component en @app/patients
+SÍNTOMA: useEffect ejecuta infinitamente
+OBJETIVO: Componente renderice una sola vez
+INTENTOS: useCallback, useMemo, dependency array
+RESTRICCIONES: No puedo cambiar props que vienen del parent
+FRUSTRACIÓN: 2 horas debuggeando
 ```
 
-### Beneficios del Modelo
+### Para GitHub Actions
 
-1. **Prevención Total de Duplicaciones**: Scripts detectan antes de que Claude actúe
-2. **Enfoque Sistemático**: Cada worktree tiene objetivo claro
-3. **Calidad Garantizada**: No avanzas sin completar fase anterior
-4. **Visibilidad Máxima**: Claude ve todo el proyecto en cada worktree
-5. **Separación Mental**: Contexto específico por tarea
+```
+CONTEXTO: @CI/CD pipeline en @GitHub
+SÍNTOMA: Build falla en step "Type Check"
+OBJETIVO: @Pipeline verde
+INTENTOS: Restart workflow, check dependencies
+RESTRICCIONES: No puedo acceder al runner directamente
+FRUSTRACIÓN: Blocking @deploys por 3 días
+```
 
-## 🐳 Docker Build Optimization
+## 🎯 RESULTADO ESPERADO
 
-### **Optimización Implementada**
+Después de dar contexto correcto, obtienes:
 
-- ✅ **Contexto reducido**: >1.7GB → <150MB
-- ✅ **Multi-stage builds**: pnpm + prune pattern
-- ✅ **.dockerignore**: Filtrado inteligente manteniendo archivos críticos
-- ✅ **Cache optimizado**: Capas estables para dependencies
+1. **Diagnóstico preciso** del problema real
+2. **Solución específica** ejecutable
+3. **Script funcional** que puedes ejecutar inmediatamente
+4. **Alternativas** si la primera opción no funciona
+5. **Explicación honesta** de por qué ocurrió
 
-### **Indicadores Logrados**
+## 🔄 FEEDBACK LOOP
 
-- Tiempo transferencia: <150MB vs ~1.7GB original
-- Builds más rápidos y cache eficiente
-- Compatibilidad con BuildKit cache mounts
+Si mi solución no funciona:
 
-## 📝 Notas de Memoria para IA
+1. **Copia el error exacto**
+2. **Describe qué cambió**
+3. **Muestra el resultado actual vs esperado**
 
-**Actitudes perfectas a memorizar:**
+Esto me permite ajustar el patrón y dar mejor solución.
 
-- ✅ Limpieza automática de scripts temporales de análisis
-- ✅ Auditoría cuidadosa antes de eliminar packages/carpetas
-- ✅ Verificación de no ruptura del código antes de cambios
-- ✅ Enfoque conservador en eliminación de dependencias
+## 🚀 ACELERADORES PARA @ALTAMEDICA
+
+### Iniciar Desarrollo Rápido
+
+```javascript
+const startDev = () => {
+  const apps = ['api-server', 'doctors', 'patients'];
+  apps.forEach((app) => {
+    execSync(`cd apps/${app} && npm run dev &`);
+  });
+};
+```
+
+### Verificar Estado Completo
+
+```javascript
+const fullDiagnosis = () => {
+  const checks = [checkPorts(), checkDependencies(), checkGitStatus(), checkFirebaseConfig()];
+  return checks;
+};
+```
+
+### Fix Común de @GitHub Actions
+
+```javascript
+const fixGithubActions = () => {
+  execSync('pnpm install --frozen-lockfile');
+  const result = execSync('pnpm type-check');
+  return result.toString().includes('error') ? 'FAILED' : 'FIXED';
+};
+```
+
+---
+
+**Recuerda**: Soy tu @autocompletado potente, no tu asistente complaciente. Dame contexto real y obtendrás soluciones reales para @AltaMedica.
+
+## 🔍 TROUBLESHOOTING AVANZADO
+
+### ✅ Diagnóstico Completo del Sistema
+
+```javascript
+import fs from 'fs';
+import { execSync } from 'child_process';
+import path from 'path';
+
+const runCompleteDiagnostics = () => {
+  const diagnostics = {
+    timestamp: new Date().toISOString(),
+    system: {},
+    services: {},
+    dependencies: {},
+    errors: [],
+  };
+
+  try {
+    diagnostics.system.nodeVersion = process.version;
+    diagnostics.system.platform = process.platform;
+    diagnostics.system.memory = process.memoryUsage();
+
+    const checkService = (name, port) => {
+      try {
+        execSync(`netstat -ano | findstr :${port}`, { stdio: 'pipe' });
+        return { status: 'RUNNING', port };
+      } catch {
+        return { status: 'STOPPED', port };
+      }
+    };
+
+    diagnostics.services = {
+      apiServer: checkService('@api-server', 3001),
+      doctors: checkService('@doctors', 3002),
+      patients: checkService('@patients', 3003),
+      companies: checkService('@companies', 3004),
+      admin: checkService('@admin', 3005),
+      webApp: checkService('@web-app', 3000),
+      signaling: checkService('@signaling', 8888),
+    };
+
+    diagnostics.dependencies.lockfile = fs.existsSync('./pnpm-lock.yaml');
+    diagnostics.dependencies.nodeModules = fs.existsSync('./node_modules');
+
+    try {
+      execSync('pnpm ls --depth=0', { stdio: 'pipe' });
+      diagnostics.dependencies.status = 'INSTALLED';
+    } catch {
+      diagnostics.dependencies.status = 'MISSING';
+    }
+  } catch (error) {
+    diagnostics.errors.push(error.message);
+  }
+
+  return diagnostics;
+};
+
+console.log(JSON.stringify(runCompleteDiagnostics(), null, 2));
+```
+
+### ✅ Fix de Problemas Comunes
+
+```javascript
+const fixCommonIssues = async () => {
+  const fixes = {
+    portsOccupied: () => {
+      const ports = [3000, 3001, 3002, 3003, 3004, 3005, 8888];
+      ports.forEach((port) => {
+        try {
+          const result = execSync(`netstat -ano | findstr :${port}`).toString();
+          const pid = result.split(/\s+/).pop().trim();
+          execSync(`taskkill /F /PID ${pid}`);
+          console.log(`✅ Killed process on port ${port}`);
+        } catch {
+          console.log(`✓ Port ${port} is free`);
+        }
+      });
+    },
+
+    lockfileSync: () => {
+      try {
+        execSync('pnpm install --frozen-lockfile=false');
+        console.log('✅ Lockfile synchronized');
+      } catch (error) {
+        console.log('❌ Lockfile sync failed:', error.message);
+      }
+    },
+
+    clearCache: () => {
+      const cacheDirs = ['.next', 'node_modules/.cache', '.turbo'];
+      cacheDirs.forEach((dir) => {
+        if (fs.existsSync(dir)) {
+          fs.rmSync(dir, { recursive: true, force: true });
+          console.log(`✅ Cleared ${dir}`);
+        }
+      });
+    },
+
+    resetGit: () => {
+      execSync('git status --porcelain');
+      console.log('✅ Git status checked');
+    },
+  };
+
+  console.log('🔧 Running fixes...\n');
+  Object.entries(fixes).forEach(([name, fix]) => {
+    console.log(`Running: ${name}`);
+    fix();
+  });
+};
+
+fixCommonIssues();
+```
+
+### ✅ Validación de Integridad
+
+```javascript
+const validateProjectIntegrity = () => {
+  const checks = {
+    requiredFiles: ['package.json', 'pnpm-workspace.yaml', 'tsconfig.json', '.env.local'],
+    requiredDirs: ['apps', 'packages', 'scripts', 'docs'],
+    appStructure: [
+      '@apps/api-server',
+      '@apps/doctors',
+      '@apps/patients',
+      '@apps/companies',
+      '@apps/admin',
+      '@apps/web-app',
+      '@apps/signaling-server',
+    ],
+    packageStructure: [
+      '@packages/auth',
+      '@packages/ui',
+      '@packages/types',
+      '@packages/medical',
+      '@packages/telemedicine-core',
+    ],
+  };
+
+  const results = {
+    files: checks.requiredFiles.map((file) => ({
+      file,
+      exists: fs.existsSync(file),
+    })),
+    dirs: checks.requiredDirs.map((dir) => ({
+      dir,
+      exists: fs.existsSync(dir),
+    })),
+    apps: checks.appStructure.map((app) => ({
+      app,
+      exists: fs.existsSync(app),
+      hasPackageJson: fs.existsSync(path.join(app, 'package.json')),
+    })),
+    packages: checks.packageStructure.map((pkg) => ({
+      package: pkg,
+      exists: fs.existsSync(pkg),
+      hasPackageJson: fs.existsSync(path.join(pkg, 'package.json')),
+    })),
+  };
+
+  const score = {
+    files: (results.files.filter((f) => f.exists).length / results.files.length) * 100,
+    dirs: (results.dirs.filter((d) => d.exists).length / results.dirs.length) * 100,
+    apps:
+      (results.apps.filter((a) => a.exists && a.hasPackageJson).length / results.apps.length) * 100,
+    packages:
+      (results.packages.filter((p) => p.exists && p.hasPackageJson).length /
+        results.packages.length) *
+      100,
+  };
+
+  const overall = (score.files + score.dirs + score.apps + score.packages) / 4;
+
+  return {
+    results,
+    score,
+    overall: overall.toFixed(1),
+    status: overall >= 90 ? 'HEALTHY' : overall >= 70 ? 'WARNING' : 'CRITICAL',
+  };
+};
+
+const integrity = validateProjectIntegrity();
+console.log(`Project Integrity: ${integrity.status} (${integrity.overall}%)`);
+```
+
+### ✅ Performance Profiler
+
+```javascript
+const profilePerformance = async () => {
+  const measurements = {};
+
+  const measure = async (name, fn) => {
+    const start = performance.now();
+    const result = await fn();
+    const end = performance.now();
+    measurements[name] = {
+      duration: (end - start).toFixed(2) + 'ms',
+      result,
+    };
+    return result;
+  };
+
+  await measure('fileSystemRead', () => {
+    return fs.readdirSync('@apps', { recursive: true }).length;
+  });
+
+  await measure('gitStatus', () => {
+    return execSync('git status --short').toString().split('\n').length;
+  });
+
+  await measure('dependencyCheck', () => {
+    try {
+      execSync('pnpm ls --depth=0', { stdio: 'pipe' });
+      return 'OK';
+    } catch {
+      return 'ERROR';
+    }
+  });
+
+  await measure('portScan', () => {
+    const ports = [3000, 3001, 3002, 3003];
+    return ports.map((p) => {
+      try {
+        execSync(`netstat -ano | findstr :${p}`, { stdio: 'pipe' });
+        return `${p}:OCCUPIED`;
+      } catch {
+        return `${p}:FREE`;
+      }
+    });
+  });
+
+  return measurements;
+};
+
+profilePerformance().then((results) => {
+  console.log('⚡ Performance Profile:');
+  Object.entries(results).forEach(([name, data]) => {
+    console.log(`  ${name}: ${data.duration}`);
+  });
+});
+```
+
+### ✅ Dependency Analyzer
+
+```javascript
+const analyzeDependencies = () => {
+  const packages = fs.readdirSync('@packages');
+  const apps = fs.readdirSync('@apps');
+
+  const analysis = {
+    packages: {},
+    apps: {},
+    conflicts: [],
+    duplicates: [],
+  };
+
+  const readPackageJson = (dir) => {
+    const pkgPath = path.join(dir, 'package.json');
+    if (fs.existsSync(pkgPath)) {
+      return JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    }
+    return null;
+  };
+
+  packages.forEach((pkg) => {
+    const packageJson = readPackageJson(`@packages/${pkg}`);
+    if (packageJson) {
+      analysis.packages[pkg] = {
+        version: packageJson.version,
+        dependencies: Object.keys(packageJson.dependencies || {}),
+        devDependencies: Object.keys(packageJson.devDependencies || {}),
+      };
+    }
+  });
+
+  apps.forEach((app) => {
+    const packageJson = readPackageJson(`@apps/${app}`);
+    if (packageJson) {
+      analysis.apps[app] = {
+        version: packageJson.version,
+        dependencies: Object.keys(packageJson.dependencies || {}),
+        internalDeps: Object.keys(packageJson.dependencies || {}).filter((dep) =>
+          dep.startsWith('@altamedica/'),
+        ),
+      };
+    }
+  });
+
+  const allDeps = {};
+  Object.values(analysis.packages).forEach((pkg) => {
+    [...pkg.dependencies, ...pkg.devDependencies].forEach((dep) => {
+      if (!allDeps[dep]) allDeps[dep] = 0;
+      allDeps[dep]++;
+    });
+  });
+
+  analysis.duplicates = Object.entries(allDeps)
+    .filter(([dep, count]) => count > 3)
+    .map(([dep, count]) => ({ dep, count }));
+
+  return analysis;
+};
+
+const depAnalysis = analyzeDependencies();
+console.log(`Found ${depAnalysis.duplicates.length} duplicate dependencies`);
+```

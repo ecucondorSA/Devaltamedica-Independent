@@ -24,7 +24,7 @@ const base = appConfigs.admin({
   },
   
   // Custom webpack config for admin app
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { isServer }) => {
     if (!isServer) {
       // Node.js polyfills
       config.resolve.fallback = {

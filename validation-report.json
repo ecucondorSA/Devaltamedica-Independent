@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-08-29T08:41:21.163Z",
+  "summary": {
+    "totalPackages": 3,
+    "validPackages": 3,
+    "invalidPackages": 0,
+    "totalDocumented": 169,
+    "totalActual": 69
+  },
+  "packages": [
+    {
+      "package": "@altamedica/auth",
+      "documented": 30,
+      "actual": 25,
+      "onlyInDocs": [],
+      "onlyInCode": [
+        "",
+        "authVersion",
+        "default"
+      ],
+      "hasStarExports": true,
+      "isValid": true
+    },
+    {
+      "package": "@altamedica/types",
+      "documented": 87,
+      "actual": 41,
+      "onlyInDocs": [],
+      "onlyInCode": [
+        "",
+        "// Solo exportar UserRole desde auth/roles"
+      ],
+      "hasStarExports": true,
+      "isValid": true
+    },
+    {
+      "package": "@altamedica/shared",
+      "documented": 52,
+      "actual": 3,
+      "onlyInDocs": [],
+      "onlyInCode": [],
+      "hasStarExports": true,
+      "isValid": true
+    }
+  ],
+  "recommendations": [
+    {
+      "package": "@altamedica/auth",
+      "type": "WARNING",
+      "message": "Documentar en glosario: , authVersion, default"
+    },
+    {
+      "package": "@altamedica/types",
+      "type": "WARNING",
+      "message": "Documentar en glosario: , // Solo exportar UserRole desde auth/roles"
+    }
+  ]
+}

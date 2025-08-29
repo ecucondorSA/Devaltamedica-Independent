@@ -30,6 +30,27 @@ export type DosageForm =
   | 'other';
 
 /**
+ * Perfil unificado de medicamento para cálculos de dosificación e interacciones
+ */
+export interface MedicationProfile {
+  id: string;
+  name: string;
+  activeIngredient: string;
+  dosageForm: DosageForm;
+  strength: string;
+  unit: string;
+  routeOfAdministration: string[];
+  contraindications?: string[];
+  interactions?: string[];
+  sideEffects?: string[];
+  dosageRange?: {
+    min: number;
+    max: number;
+    unit: string;
+  };
+}
+
+/**
  * Categorías de medicamentos
  */
 export type MedicationCategory = 

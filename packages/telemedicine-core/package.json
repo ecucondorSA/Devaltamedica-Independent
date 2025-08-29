@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "AltaMedica telemedicine-core package",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -13,8 +10,11 @@
       "require": "./dist/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "dev": "tsup src/index.ts --format=esm --watch",
     "type-check": "tsc --noEmit",
     "clean": "rimraf dist"

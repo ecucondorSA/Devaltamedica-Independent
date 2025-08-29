@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Badge, Button, Card } from '@altamedica/ui';
 import {
   Camera,
@@ -20,7 +20,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TelemedicineMVPProps {
   roomId: string;
   doctorId: string;
@@ -255,7 +255,7 @@ export default function TelemedicineMVP({
         }
       };
     } catch (error) {
-      logger.error('Error inicializando WebRTC:', error);
+      logger.error('Error inicializando WebRTC:', String(error));
       logger.error('Error WebRTC: No se pudo inicializar la videollamada');
     }
   }, [socket, roomId]);

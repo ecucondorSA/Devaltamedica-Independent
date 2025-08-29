@@ -1,13 +1,44 @@
 import { Router, type Request, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { getAuth } from 'firebase-admin/auth';
-import { AUTH_COOKIES } from '../constants/auth-cookies';
-import { issueCsrfToken } from '../middleware/csrf.middleware';
 import { ROLE_REDIRECT_URLS } from '../config/auth-config';
+import { AUTH_COOKIES } from '../constants/auth-cookies';
 import { getFirestoreAdmin } from '../lib/firebase-admin';
+import { issueCsrfToken } from '../middleware/csrf.middleware';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 const router = Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SessionLoginRequest:
+ *       type: object
+ *       required:
+ *         - idToken
+ *       properties:
+ *         idToken:
+ *           type: string
+ *           description: Firebase ID token obtained from the client.
+ *     SessionLoginResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         csrfToken:
+ *           type: string
+ *           description: CSRF token to be used in subsequent requests.
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: false
+ *         error:
+ *           type: string
+ *           description: Error code.
+ */
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -24,8 +55,38 @@ const cookieBase = {
   domain: process.env.COOKIE_DOMAIN || 'localhost',
 };
 
-// POST /api/v1/auth/session-login
-// Body: { idToken: string }
+/**
+ * @swagger
+ * /auth/session-login:
+ *   post:
+ *     summary: Creates a session cookie for the user.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SessionLoginRequest'
+ *     responses:
+ *       200:
+ *         description: Session created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SessionLoginResponse'
+ *       400:
+ *         description: Missing ID token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Invalid ID token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post('/session-login', loginLimiter as any, async (req: Request, res: Response) => {
   try {
     const { idToken } = req.body || {};
@@ -46,7 +107,7 @@ router.post('/session-login', loginLimiter as any, async (req: Request, res: Res
 
     return res.status(200).json({ success: true, csrfToken });
   } catch (error: any) {
-    logger.error('[Auth] session-login error:', undefined, error);
+    logger.error('[Auth] session-login error', undefined, error);
     return res.status(401).json({ success: false, error: 'INVALID_ID_TOKEN' });
   }
 });

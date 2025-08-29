@@ -7,7 +7,7 @@
 
 import { Button, Card, Input } from '@altamedica/ui';
 import React from 'react';
-import { DashboardStats } from '@/hooks/useDashboard';
+import { DashboardStats as DashboardStatsType } from '@/hooks/useDashboard';
 
 interface StatsCardProps {
   title: string;
@@ -22,7 +22,7 @@ interface StatsCardProps {
 }
 
 interface DashboardStatsProps {
-  stats: DashboardStats;
+  stats: DashboardStatsType;
   isLoading: boolean;
   compactMode?: boolean;
 }
@@ -131,7 +131,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
   );
 };
 
-const DashboardStats: React.FC<DashboardStatsProps> = ({ 
+const DashboardStatsComponent: React.FC<DashboardStatsProps> = ({ 
   stats, 
   isLoading, 
   compactMode = false 
@@ -325,4 +325,4 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
   );
 };
 
-export default DashboardStats;
+export default DashboardStatsComponent;

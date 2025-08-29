@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getApps, getApp, initializeApp, cert } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
-import { Environment } from '@altamedica/shared/config/environment'
-import { logger } from '@altamedica/shared/services/logger.service'
+// import { Environment } from '@altamedica/shared/config/environment'
+import { logger } from '@altamedica/shared'
 import { UserRole } from '@altamedica/types'
 
 // Initialize Firebase Admin SDK
@@ -33,15 +33,15 @@ export async function verifyAuthToken(request: NextRequest) {
     const decodedToken = await auth.verifyIdToken(token)
     return decodedToken
   } catch (error) {
-    logger.error('Auth verification failed', error, { 
+    logger.error('Auth verification failed', error as any, { 
       action: 'auth_verification',
-      metadata: { hasAuthHeader: !!authHeader }
+      metadata: { hasAuthHeader: !!request.headers.get('authorization') }
     })
     return null
   }
 }
 
-export function requireAuth(handler: (req: NextRequest, user: DecodedIdToken) => Promise<NextResponse>) {
+export function requireAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     const user = await verifyAuthToken(request)
     
@@ -56,7 +56,7 @@ export function requireAuth(handler: (req: NextRequest, user: DecodedIdToken) =>
   }
 }
 
-export function requireRole(roles: UserRole[], handler: (req: NextRequest, user: DecodedIdToken) => Promise<NextResponse>) {
+export function requireRole(roles: UserRole[], handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     const user = await verifyAuthToken(request)
     
@@ -67,14 +67,14 @@ export function requireRole(roles: UserRole[], handler: (req: NextRequest, user:
       )
     }
 
-    const userRole = (user.role || user.custom_claims?.role) as UserRole
+    const userRole = ((user as any).role || (user as any).custom_claims?.role) as UserRole
     if (!userRole || !roles.includes(userRole)) {
-      logger.warn('Access denied - insufficient role', {
+      logger.warn('Access denied - insufficient role', JSON.stringify({
         userId: user.uid,
         userRole,
         requiredRoles: roles,
         action: 'role_check_failed'
-      })
+      }, null, 2))
       return NextResponse.json(
         { error: 'Forbidden - Rol insuficiente' },
         { status: 403 }

@@ -122,7 +122,7 @@ const PatientCard = ({ patient, onViewDetails }: {
           
           <Button
             variant="secondary"
-            size="small"
+            size="sm"
             onClick={() => onViewDetails(patient.id)}
           >
             <FileText className="w-4 h-4 mr-2" />
@@ -147,10 +147,10 @@ export default function PatientsPage() {
     router.push('/patients/new');
   };
 
-  const filteredPatients = patients.filter(patient => 
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.phone.includes(searchTerm)
+  const filteredPatients = patients.filter((patient: any) => 
+    patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.phone?.includes(searchTerm)
   );
 
   return (
@@ -186,8 +186,8 @@ export default function PatientsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {patients.filter(p => {
-                const daysSinceVisit = Math.floor((Date.now() - new Date(p.lastVisit).getTime()) / (1000 * 60 * 60 * 24));
+              {patients.filter((p: any) => {
+                const daysSinceVisit = Math.floor((Date.now() - new Date(p.lastVisit || Date.now()).getTime()) / (1000 * 60 * 60 * 24));
                 return daysSinceVisit < 90;
               }).length}
             </div>

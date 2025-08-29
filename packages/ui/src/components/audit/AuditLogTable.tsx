@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
-import { Button } from '../button';
-import { Input } from '../input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
-import { Calendar } from '../calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover';
-import { Badge } from '../badge';
-import { Loader2, Download, Filter, ChevronUp, ChevronDown, CalendarIcon } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button } from '../Button';
+import { Calendar } from '../../calendar';
+import { Input } from '../Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table/Table';
+import { Popover, PopoverContent, PopoverTrigger } from '../../popover';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { CalendarIcon, ChevronDown, ChevronUp, Download, Filter, Loader2 } from 'lucide-react';
+import { Badge } from '../Badge';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
@@ -33,7 +33,7 @@ const logger = {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 /**
  * Audit Log Table Component
@@ -349,11 +349,11 @@ export const AuditLogTable: React.FC<AuditLogTableProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={tempFilters.startDate || undefined}
-                    onSelect={(date) => setTempFilters({ ...tempFilters, startDate: date || null })}
-                  />
+                  <div className="p-3">
+                    <p className="text-sm text-gray-600">
+                      Selector de fecha - Funcionalidad pendiente
+                    </p>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>
@@ -370,11 +370,11 @@ export const AuditLogTable: React.FC<AuditLogTableProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={tempFilters.endDate || undefined}
-                    onSelect={(date) => setTempFilters({ ...tempFilters, endDate: date || null })}
-                  />
+                  <div className="p-3">
+                    <p className="text-sm text-gray-600">
+                      Selector de fecha - Funcionalidad pendiente
+                    </p>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>

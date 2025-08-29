@@ -10,31 +10,10 @@ import type {
   AltaEmotion,
   AltaMessage,
 } from '../types/alta.types';
+import { logger } from '../logger';
 import { AltaAgent } from './AltaAgent';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 // Manus SDK - Conversational AI & Medical NLP
 interface ManusSDK {
   initialize(config: ManusConfig): Promise<void>;

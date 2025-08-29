@@ -5,6 +5,7 @@ import {
   RequestNotification,
   RequestPriority
 } from './types';
+import { logger } from '../../logger.service';
 
 /**
  * Request Notification Service
@@ -70,13 +71,13 @@ export class RequestNotificationService {
     additionalData: Record<string, any> = {}
   ): Promise<void> {
     try {
-      console.log(`[RequestNotification] Sending ${type} notification for request ${request.id}`);
+      logger.info(`Sending ${type} notification for request ${request.id}`, 'RequestNotification');
 
       // Get user notification preferences
       const userPreferences = await this.getUserNotificationPreferences(request.requestedBy);
 
       if (!this.shouldSendNotification(type, userPreferences)) {
-        console.log(`[RequestNotification] Notification skipped due to user preferences`);
+        logger.info('Notification skipped due to user preferences', 'RequestNotification');
         return;
       }
 
@@ -89,9 +90,9 @@ export class RequestNotificationService {
       // Store notification record
       await this.storeNotificationRecord(notification);
 
-      console.log(`[RequestNotification] Notification sent successfully: ${type}`);
+      logger.info(`Notification sent successfully: ${type}`, 'RequestNotification');
     } catch (error) {
-      console.error(`[RequestNotification] Failed to send ${type} notification:`, error);
+      logger.error(`Failed to send ${type} notification`, 'RequestNotification', error);
       // Don't throw - notifications are non-critical
     }
   }
@@ -105,7 +106,7 @@ export class RequestNotificationService {
     additionalData: Record<string, any> = {}
   ): Promise<void> {
     try {
-      console.log(`[RequestNotification] Sending bulk ${type} notifications for ${requests.length} requests`);
+      logger.info(`Sending bulk ${type} notifications for ${requests.length} requests`, 'RequestNotification');
 
       const notifications = await Promise.allSettled(
         requests.map(request =>
@@ -116,9 +117,9 @@ export class RequestNotificationService {
       const successCount = notifications.filter(result => result.status === 'fulfilled').length;
       const failureCount = notifications.length - successCount;
 
-      console.log(`[RequestNotification] Bulk notifications completed: ${successCount} sent, ${failureCount} failed`);
+      logger.info(`Bulk notifications completed: ${successCount} sent, ${failureCount} failed`, 'RequestNotification');
     } catch (error) {
-      console.error('[RequestNotification] Bulk notification sending failed:', error);
+      logger.error('Bulk notification sending failed', 'RequestNotification', error);
     }
   }
 
@@ -187,7 +188,7 @@ export class RequestNotificationService {
       const userData = userDoc.data();
       return userData?.notificationPreferences || this.getDefaultNotificationPreferences();
     } catch (error) {
-      console.warn(`[RequestNotification] Failed to get preferences for user ${userId}:`, error);
+      logger.warn(`Failed to get preferences for user ${userId}`, 'RequestNotification', error);
       return this.getDefaultNotificationPreferences();
     }
   }
@@ -265,12 +266,12 @@ export class RequestNotificationService {
   private async sendEmailNotification(notification: RequestNotification): Promise<void> {
     try {
       // This would integrate with your email service (SendGrid, AWS SES, etc.)
-      console.log(`[RequestNotification] Email notification sent to ${notification.recipient}`);
+      logger.info(`Email notification sent to ${notification.recipient}`, 'RequestNotification');
 
       // Mock implementation - replace with actual email service
       await this.mockEmailDelivery(notification);
     } catch (error) {
-      console.error('[RequestNotification] Email delivery failed:', error);
+      logger.error('Email delivery failed', 'RequestNotification', error);
     }
   }
 
@@ -280,12 +281,12 @@ export class RequestNotificationService {
   private async sendWebPushNotification(notification: RequestNotification): Promise<void> {
     try {
       // This would integrate with web push service
-      console.log(`[RequestNotification] Web push notification sent to ${notification.recipient}`);
+      logger.info(`Web push notification sent to ${notification.recipient}`, 'RequestNotification');
 
       // Mock implementation
       await this.mockWebPushDelivery(notification);
     } catch (error) {
-      console.error('[RequestNotification] Web push delivery failed:', error);
+      logger.error('Web push delivery failed', 'RequestNotification', error);
     }
   }
 
@@ -295,12 +296,12 @@ export class RequestNotificationService {
   private async sendSMSNotification(notification: RequestNotification): Promise<void> {
     try {
       // This would integrate with SMS service (Twilio, AWS SNS, etc.)
-      console.log(`[RequestNotification] SMS notification sent to ${notification.recipient}`);
+      logger.info(`SMS notification sent to ${notification.recipient}`, 'RequestNotification');
 
       // Mock implementation
       await this.mockSMSDelivery(notification);
     } catch (error) {
-      console.error('[RequestNotification] SMS delivery failed:', error);
+      logger.error('SMS delivery failed', 'RequestNotification', error);
     }
   }
 
@@ -321,9 +322,9 @@ export class RequestNotificationService {
       };
 
       await this.db.collection('in_app_notifications').add(inAppNotification);
-      console.log(`[RequestNotification] In-app notification stored for ${notification.recipient}`);
+      logger.info(`In-app notification stored for ${notification.recipient}`, 'RequestNotification');
     } catch (error) {
-      console.error('[RequestNotification] In-app notification storage failed:', error);
+      logger.error('In-app notification storage failed', 'RequestNotification', error);
     }
   }
 
@@ -340,7 +341,7 @@ export class RequestNotificationService {
 
       await this.db.collection(this.notificationsCollection).add(record);
     } catch (error) {
-      console.error('[RequestNotification] Failed to store notification record:', error);
+      logger.error('Failed to store notification record', 'RequestNotification', error);
     }
   }
 
@@ -425,7 +426,7 @@ export class RequestNotificationService {
       const patient = patientDoc.data();
       return `${patient?.firstName || ''} ${patient?.lastName || ''}`.trim() || 'Unknown Patient';
     } catch (error) {
-      console.warn(`[RequestNotification] Failed to get patient name for ${patientId}:`, error);
+      logger.warn(`Failed to get patient name for ${patientId}`, 'RequestNotification', error);
       return 'Unknown Patient';
     }
   }

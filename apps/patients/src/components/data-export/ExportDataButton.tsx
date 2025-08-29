@@ -1,22 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@altamedica/ui/components/button';
-import {
+import { 
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@altamedica/ui/components/dropdown-menu';
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@altamedica/ui/components/tooltip';
-import { Badge } from '@altamedica/ui/components/badge';
+  Badge
+} from '@altamedica/ui';
 import {
   Download,
   FileText,
@@ -30,7 +28,7 @@ import {
   Heart,
 } from 'lucide-react';
 import PatientDataExportModal from './PatientDataExportModal';
-import { useToast } from '@altamedica/ui/hooks/use-toast';
+import { useToast } from '@altamedica/ui';
 
 interface ExportDataButtonProps {
   patientId: string;

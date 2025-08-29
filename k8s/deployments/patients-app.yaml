@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patients-app
+  namespace: altamedica
+  labels:
+    app: patients-app
+    tier: frontend
+    environment: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: patients-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: patients-app
+        tier: frontend
+        environment: production
+        role: patient-portal
+    spec:
+      serviceAccountName: patients-app
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: patients-app
+        image: altamedica/patients:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3003
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3003"
+        - name: NEXT_PUBLIC_API_URL
+          value: "https://api.altamedica.com"
+        - name: NEXT_PUBLIC_FIREBASE_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: firebase-config
+              key: config
+        - name: NEXT_PUBLIC_SUPABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: supabase-config
+              key: url
+        - name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: supabase-config
+              key: anon-key
+        - name: NEXT_PUBLIC_WEBRTC_SIGNALING_URL
+          value: "wss://signaling.altamedica.com"
+        - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: stripe-config
+              key: publishable-key
+        - name: HIPAA_COMPLIANCE_MODE
+          value: "true"
+        resources:
+          limits:
+            cpu: 750m
+            memory: 768Mi
+          requests:
+            cpu: 350m
+            memory: 384Mi
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/ready
+            port: 3003
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: cache
+          mountPath: /app/.next/cache
+        - name: encrypted-storage
+          mountPath: /app/encrypted
+      volumes:
+      - name: cache
+        emptyDir: {}
+      - name: encrypted-storage
+        emptyDir: {}
+      nodeSelector:
+        node-role.kubernetes.io/worker: "true"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - patients-app
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: patients-app
+  namespace: altamedica
+  labels:
+    app: patients-app
+    tier: frontend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3003
+    targetPort: 3003
+    protocol: TCP
+    name: http
+  selector:
+    app: patients-app
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: patients-app
+  namespace: altamedica
+  labels:
+    app: patients-app

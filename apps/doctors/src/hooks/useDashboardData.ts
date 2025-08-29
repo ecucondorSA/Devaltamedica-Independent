@@ -1,7 +1,7 @@
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { Patient } from '@altamedica/types';
 
 // Removed local interface - using @altamedica/types
@@ -60,7 +60,7 @@ interface DashboardStats {
 }
 
 export function useDashboardData() {
-  const { user, firebaseUser } = useAuth();
+  const { user, firebaseUser } = useAuth() as any;
   const [patients, setPatients] = useState<Patient[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [telemedicineSessions, setTelemedicineSessions] = useState<TelemedicineSession[]>([]);
@@ -90,7 +90,7 @@ export function useDashboardData() {
         logger.error('Error loading patients:', data.error);
       }
     } catch (error) {
-      logger.error('Error loading patients:', error);
+      logger.error('Error loading patients:', String(error));
     }
   };
 
@@ -106,7 +106,7 @@ export function useDashboardData() {
         logger.error('Error loading appointments:', data.error);
       }
     } catch (error) {
-      logger.error('Error loading appointments:', error);
+      logger.error('Error loading appointments:', String(error));
     }
   };
 
@@ -122,7 +122,7 @@ export function useDashboardData() {
         logger.error('Error loading telemedicine sessions:', data.error);
       }
     } catch (error) {
-      logger.error('Error loading telemedicine sessions:', error);
+      logger.error('Error loading telemedicine sessions:', String(error));
     }
   };
 
@@ -153,7 +153,7 @@ export function useDashboardData() {
         logger.error('Error loading marketplace offers:', data.error);
       }
     } catch (error) {
-      logger.error('Error loading marketplace offers:', error);
+      logger.error('Error loading marketplace offers:', String(error));
     }
   };
 
@@ -190,7 +190,7 @@ export function useDashboardData() {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      logger.error('Error applying to offer:', error);
+      logger.error('Error applying to offer:', String(error));
       return { success: false, error: 'Error al aplicar a la oferta' };
     }
   };
@@ -226,7 +226,7 @@ export function useDashboardData() {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      logger.error('Error creating telemedicine session:', error);
+      logger.error('Error creating telemedicine session:', String(error));
       return { success: false, error: 'Error al crear la sesión' };
     }
   };
@@ -265,7 +265,7 @@ export function useDashboardData() {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      logger.error('Error updating telemedicine session:', error);
+      logger.error('Error updating telemedicine session:', String(error));
       return { success: false, error: 'Error al actualizar la sesión' };
     }
   };
@@ -308,7 +308,7 @@ export function useDashboardData() {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      logger.error('Error creating appointment:', error);
+      logger.error('Error creating appointment:', String(error));
       return { success: false, error: 'Error al crear la cita' };
     }
   };
@@ -356,7 +356,7 @@ export function useDashboardData() {
       ]);
     } catch (error) {
       setError('Error al cargar los datos del dashboard');
-      logger.error('Error loading dashboard data:', error);
+      logger.error('Error loading dashboard data:', String(error));
     } finally {
       setLoading(false);
     }

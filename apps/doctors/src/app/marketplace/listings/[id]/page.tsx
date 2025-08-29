@@ -3,7 +3,7 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { 
   ArrowLeft,
   MapPin, 
@@ -328,7 +328,7 @@ const ListingDetailsPage = ({ params }: { params: { id: string } }) => {
       // Mostrar notificación de éxito
       alert('¡Aplicación enviada con éxito!');
     } catch (error) {
-      logger.error('Error al aplicar:', error);
+      logger.error('Error al aplicar:', String(error));
       alert('Error al enviar la aplicación');
     }
   };

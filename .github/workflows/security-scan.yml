@@ -1,0 +1,176 @@
+name: Security Scan - OWASP ZAP
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Ejecutar diariamente a las 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  zap-baseline:
+    name: OWASP ZAP Baseline Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start API Server
+        run: |
+          npm run build
+          npm start &
+          sleep 30
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Run OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://localhost:3001'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          fail_action: 'WARN'
+          baseline_file: '.zap/baseline.tsv'
+
+      - name: Upload ZAP results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'zap-report.sarif'
+
+      - name: Comment PR with security findings
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('zap-report.sarif', 'utf8');
+            const findings = JSON.parse(report);
+            
+            let comment = '## 🔒 Security Scan Results\n\n';
+            comment += '**OWASP ZAP Baseline Scan completed**\n\n';
+            
+            if (findings.runs && findings.runs[0].results) {
+              const results = findings.runs[0].results;
+              const high = results.filter(r => r.level === 'error').length;
+              const medium = results.filter(r => r.level === 'warning').length;
+              const low = results.filter(r => r.level === 'note').length;
+              
+              comment += `- 🚨 **High**: ${high}\n`;
+              comment += `- ⚠️ **Medium**: ${medium}\n`;
+              comment += `- ℹ️ **Low**: ${low}\n\n`;
+              
+              if (high > 0) {
+                comment += '**⚠️ High severity findings detected!**\n';
+                comment += 'Please review and fix before merging.\n\n';
+              }
+            }
+            
+            comment += '---\n';
+            comment += '🔍 [View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  snyk-security:
+    name: Snyk Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --fail-on=high
+
+      - name: Upload Snyk results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'snyk-report.sarif'
+
+  dependency-check:
+    name: Dependency Vulnerability Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high --json > audit-report.json || true
+
+      - name: Parse and comment audit results
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 📦 Dependency Security Check\n\n';
+            
+            try {
+              const audit = JSON.parse(fs.readFileSync('audit-report.json', 'utf8'));
+              const vulnerabilities = audit.metadata.vulnerabilities;
+              
+              comment += `- 🚨 **Critical**: ${vulnerabilities.critical || 0}\n`;
+              comment += `- ⚠️ **High**: ${vulnerabilities.high || 0}\n`;
+              comment += `- 🔶 **Moderate**: ${vulnerabilities.moderate || 0}\n`;
+              comment += `- ℹ️ **Low**: ${vulnerabilities.low || 0}\n\n`;
+              
+              if (vulnerabilities.critical > 0 || vulnerabilities.high > 0) {
+                comment += '**🚨 Critical/High vulnerabilities detected!**\n';
+                comment += 'Please run `npm audit fix` and update dependencies.\n\n';
+              }
+            } catch (e) {
+              comment += '✅ No critical vulnerabilities found\n';
+            }
+            
+            comment += '---\n';
+            comment += '🔍 [View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

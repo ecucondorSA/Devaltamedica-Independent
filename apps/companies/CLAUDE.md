@@ -1,5 +1,68 @@
 # CLAUDE.md - App: Companies 🏢
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO B2B
+
+### ✅ Script Start (Next.js B2B)
+```javascript
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import { z } from 'zod';
+```
+
+### ✅ Company Auth Pattern
+```javascript
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) return res.status(401).json({ error: 'Unauthorized' });
+  
+  if (!['COMPANY_ADMIN', 'HR_MANAGER'].includes(session.user.role)) {
+    return res.status(403).json({ error: 'Company access required' });
+  }
+}
+```
+
+### ✅ B2B Marketplace Schema
+```javascript
+const JobPostingSchema = z.object({
+  title: z.string().min(5),
+  description: z.string().min(50),
+  specialization: z.enum(['cardiology', 'pediatrics', 'internal_medicine', 'emergency']),
+  location: z.object({
+    city: z.string(),
+    remote: z.boolean()
+  }),
+  salary: z.object({
+    min: z.number().min(0),
+    max: z.number().min(0),
+    currency: z.enum(['USD', 'ARS', 'EUR'])
+  })
+});
+```
+
+### ✅ Test B2B Endpoint
+```javascript
+const testB2BEndpoint = async (endpoint) => {
+  const testData = {
+    companyId: '789e0123-e89b-12d3-a456-426614174000',
+    jobType: 'medical_position'
+  };
+  
+  try {
+    const response = await fetch(`http://localhost:3004/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testData)
+    });
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+```
+
+---
+
+
 ## 🌳 WORKTREE PARA COMPANIES APP
 
 - **Para auditar componentes B2B duplicados**: usar `../devaltamedica-audit/`

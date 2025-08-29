@@ -3,102 +3,22 @@
  * @module @altamedica/medical/types
  */
 
-// TODO: Enable when @altamedica/types package is built
-/*
-// Re-export Patient types from the unified source
+// Re-export types from the unified @altamedica/types package
 export type {
   Patient,
-  CreatePatient,
-  UpdatePatient,
-  PatientFilters,
-  EmergencyContact,
-  Insurance,
-  VitalSigns,
-  Allergy,
-  ChronicCondition,
-  Medication,
-  MedicalHistory,
-  GenderType,
-  BloodTypeType,
-  PatientStatusType,
-  MaritalStatusType
-} from '@altamedica/types';
-
-// Re-export Appointment types from the unified source
-export type {
+  PatientProfile,
+  Doctor,
   Appointment,
-  CreateAppointment,
-  UpdateAppointment,
-  AppointmentFilters,
-  AppointmentStats,
-  RecurringPattern,
-  StatusChange,
-  NotificationLog,
-  Prescription,
-  Procedure,
-  TestResult,
-  LabValue,
-  ReferenceRange,
-  InsuranceCoverage,
-  AppointmentOutcome,
   AppointmentType,
   AppointmentStatus,
-  UrgencyLevel,
-  NotificationChannel
+  MedicalRecord
 } from '@altamedica/types';
-*/
 
-// Temporary basic types for building
-export interface Patient {
-  id: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  email?: string;
-  phone?: string;
-  conditions?: string[];
-  [key: string]: any;
-}
-
-export interface CreatePatient extends Omit<Patient, 'id'> {}
-export interface UpdatePatient extends Partial<CreatePatient> {}
-
-export interface Doctor {
-  id: string;
-  firstName: string;
-  lastName: string;
-  specialty: string;
-  email?: string;
-  phone?: string;
-  [key: string]: any;
-}
-
-export interface Appointment {
-  id: string;
-  patientId: string;
-  doctorId: string;
-  date: string;
-  type: string;
-  status: string;
-  duration?: number;
-  [key: string]: any;
-}
-
-export interface CreateAppointment extends Omit<Appointment, 'id'> {}
-export interface UpdateAppointment extends Partial<CreateAppointment> {}
-
-export interface MedicalRecord {
-  id: string;
-  patientId: string;
-  type: string;
-  data: any;
-  createdAt: string;
-  [key: string]: any;
-}
-
-export type AppointmentType = 'consultation' | 'telemedicine' | 'emergency' | 'follow-up' | 'routine-checkup';
-export type AppointmentStatus = 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
-
-// Export local types
-export * from './doctor';
-export * from './medical-record';
+// You might need to define Create/Update types if they are not in @altamedica/types
+import { Patient, Doctor, Appointment } from '@altamedica/types';
+export type CreatePatient = Omit<Patient, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdatePatient = Partial<CreatePatient>;
+export type CreateDoctor = Omit<Doctor, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdateDoctor = Partial<CreateDoctor>;
+export type CreateAppointment = Omit<Appointment, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdateAppointment = Partial<CreateAppointment>;

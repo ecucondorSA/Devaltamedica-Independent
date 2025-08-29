@@ -1,0 +1,143 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+# ArgoCD Installation Script
+# Run: kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# Then apply this custom configuration
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  url: "https://argocd.altamedica.com"
+  
+  # RBAC Configuration
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:admin, applications, *, */*, allow
+    p, role:admin, clusters, *, *, allow
+    p, role:admin, repositories, *, *, allow
+    p, role:developer, applications, get, */*, allow
+    p, role:developer, applications, sync, */*, allow
+    p, role:developer, applications, action/*, */*, allow
+    p, role:readonly, applications, get, */*, allow
+    g, altamedica:admins, role:admin
+    g, altamedica:developers, role:developer
+  
+  # Repository Credentials
+  repositories: |
+    - url: https://github.com/altamedica/platform
+      passwordSecret:
+        name: argocd-repo-creds
+        key: password
+      usernameSecret:
+        name: argocd-repo-creds
+        key: username
+  
+  # Helm Repositories
+  helm.repositories: |
+    - url: https://charts.bitnami.com/bitnami
+      name: bitnami
+    - url: https://helm.elastic.co
+      name: elastic
+    - url: https://prometheus-community.github.io/helm-charts
+      name: prometheus-community
+    - url: https://grafana.github.io/helm-charts
+      name: grafana
+    - url: https://kubernetes.github.io/ingress-nginx
+      name: ingress-nginx
+    - url: https://charts.jetstack.io
+      name: jetstack
+  
+  # Resource Customizations
+  resource.customizations: |
+    apps/Deployment:
+      health.lua: |
+        hs = {}
+        if obj.status ~= nil then
+          if obj.status.conditions ~= nil then
+            for i, condition in ipairs(obj.status.conditions) do
+              if condition.type == "Progressing" and condition.reason == "ProgressDeadlineExceeded" then
+                hs.status = "Degraded"
+                hs.message = "Deployment has exceeded its progress deadline"
+                return hs
+              end
+            end
+          end
+          if obj.spec.replicas ~= nil and obj.status.replicas ~= nil and obj.status.updatedReplicas ~= nil then
+            if obj.status.replicas == obj.spec.replicas and obj.status.updatedReplicas == obj.spec.replicas then
+              hs.status = "Healthy"
+              hs.message = "Deployment is healthy"
+              return hs
+            end
+          end
+        end
+        hs.status = "Progressing"
+        hs.message = "Deployment is progressing"
+        return hs
+  
+  # Webhook Configuration
+  webhook.github.secret: argocd-github-webhook-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-repo-creds
+  namespace: argocd
+type: Opaque
+stringData:
+  username: "git"
+  password: "github_pat_example"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server-nodeport
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30443
+  - name: grpc
+    port: 443
+    protocol: TCP
+    targetPort: 8083
+    nodePort: 30444
+  selector:
+    app.kubernetes.io/name: argocd-server
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - argocd.altamedica.com
+    secretName: argocd-server-tls
+  rules:
+  - host: argocd.altamedica.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port:
+              number: 443

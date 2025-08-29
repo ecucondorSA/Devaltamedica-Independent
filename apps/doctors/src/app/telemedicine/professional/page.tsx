@@ -3,7 +3,7 @@
 import React from 'react';
 import ProfessionalTelemedicineCall from '@/components/telemedicine/ProfessionalTelemedicineCall';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function ProfessionalTelemedicinePage() {
   const handleEndCall = () => {
     logger.info('Llamada finalizada');
@@ -13,11 +13,8 @@ export default function ProfessionalTelemedicinePage() {
   return (
     <ProfessionalTelemedicineCall
       sessionId="professional-session-123"
-      userType="doctor"
-      userId="doctor-1"
-      patientName="María González"
-      doctorName="Dr. Carlos López"
-      onEndCall={handleEndCall}
+      doctorId="doctor-1"
+      patientId="patient-1"
     />
   );
 } 

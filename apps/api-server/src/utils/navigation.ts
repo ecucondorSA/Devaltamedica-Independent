@@ -65,7 +65,7 @@ export const APPS: Record<string, AppInfo> = {
       },
       {
         path: "/dashboard/api-monitor",
-        title: "C:\ - Users - Eduardo - Documents - Devaltamedica - Apps - Api Server - Src - Pages - Dashboard",
+        title: "C:\\ - Users - Eduardo - Documents - Devaltamedica - Apps - Api Server - Src - Pages - Dashboard",
         app: "api-server",
         requiresAuth: false,
         role: undefined,

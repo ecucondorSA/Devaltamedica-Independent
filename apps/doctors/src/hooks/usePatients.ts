@@ -13,20 +13,7 @@ import {
 } from '@altamedica/api-client/hooks';
 
 import { useState, useCallback, useEffect } from 'react';
-
-// NOTA: Evitamos depender de @altamedica/types aquí porque el package aún no exporta Patient/PatientProfile.
-// Definimos un tipo mínimo local compatible con el hook base (zod schema en api-client) para propósitos de esta app.
-interface PatientLite {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  dateOfBirth: string;
-  gender: 'male' | 'female' | 'other';
-  createdAt?: string;
-  updatedAt?: string;
-  [key: string]: any; // Campos adicionales no tipados aún
-}
+import { SimplePatient, toSimplePatient } from '../types';
 
 export interface UsePatientsOptions {
   page?: number;
@@ -37,8 +24,8 @@ export interface UsePatientsOptions {
 
 export interface UsePatientsResult {
   // Estado
-  patients: PatientLite[];
-  currentPatient: PatientLite | null;
+  patients: SimplePatient[];
+  currentPatient: SimplePatient | null;
   loading: boolean;
   error: string | null;
   totalPatients: number;
@@ -47,7 +34,7 @@ export interface UsePatientsResult {
   fetchPatients: (page?: number, limit?: number) => Promise<void>;
   fetchMyPatients: () => Promise<void>; // Placeholder (no-op hasta que API soporte filtro)
   fetchPatientById: (id: string) => Promise<void>;
-  updatePatient: (id: string, data: Partial<PatientLite>) => Promise<boolean>;
+  updatePatient: (id: string, data: Partial<SimplePatient>) => Promise<boolean>;
   searchPatients: (query: string) => Promise<void>;
   clearError: () => void;
   clearCurrentPatient: () => void;
@@ -67,7 +54,7 @@ export function usePatients(options: UsePatientsOptions = {}): UsePatientsResult
   const getPatientQuery = usePatient;
 
   // Estado local adicional
-  const [currentPatient, setCurrentPatient] = useState<PatientLite | null>(null);
+  const [currentPatient, setCurrentPatient] = useState<SimplePatient | null>(null);
 
   // Acciones wrapper
   const fetchPatients = useCallback(async (pageOverride?: number, limitOverride?: number) => {
@@ -84,18 +71,18 @@ export function usePatients(options: UsePatientsOptions = {}): UsePatientsResult
   const fetchPatientById = useCallback(async (id: string) => {
     const result = await getPatientQuery(id);
     if (result.data) {
-      setCurrentPatient(result.data);
+      setCurrentPatient(toSimplePatient(result.data));
     }
   }, []);
 
-  const updatePatient = useCallback(async (id: string, data: Partial<PatientLite>) => {
+  const updatePatient = useCallback(async (id: string, data: Partial<SimplePatient>) => {
     try {
       // El mutation del api-client espera una mezcla { id, ...fields } no anidado en 'data'
       const result = await updateMutation.mutateAsync({ id, ...data } as any);
       if (result) {
         await baseQuery.refetch();
         if (currentPatient?.id === id) {
-          setCurrentPatient(result);
+          setCurrentPatient(toSimplePatient(result));
         }
         return true;
       }
@@ -126,11 +113,12 @@ export function usePatients(options: UsePatientsOptions = {}): UsePatientsResult
     }
   }, [autoFetch]);
 
-  // Mapear datos al formato esperado
+  // Mapear datos al formato esperado usando adapters
   return {
     // Estado
   // El response real es PaginatedResponse<Patient> => { items, pageInfo }
-  patients: (baseQuery.data as any)?.items || [],
+  // Convertir tipos complejos a SimplePatient usando adapter
+  patients: ((baseQuery.data as any)?.items || []).map(toSimplePatient),
     currentPatient,
     loading: baseQuery.isLoading || updateMutation.isPending,
     error: baseQuery.error?.message || updateMutation.error?.message || null,

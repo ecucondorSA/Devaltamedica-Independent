@@ -3,7 +3,7 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   User,
   Briefcase,
@@ -33,7 +33,8 @@ import {
   BookOpen,
   Target,
   Settings,
-  ChevronRight
+  ChevronRight,
+  CheckCircle
 } from 'lucide-react';
 
 // Tipos
@@ -264,7 +265,7 @@ export default function DoctorProfilePage() {
       setIsEditing(false);
       alert('Perfil guardado exitosamente');
     } catch (error) {
-      logger.error('Error saving profile:', error);
+      logger.error('Error saving profile:', String(error));
       alert('Error al guardar el perfil');
     } finally {
       setIsSaving(false);
@@ -278,14 +279,18 @@ export default function DoctorProfilePage() {
     }));
   };
 
-  const updateNestedField = (parent: string, field: string, value: any) => {
-    setProfile(prev => ({
-      ...prev,
-      [parent]: {
-        ...prev[parent as keyof DoctorProfile],
-        [field]: value
-      }
-    }));
+  const updateNestedField = (parent: keyof DoctorProfile, field: string, value: any) => {
+    setProfile(prev => {
+      const parentValue = prev[parent];
+      const newParentValue = typeof parentValue === 'object' && parentValue !== null && !Array.isArray(parentValue)
+        ? { ...parentValue, [field]: value }
+        : { [field]: value }; // Fallback for non-objects, though usage should be objects
+
+      return {
+        ...prev,
+        [parent]: newParentValue
+      };
+    });
   };
 
   // Componente para las secciones del perfil

@@ -1,5 +1,3 @@
-import { logger } from '@altamedica/shared/services/logger.service';
-
 #!/usr/bin/env node
 
 /**

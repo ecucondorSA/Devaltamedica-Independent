@@ -1,0 +1,46 @@
+{
+  "name": "@altamedica/services",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./patient": {
+      "import": "./dist/patient.mjs",
+      "require": "./dist/patient.js",
+      "types": "./dist/patient.d.ts"
+    },
+    "./doctor": {
+      "import": "./dist/doctor.mjs",
+      "require": "./dist/doctor.js",
+      "types": "./dist/doctor.d.ts"
+    },
+    "./appointment": {
+      "import": "./dist/appointment.mjs",
+      "require": "./dist/appointment.js",
+      "types": "./dist/appointment.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/patient.ts src/doctor.ts src/appointment.ts --format=cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@altamedica/interfaces": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "tsup": "^8.0.0",
+    "rimraf": "^5.0.0",
+    "@altamedica/typescript-config": "workspace:*"
+  }
+}

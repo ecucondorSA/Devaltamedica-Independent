@@ -6,39 +6,53 @@
 'use client';
 
 import React from 'react';
-import { Calendar, Clock, User, MapPin, Phone, Video, AlertCircle, CheckCircle } from 'lucide-react';
-import { CardCorporate, CardHeaderCorporate, CardContentCorporate, CardFooterCorporate } from '../corporate/CardCorporate';
+import {
+  Calendar,
+  Clock,
+  User,
+  MapPin,
+  Phone,
+  Video,
+  AlertCircle,
+  CheckCircle,
+} from 'lucide-react';
+import {
+  CardCorporate,
+  CardHeaderCorporate,
+  CardContentCorporate,
+  CardFooterCorporate,
+} from '../corporate/CardCorporate';
 import { ButtonCorporate } from '../corporate/ButtonCorporate';
 import { StatusBadge } from './StatusBadge';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (message, data?) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message, data?) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message, data?) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message, data?) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
-  }
+  },
 };
 // 📝 TIPOS MÉDICOS PARA CITAS
-export type AppointmentType = 
-  | 'consultation' 
-  | 'follow_up' 
-  | 'emergency' 
+export type AppointmentType =
+  | 'consultation'
+  | 'follow_up'
+  | 'emergency'
   | 'routine_checkup'
   | 'specialist_referral'
   | 'telemedicine'
@@ -47,11 +61,11 @@ export type AppointmentType =
   | 'surgery'
   | 'diagnostic';
 
-export type AppointmentStatus = 
-  | 'scheduled' 
-  | 'confirmed' 
+export type AppointmentStatus =
+  | 'scheduled'
+  | 'confirmed'
   | 'in_progress'
-  | 'completed' 
+  | 'completed'
   | 'cancelled'
   | 'no_show'
   | 'rescheduled';
@@ -118,81 +132,84 @@ const APPOINTMENT_TYPE_CONFIG = {
     icon: User,
     color: 'text-primary-altamedica',
     bgColor: 'bg-blue-100',
-    description: 'Consulta médica general'
+    description: 'Consulta médica general',
   },
   follow_up: {
     label: 'Seguimiento',
     icon: CheckCircle,
     color: 'text-secondary-altamedica',
     bgColor: 'bg-green-100',
-    description: 'Control de seguimiento'
+    description: 'Control de seguimiento',
   },
   emergency: {
     label: 'Emergencia',
     icon: AlertCircle,
     color: 'text-danger',
     bgColor: 'bg-red-100',
-    description: 'Atención médica urgente'
+    description: 'Atención médica urgente',
   },
   routine_checkup: {
     label: 'Chequeo Rutinario',
     icon: Calendar,
     color: 'text-secondary-altamedica',
     bgColor: 'bg-green-100',
-    description: 'Chequeo médico preventivo'
+    description: 'Chequeo médico preventivo',
   },
   specialist_referral: {
     label: 'Especialista',
     icon: User,
     color: 'text-primary-altamedica',
     bgColor: 'bg-blue-100',
-    description: 'Consulta con especialista'
+    description: 'Consulta con especialista',
   },
   telemedicine: {
     label: 'Telemedicina',
     icon: Video,
     color: 'text-secondary-altamedica',
     bgColor: 'bg-green-100',
-    description: 'Consulta virtual remota'
+    description: 'Consulta virtual remota',
   },
   vaccination: {
     label: 'Vacunación',
     icon: CheckCircle,
     color: 'text-secondary-altamedica',
     bgColor: 'bg-green-100',
-    description: 'Aplicación de vacunas'
+    description: 'Aplicación de vacunas',
   },
   therapy: {
     label: 'Terapia',
     icon: User,
     color: 'text-primary-altamedica',
     bgColor: 'bg-blue-100',
-    description: 'Sesión de terapia'
+    description: 'Sesión de terapia',
   },
   surgery: {
     label: 'Cirugía',
     icon: AlertCircle,
     color: 'text-warning',
     bgColor: 'bg-yellow-100',
-    description: 'Procedimiento quirúrgico'
+    description: 'Procedimiento quirúrgico',
   },
   diagnostic: {
     label: 'Diagnóstico',
     icon: Calendar,
     color: 'text-primary-altamedica',
     bgColor: 'bg-blue-100',
-    description: 'Estudios diagnósticos'
-  }
+    description: 'Estudios diagnósticos',
+  },
 };
 
 // 👨‍⚕️ COMPONENTE INFORMACIÓN DEL DOCTOR
-const DoctorInfo: React.FC<{ doctor: Doctor; compact?: boolean }> = ({ doctor, compact = false }) => (
+const DoctorInfo: React.FC<{ doctor: Doctor; compact?: boolean }> = ({
+  doctor,
+  compact = false,
+}) => (
   <div className="flex items-center space-x-3">
     <div className="w-10 h-10 bg-secondary-altamedica rounded-full flex items-center justify-center shadow-md overflow-hidden">
       {doctor.avatar ? (
-        <img 
-          src={doctor.avatar} 
-          alt={doctor.name} 
+        <img
+          src={doctor.avatar}
+          alt={doctor.name}
           className="w-full h-full object-cover"
           onError={(e) => {
             // Fallback to icon if image fails
@@ -204,7 +221,9 @@ const DoctorInfo: React.FC<{ doctor: Doctor; compact?: boolean }> = ({ doctor, c
       )}
     </div>
     <div className="flex-1 min-w-0">
-      <p className={`font-medium text-primary-altamedica truncate ${compact ? 'text-sm' : 'text-base'}`}>
+      <p
+        className={`font-medium text-primary-altamedica truncate ${compact ? 'text-sm' : 'text-base'}`}
+      >
         Dr. {doctor.name}
       </p>
       <p className={`text-gray-600 truncate ${compact ? 'text-xs' : 'text-sm'}`}>
@@ -214,9 +233,7 @@ const DoctorInfo: React.FC<{ doctor: Doctor; compact?: boolean }> = ({ doctor, c
         <div className="flex items-center space-x-1 mt-1">
           <span className="text-yellow-500 text-sm">★</span>
           <span className="text-xs text-gray-500">{doctor.rating.toFixed(1)}/5</span>
-          {doctor.license && (
-            <span className="text-xs text-gray-400">• Mat. {doctor.license}</span>
-          )}
+          {doctor.license && <span className="text-xs text-gray-400">• Mat. {doctor.license}</span>}
         </div>
       )}
     </div>
@@ -224,21 +241,21 @@ const DoctorInfo: React.FC<{ doctor: Doctor; compact?: boolean }> = ({ doctor, c
 );
 
 // 📅 COMPONENTE INFORMACIÓN DE FECHA Y HORA
-const DateTimeInfo: React.FC<{ 
-  date: string; 
-  time: string; 
-  duration: number; 
+const DateTimeInfo: React.FC<{
+  date: string;
+  time: string;
+  duration: number;
   compact?: boolean;
   priority?: string;
 }> = ({ date, time, duration, compact = false, priority }) => {
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('es-AR', { 
+      return date.toLocaleDateString('es-AR', {
         weekday: compact ? 'short' : 'long',
-        year: 'numeric', 
-        month: compact ? 'short' : 'long', 
-        day: 'numeric' 
+        year: 'numeric',
+        month: compact ? 'short' : 'long',
+        day: 'numeric',
       });
     } catch {
       return dateString;
@@ -252,24 +269,30 @@ const DateTimeInfo: React.FC<{
   return (
     <div className={`space-y-2 ${compact ? 'text-sm' : ''}`}>
       <div className="flex items-center space-x-2 text-gray-700">
-        <Calendar className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`} />
+        <Calendar
+          className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`}
+        />
         <span className="font-medium truncate">{formatDate(date)}</span>
         {priority === 'critical' && (
           <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
         )}
       </div>
       <div className="flex items-center space-x-2 text-gray-700">
-        <Clock className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-secondary-altamedica flex-shrink-0`} />
-        <span className="truncate">{formatTime(time)} ({duration} min)</span>
+        <Clock
+          className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-secondary-altamedica flex-shrink-0`}
+        />
+        <span className="truncate">
+          {formatTime(time)} ({duration} min)
+        </span>
       </div>
     </div>
   );
 };
 
 // 📍 COMPONENTE INFORMACIÓN DE UBICACIÓN
-const LocationInfo: React.FC<{ 
-  location?: string; 
-  isTelemedicine: boolean; 
+const LocationInfo: React.FC<{
+  location?: string;
+  isTelemedicine: boolean;
   compact?: boolean;
   doctor?: Doctor;
 }> = ({ location, isTelemedicine, compact = false, doctor }) => (
@@ -277,25 +300,29 @@ const LocationInfo: React.FC<{
     <div className="flex items-center space-x-2 text-gray-700">
       {isTelemedicine ? (
         <>
-          <Video className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-secondary-altamedica flex-shrink-0`} />
+          <Video
+            className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-secondary-altamedica flex-shrink-0`}
+          />
           <span className={`${compact ? 'text-sm' : ''} truncate`}>Consulta Virtual</span>
         </>
       ) : (
         <>
-          <MapPin className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`} />
+          <MapPin
+            className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`}
+          />
           <span className={`${compact ? 'text-sm' : ''} truncate`}>
             {location || 'Consultorio Médico'}
           </span>
         </>
       )}
     </div>
-    
+
     {doctor?.phone && (
       <div className="flex items-center space-x-2 text-gray-700">
-        <Phone className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`} />
-        <span className={`${compact ? 'text-sm' : ''} truncate`}>
-          {doctor.phone}
-        </span>
+        <Phone
+          className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-primary-altamedica flex-shrink-0`}
+        />
+        <span className={`${compact ? 'text-sm' : ''} truncate`}>{doctor.phone}</span>
       </div>
     )}
   </div>
@@ -311,7 +338,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   onCancel,
   onJoinCall,
   onCallDoctor,
-  className = ''
+  className = '',
 }) => {
   // 🛡️ VALIDACIONES ROBUSTAS
   if (!appointment?.id) {
@@ -321,17 +348,16 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
 
   const typeConfig = APPOINTMENT_TYPE_CONFIG[appointment.type];
   const TypeIcon = typeConfig.icon;
-  
+
   // 📅 LÓGICA DE FECHAS Y ESTADOS
   const appointmentDate = new Date(appointment.date);
   const now = new Date();
   const isUpcoming = appointmentDate > now;
   const isToday = appointmentDate.toDateString() === now.toDateString();
-  
+
   // 🔐 PERMISOS DE ACCIONES
-  const canJoinCall = appointment.isTelemedicine && 
-                     appointment.status === 'confirmed' && 
-                     (isUpcoming || isToday);
+  const canJoinCall =
+    appointment.isTelemedicine && appointment.status === 'confirmed' && (isUpcoming || isToday);
   const canReschedule = ['scheduled', 'confirmed'].includes(appointment.status) && isUpcoming;
   const canCancel = ['scheduled', 'confirmed'].includes(appointment.status) && isUpcoming;
   const canCall = appointment.doctor.phone && isUpcoming;
@@ -364,14 +390,18 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
         medical={appointment.type !== 'emergency'}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <StatusBadge 
-              status={appointment.status} 
+            <StatusBadge
+              status={appointment.status}
               size={isCompact ? 'sm' : 'md'}
               animate={appointment.priority === 'critical'}
             />
-            <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg ${typeConfig.bgColor}`}>
+            <div
+              className={`flex items-center space-x-1 px-2 py-1 rounded-lg ${typeConfig.bgColor}`}
+            >
               <TypeIcon className={`${isCompact ? 'w-3 h-3' : 'w-4 h-4'} ${typeConfig.color}`} />
-              <span className={`${isCompact ? 'text-xs' : 'text-sm'} font-medium ${typeConfig.color} whitespace-nowrap`}>
+              <span
+                className={`${isCompact ? 'text-xs' : 'text-sm'} font-medium ${typeConfig.color} whitespace-nowrap`}
+              >
                 {typeConfig.label}
               </span>
             </div>
@@ -392,16 +422,18 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
           <DoctorInfo doctor={appointment.doctor} compact={isCompact} />
 
           {/* 📅 FECHA, HORA Y UBICACIÓN */}
-          <div className={`grid ${isCompact ? 'grid-cols-1 gap-3' : 'grid-cols-1 lg:grid-cols-2 gap-4'}`}>
-            <DateTimeInfo 
-              date={appointment.date} 
-              time={appointment.time} 
+          <div
+            className={`grid ${isCompact ? 'grid-cols-1 gap-3' : 'grid-cols-1 lg:grid-cols-2 gap-4'}`}
+          >
+            <DateTimeInfo
+              date={appointment.date}
+              time={appointment.time}
               duration={appointment.duration}
               compact={isCompact}
               priority={appointment.priority}
             />
-            <LocationInfo 
-              location={appointment.location} 
+            <LocationInfo
+              location={appointment.location}
               isTelemedicine={appointment.isTelemedicine}
               compact={isCompact}
               doctor={appointment.doctor}
@@ -416,7 +448,10 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
                   <p className="text-sm font-medium text-gray-700 mb-1">Síntomas:</p>
                   <div className="flex flex-wrap gap-1">
                     {appointment.symptoms.map((symptom, index) => (
-                      <span key={index} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                      <span
+                        key={index}
+                        className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                      >
                         {symptom}
                       </span>
                     ))}
@@ -444,7 +479,9 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
               {appointment.doctorNotes && (
                 <div>
                   <p className="text-sm font-medium text-gray-700 mb-1">Indicaciones Médicas:</p>
-                  <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded-lg">{appointment.doctorNotes}</p>
+                  <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded-lg">
+                    {appointment.doctorNotes}
+                  </p>
                 </div>
               )}
             </div>
@@ -455,12 +492,16 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
             <div className="flex items-center justify-between pt-3 border-t border-gray-200">
               {appointment.cost && (
                 <span className="text-sm text-gray-600">
-                  Costo: <span className="font-bold text-primary-altamedica">${appointment.cost}</span>
+                  Costo:{' '}
+                  <span className="font-bold text-primary-altamedica">${appointment.cost}</span>
                 </span>
               )}
               {appointment.insurance && (
                 <span className="text-sm text-gray-600">
-                  Obra Social: <span className="font-medium text-secondary-altamedica">{appointment.insurance}</span>
+                  Obra Social:{' '}
+                  <span className="font-medium text-secondary-altamedica">
+                    {appointment.insurance}
+                  </span>
                 </span>
               )}
             </div>
@@ -485,7 +526,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
                 Unirse a Consulta
               </ButtonCorporate>
             )}
-            
+
             {/* 📞 BOTÓN LLAMAR AL DOCTOR */}
             {canCall && !appointment.isTelemedicine && (
               <ButtonCorporate
@@ -497,7 +538,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
                 Llamar
               </ButtonCorporate>
             )}
-            
+
             {/* 👁️ BOTÓN VER DETALLES */}
             <ButtonCorporate
               variant="ghost"
@@ -519,7 +560,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
                 Reprogramar
               </ButtonCorporate>
             )}
-            
+
             {/* ❌ BOTÓN CANCELAR */}
             {canCancel && (
               <ButtonCorporate

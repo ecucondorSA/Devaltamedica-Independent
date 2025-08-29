@@ -21,9 +21,23 @@ export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState('month')
   const [selectedMetric, setSelectedMetric] = useState('appointments')
 
-  // Fetch data using React Query
-  const { data: appointments = [] } = useAppointments()
-  const { data: patients = [] } = usePatients()
+  // Fetch data using React Query with proper typing
+  const { data: appointmentsData } = useAppointments()
+  const { data: patientsData } = usePatients()
+  
+  // Type the arrays properly
+  const appointments = (appointmentsData || []) as Array<{ 
+    id: string; 
+    status: string; 
+    type: string; 
+    patientId: string;
+    date: string;
+  }>
+  const patients = (patientsData || []) as Array<{ 
+    id: string; 
+    name: string; 
+    email: string;
+  }>
 
   // Calculate metrics
   const totalAppointments = appointments.length

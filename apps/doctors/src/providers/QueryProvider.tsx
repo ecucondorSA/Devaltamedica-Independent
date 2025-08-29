@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useState } from 'react'
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface QueryProviderProps {
   children: React.ReactNode
 }
@@ -25,7 +25,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
           mutations: {
             onError: (error) => {
               // Global error handling for mutations
-              logger.error('Mutation error:', error)
+              logger.error('Mutation error:', String(error))
             },
           },
         },

@@ -1,3 +1,26 @@
 {
-  "extends": "../../tsconfig.base.json"
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@altamedica/hooks": ["../../packages/hooks/src"],
+      "@altamedica/auth": ["../../packages/auth/src"],
+      "@altamedica/utils": ["../../packages/utils/src"],
+      "@altamedica/ui": ["../../packages/ui/src"],
+      "@altamedica/types": ["../../packages/types/src"],
+      "@altamedica/config-next": ["../../packages/config-next/src"],
+      "@altamedica/firebase": ["../../packages/firebase/src"],
+      "@altamedica/shared": ["../../packages/shared/src"],
+      "@altamedica/api-client": ["../../packages/api-client/src"],
+      "@altamedica/marketplace-hooks": ["../../packages/marketplace-hooks/src"]
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"]
 }

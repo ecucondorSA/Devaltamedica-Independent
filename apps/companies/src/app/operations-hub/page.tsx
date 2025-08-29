@@ -19,7 +19,9 @@ export default function OperationsHubPage() {
       if (!done) {
         router.replace('/onboarding');
       }
-    } catch {}
+    } catch {
+      // localStorage can throw errors in some environments
+    }
   }, [router]);
 
   return (

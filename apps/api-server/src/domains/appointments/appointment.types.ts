@@ -1,14 +1,4 @@
-export // Removed local interface - using @altamedica/types
-import { Appointment } from '@altamedica/types';;
-  reason: string;
-  notes?: string;
-  symptoms?: string[];
-  urgency: 'low' | 'medium' | 'high' | 'urgent';
-  remindersSent: Date[];
-  createdBy: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Appointment } from '@altamedica/types';
 
 export interface AppointmentSlot {
   doctorId: string;

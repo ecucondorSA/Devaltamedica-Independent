@@ -1,71 +1,81 @@
-import { appConfigs, withProfile } from '@altamedica/config-next';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Resolver rutas absolutas al monorepo para alias explícitos (evitar subpath exports de dist en dev)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '../../..');
-// Usaremos la versión publicada (dist) desde node_modules para @altamedica/hooks
-const hooksNodeModulesPath = path.resolve(__dirname, 'node_modules/@altamedica/hooks');
-const apiClientSrcPath = path.resolve(repoRoot, 'packages/api-client/src');
-const apiClientHooksSrcPath = path.resolve(repoRoot, 'packages/api-client/src/hooks/index.ts');
-
+import process from 'process';
 /** @type {import('next').NextConfig} */
-const config = withProfile(
-  appConfigs.patients({
-    transpilePackages: [
-      '@altamedica/patient-services',
-      '@altamedica/medical-hooks',
-      '@altamedica/telemedicine-core',
-      // Necesario para resolver subpath exports desde paquetes enlazados en dev/SSR
-      '@altamedica/api-client',
-      '@altamedica/hooks',
+const config = {
+  transpilePackages: [
+    '@altamedica/patient-services',
+    '@altamedica/medical-hooks',
+    '@altamedica/telemedicine-core',
+    '@altamedica/api-client',
+    '@altamedica/hooks',
+    '@altamedica/auth',
+    '@altamedica/ui',
+    '@altamedica/shared',
+    '@altamedica/types',
+    '@altamedica/firebase',
+    '@altamedica/anamnesis',
+    '@altamedica/utils',
+  ],
+  images: {
+    domains: [
+      'localhost',
+      'altamedica.com',
+      'firebasestorage.googleapis.com',
+      'lh3.googleusercontent.com',
     ],
-    images: {
-      domains: [
-        'localhost',
-        'altamedica.com',
-        'firebasestorage.googleapis.com',
-        'lh3.googleusercontent.com',
-      ],
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    scrollRestoration: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' && {
+      exclude: ['error', 'warn'],
     },
-    experimental: {
-      optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-      scrollRestoration: true,
-    },
-    typescript: {
-      ignoreBuildErrors: process.env.NODE_ENV === 'development',
-    },
-    eslint: {
-      ignoreDuringBuilds: process.env.NODE_ENV === 'development',
-    },
-    compiler: {
-      removeConsole: process.env.NODE_ENV === 'production' && {
-        exclude: ['error', 'warn'],
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(self), microphone=(self), geolocation=()',
+          },
+        ],
       },
-    },
-    async headers() {
-      const baseHeaders = await appConfigs.patients().headers();
-      return [
-        ...baseHeaders,
-        {
-          source: '/ai-diagnosis',
-          headers: [
-            { key: 'Cache-Control', value: 'public, max-age=3600, must-revalidate' },
-            { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          ],
-        },
-        {
-          source: '/static/(.*)',
-          headers: [
-            { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-          ],
-        },
-      ];
-    },
-  }),
-  'telemedicine'
-);
+      {
+        source: '/ai-diagnosis',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=3600, must-revalidate' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+        ],
+      },
+      {
+        source: '/static/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
+  },
+};
 
 export default config;

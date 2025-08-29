@@ -1,0 +1,48 @@
+{
+  "name": "@altamedica/interfaces",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./medical": {
+      "import": "./dist/medical.mjs",
+      "require": "./dist/medical.js",
+      "types": "./dist/medical.d.ts"
+    },
+    "./auth": {
+      "import": "./dist/auth.mjs",
+      "require": "./dist/auth.js",
+      "types": "./dist/auth.d.ts"
+    },
+    "./api": {
+      "import": "./dist/api.mjs",
+      "require": "./dist/api.js",
+      "types": "./dist/api.d.ts"
+    },
+    "./database": {
+      "import": "./dist/database.mjs",
+      "require": "./dist/database.js",
+      "types": "./dist/database.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/medical.ts src/auth.ts src/api.ts src/database.ts --format=cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format=esm --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "tsup": "^8.0.0",
+    "rimraf": "^5.0.0",
+    "@altamedica/typescript-config": "workspace:*"
+  }
+}

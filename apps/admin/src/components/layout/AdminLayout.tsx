@@ -1,8 +1,6 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import { useAuth  } from '@altamedica/auth';;
-import { cn } from '@altamedica/utils';
+import { useState } from 'react';
 import {
   Activity,
   BarChart,
@@ -20,7 +18,9 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+
+import { useAuth } from '@altamedica/auth';
+import { cn } from '@altamedica/utils';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -102,7 +102,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   const isActive = (href: string) => {
-    return pathname === href || (pathname && pathname.startsWith(href + '/'));
+    return pathname === href || (pathname && pathname.startsWith(`${href}/`));
   };
 
   return (
@@ -135,42 +135,43 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <ul className="space-y-2">
             {menuItems.map((item) => (
               <li key={item.href}>
-                <div>
-                  <Link
-                    href={item.href}
+                <div className="space-y-1">
+                  <div
                     className={cn(
                       'flex items-center justify-between p-2 rounded-lg transition-colors',
                       isActive(item.href) ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100',
                     )}
-                    onClick={() => {
-                      if (item.subItems && sidebarOpen) {
-                        toggleExpanded(item.title);
-                      }
-                    }}
                   >
-                    <div className="flex items-center space-x-3">
+                    <Link href={item.href} className="flex items-center space-x-3 flex-grow">
                       <item.icon className="h-5 w-5" />
                       {sidebarOpen && <span>{item.title}</span>}
-                    </div>
+                    </Link>
                     {sidebarOpen && item.subItems && (
-                      <ChevronDown
-                        className={cn(
-                          'h-4 w-4 transition-transform',
-                          expandedItems.includes(item.title) && 'rotate-180',
-                        )}
-                      />
+                      <button
+                        onClick={() => toggleExpanded(item.title)}
+                        className="p-1 rounded-full hover:bg-gray-200"
+                        aria-label={`Toggle ${item.title} submenu`}
+                        aria-expanded={expandedItems.includes(item.title)}
+                      >
+                        <ChevronDown
+                          className={cn(
+                            'h-4 w-4 transition-transform',
+                            expandedItems.includes(item.title) && 'rotate-180',
+                          )}
+                        />
+                      </button>
                     )}
-                  </Link>
+                  </div>
 
                   {/* Sub-items */}
                   {sidebarOpen && item.subItems && expandedItems.includes(item.title) && (
-                    <ul className="ml-8 mt-2 space-y-1">
+                    <ul className="ml-8 space-y-1 border-l border-gray-200 pl-2">
                       {item.subItems.map((subItem) => (
                         <li key={subItem.href}>
                           <Link
                             href={subItem.href}
                             className={cn(
-                              'block p-2 rounded text-sm transition-colors',
+                              'block p-2 rounded text-sm transition-colors w-full text-left',
                               isActive(subItem.href)
                                 ? 'bg-blue-50 text-blue-600'
                                 : 'hover:bg-gray-100',
@@ -206,7 +207,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 </div>
               </div>
             )}
-            <button onClick={logout} className="p-2 rounded hover:bg-gray-100" title="Logout">
+            <button
+              onClick={async () => logout()}
+              className="p-2 rounded hover:bg-gray-100"
+              title="Logout"
+            >
               <LogOut className="h-5 w-5" />
             </button>
           </div>
@@ -222,7 +227,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {menuItems.find((item) => isActive(item.href))?.title || 'Admin Panel'}
             </h2>
             <div className="flex items-center space-x-4">
-              <button className="p-2 rounded hover:bg-gray-100 relative">
+              <button
+                className="p-2 rounded hover:bg-gray-100 relative"
+                aria-label="View notifications"
+              >
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>

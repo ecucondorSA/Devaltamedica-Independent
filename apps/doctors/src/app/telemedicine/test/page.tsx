@@ -6,7 +6,7 @@ import ChatPanel from '../../../components/telemedicine/ChatPanel';
 import DoctorVideoCall from '../../../components/telemedicine/DoctorVideoCall';
 import SessionControls from '../../../components/telemedicine/SessionControls';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function TelemedicineTestPage() {
   const [isInCall, setIsInCall] = useState(false);
   const [roomId, setRoomId] = useState('test-room-123');
@@ -22,7 +22,7 @@ export default function TelemedicineTestPage() {
   };
 
   const handleError = (error: string) => {
-    logger.error('Error en videollamada:', error);
+    logger.error('Error en videollamada:', String(error));
     alert(`Error: ${error}`);
   };
 

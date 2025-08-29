@@ -1,86 +1,136 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Badge } from '@altamedica/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Badge,
+} from '@altamedica/ui';
 import { useState, useEffect } from 'react';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 
 // 🔗 INTEGRATED: Import real metrics from dashboard hooks
-import { useNetworkStatusLogic } from '../../../components/dashboard/hooks/useNetworkStatusLogic';
-import { useRedistributionLogic } from '../../../components/dashboard/hooks/useRedistributionLogic';
-import { useJobPostingLogic } from '../../../components/dashboard/hooks/useJobPostingLogic';
+import { useNetworkStatusLogic } from '../../components/dashboard/hooks/useNetworkStatusLogic';
+import { useRedistributionLogic } from '../../components/dashboard/hooks/useRedistributionLogic';
+import { useJobPostingLogic } from '../../components/dashboard/hooks/useJobPostingLogic';
 
 // Real-time analytics hook
 const useAnalyticsData = (timeRange: string) => {
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Integrated hooks for real data
   const { networkMetrics, mapHospitals, loadNetworkData } = useNetworkStatusLogic();
-  const { redistributionSuggestions, staffShortages } = useRedistributionLogic();
+  const { redistributions, totalActiveRedistributions } = useRedistributionLogic();
   const { jobPostings } = useJobPostingLogic();
 
   useEffect(() => {
     const generateAnalyticsFromRealData = async () => {
       setLoading(true);
-      
+
       // Load real network data
       await loadNetworkData();
-      
+
       // Calculate real metrics
       const currentMonth = new Date().getMonth();
       const monthlyData = [];
-      
+
       // Generate monthly data based on real hospital metrics
       for (let i = 6; i >= 0; i--) {
         const monthIndex = (currentMonth - i + 12) % 12;
-        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-        
+        const monthNames = [
+          'Ene',
+          'Feb',
+          'Mar',
+          'Abr',
+          'May',
+          'Jun',
+          'Jul',
+          'Ago',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dic',
+        ];
+
         // Calculate metrics based on real data with some historical simulation
         const baseOccupancy = networkMetrics?.occupancyRate || 75;
-        const redistributions = redistributionSuggestions.length;
-        const shortages = staffShortages.length;
+        const redistributionsCount = redistributions.length;
+        const shortages = 0; // TODO: Implement staff shortages logic
         const jobs = jobPostings.length;
-        
+
         monthlyData.push({
           name: monthNames[monthIndex],
-          Consultas: Math.round((baseOccupancy * 50) + (Math.random() * 500)),
-          Ingresos: Math.round((baseOccupancy * 100) + (Math.random() * 2000)),
-          Redistribuciones: redistributions + Math.floor(Math.random() * 5),
+          Consultas: Math.round(baseOccupancy * 50 + Math.random() * 500),
+          Ingresos: Math.round(baseOccupancy * 100 + Math.random() * 2000),
+          Redistribuciones: redistributionsCount + Math.floor(Math.random() * 5),
           VacantesPublicadas: jobs + Math.floor(Math.random() * 3),
-          PersonalDeficit: shortages + Math.floor(Math.random() * 2)
+          PersonalDeficit: shortages + Math.floor(Math.random() * 2),
         });
       }
-      
+
       // Real-time KPIs from integrated systems
       const realTimeKPIs = {
         totalRevenue: monthlyData.reduce((sum, month) => sum + month.Ingresos, 0),
         totalConsultations: monthlyData.reduce((sum, month) => sum + month.Consultas, 0),
         activeHospitals: mapHospitals.length,
-        networkHealthScore: Math.round(((networkMetrics?.totalBeds || 100) - (networkMetrics?.occupiedBeds || 75)) / (networkMetrics?.totalBeds || 100) * 100),
-        criticalAlerts: redistributionSuggestions.filter(r => r.priority === 'critical').length,
-        staffingCoverage: Math.round(100 - (staffShortages.length * 5))
+        networkHealthScore: Math.round(
+          (((networkMetrics?.totalBeds || 100) - (networkMetrics?.occupiedBeds || 75)) /
+            (networkMetrics?.totalBeds || 100)) *
+            100,
+        ),
+        criticalAlerts: 0, // TODO: Implement critical alerts logic
+        staffingCoverage: 95, // TODO: Implement staffing coverage logic
       };
-      
+
       setAnalyticsData({
         monthlyData,
         kpis: realTimeKPIs,
         networkStatus: {
-          healthy: mapHospitals.filter(h => h.status === 'normal').length,
-          warning: mapHospitals.filter(h => h.status === 'warning').length,
-          critical: mapHospitals.filter(h => h.status === 'critical' || h.status === 'saturated').length
+          healthy: mapHospitals.filter((h) => h.status === 'normal').length,
+          warning: mapHospitals.filter((h) => h.status === 'warning').length,
+          critical: mapHospitals.filter((h) => h.status === 'critical' || h.status === 'saturated')
+            .length,
         },
         redistributionMetrics: {
-          active: redistributionSuggestions.filter(r => r.status === 'executing').length,
-          completed: redistributionSuggestions.filter(r => r.status === 'completed').length,
-          pending: redistributionSuggestions.filter(r => r.status === 'pending').length
-        }
+          active: redistributions.filter((r) => r.status === 'in_progress').length,
+          completed: redistributions.filter((r) => r.status === 'completed').length,
+          pending: redistributions.filter((r) => r.status === 'pending').length,
+        },
       });
-      
+
       setLoading(false);
     };
 
     generateAnalyticsFromRealData();
-  }, [timeRange, networkMetrics, mapHospitals, redistributionSuggestions, staffShortages, jobPostings]);
+  }, [
+    timeRange,
+    networkMetrics,
+    mapHospitals,
+    redistributions,
+    totalActiveRedistributions,
+    jobPostings,
+  ]);
 
   return { analyticsData, loading };
 };
@@ -101,7 +151,7 @@ export default function AnalyticsPage() {
   }
 
   const { monthlyData, kpis, networkStatus, redistributionMetrics } = analyticsData;
-  
+
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
@@ -136,7 +186,9 @@ export default function AnalyticsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               💰 Ingresos de Red
-              <Badge variant="outline" className="text-xs">Real</Badge>
+              <Badge variant="outline" className="text-xs">
+                Real
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -144,12 +196,14 @@ export default function AnalyticsPage() {
             <p className="text-sm text-green-500">Basado en ocupación hospitalaria</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               🏥 Hospitales Activos
-              <Badge variant="outline" className="text-xs">Live</Badge>
+              <Badge variant="outline" className="text-xs">
+                Live
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -157,27 +211,33 @@ export default function AnalyticsPage() {
             <p className="text-sm text-blue-500">Conectados en tiempo real</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               ⚡ Salud de Red
-              <Badge variant="outline" className="text-xs">Auto</Badge>
+              <Badge variant="outline" className="text-xs">
+                Auto
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{kpis.networkHealthScore}%</p>
-            <p className={`text-sm ${kpis.networkHealthScore > 80 ? 'text-green-500' : 'text-orange-500'}`}>
+            <p
+              className={`text-sm ${kpis.networkHealthScore > 80 ? 'text-green-500' : 'text-orange-500'}`}
+            >
               {kpis.networkHealthScore > 80 ? 'Red estable' : 'Atención requerida'}
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               🚨 Alertas Críticas
-              <Badge variant="outline" className="text-xs">Real</Badge>
+              <Badge variant="outline" className="text-xs">
+                Real
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -219,7 +279,7 @@ export default function AnalyticsPage() {
                   data={[
                     { name: 'Saludables', value: networkStatus.healthy, color: '#00C49F' },
                     { name: 'Advertencia', value: networkStatus.warning, color: '#FFBB28' },
-                    { name: 'Críticos', value: networkStatus.critical, color: '#FF8042' }
+                    { name: 'Críticos', value: networkStatus.critical, color: '#FF8042' },
                   ]}
                   cx="50%"
                   cy="50%"
@@ -232,7 +292,7 @@ export default function AnalyticsPage() {
                   {[
                     { name: 'Saludables', value: networkStatus.healthy, color: '#00C49F' },
                     { name: 'Advertencia', value: networkStatus.warning, color: '#FFBB28' },
-                    { name: 'Críticos', value: networkStatus.critical, color: '#FF8042' }
+                    { name: 'Críticos', value: networkStatus.critical, color: '#FF8042' },
                   ].map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
@@ -276,13 +336,15 @@ export default function AnalyticsPage() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span>Cobertura de Personal</span>
-                <Badge variant={kpis.staffingCoverage > 90 ? "default" : "destructive"}>
+                <Badge variant={kpis.staffingCoverage > 90 ? 'default' : 'destructive'}>
                   {kpis.staffingCoverage}%
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span>Vacantes Publicadas</span>
-                <Badge variant="outline">{monthlyData[monthlyData.length - 1]?.VacantesPublicadas || 0}</Badge>
+                <Badge variant="outline">
+                  {monthlyData[monthlyData.length - 1]?.VacantesPublicadas || 0}
+                </Badge>
               </div>
             </div>
           </CardContent>

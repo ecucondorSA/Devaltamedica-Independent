@@ -4,8 +4,9 @@
  * @description Hook de alto nivel que combina datos médicos, métricas, notificaciones y estado
  */
 
+import { UserRole } from '@altamedica/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAuth } from '../auth/useAuth';
+import { useAuth } from '@altamedica/auth';
 import { usePatients } from '../medical/usePatients';
 import type { MessageEvent, NotificationData } from '../realtime/types';
 import { useNotifications } from '../realtime/useNotifications';
@@ -273,7 +274,7 @@ export function useMedicalDashboard(
   // HOOKS DEPENDIENTES
   // ==========================================
 
-  const { user, hasPermission } = useAuth();
+  const { user, hasRole } = useAuth();
   
   const { 
     patients, 
@@ -400,20 +401,20 @@ export function useMedicalDashboard(
           label: 'Usuarios',
           icon: '👥',
           action: () => window.location.href = '/admin/users',
-          disabled: !hasPermission('manage_users')
+          disabled: !hasRole(UserRole.ADMIN)
         },
         {
           id: 'system_reports',
           label: 'Reportes',
           icon: '📊',
           action: () => window.location.href = '/admin/reports',
-          disabled: !hasPermission('view_analytics')
+          disabled: !hasRole(UserRole.ADMIN)
         }
       );
     }
 
     return actions;
-  }, [dashboardType, hasPermission, alerts]);
+  }, [dashboardType, hasRole, alerts]);
 
   // ==========================================
   // MANEJADORES DE EVENTOS

@@ -4,8 +4,8 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth  } from '@altamedica/auth';;
-import { apiClient  } from '@altamedica/api-client';;
+import { useAuth  } from '@altamedica/auth';
+import { apiClient  } from '@altamedica/api-client';
 
 export interface Medication {
   id: string;

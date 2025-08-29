@@ -1,23 +1,22 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import {
-    Activity,
-    AlertTriangle,
-    CheckCircle,
-    Clock,
-    Cpu,
-    Database,
-    HardDrive,
-    RefreshCw,
-    Server,
-    Shield,
-    Wifi,
-    Zap
-} from 'lucide-react';
 import React from 'react';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Cpu,
+  Database,
+  HardDrive,
+  RefreshCw,
+  Server,
+  Shield,
+  Wifi,
+  Zap,
+} from 'lucide-react';
 
-interface SystemHealth {
+interface SystemHealthData {
   status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
   uptime: string;
   cpuUsage: number;
@@ -32,28 +31,38 @@ interface SystemHealth {
 }
 
 interface SystemHealthProps {
-  health: SystemHealth;
+  health: SystemHealthData;
   onRefresh: () => void;
 }
 
 const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
   const getHealthColor = (status: string) => {
     switch (status) {
-      case 'EXCELLENT': return 'text-green-600 bg-green-100';
-      case 'GOOD': return 'text-blue-600 bg-blue-100';
-      case 'WARNING': return 'text-yellow-600 bg-yellow-100';
-      case 'CRITICAL': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'EXCELLENT':
+        return 'text-green-600 bg-green-100';
+      case 'GOOD':
+        return 'text-blue-600 bg-blue-100';
+      case 'WARNING':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'CRITICAL':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getHealthIcon = (status: string) => {
     switch (status) {
-      case 'EXCELLENT': return <CheckCircle className="w-5 h-5" />;
-      case 'GOOD': return <CheckCircle className="w-5 h-5" />;
-      case 'WARNING': return <AlertTriangle className="w-5 h-5" />;
-      case 'CRITICAL': return <AlertTriangle className="w-5 h-5" />;
-      default: return <Activity className="w-5 h-5" />;
+      case 'EXCELLENT':
+        return <CheckCircle className="w-5 h-5" />;
+      case 'GOOD':
+        return <CheckCircle className="w-5 h-5" />;
+      case 'WARNING':
+        return <AlertTriangle className="w-5 h-5" />;
+      case 'CRITICAL':
+        return <AlertTriangle className="w-5 h-5" />;
+      default:
+        return <Activity className="w-5 h-5" />;
     }
   };
 
@@ -65,10 +74,14 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
 
   const getIssueIcon = (type: string) => {
     switch (type) {
-      case 'error': return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'info': return <Activity className="w-4 h-4 text-blue-500" />;
-      default: return <Activity className="w-4 h-4 text-gray-500" />;
+      case 'error':
+        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+      case 'warning':
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case 'info':
+        return <Activity className="w-4 h-4 text-blue-500" />;
+      default:
+        return <Activity className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -91,7 +104,11 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
           <div className="bg-gray-50 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-700">Estado General</h3>
-              <div className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(health.status)}`}>
+              <div
+                className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(
+                  health.status,
+                )}`}
+              >
                 {getHealthIcon(health.status)}
                 <span className="ml-1">{health.status}</span>
               </div>
@@ -107,7 +124,7 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
             </div>
             <p className="text-2xl font-bold text-gray-900">{health.cpuUsage}%</p>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div 
+              <div
                 className={`h-2 rounded-full ${getUsageColor(health.cpuUsage)}`}
                 style={{ width: `${health.cpuUsage}%` }}
               />
@@ -121,7 +138,7 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
             </div>
             <p className="text-2xl font-bold text-gray-900">{health.memoryUsage}%</p>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div 
+              <div
                 className={`h-2 rounded-full ${getUsageColor(health.memoryUsage)}`}
                 style={{ width: `${health.memoryUsage}%` }}
               />
@@ -135,7 +152,7 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
             </div>
             <p className="text-2xl font-bold text-gray-900">{health.diskUsage}%</p>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div 
+              <div
                 className={`h-2 rounded-full ${getUsageColor(health.diskUsage)}`}
                 style={{ width: `${health.diskUsage}%` }}
               />
@@ -214,20 +231,19 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-4">Problemas Detectados</h3>
             <div className="space-y-3">
-              {health.issues.map(issue => (
-                <div key={issue.id} className="flex items-start p-4 border border-gray-200 rounded-lg">
-                  <div className="flex-shrink-0 mr-3 mt-0.5">
-                    {getIssueIcon(issue.type)}
-                  </div>
+              {health.issues.map((issue) => (
+                <div
+                  key={issue.id}
+                  className="flex items-start p-4 border border-gray-200 rounded-lg"
+                >
+                  <div className="flex-shrink-0 mr-3 mt-0.5">{getIssueIcon(issue.type)}</div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900">{issue.message}</p>
                     <p className="text-xs text-gray-500 mt-1">
                       {new Date(issue.timestamp).toLocaleString()}
                     </p>
                   </div>
-                  <button className="text-sm text-blue-600 hover:text-blue-800">
-                    Resolver
-                  </button>
+                  <button className="text-sm text-blue-600 hover:text-blue-800">Resolver</button>
                 </div>
               ))}
             </div>
@@ -261,4 +277,4 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
   );
 };
 
-export default SystemHealth; 
+export default SystemHealth;

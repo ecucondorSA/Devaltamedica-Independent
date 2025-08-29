@@ -1,4 +1,6 @@
-"use client";
+'use client';
+
+import { logger } from '@altamedica/shared/services/logger.service';
 
 import {
   AlertCircle,
@@ -11,21 +13,15 @@ import {
   MessageCircle,
   User,
   Video,
-  X
-} from "lucide-react";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+  X,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 // Importación desde @altamedica/ui centralizado
-import {
-  ButtonCorporate,
-  CardContentCorporate,
-  CardCorporate,
-  CardHeaderCorporate,
-  LoadingSpinner
-} from "@altamedica/ui";
-import { useAuth  } from '@altamedica/auth';;
-import { logger } from '@altamedica/shared/services/logger.service';
+import { useAuth } from '@altamedica/auth';
+import { Button, Card, CardContent, CardHeader, LoadingSpinner } from '@altamedica/ui';
+
 // import { useMarketplaceJobs, useJobApplications } from '@altamedica/marketplace-hooks';
 // import { useTelemedicineUnified } from '@altamedica/telemedicine-core';
 
@@ -37,8 +33,8 @@ interface AppointmentDetail {
   specialty: string;
   date: string;
   time: string;
-  type: "consultation" | "follow_up" | "emergency" | "telemedicine";
-  status: "scheduled" | "confirmed" | "completed" | "cancelled";
+  type: 'consultation' | 'follow_up' | 'emergency' | 'telemedicine';
+  status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled';
   location?: string;
   notes?: string;
   duration: number; // en minutos
@@ -70,19 +66,11 @@ interface AppointmentDetail {
 export default function AppointmentDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { authState } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const appointmentId = params.id as string;
-  
-  // Marketplace hooks para comunicación mejorada
-  const { jobs, searchJobs } = useMarketplaceJobs();
-  const { applications, submitApplication } = useJobApplications(authState?.user?.id);
-  
-  // Hook unificado de telemedicina + marketplace
-  const telemedicineUnified = useTelemedicineUnified({
-    appointmentId,
-    userType: 'patient',
-    userId: authState?.user?.id || ''
-  });
+
+  // Estado para telemedicina
+  const [telemedicineSession, setTelemedicineSession] = useState<any>(null);
 
   const [appointment, setAppointment] = useState<AppointmentDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,30 +84,30 @@ export default function AppointmentDetailPage() {
 
   // Verificar si se puede unir a telemedicina
   useEffect(() => {
-    if (appointment && appointment.type === "telemedicine") {
+    if (appointment && appointment.type === 'telemedicine') {
       const appointmentDateTime = new Date(`${appointment.date} ${appointment.time}`);
       const now = new Date();
       const timeDiff = appointmentDateTime.getTime() - now.getTime();
       const minutesDiff = timeDiff / (1000 * 60);
-      
+
       // Habilitar 15 minutos antes y hasta 5 minutos después
       setIsJoinEnabled(minutesDiff <= 15 && minutesDiff >= -5);
     }
   }, [appointment]);
 
   const loadAppointmentDetail = async () => {
-    if (!authState?.token) return;
-    
+    if (!user?.id) return;
+
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await fetch(`/api/v1/appointments/${appointmentId}`, {
-        headers: { Authorization: `Bearer ${authState.token}` },
+        headers: { Authorization: `Bearer ${user?.id || ''}` },
       });
 
       const responseJson = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(responseJson?.error || 'Error al cargar detalle de la cita');
       }
@@ -134,9 +122,6 @@ export default function AppointmentDetailPage() {
 
   const handleJoinTelemedicine = async () => {
     try {
-      // Inicializar sesión usando el hook unificado
-      await telemedicineUnified.initializeSession();
-      
       if (appointment?.telemedicineInfo?.joinUrl) {
         window.open(appointment.telemedicineInfo.joinUrl, '_blank');
       } else {
@@ -145,29 +130,29 @@ export default function AppointmentDetailPage() {
         router.push(`/telemedicine/room/${sessionId}`);
       }
     } catch (error) {
-      logger.error('Error joining telemedicine session:', error);
+      logger.error('Error joining telemedicine session:', String(error));
       alert('Error al unirse a la videollamada. Por favor intenta nuevamente.');
     }
   };
 
   const handleCancelAppointment = async () => {
     if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) return;
-    
+
     try {
       const response = await fetch(`/api/v1/appointments/${appointmentId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authState.token}`,
+          Authorization: `Bearer ${user?.id || ''}`,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           status: 'cancelled',
-          cancellationReason: 'Cancelada por el paciente'
+          cancellationReason: 'Cancelada por el paciente',
         }),
       });
 
       if (response.ok) {
-        setAppointment(prev => prev ? { ...prev, status: 'cancelled' } : null);
+        setAppointment((prev) => (prev ? { ...prev, status: 'cancelled' } : null));
         alert('Cita cancelada exitosamente');
       } else {
         throw new Error('Error al cancelar la cita');
@@ -177,41 +162,11 @@ export default function AppointmentDetailPage() {
     }
   };
 
-  const getStatusColor = (status: string): string => {
-    const statusColors = {
-      confirmed: "text-green-700 bg-green-100 border-green-200",
-      scheduled: "text-blue-700 bg-blue-100 border-blue-200",
-      completed: "text-gray-700 bg-gray-100 border-gray-200",
-      cancelled: "text-red-700 bg-red-100 border-red-200",
-    };
-    return statusColors[status as keyof typeof statusColors] || "text-gray-700 bg-gray-100";
-  };
-
-  const getStatusText = (status: string): string => {
-    const statusTexts = {
-      confirmed: "Confirmada",
-      scheduled: "Programada",
-      completed: "Completada",
-      cancelled: "Cancelada",
-    };
-    return statusTexts[status as keyof typeof statusTexts] || status;
-  };
-
-  const getTypeIcon = (type: string) => {
-    const icons = {
-      consultation: <User className="w-5 h-5" />,
-      follow_up: <Clock className="w-5 h-5" />,
-      emergency: <AlertCircle className="w-5 h-5" />,
-      telemedicine: <Video className="w-5 h-5" />,
-    };
-    return icons[type as keyof typeof icons] || <Calendar className="w-5 h-5" />;
-  };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="space-y-4 text-center">
-          <LoadingSpinner size="lg" />
+          <LoadingSpinner />
           <p className="font-medium text-gray-600">Cargando detalle de la cita...</p>
         </div>
       </div>
@@ -229,10 +184,10 @@ export default function AppointmentDetailPage() {
             </div>
             <p className="mt-2 text-red-700">{error || 'Cita no encontrada'}</p>
             <Link href="/appointments">
-              <ButtonCorporate variant="ghost" className="mt-4">
+              <Button variant="ghost" className="mt-4">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver a Citas
-              </ButtonCorporate>
+              </Button>
             </Link>
           </div>
         </div>
@@ -248,19 +203,17 @@ export default function AppointmentDetailPage() {
           <div className="flex items-center justify-between py-6">
             <div className="flex items-center space-x-4">
               <Link href="/appointments">
-                <ButtonCorporate variant="ghost" size="sm">
+                <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Volver
-                </ButtonCorporate>
+                </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Detalle de Cita
-                </h1>
+                <h1 className="text-2xl font-bold text-gray-900">Detalle de Cita</h1>
                 <p className="text-gray-600">ID: {appointment.id}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(appointment.status)}`}
@@ -278,16 +231,14 @@ export default function AppointmentDetailPage() {
           {/* Información Principal */}
           <div className="lg:col-span-2 space-y-6">
             {/* Información de la Cita */}
-            <CardCorporate variant="default" size="lg">
-              <CardHeaderCorporate title="Información de la Cita" className="px-6 py-4 border-b">
+            <Card className="w-full">
+              <CardHeader className="px-6 py-4 border-b">
                 <div className="flex items-center space-x-2">
                   {getTypeIcon(appointment.type)}
-                  <h2 className="text-lg font-medium text-gray-900">
-                    Información de la Cita
-                  </h2>
+                  <h2 className="text-lg font-medium text-gray-900">Información de la Cita</h2>
                 </div>
-              </CardHeaderCorporate>
-              <CardContentCorporate className="p-6">
+              </CardHeader>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
@@ -297,7 +248,7 @@ export default function AppointmentDetailPage() {
                         <p className="text-lg font-semibold text-gray-900">{appointment.date}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3">
                       <Clock className="w-5 h-5 text-green-600" />
                       <div>
@@ -315,9 +266,13 @@ export default function AppointmentDetailPage() {
                       <div>
                         <p className="text-sm font-medium text-gray-600">Tipo de Consulta</p>
                         <p className="text-lg font-semibold text-gray-900 capitalize">
-                          {appointment.type === 'telemedicine' ? 'Telemedicina' : 
-                           appointment.type === 'consultation' ? 'Consulta' :
-                           appointment.type === 'follow_up' ? 'Seguimiento' : 'Emergencia'}
+                          {appointment.type === 'telemedicine'
+                            ? 'Telemedicina'
+                            : appointment.type === 'consultation'
+                              ? 'Consulta'
+                              : appointment.type === 'follow_up'
+                                ? 'Seguimiento'
+                                : 'Emergencia'}
                         </p>
                       </div>
                     </div>
@@ -327,7 +282,9 @@ export default function AppointmentDetailPage() {
                         <MapPin className="w-5 h-5 text-red-600" />
                         <div>
                           <p className="text-sm font-medium text-gray-600">Ubicación</p>
-                          <p className="text-lg font-semibold text-gray-900">{appointment.location}</p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            {appointment.location}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -340,13 +297,18 @@ export default function AppointmentDetailPage() {
                     <p className="text-blue-800">{appointment.notes}</p>
                   </div>
                 )}
-              </CardContentCorporate>
-            </CardCorporate>
+              </CardContent>
+            </Card>
 
             {/* Información del Doctor */}
-            <CardCorporate variant="default" size="lg">
-              <CardHeaderCorporate title="Información del Doctor" className="px-6 py-4 border-b" />
-              <CardContentCorporate className="p-6">
+            <Card>
+              <CardHeader className="px-6 py-4 border-b">
+                <div className="flex items-center space-x-2">
+                  <User className="w-5 h-5 text-purple-600" />
+                  <h2 className="text-lg font-medium text-gray-900">Información del Doctor</h2>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
                     {appointment.doctorInfo.photo ? (
@@ -361,17 +323,21 @@ export default function AppointmentDetailPage() {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900">{appointment.doctorName}</h3>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {appointment.doctorName}
+                    </h3>
                     <p className="text-blue-600 font-medium">{appointment.specialty}</p>
                     <p className="text-gray-600 mt-1">{appointment.doctorInfo.experience}</p>
-                    
+
                     <div className="flex items-center mt-2 space-x-4">
                       <div className="flex items-center">
                         <span className="text-yellow-400">★</span>
                         <span className="ml-1 font-medium">{appointment.doctorInfo.rating}</span>
-                        <span className="ml-1 text-gray-500">({appointment.doctorInfo.reviewsCount} reseñas)</span>
+                        <span className="ml-1 text-gray-500">
+                          ({appointment.doctorInfo.reviewsCount} reseñas)
+                        </span>
                       </div>
                     </div>
 
@@ -390,14 +356,19 @@ export default function AppointmentDetailPage() {
                     </div>
                   </div>
                 </div>
-              </CardContentCorporate>
-            </CardCorporate>
+              </CardContent>
+            </Card>
 
             {/* Archivos Adjuntos */}
             {appointment.attachments && appointment.attachments.length > 0 && (
-              <CardCorporate variant="default" size="lg">
-                <CardHeaderCorporate title="Archivos Adjuntos" className="px-6 py-4 border-b" />
-                <CardContentCorporate className="p-6">
+              <Card>
+                <CardHeader className="px-6 py-4 border-b">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    <h2 className="text-lg font-medium text-gray-900">Archivos Adjuntos</h2>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6">
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {appointment.attachments.map((attachment, index) => (
                       <div
@@ -408,113 +379,129 @@ export default function AppointmentDetailPage() {
                         <div className="flex-1">
                           <p className="text-sm font-medium text-gray-900">{attachment}</p>
                         </div>
-                        <ButtonCorporate variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm">
                           Descargar
-                        </ButtonCorporate>
+                        </Button>
                       </div>
                     ))}
                   </div>
-                </CardContentCorporate>
-              </CardCorporate>
+                </CardContent>
+              </Card>
             )}
           </div>
 
           {/* Sidebar de Acciones */}
           <div className="space-y-6">
             {/* Acciones Principales */}
-            <CardCorporate variant="default" size="md">
-              <CardHeaderCorporate title="Acciones" className="px-6 py-4 border-b" />
-              <CardContentCorporate className="p-6">
+            <Card>
+              <CardHeader className="px-6 py-4 border-b">
+                <div className="flex items-center space-x-2">
+                  <MessageCircle className="w-5 h-5 text-blue-600" />
+                  <h2 className="text-lg font-medium text-gray-900">Acciones</h2>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
                 <div className="space-y-3">
                   {appointment.status === 'confirmed' && appointment.type === 'telemedicine' && (
-                    <ButtonCorporate
-                      variant="primary"
+                    <Button
+                      variant="default"
                       className="w-full flex items-center justify-center space-x-2"
                       onClick={handleJoinTelemedicine}
                       disabled={!isJoinEnabled}
                     >
                       <Video className="w-4 h-4" />
-                      <span>{isJoinEnabled ? 'Unirse a Videollamada' : 'Disponible 15 min antes'}</span>
-                    </ButtonCorporate>
+                      <span>
+                        {isJoinEnabled ? 'Unirse a Videollamada' : 'Disponible 15 min antes'}
+                      </span>
+                    </Button>
                   )}
 
                   {appointment.status === 'confirmed' && appointment.type !== 'telemedicine' && (
-                    <ButtonCorporate
+                    <Button
                       variant="secondary"
                       className="w-full flex items-center justify-center space-x-2"
                     >
                       <MapPin className="w-4 h-4" />
                       <span>Ver Direcciones</span>
-                    </ButtonCorporate>
+                    </Button>
                   )}
 
                   {(appointment.status === 'scheduled' || appointment.status === 'confirmed') && (
                     <>
-                      <ButtonCorporate
+                      <Button
                         variant="ghost"
                         className="w-full flex items-center justify-center space-x-2"
                         onClick={() => router.push(`/appointments/${appointmentId}/reschedule`)}
                       >
                         <Edit3 className="w-4 h-4" />
                         <span>Reagendar</span>
-                      </ButtonCorporate>
+                      </Button>
 
-                      <ButtonCorporate
+                      <Button
                         variant="ghost"
                         className="w-full flex items-center justify-center space-x-2 text-red-600 hover:text-red-700"
                         onClick={handleCancelAppointment}
                       >
                         <X className="w-4 h-4" />
                         <span>Cancelar Cita</span>
-                      </ButtonCorporate>
+                      </Button>
                     </>
                   )}
 
-                  <ButtonCorporate
+                  <Button
                     variant="ghost"
                     className="w-full flex items-center justify-center space-x-2"
                     onClick={() => router.push(`/messages?doctorId=${appointment.doctorId}`)}
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>Contactar Doctor</span>
-                  </ButtonCorporate>
+                  </Button>
                 </div>
-              </CardContentCorporate>
-            </CardCorporate>
+              </CardContent>
+            </Card>
 
             {/* Información de Telemedicina */}
             {appointment.type === 'telemedicine' && appointment.telemedicineInfo && (
-              <CardCorporate variant="default" size="md">
-                <CardHeaderCorporate title="Información de Videollamada" className="px-6 py-4 border-b" />
-                <CardContentCorporate className="p-6">
+              <Card className="w-full">
+                <CardHeader className="px-6 py-4 border-b">
+                  <h3 className="text-lg font-medium text-gray-900">Información de Videollamada</h3>
+                </CardHeader>
+                <CardContent className="p-6">
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium text-gray-600">ID de Sala</p>
-                      <p className="text-gray-900 font-mono text-sm">{appointment.telemedicineInfo.roomId}</p>
+                      <p className="text-gray-900 font-mono text-sm">
+                        {appointment.telemedicineInfo.roomId}
+                      </p>
                     </div>
-                    
+
                     {appointment.telemedicineInfo.accessCode && (
                       <div>
                         <p className="text-sm font-medium text-gray-600">Código de Acceso</p>
-                        <p className="text-gray-900 font-mono text-lg font-bold">{appointment.telemedicineInfo.accessCode}</p>
+                        <p className="text-gray-900 font-mono text-lg font-bold">
+                          {appointment.telemedicineInfo.accessCode}
+                        </p>
                       </div>
                     )}
 
                     <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                       <p className="text-sm text-blue-800">
-                        <strong>Nota:</strong> Puedes unirse a la videollamada 15 minutos antes de la hora programada.
+                        <strong>Nota:</strong> Puedes unirse a la videollamada 15 minutos antes de
+                        la hora programada.
                       </p>
                     </div>
                   </div>
-                </CardContentCorporate>
-              </CardCorporate>
+                </CardContent>
+              </Card>
             )}
 
             {/* Historial de Reagendamientos */}
             {appointment.rescheduleHistory && appointment.rescheduleHistory.length > 0 && (
-              <CardCorporate variant="default" size="md">
-                <CardHeaderCorporate title="Historial de Cambios" className="px-6 py-4 border-b" />
-                <CardContentCorporate className="p-6">
+              <Card className="w-full">
+                <CardHeader className="px-6 py-4 border-b">
+                  <h3 className="text-lg font-medium text-gray-900">Historial de Cambios</h3>
+                </CardHeader>
+                <CardContent className="p-6">
                   <div className="space-y-3">
                     {appointment.rescheduleHistory.map((change, index) => (
                       <div key={index} className="border-l-2 border-blue-200 pl-3">
@@ -531,12 +518,58 @@ export default function AppointmentDetailPage() {
                       </div>
                     ))}
                   </div>
-                </CardContentCorporate>
-              </CardCorporate>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+// Funciones auxiliares
+function getStatusColor(status: string) {
+  switch (status) {
+    case 'scheduled':
+      return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'confirmed':
+      return 'bg-green-100 text-green-800 border-green-200';
+    case 'completed':
+      return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'cancelled':
+      return 'bg-red-100 text-red-800 border-red-200';
+    default:
+      return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
+}
+
+function getStatusText(status: string) {
+  switch (status) {
+    case 'scheduled':
+      return 'Programada';
+    case 'confirmed':
+      return 'Confirmada';
+    case 'completed':
+      return 'Completada';
+    case 'cancelled':
+      return 'Cancelada';
+    default:
+      return status;
+  }
+}
+
+function getTypeIcon(type: string) {
+  switch (type) {
+    case 'telemedicine':
+      return <Video className="w-5 h-5 text-blue-600" />;
+    case 'consultation':
+      return <User className="w-5 h-5 text-green-600" />;
+    case 'follow_up':
+      return <FileText className="w-5 h-5 text-purple-600" />;
+    case 'emergency':
+      return <AlertCircle className="w-5 h-5 text-red-600" />;
+    default:
+      return <User className="w-5 h-5 text-gray-600" />;
+  }
 }

@@ -10,15 +10,25 @@
 // 🏥 HOOKS MÉDICOS (evitar duplicados)
 // ==========================================
 export {
-    useDiagnosticEngine, useDoctorSchedule,
-    useDoctorWorkflow, useMedicalAI,
-    useMedicalRecord,
-    useMedicalRecords, useWebRTC as useMedicalWebRTC, usePatientDashboard,
-    usePatientPortal, usePrescription,
-    usePrescriptions, useTelemedicine,
-    useVideoCall, useVitalSigns,
-    useVitalSignsMonitoring
+  useDiagnosticEngine,
+  useDoctorSchedule,
+  useDoctorWorkflow,
+  useMedicalAI,
+  useMedicalRecord,
+  useMedicalRecords,
+  useWebRTC as useMedicalWebRTC,
+  usePatientDashboard,
+  usePatientPortal,
+  usePrescription,
+  usePrescriptions,
+  useTelemedicine,
+  useVideoCall,
+  useVitalSigns,
+  useVitalSignsMonitoring,
 } from './medical';
+
+// Accesos directos frecuentes
+export { usePatientData } from './medical';
 
 // ==========================================
 // 🔐 HOOKS DE AUTENTICACIÓN
@@ -29,6 +39,12 @@ export * from './auth';
 // 🌐 HOOKS DE API (evitar re-export de QUERY_KEYS duplicado)
 // ==========================================
 export { default as useAltamedicaAPI } from './useAltamedicaAPI';
+export { 
+  useDoctorToCompanyCommunication,
+  useCompanyToDoctorCommunication,
+  useUnreadNotificationsCount,
+  useJobApplication 
+} from './api/useB2CCommunication';
 
 // ==========================================
 // 🎨 HOOKS DE UI/UX
@@ -55,7 +71,12 @@ export * from './realtime/types';
 // ==========================================
 // 🧩 HOOKS COMPUESTOS
 // ==========================================
-export { useAdminDashboard, usePatientDashboard as useComposedPatientDashboard, useDoctorDashboard, useMedicalDashboard } from './composed/useMedicalDashboard';
+export {
+  useAdminDashboard,
+  usePatientDashboard as useComposedPatientDashboard,
+  useDoctorDashboard,
+  useMedicalDashboard,
+} from './composed/useMedicalDashboard';
 export { useTelemedicineSession } from './composed/useTelemedicineSession';
 
 // ==========================================
@@ -67,6 +88,11 @@ export * from './forms';
 // 🔌 PROVIDERS
 // ==========================================
 export * from './providers';
+
+// ==========================================
+// 🔎 HOOKS DE AUDITORÍA
+// ==========================================
+export * from './audit/useAuditLogs';
 
 // ==========================================
 // 🕰️ LEGACY (Compatibilidad temporal pacientes)

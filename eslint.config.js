@@ -1,9 +1,25 @@
-// eslint.config.js - ESLint v9 Configuration for AltaMedica Root
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
+  // Global ignores for the monorepo (flat config)
+  {
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      'build/**',
+      'coverage/**',
+      'dist/**',
+      'apps/*/.next/**',
+      'apps/*/dist/**',
+      'packages/*/dist/**',
+      '**/*.d.ts',
+      'packages/hooks/src/**/*.test.{ts,tsx,js,jsx}',
+      'packages/hooks/src/**/DEPRECATED_*.ts'
+    ]
+  },
   js.configs.recommended,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
@@ -83,11 +99,17 @@ export default [
         ReactQueryDevtools: 'readonly',
         // Additional browser globals used in legacy/rtc code
         Blob: 'readonly',
-        RTCRtpReceiver: 'readonly'
+        RTCRtpReceiver: 'readonly',
+        React: 'readonly',
+        FormData: 'readonly',
+        SpeechSynthesisUtterance: 'readonly',
+        alert: 'readonly',
+        matchMedia: 'readonly',
       }
     },
     plugins: {
-      '@typescript-eslint': tsPlugin
+      '@typescript-eslint': tsPlugin,
+      import: importPlugin
     },
     rules: {
       // Core rules
@@ -108,14 +130,13 @@ export default [
     ignores: [
       'node_modules/**',
       '.next/**',
-      'dist/**',
       'build/**',
       'coverage/**',
       '**/*.d.ts',
       'apps/*/node_modules/**',
       'packages/*/node_modules/**',
       'apps/*/.next/**',
-      'packages/*/dist/**',
+      'dist/**',
       // Ignore deprecated/backup legacy hooks
       'apps/**/src/hooks/DEPRECATED_*',
       'apps/**/src/hooks/BACKUP_*',
@@ -123,6 +144,64 @@ export default [
       // Ignore e2e and generated test artifacts
       'packages/e2e-tests/**'
     ]
+  }
+  ,
+  // Hooks package: relajar reglas estrictas para hooks
+  {
+    files: ['packages/hooks/src/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'no-case-declarations': 'warn',
+      'no-empty': ['warn', { allowEmptyCatch: true }]
+    }
+  }
+  ,
+  // Type definitions: parse as TS but skip problematic rules
+  {
+    files: ['**/*.d.ts'],
+    languageOptions: {
+      parser: tsParser,
+    },
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off'
+    }
+  }
+  ,
+  // Ensure Node.js globals are recognized in config files and mjs/cjs
+  {
+    files: ['**/*.mjs', '**/*.cjs', '**/*config.{js,mjs,cjs}', '**/next.config.mjs'],
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+        __dirname: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        Buffer: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly'
+      }
+    },
+    rules: {
+      'no-undef': 'off'
+    }
+  }
+  ,
+  {
+    files: ['packages/shared/src/services/**/*.{ts,tsx}'],
+    rules: {
+      'no-console': 'error'
+    }
+  }
+  ,
+  {
+    files: ['packages/services/src/**/*.{ts,tsx}', 'packages/database/src/**/*.{ts,tsx}'],
+    rules: {
+      'no-console': 'error'
+    }
   }
   ,
   {

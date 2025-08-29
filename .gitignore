@@ -148,3 +148,6 @@ archive/data/
 # Environment files
 .env.local
 .env.*.local
+
+.gemini/
+gha-creds-*.json

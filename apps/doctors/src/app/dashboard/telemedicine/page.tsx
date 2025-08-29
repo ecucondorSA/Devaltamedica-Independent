@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Componentes simples
 const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
@@ -117,7 +117,7 @@ const TelemedicineSessionCard = ({ session, onJoin, onViewDetails }: {
           <div className="flex items-center gap-2 pt-2">
             {session.status === 'waiting' && (
               <Button
-                size="small"
+                size="sm"
                 onClick={() => onJoin(session.id)}
                 className="flex-1"
               >
@@ -127,7 +127,7 @@ const TelemedicineSessionCard = ({ session, onJoin, onViewDetails }: {
             )}
             <Button
               variant="secondary"
-              size="small"
+              size="sm"
               onClick={() => onViewDetails(session.id)}
               className="flex-1"
             >
@@ -226,7 +226,7 @@ export default function TelemedicinePage() {
           <div className="flex items-center justify-between">
             <CardTitle>Sesiones de Telemedicina</CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="secondary" size="small" onClick={handleStartTelemedicine}>
+              <Button variant="secondary" size="sm" onClick={handleStartTelemedicine}>
                 <Plus className="w-4 h-4 mr-2" />
                 Nueva Sesión
               </Button>

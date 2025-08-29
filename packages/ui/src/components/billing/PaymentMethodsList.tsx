@@ -11,8 +11,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../dropdown-menu';
-import { Alert, AlertDescription } from '../alert';
+} from '../../dropdown-menu';
+import { Alert, AlertDescription } from '../../alert';
 
 /**
  * Payment Methods List Component

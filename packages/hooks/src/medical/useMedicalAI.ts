@@ -4,30 +4,31 @@
  * @description Hook avanzado para análisis de IA médica, diagnósticos y recomendaciones
  */
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useAuth } from '../auth/useAuth';
+import { UserRole } from '@altamedica/types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useAuth } from '@altamedica/auth';
 import { useNotifications } from '../realtime/useNotifications';
 
 // Simple logger implementation to avoid circular dependencies
 const logger = {
-  info: (message, data) => {
+  info: (...args: any[]) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
+      console.log(...args);
     }
   },
-  warn: (message, data) => {
+  warn: (...args: any[]) => {
     if (typeof console !== 'undefined') {
-      console.warn(message, data);
+      console.warn(...args);
     }
   },
-  error: (message, data) => {
+  error: (...args: any[]) => {
     if (typeof console !== 'undefined') {
-      console.error(message, data);
+      console.error(...args);
     }
   },
-  debug: (message, data) => {
+  debug: (...args: any[]) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
+      console.debug(...args);
     }
   }
 };
@@ -676,13 +677,13 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
   // REFS
   // ==========================================
   
-  const aiEngineRef = useRef<MedicalAIEngine>();
+  const aiEngineRef = useRef<MedicalAIEngine | undefined>(undefined);
   
   // ==========================================
   // HOOKS DEPENDIENTES
   // ==========================================
   
-  const { user, hasPermission } = useAuth();
+  const { user, hasRole } = useAuth();
   const notifications = useNotifications();
   
   // ==========================================
@@ -702,7 +703,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     patientContext: PatientContext
   ): Promise<AIAnalysisResult> => {
     if (!aiEngineRef.current) throw new Error('AI Engine not initialized');
-    if (!hasPermission('read_medical_records')) {
+    if (!hasRole(UserRole.DOCTOR)) {
       throw new Error('No tiene permisos para realizar análisis médicos');
     }
     
@@ -745,7 +746,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     } finally {
       setIsAnalyzing(false);
     }
-  }, [aiEngineRef.current, hasPermission, user, finalConfig, notifications]);
+  }, [aiEngineRef.current, hasRole, user, finalConfig, notifications]);
   
   const getDiagnosticSuggestions = useCallback(async (
     symptoms: string[], 
@@ -765,7 +766,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
   const checkDrugInteractions = useCallback(async (
     medications: Medication[]
   ): Promise<DrugInteraction[]> => {
-    if (!hasPermission('prescribe_medications')) {
+    if (!hasRole(UserRole.DOCTOR)) {
       throw new Error('No tiene permisos para verificar interacciones de medicamentos');
     }
     
@@ -793,7 +794,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     }
     
     return interactions;
-  }, [hasPermission]);
+  }, [hasRole]);
   
   const assessRisk = useCallback(async (
     patientContext: PatientContext

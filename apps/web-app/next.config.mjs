@@ -1,4 +1,10 @@
 import { appConfigs } from '@altamedica/config-next';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Compatibilidad ESM: definir __filename/__dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const config = appConfigs.webApp({
@@ -21,8 +27,24 @@ const config = appConfigs.webApp({
 
   // Custom webpack config for web-app
   webpack: (config, { isServer, dev }) => {
+    const monorepoAliases = {
+      '@altamedica/auth': path.resolve(__dirname, '../../packages/auth/src'),
+      '@altamedica/firebase': path.resolve(__dirname, '../../packages/firebase/src'),
+      '@altamedica/ui': path.resolve(__dirname, '../../packages/ui/src'),
+      '@altamedica/shared': path.resolve(__dirname, '../../packages/shared/src'),
+      '@altamedica/hooks': path.resolve(__dirname, '../../packages/hooks/src'),
+      '@altamedica/api-client': path.resolve(__dirname, '../../packages/api-client/src'),
+      '@altamedica/types': path.resolve(__dirname, '../../packages/types/src'),
+      '@altamedica/utils': path.resolve(__dirname, '../../packages/utils/src'),
+    };
+
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      ...monorepoAliases,
+    };
     // Client-side optimizations
-    if (!isServer) {
+  if (!isServer) {
       // Node.js polyfills
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -46,6 +68,16 @@ const config = appConfigs.webApp({
       // Remover dependencias 3D de marketing scope
       config.resolve.alias = {
         ...config.resolve.alias,
+        // Resolver paquetes internos del monorepo directo a sus src para
+        // evitar problemas de linking con pnpm en entornos CI/contenerizados.
+  '@altamedica/auth': path.resolve(__dirname, '../../packages/auth/src'),
+  '@altamedica/firebase': path.resolve(__dirname, '../../packages/firebase/src'),
+  '@altamedica/ui': path.resolve(__dirname, '../../packages/ui/src'),
+  '@altamedica/shared': path.resolve(__dirname, '../../packages/shared/src'),
+  '@altamedica/hooks': path.resolve(__dirname, '../../packages/hooks/src'),
+  '@altamedica/api-client': path.resolve(__dirname, '../../packages/api-client/src'),
+  '@altamedica/types': path.resolve(__dirname, '../../packages/types/src'),
+  '@altamedica/utils': path.resolve(__dirname, '../../packages/utils/src'),
       };
     }
 

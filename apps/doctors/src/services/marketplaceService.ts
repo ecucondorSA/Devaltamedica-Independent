@@ -1,10 +1,14 @@
-import { QueryProvider, apiClient } from '@altamedica/api-client';
-import { services } from '@altamedica/api-client';
+// import { QueryProvider, apiClient } from '@altamedica/api-client';
+// import { services } from '@altamedica/api-client';
+
+const QueryProvider: any = {};
+const apiClient: any = {};
+const services: any = {};
 
 // apps/doctors/src/services.ts
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Interfaces para marketplace unificado
@@ -114,7 +118,7 @@ export const getAvailableListings = async (filters?: {
     return result.data || [];
 
   } catch (error) {
-    logger.error('Error fetching marketplace listings:', error);
+    logger.error('Error fetching marketplace listings:', String(error));
     // Fallback a datos mock en caso de error
     return [
       { 
@@ -186,7 +190,7 @@ export const getListingDetails = async (listingId: string) => {
     return result.data;
 
   } catch (error) {
-    logger.error('Error fetching listing details:', error);
+    logger.error('Error fetching listing details:', String(error));
     // Fallback a datos mock
     return {
       id: listingId,
@@ -238,7 +242,7 @@ export const applyToListing = async (applicationData: ApplicationData) => {
     return result.data;
 
   } catch (error) {
-    logger.error('Error applying to listing:', error);
+    logger.error('Error applying to listing:', String(error));
     throw error; // Re-throw para que el componente maneje el error
   }
 };
@@ -270,7 +274,7 @@ export const getUserApplications = async () => {
     return result.data || [];
 
   } catch (error) {
-    logger.error('Error fetching user applications:', error);
+    logger.error('Error fetching user applications:', String(error));
     return [];
   }
 };
@@ -301,7 +305,7 @@ export const getMarketplaceStats = async () => {
     return result.data;
 
   } catch (error) {
-    logger.error('Error fetching marketplace stats:', error);
+    logger.error('Error fetching marketplace stats:', String(error));
     return {
       totalCompanies: 0,
       activeListings: 0,

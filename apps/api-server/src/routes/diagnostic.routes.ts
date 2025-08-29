@@ -319,4 +319,187 @@ router.get('/conditions', async (req: Request, res: Response) => {
   }
 });
 
+// 🧠 ENDPOINTS PARA HOOKS MODERNOS - REQUERIDOS POR useDiagnosisAI
+// Endpoints adicionales para hooks avanzados de IA médica
+
+// POST /api/v1/diagnostic/analyze - Análisis completo de síntomas
+router.post('/analyze', async (req: Request, res: Response) => {
+  try {
+    const data = req.body;
+    
+    // Validar estructura básica
+    if (!data.patientId || !data.symptoms || !Array.isArray(data.symptoms)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Datos requeridos: patientId, symptoms (array), medicalHistory'
+      });
+    }
+
+    // Simular análisis IA completo usando DiagnosticEngine existente
+    const engine = new DiagnosticEngine();
+    const session = engine.startSession({ 
+      age: data.age || 30, 
+      sex: data.sex || 'M' 
+    });
+
+    // Convertir síntomas a respuestas automatizadas
+    const autoAnswers = data.symptoms.map((symptom: any, index: number) => ({
+      questionId: `q_${index}`,
+      answer: { value: true, text: symptom.name || symptom }
+    }));
+
+    // Procesar respuestas automáticas
+    for (const answer of autoAnswers) {
+      engine.submitAnswer(session.id, answer.questionId, answer.answer);
+    }
+
+    const report = engine.generateReport(session.id);
+    
+    // Formatear respuesta compatible con useDiagnosisAI
+    const analysisResult = {
+      id: `analysis_${Date.now()}`,
+      patientId: data.patientId,
+      symptoms: data.symptoms,
+      medicalHistory: data.medicalHistory || {},
+      possibleConditions: (report?.recommendations || []).map((rec: any, index: number) => ({
+        condition: rec.condition || `Condición ${index + 1}`,
+        probability: rec.confidence || 0.5,
+        confidence: rec.confidence || 0.5,
+        icd10Code: rec.icd10 || 'Z00.0',
+        reasoning: rec.reasoning || 'Análisis basado en síntomas reportados',
+        urgencyLevel: rec.urgency || 'medium',
+        requiredTests: rec.tests || []
+      })),
+      recommendations: {
+        immediate: report?.immediate || ['Consultar con médico'],
+        followUp: report?.followUp || ['Monitorear síntomas'],
+        lifestyle: ['Reposo', 'Hidratación'],
+        monitoring: ['Control en 24-48 horas']
+      },
+      redFlags: report?.redFlags || [],
+      aiConfidence: 0.75,
+      requiresHumanReview: true,
+      timestamp: new Date().toISOString()
+    };
+
+    return res.json({
+      success: true,
+      data: analysisResult
+    });
+  } catch (error) {
+    logger.error('Error in diagnostic analysis:', undefined, error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to analyze symptoms'
+    });
+  }
+});
+
+// POST /api/v1/diagnostic/restrictions - Verificar restricciones médicas
+router.post('/restrictions', async (req: Request, res: Response) => {
+  try {
+    const { patientId, proposedTreatments } = req.body;
+    
+    if (!patientId || !proposedTreatments) {
+      return res.status(400).json({
+        success: false,
+        error: 'patientId y proposedTreatments son requeridos'
+      });
+    }
+
+    // Simulación de verificación de restricciones
+    // En producción, consultaría base de datos médica
+    const restrictions = [];
+
+    // Verificar alergias comunes
+    if (proposedTreatments.includes('penicillin')) {
+      restrictions.push({
+        type: 'allergy',
+        value: 'penicillin',
+        message: 'Paciente alérgico a penicilina',
+        severity: 'contraindication'
+      });
+    }
+
+    // Verificar interacciones
+    if (proposedTreatments.includes('warfarin') && proposedTreatments.includes('aspirin')) {
+      restrictions.push({
+        type: 'medication',
+        value: 'warfarin+aspirin',
+        message: 'Riesgo de sangrado por interacción',
+        severity: 'warning'
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: restrictions
+    });
+  } catch (error) {
+    logger.error('Error checking restrictions:', undefined, error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to check restrictions'
+    });
+  }
+});
+
+// POST /api/v1/diagnostic/quick-analysis - Análisis rápido de triaje
+router.post('/quick-analysis', async (req: Request, res: Response) => {
+  try {
+    const { symptoms } = req.body;
+    
+    if (!symptoms || !Array.isArray(symptoms)) {
+      return res.status(400).json({
+        success: false,
+        error: 'symptoms array is required'
+      });
+    }
+
+    // Análisis rápido basado en palabras clave
+    let urgencyLevel = 'low';
+    let requiresImmediateAttention = false;
+    let estimatedWaitTime = 120; // minutos
+    let triageRecommendation = 'Consulta médica regular';
+
+    const symptomText = symptoms.join(' ').toLowerCase();
+
+    // Detectar síntomas de emergencia
+    const emergencyKeywords = ['chest pain', 'dolor pecho', 'shortness of breath', 'difficulty breathing', 'unconscious', 'stroke'];
+    const highUrgencyKeywords = ['severe pain', 'high fever', 'bleeding', 'vomiting blood'];
+
+    if (emergencyKeywords.some(keyword => symptomText.includes(keyword))) {
+      urgencyLevel = 'emergency';
+      requiresImmediateAttention = true;
+      estimatedWaitTime = 0;
+      triageRecommendation = 'Atención inmediata en urgencias';
+    } else if (highUrgencyKeywords.some(keyword => symptomText.includes(keyword))) {
+      urgencyLevel = 'high';
+      requiresImmediateAttention = true;
+      estimatedWaitTime = 30;
+      triageRecommendation = 'Consulta urgente dentro de 1 hora';
+    } else if (symptoms.length > 3) {
+      urgencyLevel = 'medium';
+      estimatedWaitTime = 60;
+      triageRecommendation = 'Consulta médica en 24 horas';
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        urgencyLevel,
+        triageRecommendation,
+        requiresImmediateAttention,
+        estimatedWaitTime
+      }
+    });
+  } catch (error) {
+    logger.error('Error in quick analysis:', undefined, error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to perform quick analysis'
+    });
+  }
+});
+
 export default router;

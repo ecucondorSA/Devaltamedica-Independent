@@ -1,24 +1,106 @@
-import { createSSOMiddleware } from '@altamedica/auth/middleware';
+import { createAuthMiddleware } from '@altamedica/auth/middleware';
+import { createCsp } from '@altamedica/config-next';
+import { logger } from '@altamedica/shared/services/logger.service';
+import { rateLimiter } from '@altamedica/utils/rate-limiter';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { logger } from '@altamedica/shared/services/logger.service';
-/**
- * 🏥 AltaMedica Web App SSO Middleware
- * Gateway application with HIPAA-compliant security headers
- */
-
-// Create SSO middleware with web-app specific config
-const ssoMiddleware = createSSOMiddleware({
-  appName: 'web-app',
-  // No role restrictions - gateway accepts all authenticated users
-  allowedRoles: [],
+const authMiddleware = createAuthMiddleware({
   loginUrl: process.env.NEXT_PUBLIC_LOGIN_URL || 'http://localhost:3000/auth/login',
   apiUrl: process.env.NEXT_PUBLIC_API_URL
     ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/verify`
     : 'http://localhost:3001/api/v1/auth/verify',
-  // Extended public paths for web-app
-  publicPaths: [
+  allowedRoles: [],
+});
+
+const ROUTE_MAPPINGS: Record<string, string> = {
+  '/contacto': '/contact',
+  '/nosotros': '/about',
+  '/acerca': '/about',
+  '/precios': '/pricing',
+  '/privacidad': '/privacy',
+  '/terminos': '/terms',
+  '/ayuda': '/help',
+  '/testimonios': '/testimonials',
+};
+
+const HIGH_RISK_ROUTES = ['/patients', '/medical', '/appointments'];
+
+function addSecurityHeaders(response: NextResponse, nonce: string) {
+  const csp = createCsp({
+    nonce,
+    overrides: {
+      'script-src': [
+        'https://cdn.jsdelivr.net',
+        'https://www.googletagmanager.com',
+        'https://www.google-analytics.com',
+        'https://accounts.google.com',
+        'https://apis.google.com',
+        'https://www.gstatic.com',
+        'https://www.google.com',
+      ],
+      'style-src': ['https://fonts.googleapis.com'],
+      'img-src': ['https:', 'https://*.gstatic.com', 'https://*.googleusercontent.com'],
+      'font-src': ['https://fonts.gstatic.com'],
+      'connect-src': [
+        'http://localhost:*',
+        'ws://localhost:*',
+        'wss://localhost:*',
+        'https://api.altamedica.com',
+        'https://*.firebaseio.com',
+        'https://firebase.googleapis.com',
+        'https://firestore.googleapis.com',
+        'https://securetoken.googleapis.com',
+        'https://identitytoolkit.googleapis.com',
+        'https://firebaseinstallations.googleapis.com',
+        'https://accounts.google.com',
+        'https://apis.google.com',
+        'https://www.googleapis.com',
+      ],
+      'frame-src': ['https://accounts.google.com', 'https://*.google.com'],
+      'media-src': ['blob:'],
+    },
+  });
+
+  response.headers.set('Content-Security-Policy', csp);
+  return response;
+}
+
+export async function middleware(request: NextRequest) {
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith('/auth/') || pathname.startsWith('/api/')) {
+    const clientIP = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+    const limit = pathname.startsWith('/auth/') ? 20 : 100;
+    const windowInSeconds = 60;
+
+    const { isAllowed, remaining } = await rateLimiter(
+      `mw:${pathname}:${clientIP}`,
+      limit,
+      windowInSeconds
+    );
+
+    if (!isAllowed) {
+      return new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: {
+          'Retry-After': String(windowInSeconds),
+          'X-RateLimit-Limit': String(limit),
+          'X-RateLimit-Remaining': String(remaining),
+        },
+      });
+    }
+  }
+
+  if (ROUTE_MAPPINGS[pathname]) {
+    const url = request.nextUrl.clone();
+    url.pathname = ROUTE_MAPPINGS[pathname];
+    const response = NextResponse.redirect(url, { status: 301 });
+    return addSecurityHeaders(response, nonce);
+  }
+
+  const publicPaths = [
     '/',
     '/manifest.json',
     '/api/font-css',
@@ -36,7 +118,7 @@ const ssoMiddleware = createSSOMiddleware({
     '/contacto',
     '/pricing',
     '/privacy',
-    '/terms',
+    '/terminos',
     '/help',
     '/demo',
     '/landing-demo',
@@ -52,97 +134,27 @@ const ssoMiddleware = createSSOMiddleware({
     '/images',
     '/fonts',
     '/public',
-  ],
-  debug: process.env.NODE_ENV === 'development',
-});
+  ];
 
-// Spanish to English route mappings for i18n support
-const ROUTE_MAPPINGS: Record<string, string> = {
-  '/contacto': '/contact',
-  '/nosotros': '/about',
-  '/acerca': '/about',
-  '/precios': '/pricing',
-  '/privacidad': '/privacy',
-  '/terminos': '/terms',
-  '/ayuda': '/help',
-  '/testimonios': '/testimonials',
-};
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
-// High-risk medical routes that need extra logging
-const HIGH_RISK_ROUTES = [
-  '/patients',
-  '/medical',
-  // '/anamnesis', // removido en marketing scope
-  // '/patient3d', // removido en marketing scope
-  '/appointments',
-];
-
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // 0. Handle Spanish route redirections for i18n
-  if (ROUTE_MAPPINGS[pathname]) {
-    const url = request.nextUrl.clone();
-    url.pathname = ROUTE_MAPPINGS[pathname];
-    return NextResponse.redirect(url, { status: 301 });
+  let response = NextResponse.next();
+  if (!isPublicPath) {
+    const authResponse = await authMiddleware(request);
+    if (authResponse && authResponse.status !== 200) {
+      return addSecurityHeaders(authResponse, nonce);
+    }
+    response = authResponse || NextResponse.next();
   }
 
-  // 1. Run SSO middleware first
-  const ssoResponse = await ssoMiddleware(request);
-
-  // If SSO middleware returns a response (redirect/unauthorized), use it
-  if (ssoResponse && ssoResponse.status !== 200) {
-    return ssoResponse;
-  }
-
-  // 2. Add additional HIPAA-specific headers
-  const response = ssoResponse || NextResponse.next();
-
-  // Enhanced security headers for medical routes
   if (isHighRiskRoute(pathname)) {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     response.headers.set('Pragma', 'no-cache');
     response.headers.set('Expires', '0');
-
-    // Log access to high-risk routes
     logMedicalAccess(request, pathname);
   }
 
-  // 3. Content Security Policy (CSP)
-  const cspHeader = [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://accounts.google.com https://apis.google.com https://www.gstatic.com https://www.google.com",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "img-src 'self' data: blob: https: https://*.gstatic.com https://*.googleusercontent.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' http://localhost:* ws://localhost:* wss://localhost:* https://api.altamedica.com https://*.firebaseio.com https://firebase.googleapis.com https://firestore.googleapis.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://firebaseinstallations.googleapis.com https://accounts.google.com https://apis.google.com https://www.googleapis.com",
-    "frame-src 'self' https://accounts.google.com https://*.google.com",
-    "media-src 'self' blob:",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    'upgrade-insecure-requests',
-  ].join('; ');
-
-  response.headers.set('Content-Security-Policy', cspHeader);
-
-  // 4. Rate limiting for auth routes
-  if (pathname.startsWith('/auth/') || pathname.startsWith('/api/')) {
-    const clientIP = request.headers.get('x-forwarded-for') || request.ip || 'unknown';
-    if (shouldRateLimit(clientIP, pathname)) {
-      return new NextResponse('Too Many Requests', {
-        status: 429,
-        headers: {
-          'Retry-After': '60',
-          'X-RateLimit-Limit': '10',
-          'X-RateLimit-Remaining': '0',
-        },
-      });
-    }
-  }
-
-  return response;
+  return addSecurityHeaders(response, nonce);
 }
 
 function isHighRiskRoute(pathname: string): boolean {
@@ -158,34 +170,8 @@ function logMedicalAccess(request: NextRequest, pathname: string) {
   logger.info(
     `[HIPAA_AUDIT] ${timestamp} - User: ${userId} - IP: ${ip} - Path: ${pathname} - UA: ${userAgent}`,
   );
-
-  // TODO: Implement HIPAA-compliant audit logging
-  // Requirements:
-  // - Log to immutable storage
-  // - Include user identity
-  // - Track PHI access
-  // - Maintain for 6+ years
 }
 
-// Simple in-memory rate limiting for development
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-function shouldRateLimit(clientIP: string, pathname: string): boolean {
-  const now = Date.now();
-  const key = `${clientIP}:${pathname}`;
-  const limit = pathname.startsWith('/auth/') ? 5 : 100; // 5 for auth, 100 for API
-  const windowMs = 60000; // 1 minute window
-
-  const record = rateLimitMap.get(key);
-
-  if (!record || now > record.resetTime) {
-    rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
-    return false;
-  }
-
-  record.count++;
-  return record.count > limit;
-}
-
-// Export SSO middleware config from @altamedica/auth
-export { ssoMiddlewareConfig as config } from '@altamedica/auth/middleware';
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};

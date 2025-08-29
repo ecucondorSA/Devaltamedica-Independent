@@ -16,10 +16,10 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "build:watch": "tsup --watch",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "lint": "eslint src --no-error-on-unmatched-pattern",
     "clean": "rimraf dist",
     "dev": "tsup src/index.ts --format=esm --watch"
   },

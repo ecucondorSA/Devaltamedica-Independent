@@ -1,11 +1,11 @@
 {
   "config": {
-    "configFile": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\playwright.config.ts",
-    "rootDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+    "configFile": "/home/edu/Devaltamedica-Independent/e2e/playwright.config.ts",
+    "rootDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
     "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts",
-    "globalTeardown": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-teardown.ts",
+    "globalSetup": "/home/edu/Devaltamedica-Independent/e2e/config/global-setup.ts",
+    "globalTeardown": "/home/edu/Devaltamedica-Independent/e2e/config/global-teardown.ts",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -47,7 +47,7 @@
         null
       ],
       [
-        "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\utils\\medical-compliance-reporter.ts",
+        "/home/edu/Devaltamedica-Independent/e2e/utils/medical-compliance-reporter.ts",
         null
       ]
     ],
@@ -58,7 +58,7 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -74,7 +74,7 @@
         },
         "id": "chromium-desktop",
         "name": "chromium-desktop",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -86,7 +86,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -102,7 +102,7 @@
         },
         "id": "firefox-desktop",
         "name": "firefox-desktop",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -114,7 +114,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -130,7 +130,7 @@
         },
         "id": "webkit-desktop",
         "name": "webkit-desktop",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -142,7 +142,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -158,7 +158,7 @@
         },
         "id": "mobile-chrome",
         "name": "mobile-chrome",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -170,7 +170,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -186,7 +186,7 @@
         },
         "id": "mobile-safari",
         "name": "mobile-safari",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -198,7 +198,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/test-results",
+        "outputDir": "/home/edu/Devaltamedica-Independent/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -214,7 +214,7 @@
         },
         "id": "tablet-medical",
         "name": "tablet-medical",
-        "testDir": "C:/Users/Eduardo/Documents/devaltamedica/altamedica-e2e-testing/tests",
+        "testDir": "/home/edu/Devaltamedica-Independent/e2e/tests",
         "testIgnore": [],
         "testMatch": [
           "**/medical-workflows/**/*.spec.ts",
@@ -229,26 +229,26 @@
     "shard": null,
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
-    "version": "1.54.2",
+    "version": "1.55.0",
     "workers": 2,
     "webServer": null
   },
   "suites": [],
   "errors": [
     {
-      "message": "Error: API Server not healthy",
-      "stack": "Error: API Server not healthy\n    at globalSetup (C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts:21:13)",
+      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3001/api/health\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/api/health\", waiting until \"load\"\u001b[22m\n",
+      "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3001/api/health\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/api/health\", waiting until \"load\"\u001b[22m\n\n    at globalSetup (/home/edu/Devaltamedica-Independent/e2e/config/global-setup.ts:16:16)",
       "location": {
-        "file": "C:\\Users\\Eduardo\\Documents\\devaltamedica\\altamedica-e2e-testing\\config\\global-setup.ts",
-        "column": 13,
-        "line": 21
+        "file": "/home/edu/Devaltamedica-Independent/e2e/config/global-setup.ts",
+        "column": 16,
+        "line": 16
       },
-      "snippet": "\u001b[90m   at \u001b[39m..\\config\\global-setup.ts:21\n\n\u001b[0m \u001b[90m 19 |\u001b[39m     \n \u001b[90m 20 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mhealth\u001b[33m.\u001b[39msuccess) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 21 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m'API Server not healthy'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 22 |\u001b[39m     }\n \u001b[90m 23 |\u001b[39m     \n \u001b[90m 24 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ API Server is healthy'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+      "snippet": "\u001b[90m   at \u001b[39m../config/global-setup.ts:16\n\n  14 |     // Wait for API server to be ready\n  15 |     console.log('⚕️ Checking API Server health...');\n> 16 |     await page.goto('http://localhost:3001/api/health');\n     |                ^\n  17 |     const healthResponse = await page.textContent('body');\n  18 |     const health = JSON.parse(healthResponse);\n  19 |     "
     }
   ],
   "stats": {
-    "startTime": "2025-08-03T01:48:51.430Z",
-    "duration": 2319.235,
+    "startTime": "2025-08-27T09:02:23.783Z",
+    "duration": 1479.8679999999995,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

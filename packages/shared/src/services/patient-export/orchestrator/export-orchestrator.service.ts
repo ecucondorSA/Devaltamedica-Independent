@@ -1,6 +1,7 @@
 import { collectorFactory } from '../factories/collector.factory';
 import { GeneratorFactory } from '../factories/generator.factory';
 import { requestManager } from '../request';
+import { logger } from '../../logger.service';
 import { securityManager } from '../security';
 import {
   DataCategory,
@@ -43,7 +44,7 @@ export class ExportOrchestratorService {
     let request: ExportRequest | null = null;
 
     try {
-      console.log(`[ExportOrchestrator] Starting export for patient ${patientId}`);
+      logger.info(`Starting export for patient ${patientId}`, 'ExportOrchestrator');
 
       // Phase 1: Request Creation and Validation
       request = await this.createAndValidateRequest(
@@ -69,11 +70,11 @@ export class ExportOrchestratorService {
       // Phase 6: Finalization and Cleanup
       const result = await this.finalizeExport(request, secureFilePath, dataPackage);
 
-      console.log(`[ExportOrchestrator] Export completed successfully for request ${request.id}`);
+      logger.info(`Export completed successfully for request ${request.id}`, 'ExportOrchestrator');
       return result;
 
     } catch (error) {
-      console.error(`[ExportOrchestrator] Export failed:`, error);
+      logger.error('Export failed', 'ExportOrchestrator', error);
 
       if (request) {
         await requestManager.failRequest(
@@ -314,7 +315,7 @@ export class ExportOrchestratorService {
       );
 
       if (!encryptionResult) {
-        console.warn(`[ExportOrchestrator] Encryption skipped for request ${request.id}`);
+        logger.warn(`Encryption skipped for request ${request.id}`, 'ExportOrchestrator');
         return filePath;
       }
 
@@ -393,7 +394,7 @@ export class ExportOrchestratorService {
       const patientCollector = collectorFactory.getCollector('medical_records' as DataCategory);
       return await patientCollector.collect(patientId);
     } catch (error) {
-      console.error(`[ExportOrchestrator] Failed to collect patient info:`, error);
+      logger.error('Failed to collect patient info', 'ExportOrchestrator', error);
       throw new Error(`Patient information collection failed: ${error}`);
     }
   }
@@ -423,7 +424,7 @@ export class ExportOrchestratorService {
 
       return Math.abs(hash).toString(16);
     } catch (error) {
-      console.warn('[ExportOrchestrator] Checksum calculation failed:', error);
+      logger.warn('Checksum calculation failed', 'ExportOrchestrator', error);
       return 'unknown';
     }
   }
@@ -437,7 +438,7 @@ export class ExportOrchestratorService {
       const stats = fs.statSync(filePath);
       return stats.size;
     } catch (error) {
-      console.warn(`[ExportOrchestrator] Could not get file size for ${filePath}:`, error);
+      logger.warn(`Could not get file size for ${filePath}`, 'ExportOrchestrator', error);
       return 0;
     }
   }
@@ -468,9 +469,9 @@ export class ExportOrchestratorService {
           message
         );
       }
-      console.log(`[ExportOrchestrator] ${message} (${progress}%)`);
+      logger.info(`${message} (${progress}%)`, 'ExportOrchestrator');
     } catch (error) {
-      console.error('[ExportOrchestrator] Failed to update progress:', error);
+      logger.error('Failed to update progress', 'ExportOrchestrator', error);
     }
   }
 
@@ -487,7 +488,7 @@ export class ExportOrchestratorService {
 
       return { request, progress };
     } catch (error) {
-      console.error(`[ExportOrchestrator] Failed to get status for ${requestId}:`, error);
+      logger.error(`Failed to get status for ${requestId}`, 'ExportOrchestrator', error);
       throw error;
     }
   }
@@ -498,9 +499,9 @@ export class ExportOrchestratorService {
   async cancelExport(requestId: string, reason: string): Promise<void> {
     try {
       await requestManager.cancelRequest(requestId, reason);
-      console.log(`[ExportOrchestrator] Export ${requestId} cancelled: ${reason}`);
+      logger.warn(`Export ${requestId} cancelled: ${reason}`, 'ExportOrchestrator');
     } catch (error) {
-      console.error(`[ExportOrchestrator] Failed to cancel ${requestId}:`, error);
+      logger.error(`Failed to cancel ${requestId}`, 'ExportOrchestrator', error);
       throw error;
     }
   }
@@ -513,13 +514,13 @@ export class ExportOrchestratorService {
       const canRetry = await requestManager.retryRequest(requestId);
 
       if (canRetry) {
-        console.log(`[ExportOrchestrator] Export ${requestId} queued for retry`);
+        logger.info(`Export ${requestId} queued for retry`, 'ExportOrchestrator');
         // The actual retry would be handled by a background worker
       }
 
       return canRetry;
     } catch (error) {
-      console.error(`[ExportOrchestrator] Failed to retry ${requestId}:`, error);
+      logger.error(`Failed to retry ${requestId}`, 'ExportOrchestrator', error);
       throw error;
     }
   }
@@ -543,7 +544,7 @@ export class ExportOrchestratorService {
         availableFormats,
       };
     } catch (error) {
-      console.error('[ExportOrchestrator] Failed to get system health:', error);
+      logger.error('Failed to get system health', 'ExportOrchestrator', error);
       throw error;
     }
   }

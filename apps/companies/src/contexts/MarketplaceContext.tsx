@@ -22,6 +22,7 @@ interface MarketplaceCompany {
   totalHires: number;
   companyType: 'hospital' | 'clinic' | 'laboratory' | 'pharmacy' | 'other';
   jobs?: JobOffer[];
+}
 
 interface JobOffer {
   id: string;
@@ -43,6 +44,7 @@ interface JobOffer {
   schedule: string;
   remote?: boolean;
   status?: 'active' | 'paused' | 'closed';
+}
 
 interface MarketplaceFilters {
   specialties: string[];
@@ -53,30 +55,31 @@ interface MarketplaceFilters {
   verifiedOnly: boolean;
   location?: string;
   experience?: string;
+}
 
 interface MarketplaceContextType {
   // Datos
   doctors: MarketplaceDoctor[];
   companies: MarketplaceCompany[];
-  
+
   // Estado de selección
   selectedDoctor: MarketplaceDoctor | null;
   selectedCompany: MarketplaceCompany | null;
   selectedJob: JobOffer | null;
-  
+
   // Filtros
   filters: MarketplaceFilters;
-  
+
   // Vista activa
   activeView: 'marketplace' | 'jobs' | 'applications' | 'analytics';
-  
+
   // Acciones
   setSelectedDoctor: (doctor: MarketplaceDoctor | null) => void;
   setSelectedCompany: (company: MarketplaceCompany | null) => void;
   setSelectedJob: (job: JobOffer | null) => void;
   setFilters: (filters: Partial<MarketplaceFilters>) => void;
   setActiveView: (view: 'marketplace' | 'jobs' | 'applications' | 'analytics') => void;
-  
+
   // Métodos utilitarios
   getDoctorsBySpecialty: (specialty: string) => MarketplaceDoctor[];
   getJobsByCompany: (companyId: string) => JobOffer[];
@@ -92,10 +95,10 @@ interface MarketplaceProviderProps {
   initialCompanies?: MarketplaceCompany[];
 }
 
-export function MarketplaceProvider({ 
-  children, 
-  initialDoctors = [], 
-  initialCompanies = [] 
+export function MarketplaceProvider({
+  children,
+  initialDoctors = [],
+  initialCompanies = [],
 }: MarketplaceProviderProps) {
   // Estados
   const [doctors] = useState<MarketplaceDoctor[]>(initialDoctors);
@@ -103,8 +106,10 @@ export function MarketplaceProvider({
   const [selectedDoctor, setSelectedDoctor] = useState<MarketplaceDoctor | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<MarketplaceCompany | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobOffer | null>(null);
-  const [activeView, setActiveView] = useState<'marketplace' | 'jobs' | 'applications' | 'analytics'>('marketplace');
-  
+  const [activeView, setActiveView] = useState<
+    'marketplace' | 'jobs' | 'applications' | 'analytics'
+  >('marketplace');
+
   const [filters, setFiltersState] = useState<MarketplaceFilters>({
     specialties: [],
     maxHourlyRate: 200,
@@ -115,27 +120,31 @@ export function MarketplaceProvider({
   });
 
   // Métodos utilitarios
-  const getDoctorsBySpecialty = useCallback((specialty: string) => {
-    return doctors.filter(doctor => 
-      doctor.specialties.some(s => 
-        s.toLowerCase().includes(specialty.toLowerCase())
-      )
-    );
-  }, [doctors]);
+  const getDoctorsBySpecialty = useCallback(
+    (specialty: string) => {
+      return doctors.filter((doctor) =>
+        doctor.specialties.some((s) => s.toLowerCase().includes(specialty.toLowerCase())),
+      );
+    },
+    [doctors],
+  );
 
-  const getJobsByCompany = useCallback((companyId: string) => {
-    const company = companies.find(c => c.id === companyId);
-    return company?.jobs || [];
-  }, [companies]);
+  const getJobsByCompany = useCallback(
+    (companyId: string) => {
+      const company = companies.find((c) => c.id === companyId);
+      return company?.jobs || [];
+    },
+    [companies],
+  );
 
   const getFilteredDoctors = useCallback(() => {
-    return doctors.filter(doctor => {
+    return doctors.filter((doctor) => {
       // Filtro por especialidades
       if (filters.specialties.length > 0) {
-        const hasSpecialty = doctor.specialties.some(specialty =>
-          filters.specialties.some(filter =>
-            specialty.toLowerCase().includes(filter.toLowerCase())
-          )
+        const hasSpecialty = doctor.specialties.some((specialty) =>
+          filters.specialties.some((filter) =>
+            specialty.toLowerCase().includes(filter.toLowerCase()),
+          ),
         );
         if (!hasSpecialty) return false;
       }
@@ -162,41 +171,41 @@ export function MarketplaceProvider({
   }, [doctors, filters]);
 
   const getFilteredCompanies = useCallback(() => {
-    return companies.filter(company => {
+    return companies.filter((company) => {
       // Filtro por ofertas urgentes
       if (filters.urgentOnly && company.urgentJobs === 0) return false;
-      
+
       return true;
     });
   }, [companies, filters]);
 
   const setFilters = useCallback((newFilters: Partial<MarketplaceFilters>) => {
-    setFiltersState(prev => ({ ...prev, ...newFilters }));
+    setFiltersState((prev) => ({ ...prev, ...newFilters }));
   }, []);
 
   const contextValue: MarketplaceContextType = {
     // Datos
     doctors,
     companies,
-    
+
     // Estado de selección
     selectedDoctor,
     selectedCompany,
     selectedJob,
-    
+
     // Filtros
     filters,
-    
+
     // Vista activa
     activeView,
-    
+
     // Acciones
     setSelectedDoctor,
     setSelectedCompany,
     setSelectedJob,
     setFilters,
     setActiveView,
-    
+
     // Métodos utilitarios
     getDoctorsBySpecialty,
     getJobsByCompany,
@@ -204,11 +213,7 @@ export function MarketplaceProvider({
     getFilteredCompanies,
   };
 
-  return (
-    <MarketplaceContext.Provider value={contextValue}>
-      {children}
-    </MarketplaceContext.Provider>
-  );
+  return <MarketplaceContext.Provider value={contextValue}>{children}</MarketplaceContext.Provider>;
 }
 
 export function useMarketplace() {

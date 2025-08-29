@@ -17,7 +17,7 @@ import {
 import { Button } from '@altamedica/ui'
 import { AppointmentCard, useMedicalData, formatShortDate } from '@altamedica/medical'
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function AppointmentsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -51,7 +51,7 @@ export default function AppointmentsPage() {
       const data = await fetchAppointments(filters)
       setAppointments(data)
     } catch (error) {
-      logger.error('Error loading appointments:', error)
+      logger.error('Error loading appointments:', String(error))
     }
   }
 

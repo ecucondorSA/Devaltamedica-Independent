@@ -1,6 +1,7 @@
 import type { ExportGenerator, ExportFormat, PatientDataPackage } from '../types';
 import { JsonExportGenerator } from '../generators/json.generator';
 import { CsvExportGenerator } from '../generators/csv.generator';
+import { logger } from '../../logger.service';
 
 /**
  * Generator Factory implementing Strategy Pattern
@@ -194,7 +195,7 @@ export class GeneratorFactory {
         },
       };
     } catch (error) {
-      console.error(`[GeneratorFactory] Export generation failed for ${format}:`, error);
+      logger.error(`Export generation failed for ${format}`, 'GeneratorFactory', error);
       throw new Error(`Export generation failed: ${error}`);
     }
   }
@@ -421,7 +422,7 @@ export class GeneratorFactory {
       const stats = fs.statSync(filePath);
       return stats.size;
     } catch (error) {
-      console.warn(`Could not get file size for ${filePath}:`, error);
+      logger.warn(`Could not get file size for ${filePath}`, 'GeneratorFactory', error);
       return 0;
     }
   }

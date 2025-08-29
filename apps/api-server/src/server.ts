@@ -7,10 +7,16 @@ import { initializeMiddlewares } from './middleware';
 import { csrfMiddleware } from './middleware/csrf.middleware';
 import authFirebaseRoutes from './routes/auth-firebase.routes';
 // SSO routes removed - using session-based auth only
+// Importar Vercel secrets loader (sin AWS)
+import { initSecrets } from './config/vercel-secrets-loader';
 import mfaRoutes from './routes/mfa.routes';
+import { setupSwagger } from './config/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 3001; // Changed from 3002 to 3001
+
+// Setup Swagger documentation
+setupSwagger(app);
 
 // P0 Security: Global rate limiting (before other middlewares)
 const globalRateLimiter = rateLimit({
@@ -122,7 +128,7 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     architecture: 'Express.js + TypeScript',
-    documentation: '/api/v1/health',
+    documentation: '/api-docs',
     endpoints: {
       health: '/api/v1/health',
       auth: '/api/v1/auth',
@@ -355,7 +361,7 @@ app.use('/api/general', applyEndpointConfig('general'));
 // P1 Security: Import error handler
 import { errorHandler, notFoundHandler } from './middleware/error-handler';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 404 handler - must be before error handler
 app.use('*', notFoundHandler);
 
@@ -384,6 +390,10 @@ function startServer(port: number, attemptsLeft = 2) {
   });
 }
 
-startServer(Number(PORT));
+(async () => {
+  // Cargar secretos antes de iniciar el servidor (JWT, etc.)
+  await initSecrets();
+  startServer(Number(PORT));
+})();
 
 export default app;

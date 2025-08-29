@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth } from '@altamedica/auth';
 // Mock telemedicine hooks since api-client has build issues
 const useJoinTelemedicineSession = () => ({
   mutateAsync: async (params: { sessionId: string; role: string }) => {
-    logger.info('Mock join session:', params);
+    logger.info('Mock join session: ' + JSON.stringify(params));
     return Promise.resolve({ success: true });
-  }
+  },
 });
 
 const useEndTelemedicineSession = () => ({
   mutate: (params: { sessionId: string; notes?: string }) => {
-    logger.info('Mock end session:', params);
-  }
+    logger.info('Mock end session: ' + JSON.stringify(params));
+  },
 });
 
 const useTelemedicineSession = (sessionId: string) => ({
   data: null,
-  error: null
+  error: null,
 });
 import TelemedicineMVP from '../../../../components/telemedicine/TelemedicineMVP';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   Clock,
   User,
@@ -38,7 +38,7 @@ import {
   Phone,
   XCircle,
   Mic,
-  Wifi
+  Wifi,
 } from 'lucide-react';
 
 // Mock data para demostración
@@ -57,8 +57,8 @@ const mockPatientSessions = {
     patientInstructions: [
       'Tenga a mano su medidor de presión arterial',
       'Liste los medicamentos que está tomando actualmente',
-      'Prepare cualquier pregunta sobre sus síntomas'
-    ]
+      'Prepare cualquier pregunta sobre sus síntomas',
+    ],
   },
   'session-002': {
     id: 'session-002',
@@ -74,16 +74,18 @@ const mockPatientSessions = {
     patientInstructions: [
       'Manténgase en un lugar tranquilo y bien iluminado',
       'Tenga a alguien cerca en caso de necesitar asistencia',
-      'Describa detalladamente sus síntomas'
-    ]
-  }
+      'Describa detalladamente sus síntomas',
+    ],
+  },
 };
 
 export default function PatientTelemedicineSessionPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const [session, setSession] = useState<typeof mockPatientSessions[keyof typeof mockPatientSessions] | null>(null);
+  const [session, setSession] = useState<
+    (typeof mockPatientSessions)[keyof typeof mockPatientSessions] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPreCallInfo, setShowPreCallInfo] = useState(true);
@@ -91,7 +93,7 @@ export default function PatientTelemedicineSessionPage() {
   const [deviceCheck, setDeviceCheck] = useState({
     camera: false,
     microphone: false,
-    connection: false
+    connection: false,
   });
 
   const sessionId = params.sessionId as string;
@@ -104,10 +106,10 @@ export default function PatientTelemedicineSessionPage() {
   useEffect(() => {
     const loadSession = async () => {
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         const sessionData = mockPatientSessions[sessionId as keyof typeof mockPatientSessions];
-        
+
         if (!sessionData) {
           setError('Sesión no encontrada');
           return;
@@ -119,12 +121,11 @@ export default function PatientTelemedicineSessionPage() {
         }
 
         setSession(sessionData);
-        
+
         // Realizar check de dispositivos automáticamente
         await performDeviceCheck();
-        
       } catch (error) {
-        logger.error('Error loading session:', error);
+        logger.error('Error loading session: ' + String(error));
         setError('Error al cargar la sesión');
       } finally {
         setIsLoading(false);
@@ -139,42 +140,42 @@ export default function PatientTelemedicineSessionPage() {
   const performDeviceCheck = async () => {
     try {
       // Check de cámara y micrófono
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: true, 
-        audio: true 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
       });
-      
-      setDeviceCheck(prev => ({
+
+      setDeviceCheck((prev) => ({
         ...prev,
         camera: true,
         microphone: true,
-        connection: true
+        connection: true,
       }));
-      
+
       // Cerrar el stream después del check
-      stream.getTracks().forEach(track => track.stop());
+      stream.getTracks().forEach((track) => track.stop());
     } catch (error) {
-      logger.error('Device check failed:', error);
-      setDeviceCheck(prev => ({
+      logger.error('Device check failed: ' + String(error));
+      setDeviceCheck((prev) => ({
         ...prev,
         camera: false,
-        microphone: false
+        microphone: false,
       }));
     }
   };
 
   const handleJoinSession = async () => {
     if (!session || !user) return;
-    
+
     try {
       await joinSessionMutation.mutateAsync({
         sessionId: session.id,
-        role: 'patient'
+        role: 'patient',
       });
-      
+
       setShowPreCallInfo(false);
     } catch (error) {
-      logger.error('Error joining session:', error);
+      logger.error('Error joining session: ' + String(error));
       setError('Error al unirse a la sesión');
     }
   };
@@ -182,7 +183,7 @@ export default function PatientTelemedicineSessionPage() {
   const handleEndCall = () => {
     endSessionMutation.mutate({
       sessionId: sessionId,
-      notes: 'Session ended by patient'
+      notes: 'Session ended by patient',
     });
     router.push('/telemedicine?sessionCompleted=true');
   };
@@ -193,7 +194,10 @@ export default function PatientTelemedicineSessionPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" data-testid="session-loading">
+      <div
+        className="min-h-screen bg-gray-50 flex items-center justify-center"
+        data-testid="session-loading"
+      >
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Preparando consulta...</h2>
@@ -205,17 +209,19 @@ export default function PatientTelemedicineSessionPage() {
 
   if (error || !session) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" data-testid="session-error">
+      <div
+        className="min-h-screen bg-gray-50 flex items-center justify-center"
+        data-testid="session-error"
+      >
         <div className="text-center max-w-md mx-auto p-6">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             {error || 'Sesión no encontrada'}
           </h2>
           <p className="text-gray-600 mb-6">
-            {error === 'Paciente no autenticado' 
+            {error === 'Paciente no autenticado'
               ? 'Por favor, inicie sesión para acceder a su consulta médica.'
-              : 'No pudimos encontrar la sesión solicitada. Verifique el enlace e intente nuevamente.'
-            }
+              : 'No pudimos encontrar la sesión solicitada. Verifique el enlace e intente nuevamente.'}
           </p>
           <div className="space-y-3">
             <button
@@ -267,7 +273,7 @@ export default function PatientTelemedicineSessionPage() {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -328,7 +334,10 @@ export default function PatientTelemedicineSessionPage() {
                       <span>Micrófono</span>
                     </div>
                     {deviceCheck.microphone ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" data-testid="microphone-check" />
+                      <CheckCircle
+                        className="w-5 h-5 text-green-600"
+                        data-testid="microphone-check"
+                      />
                     ) : (
                       <XCircle className="w-5 h-5 text-red-600" />
                     )}
@@ -339,7 +348,10 @@ export default function PatientTelemedicineSessionPage() {
                       <span>Conexión a Internet</span>
                     </div>
                     {deviceCheck.connection ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" data-testid="connection-check" />
+                      <CheckCircle
+                        className="w-5 h-5 text-green-600"
+                        data-testid="connection-check"
+                      />
                     ) : (
                       <XCircle className="w-5 h-5 text-red-600" />
                     )}
@@ -367,8 +379,8 @@ export default function PatientTelemedicineSessionPage() {
                       data-testid="consent-checkbox"
                     />
                     <label htmlFor="consent" className="text-sm text-gray-700">
-                      Acepto que esta consulta médica sea grabada para fines de 
-                      documentación médica y cumplimiento de HIPAA.
+                      Acepto que esta consulta médica sea grabada para fines de documentación médica
+                      y cumplimiento de HIPAA.
                     </label>
                   </div>
                 </div>
@@ -387,7 +399,7 @@ export default function PatientTelemedicineSessionPage() {
                     <Phone className="w-5 h-5" />
                     <span>Unirse a la Consulta</span>
                   </button>
-                  
+
                   <button
                     onClick={() => performDeviceCheck()}
                     className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -395,7 +407,7 @@ export default function PatientTelemedicineSessionPage() {
                   >
                     Verificar Dispositivos Nuevamente
                   </button>
-                  
+
                   <button
                     onClick={handleGoBack}
                     className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"

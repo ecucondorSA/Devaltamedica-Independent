@@ -3,7 +3,7 @@
  * Hooks para gestión de sesiones de telemedicina
  */
 
-import { useTanstackQuery as useQuery, useMutation, useQueryClient } from '@altamedica/hooks/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getApiClient } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
 import { z } from 'zod';

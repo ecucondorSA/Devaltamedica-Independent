@@ -1,175 +1,174 @@
 /**
- * Hook para actualizaciones en tiempo real
- * Integración con WebSocket para admin dashboard
+ * Real-Time Updates Hook
+ * Proporciona actualizaciones en tiempo real para el dashboard admin
+ * Incluye conexión WebSocket, calidad de conexión y manejo de actualizaciones
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
-export interface RealTimeUpdateConfig {
-  onUpdate: (update: any) => void;
+export interface RealTimeUpdate {
+  type: 'emergency_alert' | 'metric_update' | 'system_status' | 'compliance_update';
+  data: unknown;
+  timestamp: Date;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+}
+
+export interface RealTimeUpdatesConfig {
+  onUpdate: (update: RealTimeUpdate) => void;
   endpoint: string;
   reconnectInterval?: number;
   maxReconnectAttempts?: number;
 }
 
-export interface ConnectionQuality {
-  latency: number;
-  status: 'excellent' | 'good' | 'poor' | 'disconnected';
+export interface RealTimeUpdatesState {
+  isConnected: boolean;
+  connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
+  lastUpdate: Date | null;
+  error: string | null;
+  reconnectAttempts: number;
 }
 
-export const useRealTimeUpdates = ({
-  onUpdate,
-  endpoint,
-  reconnectInterval = 5000,
-  maxReconnectAttempts = 5,
-}: RealTimeUpdateConfig) => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality['status']>('disconnected');
-  const [reconnectAttempts, setReconnectAttempts] = useState(0);
-  
-  const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const latencyTestRef = useRef<{ start: number; timeout: NodeJS.Timeout } | null>(null);
+export const useRealTimeUpdates = (config: RealTimeUpdatesConfig) => {
+  const [state, setState] = useState<RealTimeUpdatesState>({
+    isConnected: false,
+    connectionQuality: 'good',
+    lastUpdate: null,
+    error: null,
+    reconnectAttempts: 0,
+  });
 
-  const measureLatency = useCallback(() => {
-    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+  const [ws, setWs] = useState<WebSocket | null>(null);
 
-    const start = Date.now();
-    latencyTestRef.current = {
-      start,
-      timeout: setTimeout(() => {
-        // Si no hay respuesta en 5 segundos, consideramos conexión pobre
-        setConnectionQuality('poor');
-      }, 5000)
-    };
-
-    wsRef.current.send(JSON.stringify({ type: 'ping', timestamp: start }));
-  }, []);
-
-  const calculateQuality = useCallback((latency: number): ConnectionQuality['status'] => {
-    if (latency < 100) return 'excellent';
-    if (latency < 300) return 'good';
-    if (latency < 1000) return 'poor';
-    return 'disconnected';
-  }, []);
-
+  // Función para establecer conexión WebSocket
   const connect = useCallback(() => {
     try {
-      // Construir WebSocket URL basado en el endpoint
-      const wsUrl = endpoint.startsWith('/') 
-        ? `ws://localhost:3001${endpoint}` 
-        : endpoint;
-      
-      wsRef.current = new WebSocket(wsUrl);
+      const socket = new WebSocket(config.endpoint);
 
-      wsRef.current.onopen = () => {
-        logger.info('Admin WebSocket connected');
-        setIsConnected(true);
-        setReconnectAttempts(0);
-        
-        // Medir latencia inicial
-        setTimeout(measureLatency, 1000);
-        
-        // Medir latencia cada 30 segundos
-        const latencyInterval = setInterval(measureLatency, 30000);
-        
-        wsRef.current!.onclose = () => {
-          clearInterval(latencyInterval);
-        };
+      socket.onopen = () => {
+        setState((prev) => ({
+          ...prev,
+          isConnected: true,
+          error: null,
+          reconnectAttempts: 0,
+        }));
       };
 
-      wsRef.current.onmessage = (event) => {
+      socket.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data);
-          
-          // Handle ping response for latency measurement
-          if (data.type === 'pong' && latencyTestRef.current) {
-            const latency = Date.now() - latencyTestRef.current.start;
-            clearTimeout(latencyTestRef.current.timeout);
-            latencyTestRef.current = null;
-            
-            const quality = calculateQuality(latency);
-            setConnectionQuality(quality);
-            logger.info(`Admin WebSocket latency: ${latency}ms (${quality})`);
-          } else {
-            // Handle regular updates
-            onUpdate(data);
-          }
-        } catch (error) {
-          logger.error('Error parsing WebSocket message:', error);
+          const update: RealTimeUpdate = JSON.parse(event.data as string) as RealTimeUpdate;
+          config.onUpdate(update);
+
+          setState((prev) => ({
+            ...prev,
+            lastUpdate: new Date(),
+          }));
+        } catch {
+          // Error parsing real-time update - silently handled
         }
       };
 
-      wsRef.current.onclose = () => {
-        logger.info('Admin WebSocket disconnected');
-        setIsConnected(false);
-        setConnectionQuality('disconnected');
-        
-        // Attempt reconnection if we haven't exceeded max attempts
-        if (reconnectAttempts < maxReconnectAttempts) {
-          setReconnectAttempts(prev => prev + 1);
-          reconnectTimeoutRef.current = setTimeout(() => {
-            logger.info(`Attempting reconnection ${reconnectAttempts + 1}/${maxReconnectAttempts}`);
+      socket.onclose = () => {
+        setState((prev) => ({
+          ...prev,
+          isConnected: false,
+        }));
+
+        // Intentar reconectar
+        if (state.reconnectAttempts < (config.maxReconnectAttempts || 5)) {
+          setTimeout(() => {
+            setState((prev) => ({
+              ...prev,
+              reconnectAttempts: prev.reconnectAttempts + 1,
+            }));
             connect();
-          }, reconnectInterval);
+          }, config.reconnectInterval || 5000);
         }
       };
 
-      wsRef.current.onerror = (error) => {
-        logger.error('Admin WebSocket error:', error);
-        setConnectionQuality('disconnected');
+      socket.onerror = () => {
+        setState((prev) => ({
+          ...prev,
+          error: 'WebSocket connection error',
+          connectionQuality: 'poor',
+        }));
       };
 
-    } catch (error) {
-      logger.error('Failed to create WebSocket connection:', error);
-      setConnectionQuality('disconnected');
+      setWs(socket);
+    } catch {
+      setState((prev) => ({
+        ...prev,
+        error: 'Failed to create WebSocket connection',
+      }));
     }
-  }, [endpoint, onUpdate, reconnectAttempts, maxReconnectAttempts, reconnectInterval, measureLatency, calculateQuality]);
+  }, [config, state.reconnectAttempts]);
 
+  // Función para desconectar
   const disconnect = useCallback(() => {
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
+    if (ws) {
+      ws.close();
+      setWs(null);
+      setState((prev) => ({
+        ...prev,
+        isConnected: false,
+      }));
     }
-    
-    if (latencyTestRef.current) {
-      clearTimeout(latencyTestRef.current.timeout);
-      latencyTestRef.current = null;
+  }, [ws]);
+
+  // Función para enviar mensaje
+  const sendMessage = useCallback(
+    (message: unknown) => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(message));
+      }
+    },
+    [ws],
+  );
+
+  // Función para verificar calidad de conexión
+  const checkConnectionQuality = useCallback(() => {
+    if (!ws) return;
+
+    const now = Date.now();
+    const lastUpdate = state.lastUpdate?.getTime() || 0;
+    const timeSinceLastUpdate = now - lastUpdate;
+
+    let quality: 'excellent' | 'good' | 'fair' | 'poor' = 'good';
+
+    if (timeSinceLastUpdate < 1000) {
+      quality = 'excellent';
+    } else if (timeSinceLastUpdate < 5000) {
+      quality = 'good';
+    } else if (timeSinceLastUpdate < 15000) {
+      quality = 'fair';
+    } else {
+      quality = 'poor';
     }
 
-    if (wsRef.current) {
-      wsRef.current.close();
-      wsRef.current = null;
-    }
-    
-    setIsConnected(false);
-    setConnectionQuality('disconnected');
-    setReconnectAttempts(0);
-  }, []);
+    setState((prev) => ({
+      ...prev,
+      connectionQuality: quality,
+    }));
+  }, [ws, state.lastUpdate]);
 
-  const sendMessage = useCallback((message: any) => {
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(message));
-      return true;
-    }
-    return false;
-  }, []);
-
+  // Efecto para establecer conexión
   useEffect(() => {
     connect();
-    
+
     return () => {
       disconnect();
     };
   }, [connect, disconnect]);
 
+  // Efecto para verificar calidad de conexión
+  useEffect(() => {
+    const interval = setInterval(checkConnectionQuality, 10000);
+    return () => clearInterval(interval);
+  }, [checkConnectionQuality]);
+
   return {
-    isConnected,
-    connectionQuality,
-    reconnectAttempts,
-    sendMessage,
+    ...state,
     connect,
     disconnect,
+    sendMessage,
   };
 };

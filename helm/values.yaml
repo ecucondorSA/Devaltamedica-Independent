@@ -1,0 +1,431 @@
+# AltaMedica Platform - Helm Values
+global:
+  environment: development
+  project: altamedica
+  domain: altamedica.local
+  
+  # Image registry configuration
+  imageRegistry: ""
+  imagePullSecrets: []
+  
+  # Storage configuration
+  storageClass: "gp2"
+  
+  # Monitoring configuration
+  monitoring:
+    enabled: true
+    prometheus:
+      enabled: true
+      retention: 15d
+    grafana:
+      enabled: true
+      adminPassword: "admin123"
+      persistence:
+        enabled: true
+        size: 10Gi
+
+# API Server configuration
+apiServer:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: altamedica/api-server
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: api.altamedica.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: api-tls
+        hosts:
+          - api.altamedica.local
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  env:
+    - name: NODE_ENV
+      value: "development"
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: altamedica-secrets
+          key: database-url
+    - name: REDIS_URL
+      valueFrom:
+        secretKeyRef:
+          name: altamedica-secrets
+          key: redis-url
+    - name: JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: altamedica-secrets
+          key: jwt-secret
+
+# Web App configuration
+webApp:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: altamedica/web-app
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: app.altamedica.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: webapp-tls
+        hosts:
+          - app.altamedica.local
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Doctors App configuration
+doctorsApp:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: altamedica/doctors
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: doctors.altamedica.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: doctors-tls
+        hosts:
+          - doctors.altamedica.local
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Patients App configuration
+patientsApp:
+  enabled: true
+  replicaCount: 2
+  
+  image:
+    repository: altamedica/patients
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: patients.altamedica.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: patients-tls
+        hosts:
+          - patients.altamedica.local
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Admin App configuration
+adminApp:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: altamedica/admin
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: admin.altamedica.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: admin-tls
+        hosts:
+          - admin.altamedica.local
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  
+  auth:
+    postgresPassword: "postgres123"
+    database: "altamedica"
+    username: "altamedica"
+    password: "altamedica123"
+  
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: "gp2"
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+# Redis configuration
+redis:
+  enabled: true
+  
+  auth:
+    enabled: true
+    password: "redis123"
+  
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "gp2"
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Nginx Ingress Controller
+ingress-nginx:
+  enabled: true
+  
+  controller:
+    replicaCount: 2
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+    
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: nlb
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+
+# Cert Manager
+cert-manager:
+  enabled: true
+  
+  installCRDs: true
+  
+  replicaCount: 1
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Prometheus Stack
+prometheus-operator:
+  enabled: true
+  
+  prometheus:
+    prometheusSpec:
+      retention: 15d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: gp2
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 50Gi
+  
+  grafana:
+    adminPassword: "admin123"
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: gp2
+    
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+
+# Elasticsearch
+elasticsearch:
+  enabled: true
+  
+  replicas: 1
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  
+  volumeClaimTemplate:
+    spec:
+      storageClassName: gp2
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 30Gi
+
+# Kibana
+kibana:
+  enabled: true
+  
+  replicas: 1
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Fluentd
+fluentd:
+  enabled: true
+  
+  replicas: 1
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  config:
+    elasticsearch:
+      host: elasticsearch-master.altamedica-monitoring.svc.cluster.local
+      port: 9200
+      scheme: http
+      ssl_verify: false
+      reload_on_failure: true
+      reconnect_on_error: true
+      reload_connections: false
+      request_timeout: 30s
+      <buffer>
+        @type file
+        path /var/log/fluentd-buffers/kubernetes.system.buffer
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_interval 5s
+        retry_forever false
+        retry_max_interval 30
+        chunk_limit_size 2M
+        queue_limit_length 8
+        overflow_action block
+      </buffer>

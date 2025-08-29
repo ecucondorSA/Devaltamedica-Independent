@@ -51,16 +51,16 @@ packages/auth/
 
 ## 🔧 Configuration
 
-This package is part of the AltaMedica monorepo and follows the standardized configuration:
+This package is part of the @AltaMedica @monorepo and follows the @standardized configuration:
 
-- **TypeScript**: ^5.8.3
+- **@TypeScript**: ^5.8.3
 - **Build Tool**: tsup (dual CJS/ESM output)
 - **Module System**: ESM with CJS compatibility
 - **Package Manager**: pnpm workspace
 
 ## 📚 API Documentation
 
-Authentication flows and middleware documentation in CLAUDE.md.
+Authentication flows and middleware documentation in @CLAUDE.md.
 
 ## 🧪 Testing
 
@@ -70,11 +70,11 @@ pnpm test
 
 ## 📄 License
 
-MIT © AltaMedica Platform
+MIT © @AltaMedica Platform
 
 ## 🤝 Contributing
 
-This is an internal package of the AltaMedica platform. For contributing guidelines, please refer to the main repository documentation.
+This is an internal package of the @AltaMedica @platform. For @contributing guidelines, please refer to the main @repository documentation.
 
 ## 🔗 Related Packages
 
@@ -84,4 +84,4 @@ This is an internal package of the AltaMedica platform. For contributing guideli
 
 ---
 
-Part of the [AltaMedica Platform](https://github.com/altamedica/platform)
+Part of the [@AltaMedica Platform](https://github.com/altamedica/platform)

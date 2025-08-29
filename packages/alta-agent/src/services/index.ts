@@ -3,7 +3,9 @@
  * Punto de entrada para subpaquete `@altamedica/alta-agent/services`
  */
 
-// Reexport de servicios cuando estén disponibles
-// export { SomeService } from './SomeService';
+// Servicios existentes ya implementados en el core
+export { AltaAgent } from '../core/AltaAgent';
+export { type AltaAgentConfig, type AltaAgentState } from '../types/alta.types';
 
-export {};
+// Re-export para compatibilidad con imports esperados
+export { AltaAgent as AltaAgentService } from '../core/AltaAgent';

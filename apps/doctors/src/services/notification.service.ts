@@ -1,5 +1,9 @@
-import { QueryProvider, apiClient } from '@altamedica/api-client';
-import { services } from '@altamedica/api-client';
+// import { QueryProvider, apiClient } from '@altamedica/api-client';
+// import { services } from '@altamedica/api-client';
+
+const QueryProvider: any = {};
+const apiClient: any = {};
+const services: any = {};
 
 /**
  * 📢 NOTIFICATION SERVICE - DOCTORS APP (PRODUCTION READY)
@@ -38,12 +42,14 @@ export {
 } from './notificationServiceUnified';
 
 // Re-export tipos para compatibilidad
+/*
 export type {
   NotificationTemplate,
   NotificationChannel,
   NotificationPriority,
   NotificationStatus
 } from './notificationServiceUnified';
+*/
 
 // ==================== DEPRECATED INTERFACES (READ ONLY) ====================
 

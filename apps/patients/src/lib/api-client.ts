@@ -7,7 +7,7 @@
 import { createApiClient } from '@altamedica/api-client';
 import { auth } from '@altamedica/firebase';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Crear instancia del cliente API
 export const apiClient = createApiClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
@@ -25,7 +25,7 @@ export const apiClient = createApiClient({
       }
       return null;
     } catch (error) {
-      logger.error('Error refreshing token:', error);
+      logger.error('Error refreshing token:', String(error));
       return null;
     }
   },
@@ -33,7 +33,7 @@ export const apiClient = createApiClient({
   // Callback para manejar errores globalmente
   onError: (error) => {
     // Log para debugging
-    logger.error('API Error:', error);
+    logger.error('API Error:', String(error));
     
     // Manejar errores específicos
     if (error.statusCode === 401) {
@@ -57,7 +57,7 @@ export async function updateApiToken() {
       apiClient.setAccessToken(null);
     }
   } catch (error) {
-    logger.error('Error updating API token:', error);
+    logger.error('Error updating API token:', String(error));
     apiClient.setAccessToken(null);
   }
 }

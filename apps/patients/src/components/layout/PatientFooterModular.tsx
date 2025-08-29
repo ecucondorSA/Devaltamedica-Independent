@@ -9,7 +9,7 @@ import React, { useState, useCallback } from 'react';
 import { Heart, Mail, Phone, MapPin, Clock, Shield, ExternalLink } from 'lucide-react';
 
 // 📝 TIPOS ESPECÍFICOS DEL FOOTER
-export interface FooterLink {
+export interface IFooterLink {
   id: string;
   label: string;
   href: string;
@@ -20,7 +20,7 @@ export interface FooterLink {
 
 export interface FooterSection {
   title: string;
-  links: FooterLink[];
+  links: IFooterLink[];
 }
 
 export interface FooterProps {
@@ -29,7 +29,7 @@ export interface FooterProps {
   showContactInfo?: boolean;
   customSections?: FooterSection[];
   copyrightText?: string;
-  onLinkClick?: (link: FooterLink) => void;
+  onLinkClick?: (link: IFooterLink) => void;
 }
 
 // 🏥 DATOS CORPORATIVOS ALTAMEDICA

@@ -21,9 +21,9 @@ import {
   WifiOff,
   WifiIcon
 } from 'lucide-react';
-import { useAutoOptimizer, NetworkMetrics } from '../services/AutoOptimizer';
+import { useAutoOptimizer, NetworkMetrics } from '../../services/AutoOptimizer';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface AutoOptimizationPanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,7 +35,7 @@ export default function AutoOptimizationPanel({
   onClose, 
   currentMetrics 
 }: AutoOptimizationPanelProps) {
-  const { optimizer, analyzeAndOptimize, getOptimizationRecommendations, getPerformanceStats } = useAutoOptimizer();
+  const { optimizer, analyzeAndOptimize, getOptimizationRecommendations, getPerformanceStats } = useAutoOptimizer() as any;
   const [optimizationResult, setOptimizationResult] = useState<any>(null);
   const [recommendations, setRecommendations] = useState<any>(null);
   const [performanceStats, setPerformanceStats] = useState<any>(null);
@@ -62,7 +62,7 @@ export default function AutoOptimizationPanel({
       const stats = getPerformanceStats();
       setPerformanceStats(stats);
     } catch (error) {
-      logger.error('Error en análisis de optimización:', error);
+      logger.error('Error en análisis de optimización:', String(error));
     } finally {
       setIsAnalyzing(false);
     }

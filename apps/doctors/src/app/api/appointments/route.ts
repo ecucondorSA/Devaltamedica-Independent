@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Datos simulados de citas
 const appointments = [
   {
@@ -206,7 +206,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error obteniendo citas:', error);
+      logger.error('Error obteniendo citas:', String(error));
     }
     return NextResponse.json(
       { 
@@ -279,7 +279,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error creando cita:', error);
+      logger.error('Error creando cita:', String(error));
     }
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },
@@ -323,7 +323,8 @@ export async function PUT(request: NextRequest) {
     if (status) appointments[appointmentIndex].status = status;
     if (notes) appointments[appointmentIndex].notes = notes;
     if (symptoms) appointments[appointmentIndex].symptoms = symptoms;
-    if (vitalSigns) appointments[appointmentIndex].vitalSigns = vitalSigns;
+    // vitalSigns is not a property of the appointment type, skip for now
+    // if (vitalSigns) appointments[appointmentIndex].vitalSigns = vitalSigns;
 
     return NextResponse.json({
       success: true,
@@ -334,7 +335,7 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     // Log error for debugging
     if (process.env.NODE_ENV === 'development') {
-      logger.error('Error actualizando cita:', error);
+      logger.error('Error actualizando cita:', String(error));
     }
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },

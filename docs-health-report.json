@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-08-29T09:18:29.069Z",
+  "glosarios": {
+    "packages/GLOSARIO_MAESTRO.md": {
+      "exists": true,
+      "lastModified": "2025-08-29T09:17:28.585Z",
+      "ageInDays": "0.0",
+      "needsUpdate": false
+    },
+    "packages/auth/GLOSARIO.md": {
+      "exists": true,
+      "lastModified": "2025-08-29T08:44:55.114Z",
+      "ageInDays": "0.0",
+      "needsUpdate": false
+    },
+    "packages/types/GLOSARIO.md": {
+      "exists": true,
+      "lastModified": "2025-08-29T08:57:00.365Z",
+      "ageInDays": "0.0",
+      "needsUpdate": false
+    },
+    "packages/shared/GLOSARIO.md": {
+      "exists": true,
+      "lastModified": "2025-08-29T08:38:33.884Z",
+      "ageInDays": "0.0",
+      "needsUpdate": false
+    },
+    "packages/hooks/GLOSARIO.md": {
+      "exists": true,
+      "lastModified": "2025-08-29T08:58:39.027Z",
+      "ageInDays": "0.0",
+      "needsUpdate": false
+    }
+  },
+  "coverage": {
+    "auth": 24,
+    "types": 36,
+    "shared": 3,
+    "hooks": 39
+  },
+  "recommendations": []
+}

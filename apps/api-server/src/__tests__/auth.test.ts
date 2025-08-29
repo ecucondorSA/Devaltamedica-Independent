@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { UnifiedAuthService,
   UserRole,
   createAuthContext
- } from '@altamedica/auth';;
+ } from '@altamedica/auth';
 
 // Mock de Firebase Admin
 vi.mock('../lib/firebase-admin', () => ({

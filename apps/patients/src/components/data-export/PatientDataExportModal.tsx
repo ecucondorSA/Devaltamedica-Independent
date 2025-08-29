@@ -8,15 +8,21 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@altamedica/ui/components/dialog';
-import { Button } from '@altamedica/ui/components/button';
-import { Checkbox } from '@altamedica/ui/components/checkbox';
-import { RadioGroup, RadioGroupItem } from '@altamedica/ui/components/radio-group';
-import { Label } from '@altamedica/ui/components/label';
-import { Alert, AlertDescription, AlertTitle } from '@altamedica/ui/components/alert';
-import { Progress } from '@altamedica/ui/components/progress';
-import { Badge } from '@altamedica/ui/components/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@altamedica/ui/components/tabs';
+  Button,
+  Checkbox,
+  RadioGroup,
+  RadioGroupItem,
+  Label,
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Progress,
+  Badge,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
+} from '@altamedica/ui';
 import {
   FileText,
   Download,
@@ -38,8 +44,8 @@ import {
   CreditCard,
   FileCheck,
 } from 'lucide-react';
-import { useToast } from '@altamedica/ui/hooks/use-toast';
-import type { ExportFormat, ExportScope } from '@altamedica/shared/services/patient-data-export.service';
+import { useToast } from '@altamedica/ui';
+import type { ExportFormat, ExportScope } from '@altamedica/shared';
 
 interface PatientDataExportModalProps {
   isOpen: boolean;

@@ -1,5 +1,284 @@
 # 🚀 CLAUDE.md - API Server Complete Guide
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO CORRECTO
+
+### ✅ Script Start (Evita ReferenceError)
+```javascript
+import express from 'express';
+import { readFileSync } from 'fs';
+import { execSync } from 'child_process';
+import cors from 'cors';
+```
+
+### ✅ Health Endpoint Pattern
+```javascript
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    port: process.env.PORT || 3001 
+  });
+});
+```
+
+### ✅ Error Handler Pattern
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Server error',
+    timestamp: new Date().toISOString() 
+  });
+});
+```
+
+### ✅ Diagnostic Script Pattern
+```javascript
+const checkApiHealth = async () => {
+  try {
+    const response = await fetch('http://localhost:3001/api/health');
+    const data = await response.json();
+    return { status: 'UP', data };
+  } catch (error) {
+    return { status: 'DOWN', error: error.message };
+  }
+};
+```
+
+### ✅ Firebase Admin Pattern
+```javascript
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+
+const app = initializeApp({
+  credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON))
+});
+
+export const adminAuth = getAuth(app);
+export const adminDb = getFirestore(app);
+```
+
+### ✅ Unified Auth Middleware Pattern
+```javascript
+import { adminAuth } from './firebase-admin';
+
+export const authenticateRequest = async (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+  
+  try {
+    const decodedToken = await adminAuth.verifyIdToken(token);
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
+```
+
+### ✅ HIPAA Audit Logger Pattern
+```javascript
+const auditLog = async (action, userId, resourceId, details = {}) => {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    action,
+    userId,
+    resourceId,
+    ipAddress: req.ip,
+    userAgent: req.headers['user-agent'],
+    details,
+    hash: generateHash(action + userId + resourceId + Date.now())
+  };
+  
+  await adminDb.collection('audit_logs').add(logEntry);
+  return logEntry;
+};
+```
+
+### ✅ Service Layer Pattern
+```javascript
+export class PatientService {
+  async getPatient(patientId, requesterId) {
+    await auditLog('READ_PATIENT', requesterId, patientId);
+    
+    const patient = await adminDb
+      .collection('patients')
+      .doc(patientId)
+      .get();
+    
+    if (!patient.exists) {
+      throw new Error('Patient not found');
+    }
+    
+    return patient.data();
+  }
+  
+  async updatePatient(patientId, updates, requesterId) {
+    await auditLog('UPDATE_PATIENT', requesterId, patientId, { updates });
+    
+    await adminDb
+      .collection('patients')
+      .doc(patientId)
+      .update(updates);
+    
+    return { success: true, patientId };
+  }
+}
+```
+
+### ✅ WebRTC Signaling Pattern
+```javascript
+import { Server } from 'socket.io';
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    credentials: true
+  }
+});
+
+io.on('connection', (socket) => {
+  socket.on('join-room', async (roomId, userId) => {
+    const authorized = await verifyUserAccess(userId, roomId);
+    if (!authorized) return socket.disconnect();
+    
+    socket.join(roomId);
+    socket.to(roomId).emit('user-connected', userId);
+    
+    socket.on('offer', (offer, targetId) => {
+      io.to(targetId).emit('offer', offer, socket.id);
+    });
+    
+    socket.on('answer', (answer, targetId) => {
+      io.to(targetId).emit('answer', answer, socket.id);
+    });
+    
+    socket.on('ice-candidate', (candidate, targetId) => {
+      io.to(targetId).emit('ice-candidate', candidate, socket.id);
+    });
+  });
+});
+```
+
+### ✅ Rate Limiting Pattern
+```javascript
+import rateLimit from 'express-rate-limit';
+
+export const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP'
+});
+
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many authentication attempts'
+});
+
+app.use('/api/', apiLimiter);
+app.use('/api/auth/', authLimiter);
+```
+
+### ✅ Medical Data Validation Pattern
+```javascript
+import { z } from 'zod';
+
+const VitalSignsSchema = z.object({
+  bloodPressure: z.object({
+    systolic: z.number().min(70).max(200),
+    diastolic: z.number().min(40).max(130)
+  }),
+  heartRate: z.number().min(40).max(200),
+  temperature: z.number().min(35).max(42),
+  oxygenSaturation: z.number().min(70).max(100)
+});
+
+export const validateVitalSigns = (data) => {
+  const result = VitalSignsSchema.safeParse(data);
+  if (!result.success) {
+    throw new Error(`Invalid vital signs: ${result.error.message}`);
+  }
+  return result.data;
+};
+```
+
+### ✅ Error Recovery Pattern
+```javascript
+const withRetry = async (fn, maxRetries = 3, delay = 1000) => {
+  let lastError;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      console.error(`Attempt ${i + 1} failed:`, error.message);
+      
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+      }
+    }
+  }
+  
+  throw lastError;
+};
+
+const criticalOperation = async () => {
+  return await withRetry(async () => {
+    return await someUnreliableService();
+  });
+};
+```
+
+### ✅ Batch Processing Pattern
+```javascript
+const processBatch = async (items, batchSize = 10) => {
+  const results = [];
+  
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map(item => processItem(item))
+    );
+    results.push(...batchResults);
+    
+    console.log(`Processed ${Math.min(i + batchSize, items.length)}/${items.length} items`);
+  }
+  
+  return results;
+};
+```
+
+### ✅ Testing Pattern
+```javascript
+import request from 'supertest';
+import app from './app';
+
+describe('API Health Check', () => {
+  it('should return health status', async () => {
+    const response = await request(app)
+      .get('/api/health')
+      .expect(200);
+    
+    expect(response.body).toHaveProperty('status', 'ok');
+    expect(response.body).toHaveProperty('timestamp');
+  });
+  
+  it('should require authentication for protected routes', async () => {
+    await request(app)
+      .get('/api/patients')
+      .expect(401);
+  });
+});
+```
+
+---
+
 Este archivo proporciona orientación exhaustiva a Claude Code (claude.ai/code) cuando trabaja con la aplicación API Server del proyecto AltaMedica Platform.
 
 ## ⚠️ FILOSOFÍA E2E (End-to-End) OBLIGATORIA
@@ -769,3 +1048,9 @@ Esta documentación exhaustiva proporciona todo lo necesario para trabajar con e
 - Shared logger: soporte de subruta `@altamedica/shared/services/logger.service` con artefactos dedicados (CJS/ESM/DTS).
 
 Nota: estos cambios no alteran la lógica de negocio; están orientados a estabilizar compilación e integración entre paquetes.
+
+## 🆕 Cambios recientes (2025-08-27)
+
+- Seguridad JWT: Se agrega `config/secrets-loader.ts` que carga `JWT_SECRET` y `JWT_REFRESH_SECRET` desde AWS Secrets Manager antes de iniciar el servidor (ver `src/server.ts`).
+- Endurecimiento de `PatientService` (dominio patients): sanitización de parámetros de búsqueda, whitelisting de `sortBy` y normalización de `sortOrder`.
+- Documentación: README actualizado con nota de seguridad y endurecimiento de consultas.

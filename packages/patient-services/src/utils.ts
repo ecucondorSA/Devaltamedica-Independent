@@ -47,7 +47,7 @@ export function validateEmail(email: string): boolean {
  * Validar teléfono
  */
 export function validatePhone(phone: string): boolean {
-  return /^\+?[\d\s\-\(\)]+$/.test(phone);
+  return /^\+?[\d\s\-()]+$/.test(phone);
 }
 
 /**

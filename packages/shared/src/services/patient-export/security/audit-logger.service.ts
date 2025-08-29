@@ -1,6 +1,7 @@
 import { getFirebaseFirestore } from '@altamedica/firebase/client';
 import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import type { ExportRequest } from '../types';
+import { logger } from '../../logger.service';
 
 /**
  * Audit Logger Service for Patient Data Export
@@ -152,7 +153,7 @@ export class AuditLoggerService {
   /**
    * Log export request with enhanced metadata and compliance tracking
    */
-  async logExportRequest(request: ExportRequest, additionalMetadata?: any): Promise<void> {
+  async logExportRequest(request: ExportRequest, additionalMetadata?: Record<string, unknown>): Promise<void> {
     const auditEvent: AuditEvent = {
       action: 'patient_data_export_requested',
       userId: request.requestedBy,
@@ -421,17 +422,17 @@ export class AuditLoggerService {
 
       // Log to console for immediate monitoring (in development)
       if (process.env.NODE_ENV !== 'production') {
-        console.log(`[AuditLog] ${event.action}: ${event.userId} -> ${event.targetId}`, {
-          severity: event.severity,
-          outcome: event.outcome,
-          metadata: event.metadata,
-        });
+        logger.info(
+          `${event.action}: ${event.userId} -> ${event.targetId}`,
+          'AuditLog',
+          { severity: event.severity, outcome: event.outcome, metadata: event.metadata }
+        );
       }
 
       // Check for compliance violations
       await this.checkComplianceViolations(enrichedEvent);
     } catch (error) {
-      console.error('[AuditLogger] Failed to log audit event:', error);
+      logger.error('Failed to log audit event', 'AuditLogger', error);
 
       // Fallback logging to prevent audit trail gaps
       await this.fallbackLog(event, error as Error);
@@ -488,7 +489,7 @@ export class AuditLoggerService {
 
     // Log violations for immediate attention
     if (violations.length > 0) {
-      console.warn('[AuditLogger] Compliance violations detected:', violations);
+      logger.warn('Compliance violations detected', 'AuditLogger', violations);
 
       // In production, this would trigger alerts/notifications
       if (process.env.NODE_ENV === 'production') {
@@ -503,7 +504,7 @@ export class AuditLoggerService {
   private async fallbackLog(event: AuditEvent, error: Error): Promise<void> {
     try {
       // Log to a fallback collection or local file
-      console.error('[AuditLogger] Fallback logging activated for event:', {
+      logger.error('Fallback logging activated for event', 'AuditLogger', {
         action: event.action,
         userId: event.userId,
         targetId: event.targetId,
@@ -513,7 +514,7 @@ export class AuditLoggerService {
 
       // In production, this might write to a local file or secondary database
     } catch (fallbackError) {
-      console.error('[AuditLogger] Fallback logging also failed:', fallbackError);
+      logger.error('Fallback logging also failed', 'AuditLogger', fallbackError);
     }
   }
 
@@ -562,7 +563,7 @@ export class AuditLoggerService {
   async queryAuditLogs(query: AuditQuery): Promise<AuditEvent[]> {
     // This would implement Firestore querying with the provided filters
     // For now, return empty array as placeholder
-    console.log('[AuditLogger] Query audit logs:', query);
+    logger.info('Query audit logs', 'AuditLogger', query);
     return [];
   }
 
@@ -589,7 +590,7 @@ export class AuditLoggerService {
    */
   async getExportAuditTrail(exportId: string): Promise<AuditEvent[]> {
     // This would query all audit events related to a specific export
-    console.log('[AuditLogger] Get export audit trail for:', exportId);
+    logger.info(`Get export audit trail for: ${exportId}`, 'AuditLogger');
     return [];
   }
 

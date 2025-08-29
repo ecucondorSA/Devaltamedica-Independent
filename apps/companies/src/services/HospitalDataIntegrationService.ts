@@ -3,12 +3,16 @@
  * Sistema multi-canal para recolección de datos hospitalarios en tiempo real
  */
 
-import { addDoc, collection, getFirebaseFirestore, limit, onSnapshot, orderBy, query } from '@altamedica/firebase/client';
-import type {
-  DataSource,
-  SaturationLevel,
-  ValidationResult
-} from '@altamedica/types';
+import {
+  addDoc,
+  collection,
+  getFirebaseFirestore,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from '@altamedica/firebase';
+import type { DataSource, SaturationLevel, ValidationResult } from '@altamedica/types';
 import { HospitalAPIClient } from './integrations/HospitalAPIService';
 import { IoTSensorService } from './integrations/IoTSensorService';
 import { WhatsAppClient } from './integrations/WhatsAppService';
@@ -70,7 +74,7 @@ export class HospitalDataIntegrationService {
   private apiClient: HospitalAPIClient;
   private iotService: IoTSensorService;
   private dataCache: Map<string, HospitalMetrics> = new Map();
-  
+
   constructor(private config: IntegrationConfig) {
     this.whatsappClient = new WhatsAppClient(config.whatsapp);
     this.apiClient = new HospitalAPIClient(config.api);
@@ -84,13 +88,13 @@ export class HospitalDataIntegrationService {
     const sources = await Promise.allSettled([
       this.config.whatsapp.enabled ? this.whatsappClient.getLatestUpdate(hospitalId) : null,
       this.config.api.enabled ? this.apiClient.fetchHospitalStatus(hospitalId) : null,
-      this.config.iot.enabled ? this.iotService.getSensorData(hospitalId) : null
+      this.config.iot.enabled ? this.iotService.getSensorData(hospitalId) : null,
     ]);
 
     // Procesar y combinar datos
     const validData = sources
-      .filter(result => result.status === 'fulfilled' && result.value)
-      .map(result => (result as PromiseFulfilledResult<any>).value);
+      .filter((result) => result.status === 'fulfilled' && result.value)
+      .map((result) => (result as PromiseFulfilledResult<any>).value);
 
     if (validData.length === 0) {
       throw new Error(`No data available for hospital ${hospitalId}`);
@@ -98,13 +102,13 @@ export class HospitalDataIntegrationService {
 
     // Merge inteligente de datos con prioridad por confiabilidad
     const mergedData = this.mergeDataSources(validData);
-    
+
     // Validar y enriquecer
     const validatedData = await this.validateAndEnrich(mergedData);
-    
+
     // Guardar en cache y Firebase
     await this.persistData(hospitalId, validatedData);
-    
+
     return validatedData;
   }
 
@@ -113,7 +117,13 @@ export class HospitalDataIntegrationService {
    */
   calculateSaturation(metrics: HospitalMetrics): SaturationLevel {
     // Validar que metrics tenga la estructura esperada
-    if (!metrics || !metrics.occupancy || !metrics.occupancy.beds || !metrics.occupancy.emergency || !metrics.staff) {
+    if (
+      !metrics ||
+      !metrics.occupancy ||
+      !metrics.occupancy.beds ||
+      !metrics.occupancy.emergency ||
+      !metrics.staff
+    ) {
       logger.warn('Invalid metrics structure:', metrics);
       return {
         level: 'low',
@@ -122,9 +132,9 @@ export class HospitalDataIntegrationService {
           bedOccupancy: 0,
           emergencyWait: 0,
           staffRatio: 0,
-          criticalPatients: 0
+          criticalPatients: 0,
         },
-        recommendations: ['No hay datos suficientes para calcular saturación']
+        recommendations: ['No hay datos suficientes para calcular saturación'],
       };
     }
 
@@ -132,25 +142,28 @@ export class HospitalDataIntegrationService {
       bedOccupancy: 0.3,
       emergencyWait: 0.25,
       staffRatio: 0.25,
-      criticalPatients: 0.2
+      criticalPatients: 0.2,
     };
 
     const factors = {
       bedOccupancy: (metrics.occupancy.beds.percentage || 0) / 100,
       emergencyWait: Math.min((metrics.occupancy.emergency.averageWaitTime || 0) / 120, 1), // 2h max
-      staffRatio: (metrics.occupancy.emergency.waiting || 0) / Math.max(metrics.staff.active || 1, 1),
-      criticalPatients: (metrics.occupancy.emergency.critical || 0) / Math.max(metrics.occupancy.emergency.waiting || 1, 1)
+      staffRatio:
+        (metrics.occupancy.emergency.waiting || 0) / Math.max(metrics.staff.active || 1, 1),
+      criticalPatients:
+        (metrics.occupancy.emergency.critical || 0) /
+        Math.max(metrics.occupancy.emergency.waiting || 1, 1),
     };
 
     const score = Object.entries(factors).reduce((total, [key, value]) => {
-      return total + (value * weights[key as keyof typeof weights]);
+      return total + value * weights[key as keyof typeof weights];
     }, 0);
 
     return {
       level: score > 0.8 ? 'critical' : score > 0.6 ? 'high' : score > 0.4 ? 'medium' : 'low',
       score: Math.round(score * 100),
       factors,
-      recommendations: this.generateRecommendations(score, factors)
+      recommendations: this.generateRecommendations(score, factors),
     };
   }
 
@@ -162,7 +175,7 @@ export class HospitalDataIntegrationService {
     const db = getFirebaseFirestore();
     const metricsRef = collection(db, 'hospitals', hospitalId, 'metrics');
     const q = query(metricsRef, orderBy('timestamp', 'desc'), limit(1));
-    
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (!snapshot.empty) {
         const data = snapshot.docs[0].data() as HospitalMetrics;
@@ -200,11 +213,11 @@ export class HospitalDataIntegrationService {
       beds: /camas?\s*[:=]?\s*(\d+)\s*\/\s*(\d+)/i,
       waiting: /esperando\s*[:=]?\s*(\d+)/i,
       doctors: /m[eé]dicos?\s*[:=]?\s*(\d+)/i,
-      emergency: /urgencia\s*[:=]?\s*(\d+)/i
+      emergency: /urgencia\s*[:=]?\s*(\d+)/i,
     };
 
     const extracted: any = {};
-    
+
     for (const [key, pattern] of Object.entries(patterns)) {
       const match = message.text.match(pattern);
       if (match) {
@@ -227,15 +240,15 @@ export class HospitalDataIntegrationService {
   private mergeDataSources(sources: any[]): HospitalMetrics {
     // Prioridad: API > IoT > WhatsApp
     const priorities = { api: 3, iot: 2, whatsapp: 1 };
-    
+
     // Filtrar fuentes válidas
-    const validSources = sources.filter(s => s && s.hospitalId);
-    
+    const validSources = sources.filter((s) => s && s.hospitalId);
+
     if (validSources.length === 0) {
       // Retornar datos por defecto si no hay fuentes válidas
       return this.getDefaultMetrics('unknown');
     }
-    
+
     validSources.sort((a, b) => {
       const priorityA = priorities[a.source as keyof typeof priorities] || 0;
       const priorityB = priorities[b.source as keyof typeof priorities] || 0;
@@ -244,7 +257,7 @@ export class HospitalDataIntegrationService {
 
     // Tomar el más confiable como base
     const baseData = validSources[0];
-    
+
     // Enriquecer con datos de otras fuentes
     for (let i = 1; i < validSources.length; i++) {
       const source = validSources[i];
@@ -260,7 +273,7 @@ export class HospitalDataIntegrationService {
    */
   private async validateAndEnrich(data: HospitalMetrics): Promise<HospitalMetrics> {
     const validation = this.validateDataIntegrity(data);
-    
+
     if (!validation.isValid) {
       logger.warn(`Data validation issues: ${validation.errors.join(', ')}`);
       // Intentar corregir automáticamente
@@ -286,7 +299,7 @@ export class HospitalDataIntegrationService {
     const metricsRef = collection(db, 'hospitals', hospitalId, 'metrics');
     await addDoc(metricsRef, {
       ...data,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // PostgreSQL para históricos (mediante API)
@@ -326,18 +339,18 @@ export class HospitalDataIntegrationService {
   // Métodos auxiliares
   private validateDataIntegrity(data: HospitalMetrics): ValidationResult {
     const errors: string[] = [];
-    
+
     if (data.occupancy.beds.occupied > data.occupancy.beds.total) {
       errors.push('Bed occupancy exceeds total beds');
     }
-    
+
     if (data.occupancy.emergency.averageWaitTime < 0) {
       errors.push('Invalid wait time');
     }
-    
+
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -383,25 +396,25 @@ export class HospitalDataIntegrationService {
           total: 100,
           occupied: 0,
           available: 100,
-          percentage: 0
+          percentage: 0,
         },
         emergency: {
           waiting: 0,
           averageWaitTime: 0,
-          critical: 0
+          critical: 0,
         },
-        specialties: []
+        specialties: [],
       },
       staff: {
         total: 50,
         active: 40,
-        bySpecialty: new Map()
+        bySpecialty: new Map(),
       },
       dataQuality: {
         source: 'default' as any,
         confidence: 0,
-        lastUpdate: new Date()
-      }
+        lastUpdate: new Date(),
+      },
     };
   }
 
@@ -411,15 +424,23 @@ export class HospitalDataIntegrationService {
    */
   private async processSensorData(sensorData: any): Promise<HospitalMetrics> {
     // Si existe cache previa la usamos como base para mantener consistencia
-    const base = this.dataCache.get(sensorData?.hospitalId) || this.getDefaultMetrics(sensorData?.hospitalId || 'unknown');
+    const base =
+      this.dataCache.get(sensorData?.hospitalId) ||
+      this.getDefaultMetrics(sensorData?.hospitalId || 'unknown');
 
     // Ejemplo de mapeo simple (placeholder seguro)
     if (sensorData && typeof sensorData === 'object') {
       if (typeof sensorData.bedsOccupied === 'number' && typeof sensorData.bedsTotal === 'number') {
         base.occupancy.beds.total = sensorData.bedsTotal;
         base.occupancy.beds.occupied = Math.min(sensorData.bedsOccupied, sensorData.bedsTotal);
-        base.occupancy.beds.available = Math.max(base.occupancy.beds.total - base.occupancy.beds.occupied, 0);
-        base.occupancy.beds.percentage = base.occupancy.beds.total > 0 ? Math.round((base.occupancy.beds.occupied / base.occupancy.beds.total) * 100) : 0;
+        base.occupancy.beds.available = Math.max(
+          base.occupancy.beds.total - base.occupancy.beds.occupied,
+          0,
+        );
+        base.occupancy.beds.percentage =
+          base.occupancy.beds.total > 0
+            ? Math.round((base.occupancy.beds.occupied / base.occupancy.beds.total) * 100)
+            : 0;
       }
       if (typeof sensorData.waiting === 'number') {
         base.occupancy.emergency.waiting = sensorData.waiting;

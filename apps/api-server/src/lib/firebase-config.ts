@@ -221,54 +221,9 @@ export interface MedicalAppointment {
   endedAt?: Date;
 }
 
-export // Removed local interface - using @altamedica/types
-import { MedicalRecord } from '@altamedica/types';;
-    heartRate?: number;
-    temperature?: number;
-    weight?: number;
-    height?: number;
-    oxygenSaturation?: number;
-    respiratoryRate?: number;
-    bmi?: number;
-  };
-  
-  medications?: Array<{
-    name: string;
-    dosage: string;
-    frequency: string;
-    duration: string;
-    instructions?: string;
-  }>;
-  
-  labResults?: Array<{
-    testName: string;
-    value: string;
-    unit: string;
-    referenceRange: string;
-    status: 'normal' | 'abnormal' | 'critical';
-  }>;
-  
-  attachments?: Array<{
-    id: string;
-    type: 'image' | 'pdf' | 'lab-result' | 'x-ray' | 'scan';
-    url: string;
-    filename: string;
-    description?: string;
-    uploadedAt: Date;
-  }>;
-  
-  // Privacy & compliance
-  isConfidential: boolean;
-  accessLog?: Array<{
-    userId: string;
-    accessedAt: Date;
-    action: 'view' | 'edit' | 'download';
-  }>;
-  
-  // Timestamps
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { MedicalRecord } from '@altamedica/types';
+
+export type { MedicalRecord };
 
 export interface TelemedicineSession {
   id: string;

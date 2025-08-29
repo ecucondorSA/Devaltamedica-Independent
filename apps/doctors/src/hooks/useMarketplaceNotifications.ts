@@ -1,7 +1,7 @@
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface MarketplaceNotification {
   id: string;
   type: string;
@@ -121,7 +121,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
           const data = JSON.parse(event.data);
           handleWebSocketMessage(data);
         } catch (error) {
-          logger.error('Error parsing WebSocket message:', error);
+          logger.error('Error parsing WebSocket message:', String(error));
         }
       };
 
@@ -152,11 +152,11 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
       };
 
       ws.onerror = (error) => {
-        logger.error('WebSocket error:', error);
+        logger.error('WebSocket error:', String(error));
         setError('Connection error occurred');
       };
     } catch (error) {
-      logger.error('Error connecting to WebSocket:', error);
+      logger.error('Error connecting to WebSocket:', String(error));
       setError('Failed to connect to notification service');
     }
   }, [user?.token]);
@@ -232,7 +232,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
           break;
         case 'application_status_changed':
           icon = '/icons/status-notification.png';
-          if (notification.data?.status === 'hired') {
+          if ((notification.data as any)?.status === 'hired') {
             icon = '/icons/success-notification.png';
           }
           break;
@@ -250,7 +250,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
         badge: '/icons/badge.png',
         tag: notification.id,
         requireInteraction: notification.priority === 'urgent',
-        actions: notification.data?.actionUrl
+        actions: (notification.data as any)?.actionUrl
           ? [
               {
                 action: 'view',
@@ -258,7 +258,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
               },
             ]
           : undefined,
-      });
+      } as any);
 
       browserNotification.onclick = () => {
         if (notification.data?.actionUrl) {
@@ -291,7 +291,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
         throw new Error('Failed to fetch notifications');
       }
     } catch (error) {
-      logger.error('Error fetching marketplace notifications:', error);
+      logger.error('Error fetching marketplace notifications:', String(error));
       setError('Failed to load notifications');
     } finally {
       setIsLoading(false);
@@ -330,7 +330,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
           setUnreadCount((prev) => Math.max(0, prev - markedCount));
         }
       } catch (error) {
-        logger.error('Error marking notifications as read:', error);
+        logger.error('Error marking notifications as read:', String(error));
       }
     },
     [user?.token, notifications],
@@ -365,7 +365,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
         setUnreadCount(0);
       }
     } catch (error) {
-      logger.error('Error marking all notifications as read:', error);
+      logger.error('Error marking all notifications as read:', String(error));
     }
   }, [user?.id, user?.token]);
 
@@ -392,7 +392,7 @@ export function useMarketplaceNotifications(): UseMarketplaceNotificationsReturn
           throw new Error('Failed to send notification');
         }
       } catch (error) {
-        logger.error('Error sending marketplace notification:', error);
+        logger.error('Error sending marketplace notification:', String(error));
         throw error;
       }
     },

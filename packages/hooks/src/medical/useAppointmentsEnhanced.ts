@@ -136,80 +136,82 @@ export function useAppointmentsEnhanced(options: UseAppointmentsOptions = {}) {
   });
 
   // WebSocket para actualizaciones en tiempo real
-  useEffect(() => {
-    if (!realTime || !enabled) return;
+  // useEffect(() => {
+  //   if (!realTime || !enabled) return;
 
-    const connectWebSocket = () => {
-      try {
-        appointmentSocket = new WebSocket(
-          process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001'
-        );
+  //   const connectWebSocket = () => {
+  //     try {
+  //       appointmentSocket = new WebSocket(
+  //         process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001'
+  //       );
 
-        appointmentSocket.onopen = () => {
-          logger.info('📅 Conectado a actualizaciones de citas en tiempo real');
+  //       appointmentSocket.onopen = () => {
+  //         logger.info('📅 Conectado a actualizaciones de citas en tiempo real');
           
-          // Suscribirse a eventos de citas
-          if (patientId) {
-            appointmentSocket?.send(JSON.stringify({
-              type: 'subscribe',
-              channel: `appointments:patient:${patientId}`
-            }));
-          }
+  //         // Suscribirse a eventos de citas
+  //         if (patientId) {
+  //           appointmentSocket?.send(JSON.stringify({
+  //             type: 'subscribe',
+  //             channel: `appointments:patient:${patientId}`
+  //           }));
+  //         }
           
-          if (doctorId) {
-            appointmentSocket?.send(JSON.stringify({
-              type: 'subscribe',
-              channel: `appointments:doctor:${doctorId}`
-            }));
-          }
-        };
+  //         if (doctorId) {
+  //           appointmentSocket?.send(JSON.stringify({
+  //             type: 'subscribe',
+  //             channel: `appointments:doctor:${doctorId}`
+  //           }));
+  //         }
+  //       };
 
-        appointmentSocket.onmessage = (event) => {
-          const message = JSON.parse(event.data);
+  //       appointmentSocket.onmessage = (event) => {
+  //         const message = JSON.parse(event.data);
           
-          if (message.type === 'appointment:update') {
-            // Invalidar cache para forzar refetch
-            queryClient.invalidateQueries({ queryKey });
+  //         if (message.type === 'appointment:update') {
+  //           // Invalidar cache para forzar refetch
+  //           // queryClient.invalidateQueries({ 
+  //           //   queryKey: MEDICAL_QUERY_KEYS.appointments.all 
+  //           // });
             
-            // Mostrar notificación según el tipo de actualización
-            switch (message.action) {
-              case 'created':
-                toast.info('Nueva cita agendada');
-                break;
-              case 'cancelled':
-                toast.warning('Cita cancelada');
-                break;
-              case 'rescheduled':
-                toast.info('Cita reprogramada');
-                break;
-              case 'reminder':
-                toast.info(`Recordatorio: Cita en ${message.data.minutesUntil} minutos`);
-                break;
-            }
-          }
-        };
+  //           // Mostrar notificación según el tipo de actualización
+  //           switch (message.action) {
+  //             case 'created':
+  //               toast.info('Nueva cita agendada');
+  //               break;
+  //             case 'cancelled':
+  //               toast.warning('Cita cancelada');
+  //               break;
+  //             case 'rescheduled':
+  //               toast.info('Cita reprogramada');
+  //               break;
+  //             case 'reminder':
+  //               toast.info(`Recordatorio: Cita en ${message.data.minutesUntil} minutos`);
+  //               break;
+  //           }
+  //         }
+  //       };
 
-        appointmentSocket.onerror = (error) => {
-          logger.error('WebSocket error:', error);
-        };
+  //       appointmentSocket.onerror = (error) => {
+  //         logger.error('WebSocket error:', error);
+  //       };
 
-        appointmentSocket.onclose = () => {
-          logger.info('WebSocket desconectado, reconectando en 5s...');
-          setTimeout(connectWebSocket, 5000);
-        };
-      } catch (error) {
-        logger.error('Error conectando WebSocket:', error);
-      }
-    };
+  //       appointmentSocket.onclose = () => {
+  //         logger.info('WebSocket desconectado, reconectando en 5s...');
+  //         setTimeout(connectWebSocket, 5000);
+  //       };
+  //     } catch (error) {
+  //       logger.error('Error conectando WebSocket:', error);
+  //     }
+  //   };
 
-    connectWebSocket();
+  //   connectWebSocket();
 
-    return () => {
-      if (appointmentSocket?.readyState === WebSocket.OPEN) {
-        appointmentSocket.close();
-      }
-    };
-  }, [realTime, enabled, patientId, doctorId, queryClient, queryKey]);
+  //   return () => {
+  //     if (appointmentSocket?.readyState === WebSocket.OPEN) {
+  //       appointmentSocket.close();
+  //     }
+  //   };
+  // }, [realTime, enabled, patientId, doctorId, queryClient, queryKey]);
 
   return {
     appointments: query.data?.appointments || [],

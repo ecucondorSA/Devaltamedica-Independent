@@ -4,7 +4,7 @@
 # Workspace settings
 auto-install-peers=true
 strict-peer-dependencies=false
-shamefully-hoist=true
+# shamefully-hoist=true
 shared-workspace-lockfile=true
 link-workspace-packages=true
 prefer-workspace-packages=true

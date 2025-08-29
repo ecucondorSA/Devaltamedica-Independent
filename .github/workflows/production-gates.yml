@@ -2,9 +2,9 @@ name: Production Deployment Gates
 
 on:
   push:
-    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, production ]
+    branches: [ main, production ]
   pull_request:
-    branches: [ auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, production ]
+    branches: [ main, production ]
   workflow_dispatch:
 
 env:

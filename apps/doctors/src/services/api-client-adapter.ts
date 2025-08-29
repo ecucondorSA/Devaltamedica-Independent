@@ -6,7 +6,7 @@
 import axios from 'axios';
 import type { ApiResponse, ApiClient } from '@altamedica/patient-services';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Configuración de la API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -28,7 +28,7 @@ axiosInstance.interceptors.request.use(async (config) => {
       config.headers.Authorization = `Bearer ${user.stsTokenManager.accessToken}`;
     }
   } catch (error) {
-    logger.warn('No se pudo obtener token de autenticación:', error);
+    logger.warn('No se pudo obtener token de autenticación:', String(error));
   }
   return config;
 });

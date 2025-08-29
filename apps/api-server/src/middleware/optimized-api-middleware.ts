@@ -2,15 +2,14 @@
 // Optimización por Lead Backend Developer (r4kh6oc5t)
 // Implementado por Lead Frontend Developer para ecosistema Altamedica
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createErrorResponse, createSuccessResponse } from '@/lib/response-helpers';
-import { z } from 'zod';
-import rateLimit from 'express-rate-limit';
-import Redis from 'ioredis';
 import { admin } from '@/lib/firebase-admin';
+import { createErrorResponse } from '@/lib/response-helpers';
+import Redis from 'ioredis';
+import { NextRequest, NextResponse } from 'next/server';
 import os from 'os';
+import { z } from 'zod';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Configuración de Redis para caché y rate limiting
 const redis = new Redis({
   host: process.env.REDIS_HOST || 'localhost',
@@ -135,13 +134,13 @@ export function withValidation<T>(
   schema: z.ZodSchema<T>,
   validationType: 'body' | 'query' | 'params' = 'body'
 ) {
-  return function(handler: (request: NextRequest, validated: T) => Promise<NextResponse>) {
-    return async function(request: NextRequest): Promise<NextResponse> {
+  return function (handler: (request: NextRequest, validated: T) => Promise<NextResponse>) {
+    return async function (request: NextRequest): Promise<NextResponse> {
       const startTime = Date.now();
-      
+
       try {
         let dataToValidate: any;
-        
+
         switch (validationType) {
           case 'body':
             dataToValidate = await request.json();
@@ -157,7 +156,7 @@ export function withValidation<T>(
 
         const validated = schema.parse(dataToValidate);
         const response = await handler(request, validated);
-        
+
         // Log exitoso
         await APILogger.log({
           timestamp: new Date().toISOString(),
@@ -170,10 +169,10 @@ export function withValidation<T>(
         });
 
         return response;
-        
+
       } catch (error) {
         const responseTime = Date.now() - startTime;
-        
+
         if (error instanceof z.ZodError) {
           // Log error de validación
           await APILogger.log({
@@ -218,8 +217,8 @@ export function withValidation<T>(
 
 // Middleware de autenticación mejorado para Altamedica
 export function withAuth(requiredRoles?: string[]) {
-  return function(handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
-    return async function(request: NextRequest): Promise<NextResponse> {
+  return function (handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
+    return async function (request: NextRequest): Promise<NextResponse> {
       try {
         const authHeader = request.headers.get('authorization');
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -230,18 +229,18 @@ export function withAuth(requiredRoles?: string[]) {
         }
 
         const token = authHeader.substring(7);
-        
+
         // Verificar token en caché primero
         const cacheKey = APICache.generateKey('auth', token);
         let user = await APICache.get(cacheKey);
-        
+
         if (!user) {
           // Verificar con Firebase Auth
           try {
             const decodedToken = await admin.auth().verifyIdToken(token);
-            user = { 
-              uid: decodedToken.uid, 
-              email: decodedToken.email, 
+            user = {
+              uid: decodedToken.uid,
+              email: decodedToken.email,
               roles: decodedToken.roles || ['patient'],
               isEmailVerified: decodedToken.email_verified || false
             };
@@ -249,9 +248,9 @@ export function withAuth(requiredRoles?: string[]) {
           } catch (firebaseError) {
             // Placeholder para desarrollo
             if (process.env.NODE_ENV === 'development') {
-              user = { 
-                uid: 'dev-user', 
-                email: 'dev@altamedica.com', 
+              user = {
+                uid: 'dev-user',
+                email: 'dev@altamedica.com',
                 roles: ['patient'],
                 isEmailVerified: true
               };
@@ -265,7 +264,7 @@ export function withAuth(requiredRoles?: string[]) {
         if (requiredRoles && requiredRoles.length > 0) {
           const userRoles = user.roles || [];
           const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
-          
+
           if (!hasRequiredRole) {
             return NextResponse.json(
               createErrorResponse('INSUFFICIENT_PERMISSIONS', 'Insufficient permissions'),
@@ -278,7 +277,7 @@ export function withAuth(requiredRoles?: string[]) {
         (request as any).user = user;
 
         return await handler(request, user);
-        
+
       } catch (error) {
         return NextResponse.json(
           createErrorResponse('AUTH_ERROR', 'Authentication failed'),
@@ -291,23 +290,23 @@ export function withAuth(requiredRoles?: string[]) {
 
 // Middleware de rate limiting
 export function withRateLimit(limitType: keyof typeof rateLimitConfigs = 'general') {
-  return function(handler: (request: NextRequest) => Promise<NextResponse>) {
-    return async function(request: NextRequest): Promise<NextResponse> {
+  return function (handler: (request: NextRequest) => Promise<NextResponse>) {
+    return async function (request: NextRequest): Promise<NextResponse> {
       const config = rateLimitConfigs[limitType];
       const clientId = request.ip || 'unknown';
       const key = `altamedica:rate_limit:${limitType}:${clientId}`;
-      
+
       try {
         const current = await redis.incr(key);
-        
+
         if (current === 1) {
           await redis.expire(key, Math.floor(config.windowMs / 1000));
         }
-        
+
         if (current > config.max) {
           return NextResponse.json(
             createErrorResponse('RATE_LIMIT_EXCEEDED', 'Too many requests'),
-            { 
+            {
               status: 429,
               headers: {
                 'Retry-After': String(Math.floor(config.windowMs / 1000)),
@@ -319,13 +318,13 @@ export function withRateLimit(limitType: keyof typeof rateLimitConfigs = 'genera
         }
 
         const response = await handler(request);
-        
+
         // Agregar headers de rate limit
         response.headers.set('X-RateLimit-Limit', String(config.max));
         response.headers.set('X-RateLimit-Remaining', String(Math.max(0, config.max - current)));
-        
+
         return response;
-        
+
       } catch (error) {
         // Si Redis falla, permitir la request pero loggear el error
         logger.error('Rate limiting error:', undefined, error);
@@ -341,10 +340,10 @@ export function withMedicalAPI<T>(
   requiredRoles: string[] = ['patient', 'doctor', 'admin'],
   rateLimitType: keyof typeof rateLimitConfigs = 'medical'
 ) {
-  return function(handler: (request: NextRequest, validated: T, user: any) => Promise<NextResponse>) {
+  return function (handler: (request: NextRequest, validated: T, user: any) => Promise<NextResponse>) {
     return withRateLimit(rateLimitType)(
       withAuth(requiredRoles)(
-        withValidation(schema)((request, validated) => 
+        withValidation(schema)((request, validated) =>
           handler(request, validated, (request as any).user)
         )
       )
@@ -398,7 +397,7 @@ export class HealthChecker {
 
   static async getSystemMetrics() {
     const memUsage = process.memoryUsage();
-    
+
     return {
       uptime: Math.floor(process.uptime()),
       memory: {
@@ -447,11 +446,11 @@ export class AltamedicaUtils {
   static getClientIP(request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for');
     const real = request.headers.get('x-real-ip');
-    
+
     if (forwarded) {
       return forwarded.split(',')[0].trim();
     }
-    
+
     if (real) {
       return real;
     }
@@ -462,13 +461,13 @@ export class AltamedicaUtils {
   static isMedicalEndpoint(pathname: string): boolean {
     const medicalPaths = [
       '/api/patients',
-      '/api/doctors', 
+      '/api/doctors',
       '/api/medical',
       '/api/appointments',
       '/api/records',
       '/api/prescriptions'
     ];
-    
+
     return medicalPaths.some(path => pathname.startsWith(path));
   }
 
@@ -480,9 +479,5 @@ export class AltamedicaUtils {
 
 // Exportar todo para uso en otros archivos
 export {
-  APILogger,
-  APICache,
-  rateLimitConfigs,
-  HealthChecker,
-  AltamedicaUtils
-}; 
+  AltamedicaUtils, APICache, APILogger, HealthChecker, rateLimitConfigs
+};

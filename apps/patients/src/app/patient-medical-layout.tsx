@@ -71,7 +71,9 @@ export default function PatientMedicalLayout({
           window.location.pathname.includes('telemedicine') ||
           appointmentStatus === 'active'
         );
-      } catch {}
+      } catch {
+        // window.location.pathname can throw errors in some environments
+      }
     }
   }, [appointmentStatus]);
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { matchingApiService } from '../services/matching-api.service';
 import { notificationService } from '../services/notification.service';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface JobOffer {
   id: string;
   title: string;
@@ -166,7 +166,7 @@ export function useMarketplace() {
         });
       }
     } catch (error) {
-      logger.error('Error loading doctor profile:', error);
+      logger.error('Error loading doctor profile:', String(error));
     }
   };
 
@@ -187,7 +187,7 @@ export function useMarketplace() {
         // Notificar sobre ofertas con alto match score
         jobOffers.forEach(job => {
           if (job.matchScore && job.matchScore >= 80) {
-            notificationService.notifyJobMatch({
+            (notificationService as any).notifyJobMatch({
               id: job.id,
               title: job.title,
               company: job.company,
@@ -201,7 +201,7 @@ export function useMarketplace() {
         setJobs(getMockJobs());
       }
     } catch (error) {
-      logger.error('Error loading job offers:', error);
+      logger.error('Error loading job offers:', String(error));
       setError('Error al cargar las ofertas');
       // Usar datos mock como fallback
       setJobs(getMockJobs());
@@ -219,7 +219,7 @@ export function useMarketplace() {
       
       // Notificar sobre la nueva oferta
       if (newJob.matchScore && newJob.matchScore >= 80) {
-        notificationService.notifyJobMatch({
+        (notificationService as any).notifyJobMatch({
           id: newJob.id,
           title: newJob.title,
           company: newJob.company,
@@ -265,7 +265,7 @@ export function useMarketplace() {
       
       return result;
     } catch (error) {
-      logger.error('Error applying to job:', error);
+      logger.error('Error applying to job:', String(error));
       return { success: false, error: 'Error al enviar la aplicación' };
     }
   }, [doctorProfile]);

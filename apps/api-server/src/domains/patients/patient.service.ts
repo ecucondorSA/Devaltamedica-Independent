@@ -1,6 +1,7 @@
 import { adminDb } from '@/shared/lib/firebase-admin';
-import { Patient, CreatePatientSchema, UpdatePatientSchema, PatientQueryOptions, PatientStats } from './patient.types';
 import { ServiceContext } from '@/shared/lib/patterns/ServicePattern';
+import { sanitizeInput } from '../../middleware/hipaa-audit.middleware';
+import { CreatePatientSchema, Patient, PatientQueryOptions, PatientStats, UpdatePatientSchema } from './patient.types';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 export class PatientService {
@@ -10,21 +11,31 @@ export class PatientService {
     try {
       let query = adminDb.collection(this.collectionName);
 
+      // Sanitizar y blindar parámetros de consulta
+      const safeSearch = options.search
+        ? (sanitizeInput(options.search) as string).replace(/[^a-zA-Z0-9\s-]/g, '').trim()
+        : undefined;
+      const allowedSortFields = new Set(['createdAt', 'lastName', 'firstName']);
+      const sortBy = allowedSortFields.has((options.sortBy as string) || '')
+        ? (options.sortBy as string)
+        : 'createdAt';
+      const sortOrder: 'asc' | 'desc' = (options.sortOrder === 'asc' || options.sortOrder === 'desc')
+        ? options.sortOrder
+        : 'desc';
+
       // Filtrar por doctor si se proporciona
       if (options.doctorId) {
-        query = query.where('assignedDoctor', '==', options.doctorId);
+        query = query.where('assignedDoctor', '==', sanitizeInput(options.doctorId));
       }
 
       // Búsqueda por nombre (simplificada)
-      if (options.search) {
+      if (safeSearch) {
         // En un caso real, podrías usar Algolia o similar para búsqueda compleja
-        query = query.where('firstName', '>=', options.search)
-                    .where('firstName', '<=', options.search + '\uf8ff');
+        query = query.where('firstName', '>=', safeSearch)
+                    .where('firstName', '<=', safeSearch + '\uf8ff');
       }
 
       // Ordenamiento
-      const sortBy = options.sortBy || 'createdAt';
-      const sortOrder = options.sortOrder || 'desc';
       query = query.orderBy(sortBy, sortOrder);
 
       // Paginación

@@ -5,7 +5,9 @@
   "type": "module",
   "main": "index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./base.json": "./base.json",
+    "./react.json": "./react.json"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

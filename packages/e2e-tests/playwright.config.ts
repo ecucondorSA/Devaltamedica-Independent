@@ -83,5 +83,12 @@ export default defineConfig({
       testMatch: /.*\.spec\.ts/,
       timeout: 180000,
     }
+  },
+    {
+      name: 'storybook',
+      use: { baseURL: 'http://localhost:6006', ...devices['Desktop Chrome'] }, // Asumiendo que Storybook corre en el puerto 6006
+      testDir: 'tests/storybook',
+      testMatch: /.*\\.spec\\.ts/,
+    }
   ]
 });

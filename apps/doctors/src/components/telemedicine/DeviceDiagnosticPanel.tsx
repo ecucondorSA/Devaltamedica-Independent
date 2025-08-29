@@ -17,9 +17,9 @@ import {
   Wifi,
   Monitor
 } from 'lucide-react';
-import { useAudioVideoOptimizer } from '../services/AudioVideoOptimizer';
+import { AudioVideoOptimizer } from '../../services/AudioVideoOptimizer';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface DeviceDiagnosticPanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,7 +38,7 @@ export default function DeviceDiagnosticPanel({
   onClose, 
   onRetry 
 }: DeviceDiagnosticPanelProps) {
-  const { checkDevicePermissions, getAvailableDevices, requestDevicePermissions } = useAudioVideoOptimizer();
+  const { checkDevicePermissions, getAvailableDevices, requestDevicePermissions }: any = {};
   const [devices, setDevices] = useState<{
     cameras: DeviceInfo[];
     microphones: DeviceInfo[];
@@ -83,14 +83,14 @@ export default function DeviceDiagnosticPanel({
       // 2. Enumerar dispositivos
       const deviceResults = await getAvailableDevices();
       
-      const cameras: DeviceInfo[] = deviceResults.cameras.map(device => ({
+      const cameras: DeviceInfo[] = deviceResults.cameras.map((device: any) => ({
         name: device.label || `Cámara ${device.deviceId.slice(0, 8)}`,
         id: device.deviceId,
         kind: 'videoinput',
         status: 'available'
       }));
 
-      const microphones: DeviceInfo[] = deviceResults.microphones.map(device => ({
+      const microphones: DeviceInfo[] = deviceResults.microphones.map((device: any) => ({
         name: device.label || `Micrófono ${device.deviceId.slice(0, 8)}`,
         id: device.deviceId,
         kind: 'audioinput',
@@ -134,7 +134,7 @@ export default function DeviceDiagnosticPanel({
       });
 
     } catch (error) {
-      logger.error('Error en diagnóstico:', error);
+      logger.error('Error en diagnóstico:', String(error));
       issues.push('Error durante el diagnóstico');
       recommendations.push('Intenta recargar la página');
       

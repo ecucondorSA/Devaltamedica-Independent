@@ -27,9 +27,9 @@ import {
   HelpCircle,
   Shield
 } from 'lucide-react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 📝 TIPOS DE NAVEGACIÓN
 interface NavigationItem {
   name: string;
@@ -129,7 +129,7 @@ export default function PatientSidebar() {
     try {
       await logout();
     } catch (error) {
-      logger.error('Logout failed:', error);
+      logger.error('Logout failed:', String(error));
     }
   };
 

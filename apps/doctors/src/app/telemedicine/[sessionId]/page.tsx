@@ -8,7 +8,7 @@ import ChatPanel from '../../../components/telemedicine/ChatPanel';
 import SessionControls from '../../../components/telemedicine/SessionControls';
 import { User, Calendar, Clock, ArrowLeft, AlertCircle, Stethoscope } from "lucide-react";
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Datos mock para la sesión
 const sessionMock = {
   id: "tm-001",

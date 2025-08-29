@@ -1,0 +1,270 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: altamedica-argocd
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
+spec:
+  server:
+    extraArgs:
+      - --insecure
+    route:
+      enabled: true
+      tls:
+        enabled: true
+        termination: reencrypt
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  repo:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  applicationSet:
+    enabled: true
+  configManagementPlugins: |
+    - name: kustomize
+      init:
+        command: [sh, -c]
+        args: ["echo 'Initializing kustomize'"]
+      generate:
+        command: [kustomize]
+        args: [build, .]
+    - name: helm
+      init:
+        command: [sh, -c]
+        args: ["echo 'Initializing helm'"]
+      generate:
+        command: [helm]
+        args: [template, ., -f, values.yaml]
+  rbac:
+    create: true
+    pspEnabled: false
+  dex:
+    enabled: true
+    config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $GITHUB_CLIENT_ID
+            clientSecret: $GITHUB_CLIENT_SECRET
+            orgs:
+              - name: altamedica
+                teams:
+                  - altamedica-devops
+                  - altamedica-developers
+  notifications:
+    enabled: true
+    triggers:
+      - name: on-sync-succeeded
+        condition: app.status.operationState.phase in ['Succeeded']
+        template: app-sync-succeeded
+        enabled: true
+      - name: on-sync-failed
+        condition: app.status.operationState.phase in ['Error', 'Failed']
+        template: app-sync-failed
+        enabled: true
+    templates:
+      - name: app-sync-succeeded
+        slack:
+          attachments: |
+            [{
+              "title": "{{.app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "good",
+              "fields": [{
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              }, {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }]
+            }]
+      - name: app-sync-failed
+        slack:
+          attachments: |
+            [{
+              "title": "{{.app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "danger",
+              "fields": [{
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              }, {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }]
+            }]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: altamedica-platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: altamedica-platform
+    app.kubernetes.io/instance: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/altamedica/altamedica-platform
+    targetRevision: main
+    path: k8s
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: global.environment
+          value: production
+        - name: global.domain
+          value: altamedica.com
+        - name: global.ssl.enabled
+          value: "true"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: altamedica
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 10
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: altamedica-apps
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: api-server
+            path: k8s/deployments
+            values:
+              image: altamedica/api-server
+              port: 3001
+              replicas: 3
+          - name: web-app
+            path: k8s/deployments
+            values:
+              image: altamedica/web-app
+              port: 3000
+              replicas: 3
+          - name: patients-app
+            path: k8s/deployments
+            values:
+              image: altamedica/patients-app
+              port: 3002
+              replicas: 2
+          - name: doctors-app
+            path: k8s/deployments
+            values:
+              image: altamedica/doctors-app
+              port: 3003
+              replicas: 2
+          - name: companies-app
+            path: k8s/deployments
+            values:
+              image: altamedica/companies-app
+              port: 3004
+              replicas: 2
+          - name: admin-app
+            path: k8s/deployments
+            values:
+              image: altamedica/admin-app
+              port: 3005
+              replicas: 2
+  template:
+    metadata:
+      name: '{{name}}-app'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      labels:
+        app.kubernetes.io/name: '{{name}}-app'
+        app.kubernetes.io/instance: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/altamedica/altamedica-platform
+        targetRevision: main
+        path: '{{path}}'
+        helm:
+          values: |
+            deployment:
+              name: {{name}}
+              replicas: {{values.replicas}}
+              image:
+                repository: {{values.image}}
+                tag: latest
+              containerPort: {{values.port}}
+              resources:
+                requests:
+                  memory: 256Mi
+                  cpu: 250m
+                limits:
+                  memory: 512Mi
+                  cpu: 500m
+              livenessProbe:
+                httpGet:
+                  path: /health
+                  port: {{values.port}}
+                initialDelaySeconds: 30
+                periodSeconds: 10
+              readinessProbe:
+                httpGet:
+                  path: /ready
+                  port: {{values.port}}
+                initialDelaySeconds: 5
+                periodSeconds: 5
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: altamedica
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+        retry:
+          limit: 3
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 1m

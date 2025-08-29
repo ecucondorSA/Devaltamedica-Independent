@@ -6,22 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-// TODO: Import Prescription from @altamedica/types once it's defined there
-interface Prescription {
-  id: string;
-  patientId: string;
-  doctorId: string;
-  medicationName: string;
-  dosage: string;
-  frequency: string;
-  instructions?: string;
-  prescribedDate: Date;
-  startDate?: Date;
-  endDate?: Date;
-  refillsRemaining?: number;
-  status: 'active' | 'expired' | 'cancelled' | 'completed';
-  notes?: string;
-}
+import { Prescription } from '@altamedica/types';
 
 // ==========================================
 // TYPES

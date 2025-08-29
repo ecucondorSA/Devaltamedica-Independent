@@ -19,678 +19,676 @@ export interface AppInfo {
 
 // 📱 Configuración de aplicaciones
 export const APPS: Record<string, AppInfo> = {
-  "admin": {
-    name: "admin",
-    baseUrl: "http://localhost:3005",
+  admin: {
+    name: 'admin',
+    baseUrl: 'http://localhost:3005',
     port: 3005,
     routes: [
       {
-        path: "/",
-        title: "Home",
-        app: "admin",
+        path: '/',
+        title: 'Home',
+        app: 'admin',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
-    ]
+    ],
   },
-  "api-server": {
-    name: "api-server",
-    baseUrl: "http://localhost:3001",
+  'api-server': {
+    name: 'api-server',
+    baseUrl: 'http://localhost:3001',
     port: 3001,
     routes: [
       {
-        path: "/",
-        title: "Home",
-        app: "api-server",
+        path: '/',
+        title: 'Home',
+        app: 'api-server',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/dashboard",
-        title: "Dashboard",
-        app: "api-server",
+        path: '/dashboard',
+        title: 'Dashboard',
+        app: 'api-server',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/test-alias",
-        title: "Test Alias",
-        app: "api-server",
+        path: '/test-alias',
+        title: 'Test Alias',
+        app: 'api-server',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/dashboard/api-monitor",
-        title: "C:\ - Users - Eduardo - Documents - Devaltamedica - Apps - Api Server - Src - Pages - Dashboard",
-        app: "api-server",
+        path: '/dashboard/api-monitor',
+        title:
+          'C: - Users - Eduardo - Documents - Devaltamedica - Apps - Api Server - Src - Pages - Dashboard',
+        app: 'api-server',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
-    ]
+    ],
   },
-  "companies": {
-    name: "companies",
-    baseUrl: "http://localhost:3004",
+  companies: {
+    name: 'companies',
+    baseUrl: 'http://localhost:3004',
     port: 3004,
     routes: [
       {
-        path: "/",
-        title: "Home",
-        app: "companies",
+        path: '/',
+        title: 'Home',
+        app: 'companies',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/_temp_pages",
-        title: "_Temp_Pages",
-        app: "companies",
+        path: '/_temp_pages',
+        title: '_Temp_Pages',
+        app: 'companies',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
-    ]
+    ],
   },
-  "doctors": {
-    name: "doctors",
-    baseUrl: "http://localhost:3002",
+  doctors: {
+    name: 'doctors',
+    baseUrl: 'http://localhost:3002',
     port: 3002,
     routes: [
       {
-        path: "/",
-        title: "Home",
-        app: "doctors",
+        path: '/',
+        title: 'Home',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/citas",
-        title: "Citas",
-        app: "doctors",
+        path: '/citas',
+        title: 'Citas',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/dashboard",
-        title: "Dashboard",
-        app: "doctors",
+        path: '/dashboard',
+        title: 'Dashboard',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/marketplace",
-        title: "Cardiólogo Intervencionista - Urgente",
-        app: "doctors",
+        path: '/marketplace',
+        title: 'Cardiólogo Intervencionista - Urgente',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/onboarding",
-        title: "Onboarding",
-        app: "doctors",
+        path: '/onboarding',
+        title: 'Onboarding',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/pacientes",
-        title: "Pacientes",
-        app: "doctors",
+        path: '/pacientes',
+        title: 'Pacientes',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/profile",
-        title: "Información Básica",
-        app: "doctors",
+        path: '/profile',
+        title: 'Información Básica',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine",
-        title: "Consulta de seguimiento",
-        app: "doctors",
+        path: '/telemedicine',
+        title: 'Consulta de seguimiento',
+        app: 'doctors',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/test-video",
-        title: "Doctor Video",
-        app: "doctors",
+        path: '/test-video',
+        title: 'Doctor Video',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/professional",
-        title: "Telemedicine - Professional",
-        app: "doctors",
+        path: '/telemedicine/professional',
+        title: 'Telemedicine - Professional',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/test",
-        title: "Telemedicine - Test",
-        app: "doctors",
+        path: '/telemedicine/test',
+        title: 'Telemedicine - Test',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/[sessionId]",
-        title: "Telemedicine - Sessionid",
-        app: "doctors",
+        path: '/telemedicine/[sessionId]',
+        title: 'Telemedicine - Sessionid',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: ["sessionId"]
+        params: ['sessionId'],
       },
       {
-        path: "/telemedicine/session/[sessionId]",
-        title: "Telemedicine - Session - Sessionid",
-        app: "doctors",
+        path: '/telemedicine/session/[sessionId]',
+        title: 'Telemedicine - Session - Sessionid',
+        app: 'doctors',
         requiresAuth: true,
         role: undefined,
-        params: ["sessionId"]
+        params: ['sessionId'],
       },
       {
-        path: "/telemedicine/room/[roomId]",
-        title: "Telemedicine - Room - Roomid",
-        app: "doctors",
+        path: '/telemedicine/room/[roomId]',
+        title: 'Telemedicine - Room - Roomid',
+        app: 'doctors',
         requiresAuth: true,
         role: undefined,
-        params: ["roomId"]
+        params: ['roomId'],
       },
       {
-        path: "/profile/edit",
-        title: "Profile - Edit",
-        app: "doctors",
+        path: '/profile/edit',
+        title: 'Profile - Edit',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/marketplace/applications",
-        title: "Cardiólogo Intervencionista - Urgente",
-        app: "doctors",
+        path: '/marketplace/applications',
+        title: 'Cardiólogo Intervencionista - Urgente',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/marketplace/listings/[id]",
-        title: "Cardiólogo Intervencionista - Urgente",
-        app: "doctors",
+        path: '/marketplace/listings/[id]',
+        title: 'Cardiólogo Intervencionista - Urgente',
+        app: 'doctors',
         requiresAuth: false,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
-    ]
+    ],
   },
-  "patients": {
-    name: "patients",
-    baseUrl: "http://localhost:3003",
+  patients: {
+    name: 'patients',
+    baseUrl: 'http://localhost:3003',
     port: 3003,
     routes: [
       {
-        path: "/",
-        title: "Tienes actualizaciones importantes",
-        app: "patients",
+        path: '/',
+        title: 'Tienes actualizaciones importantes',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/ai-diagnosis",
-        title: "Ai Diagnosis",
-        app: "patients",
+        path: '/ai-diagnosis',
+        title: 'Ai Diagnosis',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/appointments",
-        title: "Appointments",
-        app: "patients",
+        path: '/appointments',
+        title: 'Appointments',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/doctors",
-        title: "Doctors",
-        app: "patients",
+        path: '/doctors',
+        title: 'Doctors',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/galeria-componentes",
-        title: "Galeria Componentes",
-        app: "patients",
+        path: '/galeria-componentes',
+        title: 'Galeria Componentes',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/health-metrics",
-        title: "Health Metrics",
-        app: "patients",
+        path: '/health-metrics',
+        title: 'Health Metrics',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/hospital3d-simulator",
-        title: "Hospital3D Simulator",
-        app: "patients",
+        path: '/hospital3d-simulator',
+        title: 'Hospital3D Simulator',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/lab-results",
-        title: "Lab Results",
-        app: "patients",
+        path: '/lab-results',
+        title: 'Lab Results',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/medical-history",
-        title: "Consulta de Cardiología",
-        app: "patients",
+        path: '/medical-history',
+        title: 'Consulta de Cardiología',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/notifications",
-        title: "Recordatorio de cita médica",
-        app: "patients",
+        path: '/notifications',
+        title: 'Recordatorio de cita médica',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/onboarding",
-        title: "Onboarding",
-        app: "patients",
+        path: '/onboarding',
+        title: 'Onboarding',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/patients",
-        title: "Patients",
-        app: "patients",
+        path: '/patients',
+        title: 'Patients',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/post-consultation",
-        title: "Resumen de Consulta Médica",
-        app: "patients",
+        path: '/post-consultation',
+        title: 'Resumen de Consulta Médica',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/prescriptions",
-        title: "Prescriptions",
-        app: "patients",
+        path: '/prescriptions',
+        title: 'Prescriptions',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/profile",
-        title: "Profile",
-        app: "patients",
+        path: '/profile',
+        title: 'Profile',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/settings",
-        title: "Settings",
-        app: "patients",
+        path: '/settings',
+        title: 'Settings',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/support",
-        title: "Support",
-        app: "patients",
+        path: '/support',
+        title: 'Support',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine",
-        title: "Consulta en Curso",
-        app: "patients",
+        path: '/telemedicine',
+        title: 'Consulta en Curso',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/test-results",
-        title: "Test Results",
-        app: "patients",
+        path: '/test-results',
+        title: 'Test Results',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/test",
-        title: "Verificación de Equipos",
-        app: "patients",
+        path: '/telemedicine/test',
+        title: 'Verificación de Equipos',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/waiting",
-        title: "Telemedicine - Waiting",
-        app: "patients",
+        path: '/telemedicine/waiting',
+        title: 'Telemedicine - Waiting',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/telemedicine/[sessionId]",
-        title: "Telemedicine - Sessionid",
-        app: "patients",
+        path: '/telemedicine/[sessionId]',
+        title: 'Telemedicine - Sessionid',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["sessionId"]
+        params: ['sessionId'],
       },
       {
-        path: "/telemedicine/webrtc/[roomId]",
-        title: "Chat",
-        app: "patients",
+        path: '/telemedicine/webrtc/[roomId]',
+        title: 'Chat',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["roomId"]
+        params: ['roomId'],
       },
       {
-        path: "/telemedicine/room/[roomId]",
-        title: "Telemedicine - Room - Roomid",
-        app: "patients",
+        path: '/telemedicine/room/[roomId]',
+        title: 'Telemedicine - Room - Roomid',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: ["roomId"]
+        params: ['roomId'],
       },
       {
-        path: "/telemedicine/consultation/[sessionId]",
-        title: "Telemedicine - Consultation - Sessionid",
-        app: "patients",
+        path: '/telemedicine/consultation/[sessionId]',
+        title: 'Telemedicine - Consultation - Sessionid',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: ["sessionId"]
+        params: ['sessionId'],
       },
       {
-        path: "/prescriptions/[id]",
-        title: "Prescriptions - Id",
-        app: "patients",
+        path: '/prescriptions/[id]',
+        title: 'Prescriptions - Id',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
       {
-        path: "/patients/[id]",
-        title: "Patients - Id",
-        app: "patients",
+        path: '/patients/[id]',
+        title: 'Patients - Id',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
       {
-        path: "/onboarding/company",
-        title: "Información de la Empresa",
-        app: "patients",
+        path: '/onboarding/company',
+        title: 'Información de la Empresa',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/onboarding/doctor",
-        title: "Información Personal",
-        app: "patients",
+        path: '/onboarding/doctor',
+        title: 'Información Personal',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/onboarding/select-role",
-        title: "Paciente",
-        app: "patients",
+        path: '/onboarding/select-role',
+        title: 'Paciente',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/medical-history/[id]",
-        title: "Medical History - Id",
-        app: "patients",
+        path: '/medical-history/[id]',
+        title: 'Medical History - Id',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
       {
-        path: "/lab-results/[id]",
-        title: "Lab Results - Id",
-        app: "patients",
+        path: '/lab-results/[id]',
+        title: 'Lab Results - Id',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
       {
-        path: "/auth/register",
-        title: "Auth - Register",
-        app: "patients",
+        path: '/auth/register',
+        title: 'Auth - Register',
+        app: 'patients',
         requiresAuth: false,
-        role: "patient",
-        params: undefined
+        role: 'patient',
+        params: undefined,
       },
       {
-        path: "/appointments/book",
-        title: "Seleccionar Especialidad",
-        app: "patients",
-        requiresAuth: false,
-        role: undefined,
-        params: undefined
-      },
-      {
-        path: "/appointments/new",
-        title: "Appointments - New",
-        app: "patients",
+        path: '/appointments/book',
+        title: 'Seleccionar Especialidad',
+        app: 'patients',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/appointments/[id]",
-        title: "Información de la Cita",
-        app: "patients",
+        path: '/appointments/new',
+        title: 'Appointments - New',
+        app: 'patients',
+        requiresAuth: false,
+        role: undefined,
+        params: undefined,
+      },
+      {
+        path: '/appointments/[id]',
+        title: 'Información de la Cita',
+        app: 'patients',
         requiresAuth: true,
         role: undefined,
-        params: ["id"]
+        params: ['id'],
       },
-    ]
+    ],
   },
-  "web-app": {
-    name: "web-app",
-    baseUrl: "http://localhost:3000",
+  'web-app': {
+    name: 'web-app',
+    baseUrl: 'http://localhost:3000',
     port: 3000,
     routes: [
       {
-        path: "/",
-        title: "Introducción a AltaMedica",
-        app: "web-app",
+        path: '/',
+        title: 'Introducción a AltaMedica',
+        app: 'web-app',
         requiresAuth: false,
-        role: "Cardióloga, Hospital Central",
-        params: undefined
+        role: 'Cardióloga, Hospital Central',
+        params: undefined,
       },
       {
-        path: "/anamnesis-interactiva",
-        title: "Anamnesis Interactiva",
-        app: "web-app",
-        requiresAuth: false,
-        role: undefined,
-        params: undefined
-      },
-      {
-        path: "/anamnesis-juego",
-        title: "Esto ayuda al doctor a personalizar tu atención basada en evidencia clínica.",
-        app: "web-app",
+        path: '/anamnesis-interactiva',
+        title: 'Anamnesis Interactiva',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/calculadora-precios",
-        title: "Calculadora Precios",
-        app: "web-app",
+        path: '/anamnesis-juego',
+        title: 'Esto ayuda al doctor a personalizar tu atención basada en evidencia clínica.',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/demo",
-        title: "Agenda una consulta",
-        app: "web-app",
+        path: '/calculadora-precios',
+        title: 'Calculadora Precios',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/help",
-        title: "Help",
-        app: "web-app",
+        path: '/demo',
+        title: 'Agenda una consulta',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        // /home-optimized eliminado
-      },
-      {
-        path: "/hospital3d",
-        title: "Hospital3D",
-        app: "web-app",
+        path: '/help',
+        title: 'Help',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/landing-demo",
-        title: "Consultas Médicas en Video",
-        app: "web-app",
-        requiresAuth: false,
-        role: "Paciente",
-        params: undefined
-      },
-      {
-        path: "/privacy",
-        title: "Privacy",
-        app: "web-app",
+        path: '/hospital3d',
+        title: 'Hospital3D',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/profile",
-        title: "Profile",
-        app: "web-app",
+        path: '/landing-demo',
+        title: 'Consultas Médicas en Video',
+        app: 'web-app',
+        requiresAuth: false,
+        role: 'Paciente',
+        params: undefined,
+      },
+      {
+        path: '/privacy',
+        title: 'Privacy',
+        app: 'web-app',
+        requiresAuth: false,
+        role: undefined,
+        params: undefined,
+      },
+      {
+        path: '/profile',
+        title: 'Profile',
+        app: 'web-app',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/status",
-        title: "Mantenimiento programado de base de datos",
-        app: "web-app",
+        path: '/status',
+        title: 'Mantenimiento programado de base de datos',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/terms",
-        title: "Terms",
-        app: "web-app",
+        path: '/terms',
+        title: 'Terms',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/unauthorized",
-        title: "Unauthorized",
-        app: "web-app",
+        path: '/unauthorized',
+        title: 'Unauthorized',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/(auth)/forgot-password",
-        title: "(Auth) - Forgot Password",
-        app: "web-app",
+        path: '/(auth)/forgot-password',
+        title: '(Auth) - Forgot Password',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/(auth)/login",
-        title: "(Auth) - Login",
-        app: "web-app",
+        path: '/(auth)/login',
+        title: '(Auth) - Login',
+        app: 'web-app',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/(auth)/register",
-        title: "(Auth) - Register",
-        app: "web-app",
+        path: '/(auth)/register',
+        title: '(Auth) - Register',
+        app: 'web-app',
         requiresAuth: false,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
       {
-        path: "/(auth)/verify-email",
-        title: "(Auth) - Verify Email",
-        app: "web-app",
+        path: '/(auth)/verify-email',
+        title: '(Auth) - Verify Email',
+        app: 'web-app',
         requiresAuth: true,
         role: undefined,
-        params: undefined
+        params: undefined,
       },
-    ]
+    ],
   },
 };
 
 // 🔗 Helper functions
-export const getAppUrl = (appName: string, route: string = "/"): string => {
+export const getAppUrl = (appName: string, route: string = '/'): string => {
   const app = APPS[appName];
   if (!app) throw new Error(`App ${appName} not found`);
   return `${app.baseUrl}${route}`;
 };
 
 export const getAllRoutes = (): RouteInfo[] => {
-  return Object.values(APPS).flatMap(app => app.routes);
+  return Object.values(APPS).flatMap((app) => app.routes);
 };
 
 export const getRoutesByApp = (appName: string): RouteInfo[] => {
@@ -699,15 +697,15 @@ export const getRoutesByApp = (appName: string): RouteInfo[] => {
 
 export const findRoute = (path: string, appName?: string): RouteInfo | undefined => {
   const routes = appName ? getRoutesByApp(appName) : getAllRoutes();
-  return routes.find(route => route.path === path);
+  return routes.find((route) => route.path === path);
 };
 
 export const getAuthenticatedRoutes = (): RouteInfo[] => {
-  return getAllRoutes().filter(route => route.requiresAuth);
+  return getAllRoutes().filter((route) => route.requiresAuth);
 };
 
 export const getRoutesByRole = (role: string): RouteInfo[] => {
-  return getAllRoutes().filter(route => route.role === role);
+  return getAllRoutes().filter((route) => route.role === role);
 };
 
 // 📊 Estadísticas
@@ -716,11 +714,11 @@ export const getRoutesStats = () => {
   return {
     totalApps: Object.keys(APPS).length,
     totalRoutes: allRoutes.length,
-    authenticatedRoutes: allRoutes.filter(r => r.requiresAuth).length,
-    dynamicRoutes: allRoutes.filter(r => r.params && r.params.length > 0).length,
+    authenticatedRoutes: allRoutes.filter((r) => r.requiresAuth).length,
+    dynamicRoutes: allRoutes.filter((r) => r.params && r.params.length > 0).length,
     routesByApp: Object.entries(APPS).map(([name, app]) => ({
       app: name,
-      count: app.routes.length
-    }))
+      count: app.routes.length,
+    })),
   };
 };

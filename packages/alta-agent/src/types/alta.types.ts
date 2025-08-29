@@ -5,14 +5,14 @@
  * Tipos y definiciones para el sistema Alta
  */
 
-import type { Anamnesis as Medical } from '@altamedica/types/medical';
+import type { Anamnesis as Medical } from '@altamedica/types';
 import { z } from 'zod';
 
 // Estados de Alta
 export type AltaState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'analyzing' | 'alert';
 
 // Emociones del avatar
-export type AltaEmotion = 'neutral' | 'empathetic' | 'concerned' | 'happy' | 'focused' | 'urgent';
+export type AltaEmotion = 'neutral' | 'empathetic' | 'concerned' | 'happy' | 'focused' | 'urgent' | 'friendly' | 'caring' | 'supportive';
 
 // Configuración de Alta
 export interface AltaConfig {

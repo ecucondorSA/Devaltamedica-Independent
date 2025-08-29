@@ -4,16 +4,15 @@
 
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
-import React, { useState, useCallback } from 'react';
-import PatientHeaderModular from './PatientHeaderModular';
-import PatientSidebarModular from './PatientSidebarModular';
-import PatientFooterModular from './PatientFooterModular';
-import { AuthProvider } from "@altamedica/auth';
-import type { SidebarConfig } from './PatientSidebarModular';
+import React, { useCallback, useState } from 'react';
+import { AuthProvider } from '@altamedica/auth';
 import type { FooterProps } from './PatientFooterModular';
+import PatientFooterModular from './PatientFooterModular';
+import PatientHeaderModular from './PatientHeaderModular';
+import type { SidebarConfig } from './PatientSidebarModular';
+import PatientSidebarModular from './PatientSidebarModular';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // 📝 INTERFAZ COMPATIBLE CON LAYOUT ORIGINAL
 interface PatientLayoutModularProps {
   children: React.ReactNode;
@@ -22,7 +21,7 @@ interface PatientLayoutModularProps {
   actions?: React.ReactNode;
   requireAuth?: boolean;
   className?: string;
-  
+
   // 🔧 Configuraciones opcionales para componentes modulares
   sidebarConfig?: SidebarConfig;
   footerConfig?: Omit<FooterProps, 'className'>;
@@ -38,29 +37,35 @@ function PatientLayoutModularContent({
   title,
   subtitle,
   actions,
-  className = "",
+  className = '',
   sidebarConfig,
   footerConfig,
   showHeader = true,
   showFooter = true,
   onNavigate,
-  onError
+  onError,
 }: PatientLayoutModularProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleMenuToggle = useCallback(() => {
-    setShowMobileMenu(prev => !prev);
+    setShowMobileMenu((prev) => !prev);
   }, []);
 
-  const handleNavigate = useCallback((item: any) => {
-    setShowMobileMenu(false);
-    onNavigate?.(item);
-  }, [onNavigate]);
+  const handleNavigate = useCallback(
+    (item: any) => {
+      setShowMobileMenu(false);
+      onNavigate?.(item);
+    },
+    [onNavigate],
+  );
 
-  const handleError = useCallback((error: Error) => {
-    logger.error('Layout Error:', error);
-    onError?.(error);
-  }, [onError]);
+  const handleError = useCallback(
+    (error: Error) => {
+      logger.error('Layout Error:', String(error));
+      onError?.(error);
+    },
+    [onError],
+  );
 
   return (
     <div className={`flex h-screen bg-gradient-primary-altamedica ${className}`}>
@@ -70,12 +75,12 @@ function PatientLayoutModularContent({
           collapsible: true,
           persistState: true,
           showUserProfile: true,
-          ...sidebarConfig
+          ...sidebarConfig,
         }}
         onNavigate={handleNavigate}
         onError={handleError}
       />
-      
+
       {/* 📱 CONTENIDO PRINCIPAL */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* 📋 HEADER MODULAR */}
@@ -88,14 +93,14 @@ function PatientLayoutModularContent({
             showMobileMenu={showMobileMenu}
           />
         )}
-        
+
         {/* 📄 CONTENIDO */}
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-conservative">
             {children}
           </div>
         </main>
-        
+
         {/* 🦶 FOOTER MODULAR */}
         {showFooter && (
           <PatientFooterModular
@@ -134,12 +139,7 @@ export default function PatientLayoutModular({
           </PatientLayoutModularContent>
         </ProtectedRoute>
       ) : (
-        <PatientLayoutModularContent
-          title={title}
-          subtitle={subtitle}
-          actions={actions}
-          {...props}
-        >
+        <PatientLayoutModularContent title={title} subtitle={subtitle} actions={actions} {...props}>
           {children}
         </PatientLayoutModularContent>
       )}

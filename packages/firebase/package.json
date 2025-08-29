@@ -3,26 +3,26 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Shared Firebase configuration and utilities for ALTAMEDICA APIs",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean --silent",
+    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
     "clean": "rimraf dist",
     "type-check": "tsc --noEmit",
     "dev": "tsup src/index.ts --format=esm --watch"
   },
   "dependencies": {
-    "firebase": "^10.7.1",
+    "firebase": "^10.14.1",
     "firebase-admin": "^12.0.0"
   },
   "devDependencies": {
@@ -34,6 +34,6 @@
     "tsup": "^8.0.0",
     "typescript": "5.8.3"
   },
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "sideEffects": false
 }

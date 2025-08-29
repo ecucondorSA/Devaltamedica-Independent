@@ -2,23 +2,23 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 // Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
+const baseLogger = {
+  info: (message: any, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.log(message, data);
     }
   },
-  warn: (message, data) => {
+  warn: (message: any, data?: any) => {
     if (typeof console !== 'undefined') {
       console.warn(message, data);
     }
   },
-  error: (message, data) => {
+  error: (message: any, data?: any) => {
     if (typeof console !== 'undefined') {
       console.error(message, data);
     }
   },
-  debug: (message, data) => {
+  debug: (message: any, data?: any) => {
     if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
       console.debug(message, data);
     }
@@ -51,17 +51,17 @@ export class ValidationError extends AppError {
 // Logger
 export const logger = {
   info: (message: string, data?: any) => {
-    logger.info(`[INFO] ${message}`, data ? JSON.stringify(data) : '');
+    baseLogger.info(`[INFO] ${message}`, data ? JSON.stringify(data) : '');
   },
   error: (message: string, error?: any) => {
-    logger.error(`[ERROR] ${message}`, error);
+    baseLogger.error(`[ERROR] ${message}`, error);
   },
   warn: (message: string, data?: any) => {
-    logger.warn(`[WARN] ${message}`, data ? JSON.stringify(data) : '');
+    baseLogger.warn(`[WARN] ${message}`, data ? JSON.stringify(data) : '');
   },
   debug: (message: string, data?: any) => {
     if (process.env.NODE_ENV === 'development') {
-      logger.debug(`[DEBUG] ${message}`, data ? JSON.stringify(data) : '');
+      baseLogger.debug(`[DEBUG] ${message}`, data ? JSON.stringify(data) : '');
     }
   }
 };

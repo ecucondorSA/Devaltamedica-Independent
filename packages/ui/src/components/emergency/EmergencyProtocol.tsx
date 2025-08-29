@@ -4,22 +4,22 @@
  * @description Panel interactivo para guiar protocolos médicos de emergencia
  */
 
-import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
-  Circle, 
-  Clock, 
-  AlertCircle,
+import {
   Activity,
+  AlertCircle,
+  CheckCircle2,
+  Circle,
+  Clock,
   Heart,
   Stethoscope,
-  Syringe
+  Syringe,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../card';
-import { Button } from '../button';
-import { Badge } from '../badge';
-import { Progress } from '../progress';
+import { Badge } from '../Badge';
+import { Button } from '../Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../Card';
+import { Progress } from '../Progress';
 
 export interface ProtocolStep {
   id: string;
@@ -32,7 +32,12 @@ export interface ProtocolStep {
 }
 
 export interface EmergencyProtocolProps {
-  protocolCode: 'CODE_BLUE' | 'CODE_STEMI' | 'CODE_STROKE' | 'CODE_ANAPHYLAXIS' | 'CODE_RESPIRATORY';
+  protocolCode:
+    | 'CODE_BLUE'
+    | 'CODE_STEMI'
+    | 'CODE_STROKE'
+    | 'CODE_ANAPHYLAXIS'
+    | 'CODE_RESPIRATORY';
   patientInfo?: {
     name: string;
     age: number;
@@ -55,14 +60,14 @@ const PROTOCOLS = {
         title: 'Verificar respuesta',
         description: 'Sacudir suavemente y gritar "¿Está usted bien?"',
         criticalTime: 10,
-        required: true
+        required: true,
       },
       {
         id: 'call-help',
         title: 'Llamar ayuda',
         description: 'Activar código azul y solicitar DEA',
         criticalTime: 30,
-        required: true
+        required: true,
       },
       {
         id: 'start-cpr',
@@ -74,17 +79,17 @@ const PROTOCOLS = {
           'Posicionar al paciente en superficie firme',
           'Colocar talón de la mano en centro del pecho',
           'Comprimir al menos 5cm de profundidad',
-          'Ritmo 100-120 compresiones/minuto'
-        ]
+          'Ritmo 100-120 compresiones/minuto',
+        ],
       },
       {
         id: 'attach-dea',
         title: 'Conectar DEA',
         description: 'Seguir instrucciones del dispositivo',
         criticalTime: 180,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   CODE_STEMI: {
     name: 'Infarto Agudo',
@@ -96,30 +101,30 @@ const PROTOCOLS = {
         title: 'ECG 12 derivaciones',
         description: 'Obtener ECG en <10 minutos',
         criticalTime: 600,
-        required: true
+        required: true,
       },
       {
         id: 'aspirin',
         title: 'Administrar Aspirina',
         description: '300mg sublingual STAT',
         criticalTime: 300,
-        required: true
+        required: true,
       },
       {
         id: 'notify-cathlab',
         title: 'Activar sala de cateterismo',
         description: 'Notificar equipo de hemodinamia',
         criticalTime: 900,
-        required: true
+        required: true,
       },
       {
         id: 'door-to-balloon',
         title: 'Preparar traslado',
         description: 'Objetivo: puerta-balón <90 min',
         criticalTime: 5400,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   CODE_STROKE: {
     name: 'ACV Agudo',
@@ -136,24 +141,24 @@ const PROTOCOLS = {
           'Facial: Asimetría facial',
           'Arms: Debilidad en brazos',
           'Speech: Dificultad para hablar',
-          'Time: Anotar hora de inicio'
-        ]
+          'Time: Anotar hora de inicio',
+        ],
       },
       {
         id: 'ct-scan',
         title: 'TC cerebral urgente',
         description: 'Descartar hemorragia',
         criticalTime: 1500,
-        required: true
+        required: true,
       },
       {
         id: 'thrombolysis-eval',
         title: 'Evaluar trombolisis',
         description: 'Ventana <4.5 horas',
         criticalTime: 3600,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   CODE_ANAPHYLAXIS: {
     name: 'Anafilaxia',
@@ -165,30 +170,30 @@ const PROTOCOLS = {
         title: 'Epinefrina IM',
         description: '0.3-0.5mg cara anterolateral muslo',
         criticalTime: 60,
-        required: true
+        required: true,
       },
       {
         id: 'oxygen',
         title: 'Oxígeno alto flujo',
         description: 'Mantener SatO2 >94%',
         criticalTime: 120,
-        required: true
+        required: true,
       },
       {
         id: 'iv-access',
         title: 'Acceso IV',
         description: 'Iniciar cristaloides',
         criticalTime: 300,
-        required: true
+        required: true,
       },
       {
         id: 'monitor',
         title: 'Monitorizar',
         description: 'Vigilar respuesta y shock',
         criticalTime: 600,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   CODE_RESPIRATORY: {
     name: 'Insuficiencia Respiratoria',
@@ -200,31 +205,31 @@ const PROTOCOLS = {
         title: 'Posición Fowler',
         description: 'Elevar cabecera 45-90°',
         criticalTime: 60,
-        required: true
+        required: true,
       },
       {
         id: 'oxygen-therapy',
         title: 'Oxigenoterapia',
         description: 'Iniciar con máscara reservorio',
         criticalTime: 120,
-        required: true
+        required: true,
       },
       {
         id: 'nebulization',
         title: 'Broncodilatadores',
         description: 'Salbutamol nebulizado',
         criticalTime: 300,
-        required: true
+        required: true,
       },
       {
         id: 'prepare-intubation',
         title: 'Preparar intubación',
         description: 'Si no mejora con medidas',
         criticalTime: 600,
-        required: false
-      }
-    ]
-  }
+        required: false,
+      },
+    ],
+  },
 };
 
 export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
@@ -233,7 +238,7 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
   onStepComplete,
   onProtocolComplete,
   onEmergencyEscalate,
-  className
+  className,
 }) => {
   const protocol = PROTOCOLS[protocolCode];
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
@@ -252,26 +257,26 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
 
   const handleStepToggle = (stepId: string) => {
     const newCompleted = new Set(completedSteps);
-    
+
     if (newCompleted.has(stepId)) {
       newCompleted.delete(stepId);
     } else {
       newCompleted.add(stepId);
       onStepComplete?.(stepId, new Date());
-      
+
       // Avanzar al siguiente paso
-      const currentIndex = protocol.steps.findIndex(s => s.id === stepId);
+      const currentIndex = protocol.steps.findIndex((s) => s.id === stepId);
       if (currentIndex < protocol.steps.length - 1) {
         setCurrentStepIndex(currentIndex + 1);
       }
     }
-    
+
     setCompletedSteps(newCompleted);
 
     // Verificar si el protocolo está completo
-    const requiredSteps = protocol.steps.filter(s => s.required);
-    const allRequiredComplete = requiredSteps.every(s => newCompleted.has(s.id));
-    
+    const requiredSteps = protocol.steps.filter((s) => s.required);
+    const allRequiredComplete = requiredSteps.every((s) => newCompleted.has(s.id));
+
     if (allRequiredComplete) {
       onProtocolComplete?.(Array.from(newCompleted), elapsedTime);
     }
@@ -293,10 +298,7 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
   const progress = (completedSteps.size / protocol.steps.length) * 100;
 
   return (
-    <Card 
-      data-testid="emergency-protocol"
-      className={cn('w-full max-w-2xl', className)}
-    >
+    <Card data-testid="emergency-protocol" className={cn('w-full max-w-2xl', className)}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -306,13 +308,13 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
               {protocolCode}
             </Badge>
           </CardTitle>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm">
               <Clock className="w-4 h-4" />
               <span className="font-mono">{formatTime(elapsedTime)}</span>
             </div>
-            
+
             {onEmergencyEscalate && (
               <Button
                 data-testid="escalate-emergency"
@@ -349,7 +351,7 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
                 'border rounded-lg p-4 transition-all',
                 isCompleted && 'bg-green-50 border-green-200',
                 isCurrent && 'bg-blue-50 border-blue-300 shadow-md',
-                isOverdue && 'bg-red-50 border-red-300 animate-pulse'
+                isOverdue && 'bg-red-50 border-red-300 animate-pulse',
               )}
             >
               <div className="flex items-start gap-3">
@@ -376,12 +378,14 @@ export const EmergencyProtocol: React.FC<EmergencyProtocolProps> = ({
                         </Badge>
                       )}
                     </h4>
-                    
+
                     {step.criticalTime && (
-                      <span className={cn(
-                        'text-sm font-mono',
-                        isOverdue ? 'text-red-600 font-bold' : 'text-gray-500'
-                      )}>
+                      <span
+                        className={cn(
+                          'text-sm font-mono',
+                          isOverdue ? 'text-red-600 font-bold' : 'text-gray-500',
+                        )}
+                      >
                         {isOverdue && <AlertCircle className="w-4 h-4 inline mr-1" />}
                         Límite: {formatTime(step.criticalTime)}
                       </span>

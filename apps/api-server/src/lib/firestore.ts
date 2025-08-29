@@ -1,6 +1,5 @@
 import { logger } from '@altamedica/shared/services/logger.service';
-
-﻿import { getFirestoreAdmin } from './firebase-admin';
+import { getFirestoreAdmin } from './firebase-admin';
 
 // Get Firestore instance from Firebase Admin
 const db = getFirestoreAdmin();

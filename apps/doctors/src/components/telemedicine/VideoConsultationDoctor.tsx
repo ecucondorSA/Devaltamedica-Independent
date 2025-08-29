@@ -3,7 +3,7 @@
 // Deprecated: do not import. Kept only as a no-op stub during pruning.
 import React from "react";
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export interface VideoConsultationDoctorProps {
   roomId?: string;
 }

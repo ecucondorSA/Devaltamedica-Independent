@@ -18,7 +18,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Componentes simples
 const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
@@ -126,7 +126,7 @@ const AppointmentCard = ({ appointment, onViewDetails, onCancel, onReschedule }:
           <div className="flex items-center gap-2 pt-2">
             <Button
               variant="secondary"
-              size="small"
+              size="sm"
               onClick={() => onViewDetails(appointment.id)}
               className="flex-1"
             >
@@ -137,7 +137,7 @@ const AppointmentCard = ({ appointment, onViewDetails, onCancel, onReschedule }:
               <>
                 <Button
                   variant="secondary"
-                  size="small"
+                  size="sm"
                   onClick={() => onReschedule(appointment.id)}
                   className="flex-1"
                 >
@@ -146,7 +146,7 @@ const AppointmentCard = ({ appointment, onViewDetails, onCancel, onReschedule }:
                 </Button>
                 <Button
                   variant="secondary"
-                  size="small"
+                  size="sm"
                   onClick={() => onCancel(appointment.id)}
                   className="p-2"
                 >
@@ -193,8 +193,8 @@ export default function AppointmentsPage() {
     return true;
   });
 
-  const upcomingAppointments = filteredAppointments.filter(a => a.status === 'confirmed');
-  const pendingAppointments = filteredAppointments.filter(a => a.status === 'pending');
+  const upcomingAppointments = filteredAppointments.filter((a: any) => a.status === 'confirmed');
+  const pendingAppointments = filteredAppointments.filter((a: any) => a.status === 'pending');
 
   return (
     <div className="space-y-6">
@@ -219,7 +219,7 @@ export default function AppointmentsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {appointments.filter(a => a.date === new Date().toLocaleDateString()).length}
+              {appointments.filter((a: any) => a.date === new Date().toLocaleDateString()).length}
             </div>
           </CardContent>
         </Card>

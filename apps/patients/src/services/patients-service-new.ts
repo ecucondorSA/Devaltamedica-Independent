@@ -4,7 +4,7 @@
  */
 
 import { createPatientsService } from '@altamedica/patient-services';
-import { apiClient  } from '@altamedica/api-client';;
+import { apiClient  } from '@altamedica/api-client';
 
 // Crear instancia del servicio de pacientes usando el cliente API local
 export const patientsService = createPatientsService(apiClient);

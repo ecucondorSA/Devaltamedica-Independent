@@ -1,5 +1,67 @@
 # 🛡️ Admin App - Panel de Superadministrador AltaMedica
 
+## 🤖 FRAGMENTOS PARA AUTOCOMPLETADO ADMIN
+
+### ✅ Script Start (Next.js Admin)
+```javascript
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import { z } from 'zod';
+```
+
+### ✅ Admin Auth Pattern
+```javascript
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) return res.status(401).json({ error: 'Unauthorized' });
+  
+  if (!['SUPER_ADMIN', 'SYSTEM_ADMIN'].includes(session.user.role)) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+}
+```
+
+### ✅ System Monitoring Schema
+```javascript
+const SystemHealthSchema = z.object({
+  services: z.array(z.object({
+    name: z.string(),
+    status: z.enum(['UP', 'DOWN', 'DEGRADED']),
+    port: z.number(),
+    lastCheck: z.string().datetime()
+  })),
+  metrics: z.object({
+    cpuUsage: z.number().min(0).max(100),
+    memoryUsage: z.number().min(0).max(100),
+    diskUsage: z.number().min(0).max(100)
+  })
+});
+```
+
+### ✅ Test Admin Endpoint
+```javascript
+const testAdminEndpoint = async (endpoint) => {
+  const testData = {
+    adminId: 'admin-123e4567-e89b-12d3-a456-426614174000',
+    action: 'system_check'
+  };
+  
+  try {
+    const response = await fetch(`http://localhost:3005/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testData)
+    });
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+```
+
+---
+
+
 **Aplicación**: Panel de control y monitoreo global de la plataforma  
 **Puerto**: 3005  
 **Estado**: 🟢 PRODUCCIÓN (8.5/10)  

@@ -5,7 +5,7 @@
 
 import { PrismaClient } from '@prisma/client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Declaración global para desarrollo en TypeScript
 declare global {
   var prisma: PrismaClient | undefined;
@@ -25,8 +25,8 @@ const pooledUrl = connectionUrl.includes('?')
   : `${connectionUrl}?connection_limit=10&pool_timeout=30`;
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-  log: process.env.NODE_ENV === 'production' 
-    ? ['error', 'warn'] 
+  log: process.env.NODE_ENV === 'production'
+    ? ['error', 'warn']
     : ['query', 'error', 'warn'],
   datasources: {
     db: {
@@ -55,7 +55,7 @@ async function connectWithRetry(): Promise<void> {
   } catch (error) {
     connectionAttempts++;
     logger.error(`❌ [Prisma] Connection attempt ${connectionAttempts} failed:`, undefined, error);
-    
+
     if (connectionAttempts < MAX_RETRIES) {
       logger.info(`⏳ [Prisma] Retrying in ${RETRY_DELAY / 1000} seconds...`);
       setTimeout(connectWithRetry, RETRY_DELAY);

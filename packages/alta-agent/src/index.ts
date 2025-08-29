@@ -66,6 +66,7 @@ export { CompaniesMCP, companiesMCP } from './mcp/CompaniesMCP';
 export { UnifiedMCP, mcp } from './mcp/UnifiedMCP';
 
 // Quick access functions for Package Expert
+import { logger } from './logger';
 import { packageExpert } from './PackageExpertAgent';
 
 export const agent = packageExpert;
@@ -77,29 +78,7 @@ export const help = (query?: string) => packageExpert.help(query);
 // Import MCP for global registration
 import { mcp } from './mcp/UnifiedMCP';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+
 // Auto-register en global para desarrollo (solo en dev)
 if (typeof globalThis !== 'undefined' && process.env.NODE_ENV === 'development') {
   (globalThis as any).altaAgent = packageExpert;

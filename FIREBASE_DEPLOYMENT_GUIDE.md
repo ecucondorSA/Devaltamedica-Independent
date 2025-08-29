@@ -77,9 +77,11 @@ pnpm --filter functions deploy
 Configura estos secrets en tu repositorio:
 
 1. **FIREBASE_TOKEN**:
+
    ```bash
    firebase login:ci
    ```
+
    Copia el token generado
 
 2. **FIREBASE_PROJECT_ID**:
@@ -103,7 +105,7 @@ graph LR
 
 ## 🚨 Troubleshooting
 
-### Error: "Cannot resolve workspace:* dependencies"
+### Error: "Cannot resolve workspace:\* dependencies"
 
 **Solución**: Firelink ya está configurado para resolver esto automáticamente.
 
@@ -114,6 +116,7 @@ graph LR
 ### Error: "FIREBASE_TOKEN invalid"
 
 **Solución**: Regenera el token:
+
 ```bash
 firebase logout
 firebase login:ci
@@ -145,6 +148,7 @@ firebase login:ci
    - Agrega FIREBASE_TOKEN y FIREBASE_PROJECT_ID
 
 2. **Test Local**:
+
    ```bash
    cd functions
    pnpm install
@@ -152,6 +156,7 @@ firebase login:ci
    ```
 
 3. **Deploy Manual**:
+
    ```bash
    cd functions
    pnpm deploy

@@ -1,7 +1,7 @@
 import { UserRole } from '@altamedica/types';
 import { headers } from 'next/headers';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export interface UserInfo {
   uid: string;
   email: string;
@@ -35,7 +35,7 @@ export async function getUserFromHeaders(): Promise<UserInfo | null> {
       roles,
     };
   } catch (error) {
-    logger.error('Error getting user from headers:', error);
+    logger.error('Error getting user from headers:', String(error));
     return null;
   }
 }

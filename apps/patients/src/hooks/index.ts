@@ -1,5 +1,5 @@
 /**
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
  * 🪝 MIGRATED HOOKS INDEX - AltaMedica Patients App
  * 
