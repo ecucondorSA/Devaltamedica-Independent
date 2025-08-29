@@ -5,21 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 import { Button } from '@altamedica/ui';
 import { Input } from '@altamedica/ui';
 import { Textarea } from '@altamedica/ui';
-
 import { Badge } from '@altamedica/ui';
-import { Separator } from '@altamedica/ui';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import { 
-  FileText, 
-  Pill, 
-  Calendar, 
-  AlertTriangle,
   Save,
   Send,
   Plus,
-  Trash2
+  Trash2,
+  Pill,
+  AlertTriangle
 } from 'lucide-react';
 
+// --- Interfaces de Datos ---
 interface PatientData {
   id: string;
   name: string;
@@ -55,6 +52,7 @@ interface PostConsultationFormData {
   notes: string;
 }
 
+// --- Componente Principal ---
 export default function PostConsultationForm() {
   const [formData, setFormData] = useState<PostConsultationFormData>({
     patientId: '',
@@ -77,7 +75,7 @@ export default function PostConsultationForm() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Simular carga de datos del paciente
+  // Simulación de carga de datos del paciente
   useEffect(() => {
     setPatientData({
       id: 'P001',
@@ -87,6 +85,8 @@ export default function PostConsultationForm() {
       medicalHistory: ['Hipertensión', 'Diabetes tipo 2', 'Alergia a penicilina']
     });
   }, []);
+
+  // --- Manejadores de Estado ---
 
   const addPrescription = () => {
     const newPrescription: Prescription = {
@@ -107,8 +107,8 @@ export default function PostConsultationForm() {
   const updatePrescription = (id: string, field: keyof Prescription, value: string | number) => {
     setFormData(prev => ({
       ...prev,
-      prescriptions: prev.prescriptions.map(prescription =>
-        prescription.id === id ? { ...prescription, [field]: value } : prescription
+      prescriptions: prev.prescriptions.map(p =>
+        p.id === id ? { ...p, [field]: value } : p
       )
     }));
   };
@@ -116,66 +116,44 @@ export default function PostConsultationForm() {
   const removePrescription = (id: string) => {
     setFormData(prev => ({
       ...prev,
-      prescriptions: prev.prescriptions.filter(prescription => prescription.id !== id)
+      prescriptions: prev.prescriptions.filter(p => p.id !== id)
     }));
   };
 
-  const addUrgentAlert = () => {
-    const alert = prompt('Ingrese alerta urgente:');
-    if (alert) {
-      setFormData(prev => ({
-        ...prev,
-        urgentAlerts: [...prev.urgentAlerts, alert]
-      }));
-    }
+  const createDynamicListUpdater = (field: keyof PostConsultationFormData) => {
+    return {
+      add: (item: string) => {
+        if (item) {
+          setFormData(prev => ({
+            ...prev,
+            [field]: [...(prev[field] as string[]), item]
+          }));
+        }
+      },
+      remove: (index: number) => {
+        setFormData(prev => ({
+          ...prev,
+          [field]: (prev[field] as string[]).filter((_, i) => i !== index)
+        }));
+      }
+    };
   };
 
-  const removeUrgentAlert = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      urgentAlerts: prev.urgentAlerts.filter((_, i) => i !== index)
-    }));
-  };
+  const urgentAlertsManager = createDynamicListUpdater('urgentAlerts');
+  const labOrdersManager = createDynamicListUpdater('labOrders');
+  const imagingOrdersManager = createDynamicListUpdater('imagingOrders');
+  const referralsManager = createDynamicListUpdater('referrals');
 
-  const addLabOrder = () => {
-    const order = prompt('Ingrese orden de laboratorio:');
-    if (order) {
-      setFormData(prev => ({
-        ...prev,
-        labOrders: [...prev.labOrders, order]
-      }));
-    }
-  };
-
-  const addImagingOrder = () => {
-    const order = prompt('Ingrese orden de imagenología:');
-    if (order) {
-      setFormData(prev => ({
-        ...prev,
-        imagingOrders: [...prev.imagingOrders, order]
-      }));
-    }
-  };
-
-  const addReferral = () => {
-    const referral = prompt('Ingrese referencia médica:');
-    if (referral) {
-      setFormData(prev => ({
-        ...prev,
-        referrals: [...prev.referrals, referral]
-      }));
-    }
-  };
+  // --- Acciones de Formulario ---
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Simular guardado
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      logger.info('Datos guardados:', formData);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      logger.info('Datos guardados:', JSON.stringify(formData, null, 2));
       alert('Documentación guardada exitosamente');
     } catch (error) {
-      logger.error('Error al guardar:', error);
+      logger.error('Error al guardar:', String(error));
       alert('Error al guardar la documentación');
     } finally {
       setSaving(false);
@@ -185,12 +163,11 @@ export default function PostConsultationForm() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // Simular envío
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      logger.info('Documentación enviada:', formData);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      logger.info('Documentación enviada:', JSON.stringify(formData, null, 2));
       alert('Documentación enviada al paciente exitosamente');
     } catch (error) {
-      logger.error('Error al enviar:', error);
+      logger.error('Error al enviar:', String(error));
       alert('Error al enviar la documentación');
     } finally {
       setLoading(false);
@@ -208,32 +185,26 @@ export default function PostConsultationForm() {
     );
   }
 
+  // --- Renderizado ---
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <header className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">Documentación Post-Consulta</h1>
           <p className="text-gray-600">Complete la documentación de la consulta médica</p>
         </div>
         <div className="flex gap-3">
-          <Button 
-            onClick={handleSave}
-            disabled={saving}
-            variant="outline"
-          >
+          <Button onClick={handleSave} disabled={saving} variant="outline">
             <Save className="h-4 w-4 mr-2" />
             {saving ? 'Guardando...' : 'Guardar'}
           </Button>
-          <Button 
-            onClick={handleSubmit}
-            disabled={loading}
-          >
+          <Button onClick={handleSubmit} disabled={loading}>
             <Send className="h-4 w-4 mr-2" />
             {loading ? 'Enviando...' : 'Enviar al Paciente'}
           </Button>
         </div>
-      </div>
+      </header>
 
       {/* Información del Paciente */}
       <Card>
@@ -243,24 +214,24 @@ export default function PostConsultationForm() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Nombre</div>
+              <label className="text-sm font-medium text-gray-700">Nombre</label>
               <p className="font-medium">{patientData.name}</p>
             </div>
             <div>
-              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Edad</div>
+              <label className="text-sm font-medium text-gray-700">Edad</label>
               <p className="font-medium">{patientData.age} años</p>
             </div>
             <div>
-              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Género</div>
+              <label className="text-sm font-medium text-gray-700">Género</label>
               <p className="font-medium">{patientData.gender}</p>
             </div>
             <div>
-              <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">ID Paciente</div>
+              <label className="text-sm font-medium text-gray-700">ID Paciente</label>
               <p className="font-medium">{patientData.id}</p>
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Historial Médico</div>
+            <label className="text-sm font-medium text-gray-700">Historial Médico</label>
             <div className="flex flex-wrap gap-2 mt-2">
               {patientData.medicalHistory.map((condition, index) => (
                 <Badge key={index} variant="secondary">{condition}</Badge>
@@ -270,83 +241,80 @@ export default function PostConsultationForm() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Diagnóstico y Síntomas */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Diagnóstico y Síntomas</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="diagnosis">Diagnóstico Principal</div>
-              <Input
-                id="diagnosis"
-                value={formData.diagnosis}
-                onChange={(e) => setFormData(prev => ({ ...prev, diagnosis: e.target.value }))}
-                placeholder="Ingrese el diagnóstico principal"
-              />
-            </div>
-            <div>
-              <Label htmlFor="symptoms">Síntomas Reportados</div>
-              <Textarea
-                id="symptoms"
-                value={formData.symptoms}
-                onChange={(e) => setFormData(prev => ({ ...prev, symptoms: e.target.value }))}
-                placeholder="Describa los síntomas reportados por el paciente"
-                rows={3}
-              />
-            </div>
-            <div>
-              <Label htmlFor="physicalExam">Examen Físico</div>
-              <Textarea
-                id="physicalExam"
-                value={formData.physicalExam}
-                onChange={(e) => setFormData(prev => ({ ...prev, physicalExam: e.target.value }))}
-                placeholder="Resultados del examen físico"
-                rows={3}
-              />
-            </div>
-          </CardContent>
-        </Card>
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Columna Izquierda */}
+        <div className="space-y-6">
+          {/* Diagnóstico y Síntomas */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Diagnóstico y Síntomas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label htmlFor="diagnosis" className="text-sm font-medium text-gray-700">Diagnóstico Principal</label>
+                <Input id="diagnosis" value={formData.diagnosis} onChange={(e) => setFormData(prev => ({ ...prev, diagnosis: e.target.value }))} placeholder="Ingrese el diagnóstico principal" />
+              </div>
+              <div>
+                <label htmlFor="symptoms" className="text-sm font-medium text-gray-700">Síntomas Reportados</label>
+                <Textarea id="symptoms" value={formData.symptoms} onChange={(e) => setFormData(prev => ({ ...prev, symptoms: e.target.value }))} placeholder="Describa los síntomas reportados" rows={3} />
+              </div>
+              <div>
+                <label htmlFor="physicalExam" className="text-sm font-medium text-gray-700">Examen Físico</label>
+                <Textarea id="physicalExam" value={formData.physicalExam} onChange={(e) => setFormData(prev => ({ ...prev, physicalExam: e.target.value }))} placeholder="Resultados del examen físico" rows={3} />
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Plan de Tratamiento */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Plan de Tratamiento</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="treatmentPlan">Plan de Tratamiento</div>
-              <Textarea
-                id="treatmentPlan"
-                value={formData.treatmentPlan}
-                onChange={(e) => setFormData(prev => ({ ...prev, treatmentPlan: e.target.value }))}
-                placeholder="Describa el plan de tratamiento"
-                rows={3}
-              />
-            </div>
-            <div>
-              <Label htmlFor="followUpDate">Fecha de Seguimiento</div>
-              <Input
-                id="followUpDate"
-                type="date"
-                value={formData.followUpDate}
-                onChange={(e) => setFormData(prev => ({ ...prev, followUpDate: e.target.value }))}
-              />
-            </div>
-            <div>
-              <Label htmlFor="followUpNotes">Notas de Seguimiento</div>
-              <Textarea
-                id="followUpNotes"
-                value={formData.followUpNotes}
-                onChange={(e) => setFormData(prev => ({ ...prev, followUpNotes: e.target.value }))}
-                placeholder="Notas para el seguimiento"
-                rows={2}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          {/* Órdenes y Referencias */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Órdenes y Referencias</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <DynamicListSection title="Órdenes de Laboratorio" items={formData.labOrders} manager={labOrdersManager} />
+              <DynamicListSection title="Órdenes de Imagenología" items={formData.imagingOrders} manager={imagingOrdersManager} />
+              <DynamicListSection title="Referencias" items={formData.referrals} manager={referralsManager} />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Columna Derecha */}
+        <div className="space-y-6">
+          {/* Plan de Tratamiento */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Plan de Tratamiento</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label htmlFor="treatmentPlan" className="text-sm font-medium text-gray-700">Plan de Tratamiento</label>
+                <Textarea id="treatmentPlan" value={formData.treatmentPlan} onChange={(e) => setFormData(prev => ({ ...prev, treatmentPlan: e.target.value }))} placeholder="Describa el plan de tratamiento" rows={3} />
+              </div>
+              <div>
+                <label htmlFor="followUpDate" className="text-sm font-medium text-gray-700">Fecha de Seguimiento</label>
+                <Input id="followUpDate" type="date" value={formData.followUpDate} onChange={(e) => setFormData(prev => ({ ...prev, followUpDate: e.target.value }))} />
+              </div>
+              <div>
+                <label htmlFor="followUpNotes" className="text-sm font-medium text-gray-700">Notas de Seguimiento</label>
+                <Textarea id="followUpNotes" value={formData.followUpNotes} onChange={(e) => setFormData(prev => ({ ...prev, followUpNotes: e.target.value }))} placeholder="Notas para el seguimiento" rows={2} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Alertas Urgentes */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-red-600">
+                <AlertTriangle className="h-5 w-5" />
+                Alertas Urgentes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DynamicListSection items={formData.urgentAlerts} manager={urgentAlertsManager} isUrgent />
+            </CardContent>
+          </Card>
+        </div>
+      </main>
 
       {/* Prescripciones */}
       <Card>
@@ -358,197 +326,12 @@ export default function PostConsultationForm() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {formData.prescriptions.map((prescription) => (
-              <div key={prescription.id} className="border rounded-lg p-4">
-                <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                  <div>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Medicamento</div>
-                    <Input
-                      value={prescription.medication}
-                      onChange={(e) => updatePrescription(prescription.id, 'medication', e.target.value)}
-                      placeholder="Nombre del medicamento"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Dosis</div>
-                    <Input
-                      value={prescription.dosage}
-                      onChange={(e) => updatePrescription(prescription.id, 'dosage', e.target.value)}
-                      placeholder="Ej: 500mg"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Frecuencia</div>
-                    <Input
-                      value={prescription.frequency}
-                      onChange={(e) => updatePrescription(prescription.id, 'frequency', e.target.value)}
-                      placeholder="Ej: Cada 8 horas"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Duración</div>
-                    <Input
-                      value={prescription.duration}
-                      onChange={(e) => updatePrescription(prescription.id, 'duration', e.target.value)}
-                      placeholder="Ej: 7 días"
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Cantidad</div>
-                    <Input
-                      type="number"
-                      value={prescription.quantity}
-                      onChange={(e) => updatePrescription(prescription.id, 'quantity', parseInt(e.target.value))}
-                      min="1"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <Button
-                      onClick={() => removePrescription(prescription.id)}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">Instrucciones Especiales</div>
-                  <Input
-                    value={prescription.instructions}
-                    onChange={(e) => updatePrescription(prescription.id, 'instructions', e.target.value)}
-                    placeholder="Instrucciones especiales para el paciente"
-                  />
-                </div>
-              </div>
+            {formData.prescriptions.map((p) => (
+              <PrescriptionItem key={p.id} prescription={p} onUpdate={updatePrescription} onRemove={removePrescription} />
             ))}
             <Button onClick={addPrescription} variant="outline" className="w-full">
               <Plus className="h-4 w-4 mr-2" />
               Agregar Prescripción
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Órdenes y Referencias */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Órdenes de Laboratorio */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Órdenes de Laboratorio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {formData.labOrders.map((order, index) => (
-                <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                  <span className="flex-1 text-sm">{order}</span>
-                  <Button
-                    onClick={() => setFormData(prev => ({
-                      ...prev,
-                      labOrders: prev.labOrders.filter((_, i) => i !== index)
-                    }))}
-                    variant="ghost"
-                    size="sm"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              ))}
-              <Button onClick={addLabOrder} variant="outline" size="sm" className="w-full">
-                <Plus className="h-3 w-3 mr-1" />
-                Agregar Orden
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Órdenes de Imagenología */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Imagenología</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {formData.imagingOrders.map((order, index) => (
-                <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                  <span className="flex-1 text-sm">{order}</span>
-                  <Button
-                    onClick={() => setFormData(prev => ({
-                      ...prev,
-                      imagingOrders: prev.imagingOrders.filter((_, i) => i !== index)
-                    }))}
-                    variant="ghost"
-                    size="sm"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              ))}
-              <Button onClick={addImagingOrder} variant="outline" size="sm" className="w-full">
-                <Plus className="h-3 w-3 mr-1" />
-                Agregar Orden
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Referencias */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Referencias</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {formData.referrals.map((referral, index) => (
-                <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                  <span className="flex-1 text-sm">{referral}</span>
-                  <Button
-                    onClick={() => setFormData(prev => ({
-                      ...prev,
-                      referrals: prev.referrals.filter((_, i) => i !== index)
-                    }))}
-                    variant="ghost"
-                    size="sm"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              ))}
-              <Button onClick={addReferral} variant="outline" size="sm" className="w-full">
-                <Plus className="h-3 w-3 mr-1" />
-                Agregar Referencia
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Alertas Urgentes */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-500" />
-            Alertas Urgentes
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {formData.urgentAlerts.map((alert, index) => (
-              <div key={index} className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded">
-                <AlertTriangle className="h-4 w-4 text-red-500" />
-                <span className="flex-1 text-red-700">{alert}</span>
-                <Button
-                  onClick={() => removeUrgentAlert(index)}
-                  variant="ghost"
-                  size="sm"
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
-              </div>
-            ))}
-            <Button onClick={addUrgentAlert} variant="outline" className="w-full">
-              <Plus className="h-4 w-4 mr-2" />
-              Agregar Alerta Urgente
             </Button>
           </div>
         </CardContent>
@@ -560,14 +343,73 @@ export default function PostConsultationForm() {
           <CardTitle>Notas Adicionales</CardTitle>
         </CardHeader>
         <CardContent>
-          <Textarea
-            value={formData.notes}
-            onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-            placeholder="Notas adicionales, observaciones importantes, etc."
-            rows={4}
-          />
+          <Textarea value={formData.notes} onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))} placeholder="Notas adicionales, observaciones importantes, etc." rows={4} />
         </CardContent>
       </Card>
     </div>
   );
-} 
+}
+
+// --- Sub-componentes ---
+
+function PrescriptionItem({ prescription, onUpdate, onRemove }: { prescription: Prescription, onUpdate: Function, onRemove: Function }) {
+  return (
+    <div className="border rounded-lg p-4 space-y-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="col-span-2 md:col-span-3 lg:col-span-2">
+          <label htmlFor={`med-${prescription.id}`} className="text-sm font-medium text-gray-700">Medicamento</label>
+          <Input id={`med-${prescription.id}`} value={prescription.medication} onChange={(e) => onUpdate(prescription.id, 'medication', e.target.value)} placeholder="Nombre" />
+        </div>
+        <div>
+          <label htmlFor={`dos-${prescription.id}`} className="text-sm font-medium text-gray-700">Dosis</label>
+          <Input id={`dos-${prescription.id}`} value={prescription.dosage} onChange={(e) => onUpdate(prescription.id, 'dosage', e.target.value)} placeholder="500mg" />
+        </div>
+        <div>
+          <label htmlFor={`freq-${prescription.id}`} className="text-sm font-medium text-gray-700">Frecuencia</label>
+          <Input id={`freq-${prescription.id}`} value={prescription.frequency} onChange={(e) => onUpdate(prescription.id, 'frequency', e.target.value)} placeholder="Cada 8h" />
+        </div>
+        <div>
+          <label htmlFor={`dur-${prescription.id}`} className="text-sm font-medium text-gray-700">Duración</label>
+          <Input id={`dur-${prescription.id}`} value={prescription.duration} onChange={(e) => onUpdate(prescription.id, 'duration', e.target.value)} placeholder="7 días" />
+        </div>
+        <div className="flex items-end">
+          <Button onClick={() => onRemove(prescription.id)} variant="destructive" size="icon">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <div>
+        <label htmlFor={`instr-${prescription.id}`} className="text-sm font-medium text-gray-700">Instrucciones</label>
+        <Input id={`instr-${prescription.id}`} value={prescription.instructions} onChange={(e) => onUpdate(prescription.id, 'instructions', e.target.value)} placeholder="Instrucciones especiales" />
+      </div>
+    </div>
+  );
+}
+
+function DynamicListSection({ title, items, manager, isUrgent = false }: { title?: string, items: string[], manager: { add: Function, remove: Function }, isUrgent?: boolean }) {
+  const handleAdd = () => {
+    const item = prompt(`Agregar ${title || (isUrgent ? 'Alerta' : 'Item')}:`);
+    if (item) manager.add(item);
+  };
+
+  return (
+    <div>
+      {title && <h4 className="font-medium mb-2">{title}</h4>}
+      <div className="space-y-2">
+        {items.map((item, index) => (
+          <div key={index} className={`flex items-center gap-2 p-2 rounded ${isUrgent ? 'bg-red-50 border border-red-200' : 'bg-gray-50'}`}>
+            {isUrgent && <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />}
+            <span className={`flex-1 text-sm ${isUrgent ? 'text-red-700' : ''}`}>{item}</span>
+            <Button onClick={() => manager.remove(index)} variant="ghost" size="icon" className="h-6 w-6">
+              <Trash2 className="h-3 w-3" />
+            </Button>
+          </div>
+        ))}
+        <Button onClick={handleAdd} variant="outline" size="sm" className="w-full">
+          <Plus className="h-3 w-3 mr-1" />
+          Agregar
+        </Button>
+      </div>
+    </div>
+  );
+}

@@ -3,6 +3,7 @@
   "env": {
     "node": true
   },
+  "plugins": ["import"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "warn",

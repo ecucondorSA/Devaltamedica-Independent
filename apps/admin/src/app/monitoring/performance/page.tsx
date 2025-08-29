@@ -9,6 +9,7 @@ import {
   Network,
   TrendingDown,
   TrendingUp,
+  LucideProps,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -18,7 +19,7 @@ interface PerformanceMetric {
   previous: number;
   unit: string;
   threshold: number;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<LucideProps>;
 }
 
 interface ServicePerformance {

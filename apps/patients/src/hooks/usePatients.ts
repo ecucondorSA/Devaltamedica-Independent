@@ -15,8 +15,42 @@
 //   useUploadPatientDocument
 // } from '@altamedica/api-client/hooks';
 
-// Stubs temporales para permitir compilación
-const usePatientsBase = () => ({ data: [], isLoading: false, error: null });
+// Stubs temporales con datos de muestra para permitir compilación
+const usePatientsBase = () => ({
+  data: {
+    patients: [
+      {
+        id: '1',
+        firstName: 'Juan',
+        lastName: 'Pérez',
+        email: 'juan.perez@ejemplo.com',
+        dateOfBirth: '1985-06-15',
+        gender: 'Masculino',
+        personalInfo: { firstName: 'Juan', lastName: 'Pérez', dateOfBirth: '1985-06-15', gender: 'Masculino' },
+        contactInfo: { email: 'juan.perez@ejemplo.com' }
+      },
+      {
+        id: '2', 
+        firstName: 'María',
+        lastName: 'García',
+        email: 'maria.garcia@ejemplo.com',
+        dateOfBirth: '1990-03-22',
+        gender: 'Femenino',
+        personalInfo: { firstName: 'María', lastName: 'García', dateOfBirth: '1990-03-22', gender: 'Femenino' },
+        contactInfo: { email: 'maria.garcia@ejemplo.com' }
+      }
+    ], 
+    page: 1, 
+    limit: 10, 
+    total: 2, 
+    totalPages: 1, 
+    hasNextPage: false, 
+    hasPrevPage: false 
+  }, 
+  isLoading: false, 
+  error: null,
+  refetch: () => Promise.resolve()
+});
 const usePatient = () => ({ data: null, isLoading: false, error: null });
 const useCreatePatient = () => ({ mutate: () => {}, isLoading: false });
 const useUpdatePatient = () => ({ mutate: () => {}, isLoading: false });
@@ -28,12 +62,13 @@ const usePatientDocuments = () => ({ data: [], isLoading: false });
 const useUploadPatientDocument = () => ({ mutate: () => {}, isLoading: false });
 
 import { useState, useCallback, useEffect } from 'react';
-import type { Patient } from '@altamedica/types';
+import type { PatientProfile } from '@altamedica/types';
+import { SimplePatient, toSimplePatient } from '../types';
 
 // 📝 TIPOS ESPECIALIZADOS (mantenidos para compatibilidad)
 export interface UsePatientState {
-  patients: Patient[];
-  currentPatient: Patient | null;
+  patients: SimplePatient[];
+  currentPatient: SimplePatient | null;
   loading: boolean;
   error: string | null;
   pagination: {
@@ -49,9 +84,9 @@ export interface UsePatientState {
 
 export interface UsePatientActions {
   searchPatients: (filters?: any) => Promise<void>;
-  getPatientById: (id: string) => Promise<Patient | null>;
-  createPatient: (data: Partial<Patient>) => Promise<Patient | null>;
-  updatePatient: (id: string, data: Partial<Patient>) => Promise<Patient | null>;
+  getPatientById: (id: string) => Promise<SimplePatient | null>;
+  createPatient: (data: Partial<SimplePatient>) => Promise<SimplePatient | null>;
+  updatePatient: (id: string, data: Partial<SimplePatient>) => Promise<SimplePatient | null>;
   deletePatient: (id: string) => Promise<boolean>;
   refreshPatients: () => Promise<void>;
   clearError: () => void;
@@ -88,7 +123,7 @@ export function usePatients(options: UsePatientOptions = {}) {
   const getPatientQuery = usePatient;
 
   // Estado local adicional
-  const [currentPatient, setCurrentPatient] = useState<Patient | null>(null);
+  const [currentPatient, setCurrentPatient] = useState<SimplePatient | null>(null);
   const [lastSync, setLastSync] = useState<string | null>(null);
 
   // Acciones wrapper
@@ -110,11 +145,11 @@ export function usePatients(options: UsePatientOptions = {}) {
   }, []);
 
   const createPatient = useCallback(
-    async (data: Partial<Patient>) => {
+    async (data: Partial<SimplePatient>) => {
       const result = await createMutation.mutateAsync(data);
       if (result) {
         await baseQuery.refetch();
-        return result;
+        return toSimplePatient(result);
       }
       return null;
     },
@@ -122,14 +157,15 @@ export function usePatients(options: UsePatientOptions = {}) {
   );
 
   const updatePatient = useCallback(
-    async (id: string, data: Partial<Patient>) => {
+    async (id: string, data: Partial<SimplePatient>) => {
       const result = await updateMutation.mutateAsync({ id, data });
       if (result) {
         await baseQuery.refetch();
+        const simplePatient = toSimplePatient(result);
         if (currentPatient?.id === id) {
-          setCurrentPatient(result);
+          setCurrentPatient(simplePatient);
         }
-        return result;
+        return simplePatient;
       }
       return null;
     },
@@ -184,9 +220,9 @@ export function usePatients(options: UsePatientOptions = {}) {
     }
   }, [initialFetch]);
 
-  // Mapear datos al formato esperado
+  // Mapear datos al formato esperado usando adapter
   const state: UsePatientState = {
-    patients: baseQuery.data?.patients || [],
+    patients: (baseQuery.data?.patients || []).map(toSimplePatient),
     currentPatient,
     loading:
       baseQuery.isLoading ||

@@ -8,7 +8,7 @@
 
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 import {
   FileText,
   Plus,
@@ -52,7 +52,8 @@ import {
   AlertCircle,
   Database,
   Microscope,
-  Zap
+  Zap,
+  Unlock
 } from 'lucide-react';
 
 // Tipos para el sistema de notas médicas
@@ -388,7 +389,7 @@ PRÓXIMA CITA:
       
       setNotes(mockNotes);
     } catch (error) {
-      logger.error('Error cargando notas:', error);
+      logger.error('Error cargando notas:', String(error));
     }
   }, [sessionId, patientId, doctorId, doctorName]);
 
@@ -539,9 +540,10 @@ PRÓXIMA CITA:
     switch (sortBy) {
       case 'date':
         return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-      case 'priority':
+      case 'priority': {
         const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
+      }
       case 'category':
         return a.category.localeCompare(b.category);
       default:

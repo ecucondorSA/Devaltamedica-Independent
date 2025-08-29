@@ -810,7 +810,11 @@ export default function MarketplaceMap({
   useEffect(() => {
     const handler = () => {
       setTimeout(() => {
-        try { (mapRef.current as any)?.invalidateSize?.(); } catch {}
+        try {
+          (mapRef.current as any)?.invalidateSize?.();
+        } catch {
+          // map may not be initialized
+        }
       }, 50);
     };
     window.addEventListener('map:invalidate-size', handler);
@@ -820,7 +824,11 @@ export default function MarketplaceMap({
   // Reflow inicial tras el montaje para evitar mapa en blanco por altura/medidas
   useEffect(() => {
     const t = setTimeout(() => {
-      try { (mapRef.current as any)?.invalidateSize?.(); } catch {}
+      try {
+        (mapRef.current as any)?.invalidateSize?.();
+      } catch {
+        // map may not be initialized
+      }
     }, 150);
     return () => clearTimeout(t);
   }, []);
@@ -834,7 +842,13 @@ export default function MarketplaceMap({
         setSelectedDoctor(doc);
         setMapCenter(doc.location.coordinates);
         setZoom(z => Math.max(z, 12));
-        setTimeout(() => { try { (mapRef.current as any)?.panTo?.(doc.location.coordinates); } catch {} }, 50);
+        setTimeout(() => {
+          try {
+            (mapRef.current as any)?.panTo?.(doc.location.coordinates);
+          } catch {
+            // map may not be initialized
+          }
+        }, 50);
       }
     }
   }, [selectedDoctorId, filteredDoctors, isClient]);
@@ -847,7 +861,13 @@ export default function MarketplaceMap({
         setSelectedDoctor(null);
         setMapCenter(comp.location.coordinates as LatLngTuple);
         setZoom(z => Math.max(z, 12));
-        setTimeout(() => { try { (mapRef.current as any)?.panTo?.(comp.location.coordinates); } catch {} }, 50);
+        setTimeout(() => {
+          try {
+            (mapRef.current as any)?.panTo?.(comp.location.coordinates);
+          } catch {
+            // map may not be initialized
+          }
+        }, 50);
       }
     }
   }, [selectedCompanyId, filteredCompanies, isClient]);

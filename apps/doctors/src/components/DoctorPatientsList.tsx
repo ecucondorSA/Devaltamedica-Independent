@@ -15,9 +15,9 @@ import {
   formatPhone,
   calculateAge
 } from '../services/patients-service';
-import type { Patient } from '../services/patients-service';
+import type { SimplePatient } from '../types';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
 interface DoctorPatientsListProps {
   doctorId: string;
@@ -25,7 +25,7 @@ interface DoctorPatientsListProps {
 
 export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<SimplePatient | null>(null);
   
   const {
     patients,
@@ -37,7 +37,6 @@ export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
     updatePatient,
     clearError
   } = usePatients({
-    doctorId,
     autoFetch: true
   });
 
@@ -46,11 +45,11 @@ export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
     if (searchTerm.trim()) {
       await searchPatients(searchTerm);
     } else {
-      await fetchMyPatients(doctorId);
+      await fetchMyPatients();
     }
   };
 
-  const handlePatientSelect = (patient: Patient) => {
+  const handlePatientSelect = (patient: SimplePatient) => {
     setSelectedPatient(patient);
   };
 
@@ -118,7 +117,7 @@ export function DoctorPatientsList({ doctorId }: DoctorPatientsListProps) {
               type="button"
               onClick={() => {
                 setSearchTerm('');
-                fetchMyPatients(doctorId);
+                fetchMyPatients();
               }}
               className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
             >
@@ -197,12 +196,12 @@ function PatientCard({
   isSelected, 
   onClick 
 }: { 
-  patient: Patient; 
+  patient: SimplePatient; 
   isSelected: boolean;
   onClick: () => void;
 }) {
-  const statusInfo = getPatientStatusInfo(patient.status);
-  const timeSinceLastVisit = getTimeSinceLastVisit(patient.lastVisit);
+  const statusInfo = getPatientStatusInfo(patient.status || 'inactive');
+  const timeSinceLastVisit = getTimeSinceLastVisit((patient as any).lastVisit || '');
 
   return (
     <div 
@@ -216,11 +215,11 @@ function PatientCard({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-semibold text-gray-900">
-            {formatPatientName(patient)}
+            {formatPatientName(patient as any)}
           </h3>
           <p className="text-sm text-gray-600">{patient.email}</p>
           <p className="text-xs text-gray-500">
-            {patient.age} años • {formatPhone(patient.phone || '')}
+            {(patient as any).age || calculateAge(patient.dateOfBirth)} años • {formatPhone(patient.phoneNumber || '')}
           </p>
         </div>
         <div className="text-right">
@@ -241,7 +240,7 @@ function PatientDetails({
   patient, 
   onUpdate 
 }: { 
-  patient: Patient;
+  patient: SimplePatient;
   onUpdate: (updates: any) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -250,7 +249,7 @@ function PatientDetails({
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">{formatPatientName(patient)}</h3>
+        <h3 className="text-lg font-semibold">{formatPatientName(patient as any)}</h3>
         <button
           onClick={() => setIsEditing(!isEditing)}
           className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
@@ -267,34 +266,34 @@ function PatientDetails({
         
         <div>
           <label className="text-sm font-medium text-gray-700">Teléfono:</label>
-          <p className="text-gray-900">{formatPhone(patient.phone || 'No registrado')}</p>
+          <p className="text-gray-900">{formatPhone(patient.phoneNumber || 'No registrado')}</p>
         </div>
         
         <div>
           <label className="text-sm font-medium text-gray-700">Edad:</label>
-          <p className="text-gray-900">{patient.age} años</p>
+          <p className="text-gray-900">{calculateAge(patient.dateOfBirth) || 'No disponible'} años</p>
         </div>
         
-        {patient.bloodType && (
+        {(patient as any).bloodType && (
           <div>
             <label className="text-sm font-medium text-gray-700">Tipo de Sangre:</label>
-            <p className="text-gray-900">{patient.bloodType}</p>
+            <p className="text-gray-900">{(patient as any).bloodType}</p>
           </div>
         )}
         
-        {patient.allergies && patient.allergies.length > 0 && (
+        {(patient as any).allergies && (patient as any).allergies.length > 0 && (
           <div>
             <label className="text-sm font-medium text-gray-700">Alergias:</label>
-            <p className="text-gray-900">{patient.allergies.join(', ')}</p>
+            <p className="text-gray-900">{(patient as any).allergies.join(', ')}</p>
           </div>
         )}
         
-        {patient.emergencyContact && (
+        {(patient as any).emergencyContact && (
           <div>
             <label className="text-sm font-medium text-gray-700">Contacto de Emergencia:</label>
             <p className="text-gray-900">
-              {patient.emergencyContact.name} - {formatPhone(patient.emergencyContact.phone)}
-              <span className="text-sm text-gray-500 ml-2">({patient.emergencyContact.relationship})</span>
+              {(patient as any).emergencyContact.name} - {formatPhone((patient as any).emergencyContact.phone)}
+              <span className="text-sm text-gray-500 ml-2">({(patient as any).emergencyContact.relationship})</span>
             </p>
           </div>
         )}

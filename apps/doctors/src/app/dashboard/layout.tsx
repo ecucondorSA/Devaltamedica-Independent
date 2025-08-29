@@ -31,18 +31,18 @@ export default function DashboardLayout({
             <div className="flex items-center gap-4">
               <NotificationCenter />
               <Link href="/profile">
-                <Button variant="secondary" size="small">
+                <Button variant="secondary" size="sm">
                   <User className="w-4 h-4 mr-2" />
                   Mi Perfil
                 </Button>
               </Link>
               <Link href="/settings">
-                <Button variant="secondary" size="small">
+                <Button variant="secondary" size="sm">
                   <Settings className="w-4 h-4 mr-2" />
                   Configuración
                 </Button>
               </Link>
-              <Button size="small" onClick={handleNewAppointment}>
+              <Button size="sm" onClick={handleNewAppointment}>
                 <Plus className="w-4 h-4 mr-2" />
                 Nueva Cita
               </Button>

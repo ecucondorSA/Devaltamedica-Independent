@@ -10,10 +10,15 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.mjs",
+      "require": "./dist/hooks/index.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --format esm --dts --clean ",
+    "build": "tsup src/index.ts src/hooks/index.ts --format cjs,esm --dts --clean",
     "dev": "tsup src/index.ts --format=esm --watch",
     "lint": "eslint src --no-error-on-unmatched-pattern",
     "lint:fix": "eslint src --fix --no-error-on-unmatched-pattern",

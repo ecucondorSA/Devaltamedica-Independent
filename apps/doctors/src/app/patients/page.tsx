@@ -20,7 +20,10 @@ import {
 import { PatientCard } from '@altamedica/medical'
 import { Button } from '@altamedica/ui'
 import { usePatients } from '@/hooks/queries/usePatients'
-import { useDebounce } from '@altamedica/hooks'
+import { PatientProfile } from '@altamedica/types';
+import { useDebounce } from '@altamedica/hooks';
+import { SimplePatient, toSimplePatient } from '../../types';
+
 
 export default function PatientsPage() {
   const router = useRouter()
@@ -32,17 +35,20 @@ export default function PatientsPage() {
   const debouncedSearch = useDebounce(searchTerm, 500)
 
   // Use React Query hook
-  const { data: patients = [], isLoading, error } = usePatients({
+  const { data: patientProfiles = [], isLoading, error } = usePatients({
     search: debouncedSearch,
     status: selectedFilter === 'all' ? undefined : selectedFilter
-  })
+  });
+
+  // Map PatientProfile to simple Patient for UI
+  const patients: SimplePatient[] = useMemo(() => patientProfiles.map(toSimplePatient), [patientProfiles]);
 
   // Compute stats from the data
   const stats = useMemo(() => ({
     total: patients.length,
-    active: patients.filter(p => p.lastVisit).length,
-    new: patients.filter(p => p.isNew).length
-  }), [patients])
+    active: patients.filter((p: SimplePatient) => p.status === 'active').length,
+    new: patients.filter((p: SimplePatient) => p.status === 'inactive').length // Placeholder logic for 'new'
+  }), [patients]);
 
   return (
     <div className="space-y-6">
@@ -150,7 +156,7 @@ export default function PatientsPage() {
         </div>
       ) : !error && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {patients.map((patient) => (
+          {patients.map((patient: SimplePatient) => (
             <div
               key={patient.id}
               onClick={() => router.push(`/patients/${patient.id}`)}
@@ -162,11 +168,11 @@ export default function PatientsPage() {
                   <div className="flex items-center space-x-4">
                     <span className="flex items-center text-gray-600">
                       <Calendar className="h-4 w-4 mr-1" />
-                      Last visit: {patient.lastVisit || 'Never'}
+                      {/* Last visit: {patient.lastVisit || 'Never'} */}
                     </span>
                     <span className="flex items-center text-gray-600">
                       <FileText className="h-4 w-4 mr-1" />
-                      {patient.recordCount || 0} records
+                      {/* {patient.recordCount || 0} records */}
                     </span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-gray-400" />

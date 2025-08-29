@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Datos simulados de pacientes
 const patients = [
   {
@@ -174,7 +174,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    logger.error('Error obteniendo pacientes:', error);
+    logger.error('Error obteniendo pacientes:', String(error));
     return NextResponse.json(
       { 
         success: false, 
@@ -267,7 +267,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    logger.error('Error creando paciente:', error);
+    logger.error('Error creando paciente:', String(error));
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },
       { status: 500 }

@@ -2,7 +2,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface SignalingMessage {
   type: 'offer' | 'answer' | 'ice-candidate' | 'join' | 'leave' | 'user-joined' | 'user-left';
   from: string;
@@ -42,7 +42,7 @@ class SignalingServer {
           const message: SignalingMessage = JSON.parse(data.toString());
           this.handleMessage(ws, message);
         } catch (error) {
-          logger.error('Error procesando mensaje:', error);
+          logger.error('Error procesando mensaje:', String(error));
           ws.send(JSON.stringify({
             type: 'error',
             data: 'Mensaje inválido'
@@ -55,7 +55,7 @@ class SignalingServer {
       });
 
       ws.on('error', (error) => {
-        logger.error('Error en WebSocket:', error);
+        logger.error('Error en WebSocket:', String(error));
         this.handleUserDisconnect(ws);
       });
     });
@@ -110,7 +110,7 @@ class SignalingServer {
     }, userId);
 
     logger.info(`Usuario ${userId} (${userType}) se unió a la sala ${roomId}`);
-    logger.info(`Usuarios en sala ${roomId}:`, this.rooms.get(roomId)!.map(u => `${u.id} (${u.userType})`));
+    logger.info(`Usuarios en sala ${roomId}:`, JSON.stringify(this.rooms.get(roomId)!.map(u => `${u.id} (${u.userType})`), null, 2));
   }
 
   private handlePeerMessage(message: SignalingMessage): void {

@@ -1,62 +1,34 @@
-export const useMarketplace = () => {
-  return {
-    doctors: [],
-    companies: [],
-    selectedDoctor: null,
-    selectedCompany: null,
-    filters: {},
-    setFilters: () => {},
-    setSelectedDoctor: () => {},
-    setSelectedCompany: () => {},
-  };
-};
+// packages/marketplace-hooks/src/index.ts
 
-export const useMatching = () => {
+export const useDoctorProfile = () => {
   return {
-    matchedProfiles: [],
-    isMatching: false,
-    performMatching: () => Promise.resolve([]),
-  };
-};
-
-export const useMarketplaceNotifications = () => {
-  return {
-    notifications: [],
-    unreadCount: 0,
-    markAsRead: () => {},
-  };
-};
-
-export const useCompanyProfile = () => {
-  return {
-    company: null,
-    isLoading: false,
+    profile: {
+      name: 'Dr. Juan Perez',
+      specialty: 'Cardiología',
+      license: '12345',
+      // ... otros datos del perfil
+    },
+    loading: false,
     error: null,
   };
 };
 
-export const useDoctorSearch = () => {
+export const useMarketplaceJobs = (params?: any) => {
   return {
-    doctors: [],
-    isSearching: false,
-    search: () => {},
+    jobs: [],
+    loading: false,
+    error: null,
+    searchJobs: (query: string) => {},
+    filterJobs: (filters: any) => {},
+    applyToJob: (jobId: string) => Promise.resolve(),
   };
 };
 
 export const useJobApplications = () => {
   return {
     applications: [],
-    isLoading: false,
-    submitApplication: () => Promise.resolve(),
-  };
-};
-
-export const useMarketplaceJobs = () => {
-  return {
-    jobs: [],
-    isLoading: false,
-    createJob: () => Promise.resolve(),
-    updateJob: () => Promise.resolve(),
-    deleteJob: () => Promise.resolve(),
+    loading: false,
+    error: null,
+    updateApplication: (id: string, data: any) => Promise.resolve(),
   };
 };

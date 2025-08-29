@@ -11,6 +11,7 @@ import {
   RequestStatus,
   RequestValidation
 } from './types';
+import { logger } from '../../logger.service';
 
 /**
  * Request Lifecycle Service
@@ -48,7 +49,7 @@ export class RequestLifecycleService {
     priority: RequestPriority = RequestPriority.NORMAL
   ): Promise<ExportRequest> {
     try {
-      console.log(`[RequestLifecycle] Creating export request for patient ${patientId}`);
+      logger.info(`Creating export request for patient ${patientId}`, 'RequestLifecycle');
 
       // Validate input parameters
       this.validateCreateRequestParams(patientId, requestedBy, exportOptions);
@@ -93,10 +94,10 @@ export class RequestLifecycleService {
       // Initialize progress tracking
       await this.initializeProgress(requestId);
 
-      console.log(`[RequestLifecycle] Request created successfully: ${requestId}`);
+      logger.info(`Request created successfully: ${requestId}`, 'RequestLifecycle');
       return request;
     } catch (error) {
-      console.error('[RequestLifecycle] Failed to create request:', error);
+      logger.error('Failed to create request', 'RequestLifecycle', error);
       throw new Error(`Failed to create export request: ${error}`);
     }
   }
@@ -108,7 +109,7 @@ export class RequestLifecycleService {
     requestId: string,
     status: RequestStatus,
     message?: string,
-    errorDetails?: any
+    errorDetails?: unknown
   ): Promise<void> {
     try {
       const updates: Partial<ExportRequest> = {
@@ -121,8 +122,8 @@ export class RequestLifecycleService {
       }
 
       if (status === RequestStatus.FAILED && errorDetails) {
-        updates.errorMessage = typeof errorDetails === 'string' 
-          ? errorDetails 
+        updates.errorMessage = typeof errorDetails === 'string'
+          ? errorDetails
           : JSON.stringify(errorDetails);
       }
 
@@ -140,9 +141,9 @@ export class RequestLifecycleService {
         });
       }
 
-      console.log(`[RequestLifecycle] Status updated for ${requestId}: ${status}`);
+      logger.info(`Status updated for ${requestId}: ${status}`, 'RequestLifecycle');
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to update status for ${requestId}:`, error);
+      logger.error(`Failed to update status for ${requestId}`, 'RequestLifecycle', error);
       throw error;
     }
   }
@@ -166,9 +167,9 @@ export class RequestLifecycleService {
       const docRef = this.db.collection(this.progressCollectionName).doc(requestId);
       await docRef.set(progress, { merge: true });
 
-      console.log(`[RequestLifecycle] Progress updated for ${requestId}: ${progress.progress}%`);
+      logger.info(`Progress updated for ${requestId}: ${progress.progress}%`, 'RequestLifecycle');
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to update progress for ${requestId}:`, error);
+      logger.error(`Failed to update progress for ${requestId}`, 'RequestLifecycle', error);
       throw error;
     }
   }
@@ -193,7 +194,7 @@ export class RequestLifecycleService {
         estimatedCompletionAt: data.estimatedCompletionAt?.toDate(),
       } as ExportRequest;
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to get request ${requestId}:`, error);
+      logger.error(`Failed to get request ${requestId}`, 'RequestLifecycle', error);
       throw error;
     }
   }
@@ -211,7 +212,7 @@ export class RequestLifecycleService {
 
       return doc.data() as RequestProgress;
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to get progress for ${requestId}:`, error);
+      logger.error(`Failed to get progress for ${requestId}`, 'RequestLifecycle', error);
       return null;
     }
   }
@@ -222,9 +223,9 @@ export class RequestLifecycleService {
   async cancelRequest(requestId: string, reason: string): Promise<void> {
     try {
       await this.updateRequestStatus(requestId, RequestStatus.CANCELLED, `Cancelled: ${reason}`);
-      console.log(`[RequestLifecycle] Request ${requestId} cancelled: ${reason}`);
+      logger.warn(`Request ${requestId} cancelled: ${reason}`, 'RequestLifecycle');
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to cancel request ${requestId}:`, error);
+      logger.error(`Failed to cancel request ${requestId}`, 'RequestLifecycle', error);
       throw error;
     }
   }
@@ -257,10 +258,10 @@ export class RequestLifecycleService {
 
       await this.db.collection(this.collectionName).doc(requestId).update(updates);
 
-      console.log(`[RequestLifecycle] Request ${requestId} queued for retry (${updates.retryCount}/${request.maxRetries})`);
+      logger.info(`Request ${requestId} queued for retry (${updates.retryCount}/${request.maxRetries})`, 'RequestLifecycle');
       return true;
     } catch (error) {
-      console.error(`[RequestLifecycle] Failed to retry request ${requestId}:`, error);
+      logger.error(`Failed to retry request ${requestId}`, 'RequestLifecycle', error);
       throw error;
     }
   }
@@ -285,10 +286,10 @@ export class RequestLifecycleService {
         cleanedCount++;
       }
 
-      console.log(`[RequestLifecycle] Cleaned up ${cleanedCount} expired requests`);
+      logger.info(`Cleaned up ${cleanedCount} expired requests`, 'RequestLifecycle');
       return cleanedCount;
     } catch (error) {
-      console.error('[RequestLifecycle] Failed to cleanup expired requests:', error);
+      logger.error('Failed to cleanup expired requests', 'RequestLifecycle', error);
       return 0;
     }
   }
@@ -305,7 +306,7 @@ export class RequestLifecycleService {
 
       return snapshot.size;
     } catch (error) {
-      console.error('[RequestLifecycle] Failed to get pending requests count:', error);
+      logger.error('Failed to get pending requests count', 'RequestLifecycle', error);
       return 0;
     }
   }
@@ -360,7 +361,7 @@ export class RequestLifecycleService {
             }
           }
         } catch (error) {
-          console.warn(`[RequestLifecycle] Validation rule '${rule.name}' failed:`, error);
+          logger.warn(`Validation rule '${rule.name}' failed`, 'RequestLifecycle', error);
         }
       }
 

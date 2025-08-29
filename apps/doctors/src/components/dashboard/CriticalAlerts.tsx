@@ -9,7 +9,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
 import { CriticalAlert } from '@/hooks/useDashboard';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface CriticalAlertsProps {
   alerts: CriticalAlert[];
   isLoading: boolean;
@@ -61,7 +61,7 @@ const AlertCard: React.FC<AlertCardProps> = ({
     try {
       await onAcknowledge(alert.id);
     } catch (error) {
-      logger.error('Error reconociendo alerta:', error);
+      logger.error('Error reconociendo alerta:', String(error));
     } finally {
       setIsAcknowledging(false);
     }
@@ -111,6 +111,17 @@ const AlertCard: React.FC<AlertCardProps> = ({
       bgColor: 'bg-gray-600',
       textColor: 'text-gray-600',
       borderColor: 'border-gray-300'
+    },
+    APPOINTMENT: {
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      ),
+      label: 'Cita',
+      bgColor: 'bg-blue-600',
+      textColor: 'text-blue-600',
+      borderColor: 'border-blue-300'
     }
   };
 

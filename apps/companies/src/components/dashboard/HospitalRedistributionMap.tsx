@@ -138,21 +138,21 @@ function HospitalMarker({ hospital, staffShortages, isSelected, onClick, emergen
       : '';
 
     const emergencyBadge = hospital.emergencyPatients > 0
-      ? '<div class="absolute -top-2 -left-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white animate-ping">!<\/div>'
+      ? '<div class="absolute -top-2 -left-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white animate-ping">!</div>'
       : '';
 
     const html =
       '<div class="relative">' +
         '<div class="w-16 h-16 rounded-xl border-4 border-white shadow-2xl flex items-center justify-center text-white font-bold transition-all duration-300 ' + selectedClass + ' ' + pulseClass + '" ' +
              'style="background: linear-gradient(135deg, ' + color + ' 0%, ' + color + 'cc 100%); box-shadow: 0 4px 20px ' + color + '66">' +
-          '<span class="text-2xl">🏥<\/span>' +
-        '<\/div>' +
+          '<span class="text-2xl">🏥</span>' +
+        '</div>' +
         '<div class="absolute -top-2 -right-2 bg-white border-2 border-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold ' + capacityClass + '">' +
-          String(Math.round(capacityPercentage)) + '%<\/div>' +
+          String(Math.round(capacityPercentage)) + '%</div>' +
         shortageBadge +
         waitingBadge +
         emergencyBadge +
-      '<\/div>';
+      '</div>';
 
     return L.divIcon({
       className: 'custom-hospital-marker',
@@ -465,7 +465,9 @@ export default function HospitalRedistributionMap({
               padding: [50, 50],
               maxZoom: 12
             });
-          } catch {}
+          } catch {
+            // fitBounds can fail if map is not visible
+          }
         }
       }, 100);
     }

@@ -5,4 +5,5 @@ export {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from './components/navigation/DropdownMenu';

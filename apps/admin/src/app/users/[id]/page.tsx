@@ -1,10 +1,11 @@
 'use client';
 
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@altamedica/ui';
-import { useToast } from '../../../hooks/use-toast';
+import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft, Save, User } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+
+import { useToast } from '@altamedica/ui';
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@altamedica/ui';
 
 interface UserData {
   id: string;
@@ -31,30 +32,14 @@ export default function EditUserPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    role: '',
-    status: '',
+    role: 'patient',
+    status: 'active',
     phoneNumber: '',
     address: '',
+    password: '',
   });
 
-  useEffect(() => {
-    if (userId && userId !== 'new') {
-      fetchUser();
-    } else if (userId === 'new') {
-      // Initialize form for new user
-      setFormData({
-        name: '',
-        email: '',
-        role: 'patient',
-        status: 'active',
-        phoneNumber: '',
-        address: '',
-      });
-      setLoading(false);
-    }
-  }, [userId]);
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}`, {
         headers: {
@@ -64,17 +49,18 @@ export default function EditUserPage() {
 
       if (!response.ok) throw new Error('Failed to fetch user');
 
-      const data = await response.json();
+      const data: { user: UserData } = await response.json();
       setUser(data.user);
       setFormData({
         name: data.user.name || '',
         email: data.user.email || '',
-        role: data.user.role || '',
-        status: data.user.status || '',
+        role: data.user.role || 'patient',
+        status: data.user.status || 'active',
         phoneNumber: data.user.phoneNumber || '',
         address: data.user.address || '',
+        password: '',
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to load user data',
@@ -84,7 +70,25 @@ export default function EditUserPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, router, toast]);
+
+  useEffect(() => {
+    if (userId && userId !== 'new') {
+      void fetchUser();
+    } else if (userId === 'new') {
+      // Initialize form for new user
+      setFormData({
+        name: '',
+        email: '',
+        role: 'patient',
+        status: 'active',
+        phoneNumber: '',
+        address: '',
+        password: '',
+      });
+      setLoading(false);
+    }
+  }, [userId, fetchUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,13 +102,25 @@ export default function EditUserPage() {
 
       const method = userId === 'new' ? 'POST' : 'PUT';
 
+      const body =
+        userId === 'new'
+          ? formData
+          : {
+              name: formData.name,
+              email: formData.email,
+              role: formData.role,
+              status: formData.status,
+              phoneNumber: formData.phoneNumber,
+              address: formData.address,
+            };
+
       const response = await fetch(url, {
         method,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) throw new Error('Failed to save user');
@@ -115,7 +131,7 @@ export default function EditUserPage() {
       });
 
       router.push('/users');
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to save user',
@@ -134,18 +150,20 @@ export default function EditUserPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-full">Loading...</div>;
+    return <div className="flex h-full items-center justify-center">Loading...</div>;
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="mx-auto max-w-4xl space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" onClick={() => router.push('/users')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Button variant="ghost" size="sm" onClick={() => router.push('/users')} type="button">
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Users
           </Button>
-          <h1 className="text-2xl font-bold">{userId === 'new' ? 'Add New User' : 'Edit User'}</h1>
+          <h1 className="text-2xl font-bold">
+            {userId === 'new' ? 'Add New User' : 'Edit User'}
+          </h1>
         </div>
       </div>
 
@@ -158,7 +176,7 @@ export default function EditUserPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">
                   Full Name *
@@ -195,7 +213,7 @@ export default function EditUserPage() {
                   id="role"
                   value={formData.role}
                   onChange={(e) => handleChange('role', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
+                  className="w-full rounded-md border px-3 py-2"
                   required
                 >
                   <option value="patient">Patient</option>
@@ -214,7 +232,7 @@ export default function EditUserPage() {
                   id="status"
                   value={formData.status}
                   onChange={(e) => handleChange('status', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
+                  className="w-full rounded-md border px-3 py-2"
                   required
                 >
                   <option value="active">Active</option>
@@ -254,7 +272,14 @@ export default function EditUserPage() {
                 <label htmlFor="password" className="text-sm font-medium">
                   Initial Password *
                 </label>
-                <Input id="password" type="password" placeholder="Minimum 8 characters" required />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Minimum 8 characters"
+                  required
+                  value={formData.password}
+                  onChange={(e) => handleChange('password', e.target.value)}
+                />
                 <p className="text-sm text-gray-500">
                   User will be required to change password on first login
                 </p>
@@ -262,7 +287,7 @@ export default function EditUserPage() {
             )}
 
             {user && (
-              <div className="pt-4 border-t">
+              <div className="border-t pt-4">
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
                   <div>
                     <span className="font-medium">Created:</span>{' '}
@@ -281,7 +306,7 @@ export default function EditUserPage() {
                 Cancel
               </Button>
               <Button type="submit" disabled={saving}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 {saving ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>

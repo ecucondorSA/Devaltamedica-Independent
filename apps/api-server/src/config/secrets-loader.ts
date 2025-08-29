@@ -1,6 +1,7 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import fs from 'fs';
 import path from 'path';
+import { logger } from '@altamedica/shared';
 
 /**
  * Carga secretos críticos desde AWS Secrets Manager o localmente
@@ -9,7 +10,7 @@ import path from 'path';
 export async function initSecrets() {
   // Si USE_LOCAL_SECRETS está activo, cargar secrets locales
   if (process.env.USE_LOCAL_SECRETS === 'true') {
-    console.log('[secrets-loader] 📁 Usando secrets locales para desarrollo');
+    logger.info('[secrets-loader] 📁 Usando secrets locales para desarrollo');
 
     try {
       // Intentar cargar desde config/local-secrets.json
@@ -32,19 +33,19 @@ export async function initSecrets() {
             localSecrets['altamedica/encryption'].ENCRYPTION_KEY || process.env.ENCRYPTION_KEY;
         }
 
-        console.log('[secrets-loader] ✅ Secrets locales cargados desde archivo');
+        logger.info('[secrets-loader] ✅ Secrets locales cargados desde archivo');
         return;
       }
     } catch (error) {
-      console.log('[secrets-loader] ⚠️ No se pudo cargar archivo local-secrets.json');
+      logger.warn('[secrets-loader] ⚠️ No se pudo cargar archivo local-secrets.json');
     }
 
     // Verificar que tengamos secrets en .env
     if (process.env.JWT_SECRET && process.env.JWT_REFRESH_SECRET) {
-      console.log('[secrets-loader] ✅ Usando secrets desde .env');
+      logger.info('[secrets-loader] ✅ Usando secrets desde .env');
       return;
     } else {
-      console.error(
+      logger.error(
         '[secrets-loader] ❌ No se encontraron JWT secrets. Ejecuta: node scripts/setup-local-secrets.js',
       );
       return;
@@ -56,7 +57,7 @@ export async function initSecrets() {
   const region = process.env.AWS_REGION || 'us-east-1';
 
   try {
-    console.log('[secrets-loader] ☁️ Intentando cargar desde AWS Secrets Manager...');
+    logger.info('[secrets-loader] ☁️ Intentando cargar desde AWS Secrets Manager...');
     const client = new SecretsManagerClient({ region });
     const command = new GetSecretValueCommand({ SecretId: secretName });
     const res = await client.send(command);
@@ -79,12 +80,12 @@ export async function initSecrets() {
       process.env.DATABASE_URL = process.env.DATABASE_URL || secrets.DATABASE_URL;
     }
 
-    console.log('[secrets-loader] ✅ Secrets cargados desde AWS');
+    logger.info('[secrets-loader] ✅ Secrets cargados desde AWS');
   } catch (error) {
-    console.warn(
+    logger.warn(
       '[secrets-loader] ⚠️ No se pudieron cargar secretos desde AWS:',
       (error as any)?.message,
     );
-    console.log('[secrets-loader] 📁 Usando variables de entorno locales como fallback');
+    logger.info('[secrets-loader] 📁 Usando variables de entorno locales como fallback');
   }
 }

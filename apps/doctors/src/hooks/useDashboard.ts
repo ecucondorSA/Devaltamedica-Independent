@@ -8,10 +8,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { User } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
-import { firebaseService } from '@altamedica/database';
+import { dbConnection } from '@altamedica/database';
 import { doctorService, DoctorStats, DoctorAppointment, DoctorPatient, DoctorAlert, DoctorActivity } from '../services/doctor-service';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Usar tipos del servicio de doctores
 export type DashboardStats = DoctorStats;
 export type TodayAppointment = DoctorAppointment;
@@ -96,13 +96,13 @@ export const useDashboard = (): UseDashboardReturn => {
         setIsLoading(true);
         
         // Verificar si Firebase está inicializado
-        if (!firebaseService.isReady) {
+        if (!(dbConnection as any).isReady) {
           logger.warn('Firebase no inicializado. Configure las credenciales.');
         }
         
         // Configurar listener de autenticación
         const unsubscribe = onAuthStateChanged(
-          firebaseService.authentication,
+          (dbConnection as any).authentication,
           async (firebaseUser) => {
             setUser(firebaseUser);
             
@@ -119,7 +119,7 @@ export const useDashboard = (): UseDashboardReturn => {
         return () => unsubscribe();
         
       } catch (err) {
-        logger.error('Error inicializando dashboard:', err);
+        logger.error('Error inicializando dashboard:', err as any);
         setError('Error al inicializar el dashboard');
         setIsLoading(false);
       }
@@ -158,7 +158,7 @@ export const useDashboard = (): UseDashboardReturn => {
       if (activityData.status === 'fulfilled') setRecentActivity(activityData.value);
       
     } catch (err) {
-      logger.error('Error cargando datos del dashboard:', err);
+      logger.error('Error cargando datos del dashboard:', err as any);
       setError('Error al cargar los datos del dashboard');
     }
   };
@@ -195,7 +195,7 @@ export const useDashboard = (): UseDashboardReturn => {
       }));
       
     } catch (err) {
-      logger.error('Error reconociendo alerta:', err);
+      logger.error('Error reconociendo alerta:', err as any);
       throw new Error('No se pudo reconocer la alerta');
     }
   }, []);
@@ -224,7 +224,7 @@ export const useDashboard = (): UseDashboardReturn => {
       }));
       
     } catch (err) {
-      logger.error('Error completando cita:', err);
+      logger.error('Error completando cita:', err as any);
       throw new Error('No se pudo completar la cita');
     }
   }, []);
@@ -253,9 +253,9 @@ export const useDashboard = (): UseDashboardReturn => {
 
       // Guardar en Firebase (opcional)
       try {
-        await doctorService.createTelemedicineSession(telemedicineSession);
+        await doctorService.createTelemedicineSession(telemedicineSession as any);
       } catch (err) {
-        logger.warn('No se pudo guardar la sesión en Firebase:', err);
+        logger.warn('No se pudo guardar la sesión en Firebase:', err as any);
       }
 
       // Actualizar estado local
@@ -272,7 +272,7 @@ export const useDashboard = (): UseDashboardReturn => {
       }));
 
     } catch (err) {
-      logger.error('Error iniciando sesión de telemedicina:', err);
+      logger.error('Error iniciando sesión de telemedicina:', err as any);
       throw new Error('No se pudo iniciar la sesión de telemedicina');
     }
   }, [user]);

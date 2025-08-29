@@ -104,49 +104,45 @@ export class AppointmentRepository extends BaseRepository<Appointment> {
     toDate?: Date;
     limit?: number;
   }): Promise<RepositoryResult<Appointment>> {
-    try {
-      const db = await this.ensureFirestore();
-      let query = db.collection(this.collectionName)
-        .where('patientId', '==', patientId);
+    const db = await this.ensureFirestore();
+    let query = db.collection(this.collectionName)
+      .where('patientId', '==', patientId);
 
-      // Aplicar filtros de estado
-      if (filters?.status && filters.status.length > 0) {
-        query = query.where('appointmentStatus', 'in', filters.status);
-      }
-
-      // Ordenar por fecha programada
-      query = query.orderBy('scheduledDate', 'desc');
-
-      if (filters?.limit) {
-        query = query.limit(filters.limit);
-      }
-
-      const snapshot = await query.get();
-      let appointments = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
-      } as Appointment));
-
-      // Filtrar por rango de fechas en memoria si es necesario
-      if (filters?.fromDate || filters?.toDate) {
-        appointments = appointments.filter(apt => {
-          const appointmentDate = new Date(apt.scheduledDate);
-          if (filters.fromDate && appointmentDate < filters.fromDate) return false;
-          if (filters.toDate && appointmentDate > filters.toDate) return false;
-          return true;
-        });
-      }
-
-      await this.logAudit('read_by_patient', 'collection', context, { patientId, filters });
-
-  return {
-        data: appointments,
-        total: appointments.length,
-        hasMore: false
-      };
-    } catch (error) {
-      throw error;
+    // Aplicar filtros de estado
+    if (filters?.status && filters.status.length > 0) {
+      query = query.where('appointmentStatus', 'in', filters.status);
     }
+
+    // Ordenar por fecha programada
+    query = query.orderBy('scheduledDate', 'desc');
+
+    if (filters?.limit) {
+      query = query.limit(filters.limit);
+    }
+
+    const snapshot = await query.get();
+    let appointments = snapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data() 
+    } as Appointment));
+
+    // Filtrar por rango de fechas en memoria si es necesario
+    if (filters?.fromDate || filters?.toDate) {
+      appointments = appointments.filter(apt => {
+        const appointmentDate = new Date(apt.scheduledDate);
+        if (filters.fromDate && appointmentDate < filters.fromDate) return false;
+        if (filters.toDate && appointmentDate > filters.toDate) return false;
+        return true;
+      });
+    }
+
+    await this.logAudit('read_by_patient', 'collection', context, { patientId, filters });
+
+    return {
+      data: appointments,
+      total: appointments.length,
+      hasMore: false
+    };
   }
 
   /**
@@ -158,259 +154,231 @@ export class AppointmentRepository extends BaseRepository<Appointment> {
     toDate?: Date;
     limit?: number;
   }): Promise<RepositoryResult<Appointment>> {
-    try {
-      const db = await this.ensureFirestore();
-      let query = db.collection(this.collectionName)
-        .where('doctorId', '==', doctorId);
+    const db = await this.ensureFirestore();
+    let query = db.collection(this.collectionName)
+      .where('doctorId', '==', doctorId);
 
-      // Aplicar filtros de estado
-      if (filters?.status && filters.status.length > 0) {
-        query = query.where('appointmentStatus', 'in', filters.status);
-      }
-
-      // Ordenar por fecha programada
-      query = query.orderBy('scheduledDate', 'asc');
-
-      if (filters?.limit) {
-        query = query.limit(filters.limit);
-      }
-
-      const snapshot = await query.get();
-      let appointments = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
-      } as Appointment));
-
-      // Filtrar por rango de fechas en memoria si es necesario
-      if (filters?.fromDate || filters?.toDate) {
-        appointments = appointments.filter(apt => {
-          const appointmentDate = new Date(apt.scheduledDate);
-          if (filters.fromDate && appointmentDate < filters.fromDate) return false;
-          if (filters.toDate && appointmentDate > filters.toDate) return false;
-          return true;
-        });
-      }
-
-      await this.logAudit('read_by_doctor', 'collection', context, { doctorId, filters });
-
-  return {
-        data: appointments,
-        total: appointments.length,
-        hasMore: false
-      };
-    } catch (error) {
-      throw error;
+    // Aplicar filtros de estado
+    if (filters?.status && filters.status.length > 0) {
+      query = query.where('appointmentStatus', 'in', filters.status);
     }
+
+    // Ordenar por fecha programada
+    query = query.orderBy('scheduledDate', 'asc');
+
+    if (filters?.limit) {
+      query = query.limit(filters.limit);
+    }
+
+    const snapshot = await query.get();
+    let appointments = snapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data() 
+    } as Appointment));
+
+    // Filtrar por rango de fechas en memoria si es necesario
+    if (filters?.fromDate || filters?.toDate) {
+      appointments = appointments.filter(apt => {
+        const appointmentDate = new Date(apt.scheduledDate);
+        if (filters.fromDate && appointmentDate < filters.fromDate) return false;
+        if (filters.toDate && appointmentDate > filters.toDate) return false;
+        return true;
+      });
+    }
+
+    await this.logAudit('read_by_doctor', 'collection', context, { doctorId, filters });
+
+    return {
+      data: appointments,
+      total: appointments.length,
+      hasMore: false
+    };
   }
 
   /**
    * Crear cita con número único
    */
   async createWithAppointmentNumber(data: Omit<Appointment, 'id' | 'createdAt' | 'updatedAt' | 'appointmentNumber'>, context: ServiceContext): Promise<Appointment> {
-    try {
-      // Generar número único de cita
-      const appointmentNumber = this.generateAppointmentNumber();
-      
-      const appointmentData = {
-        ...data,
-        appointmentNumber,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
+    // Generar número único de cita
+    const appointmentNumber = this.generateAppointmentNumber();
+    
+    const appointmentData = {
+      ...data,
+      appointmentNumber,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
-  const created = await this.create(appointmentData as any, context);
-  await this.logAudit('create_with_number', created.id, context, { appointmentNumber });
-  return created as Appointment;
-    } catch (error) {
-  throw error;
-    }
+    const created = await this.create(appointmentData as any, context);
+    await this.logAudit('create_with_number', created.id, context, { appointmentNumber });
+    return created as Appointment;
   }
 
   /**
    * Buscar citas por número
    */
   async findByAppointmentNumber(appointmentNumber: string, context: ServiceContext): Promise<Appointment | null> {
-    try {
-      const db = await this.ensureFirestore();
-      
-      const query = db.collection(this.collectionName)
-        .where('appointmentNumber', '==', appointmentNumber)
-        .limit(1);
+    const db = await this.ensureFirestore();
+    
+    const query = db.collection(this.collectionName)
+      .where('appointmentNumber', '==', appointmentNumber)
+      .limit(1);
 
-      const snapshot = await query.get();
-      
-      if (snapshot.empty) {
-  return null;
-      }
-
-      const appointment = { 
-        id: snapshot.docs[0].id, 
-        ...snapshot.docs[0].data() 
-      } as Appointment;
-
-  await this.logAudit('read_by_number', appointment.id, context, { appointmentNumber });
-  return appointment;
-    } catch (error) {
-  throw error;
+    const snapshot = await query.get();
+    
+    if (snapshot.empty) {
+      return null;
     }
+
+    const appointment = { 
+      id: snapshot.docs[0].id, 
+      ...snapshot.docs[0].data() 
+    } as Appointment;
+
+    await this.logAudit('read_by_number', appointment.id, context, { appointmentNumber });
+    return appointment;
   }
 
   /**
    * Actualizar estado de cita
    */
   async updateStatus(appointmentId: string, status: Appointment['appointmentStatus'], notes: string | undefined, context: ServiceContext): Promise<Appointment | null> {
-    try {
-      const updateData: any = {
-        appointmentStatus: status,
-        updatedAt: new Date()
-      };
+    const updateData: any = {
+      appointmentStatus: status,
+      updatedAt: new Date()
+    };
 
-      // Agregar timestamps según el estado
-      if (status === 'in_progress') {
-        updateData.actualStartTime = new Date();
-      } else if (status === 'completed') {
-        updateData.actualEndTime = new Date();
-        
-        // Calcular duración real si hay tiempo de inicio
-        const appointment = await this.findById(appointmentId, context);
-        if (appointment?.actualStartTime) {
-          const startTime = new Date(appointment.actualStartTime);
-          const endTime = new Date();
-          updateData.actualDuration = Math.floor((endTime.getTime() - startTime.getTime()) / 60000); // minutos
-        }
-      } else if (status === 'cancelled') {
-        updateData.cancellationDate = new Date();
+    // Agregar timestamps según el estado
+    if (status === 'in_progress') {
+      updateData.actualStartTime = new Date();
+    } else if (status === 'completed') {
+      updateData.actualEndTime = new Date();
+      
+      // Calcular duración real si hay tiempo de inicio
+      const appointment = await this.findById(appointmentId, context);
+      if (appointment?.actualStartTime) {
+        const startTime = new Date(appointment.actualStartTime);
+        const endTime = new Date();
+        updateData.actualDuration = Math.floor((endTime.getTime() - startTime.getTime()) / 60000); // minutos
       }
-
-      if (notes) {
-        updateData.internalNotes = notes;
-      }
-
-  const result = await this.update(appointmentId, updateData, context);
-  await this.logAudit('update_status', appointmentId, context, { status, notes });
-  return result as Appointment | null;
-    } catch (error) {
-  throw error;
+    } else if (status === 'cancelled') {
+      updateData.cancellationDate = new Date();
     }
+
+    if (notes) {
+      updateData.internalNotes = notes;
+    }
+
+    const result = await this.update(appointmentId, updateData, context);
+    await this.logAudit('update_status', appointmentId, context, { status, notes });
+    return result as Appointment | null;
   }
 
   /**
    * Reagendar cita
    */
   async reschedule(appointmentId: string, newScheduledDate: Date, newStartTime: string, newEndTime: string, reason: string | undefined, context: ServiceContext): Promise<Appointment | null> {
-    try {
-      const updateData = {
-        scheduledDate: newScheduledDate,
-        scheduledStartTime: newStartTime,
-        scheduledEndTime: newEndTime,
-        appointmentStatus: 'rescheduled' as const,
-        rescheduleReason: reason,
-        updatedAt: new Date()
-      };
+    const updateData = {
+      scheduledDate: newScheduledDate,
+      scheduledStartTime: newStartTime,
+      scheduledEndTime: newEndTime,
+      appointmentStatus: 'rescheduled' as const,
+      rescheduleReason: reason,
+      updatedAt: new Date()
+    };
 
-  const result = await this.update(appointmentId, updateData, context);
+    const result = await this.update(appointmentId, updateData, context);
       
-  await this.logAudit('reschedule', appointmentId, context, { 
-        appointmentId, 
-        newScheduledDate, 
-        newStartTime, 
-        newEndTime, 
-        reason 
-  });
+    await this.logAudit('reschedule', appointmentId, context, { 
+      appointmentId, 
+      newScheduledDate, 
+      newStartTime, 
+      newEndTime, 
+      reason 
+    });
 
-  return result as Appointment | null;
-    } catch (error) {
-  throw error;
-    }
+    return result as Appointment | null;
   }
 
   /**
    * Buscar conflictos de horario para un doctor
    */
   async findScheduleConflicts(doctorId: string, scheduledDate: Date, startTime: string, endTime: string, excludeAppointmentId: string | undefined, context: ServiceContext): Promise<RepositoryResult<Appointment>> {
-    try {
-  const db = await this.ensureFirestore();
+    const db = await this.ensureFirestore();
       
-      // Crear fecha de inicio y fin del día
-      const dayStart = new Date(scheduledDate);
-      dayStart.setHours(0, 0, 0, 0);
-      
-      const dayEnd = new Date(scheduledDate);
-      dayEnd.setHours(23, 59, 59, 999);
+    // Crear fecha de inicio y fin del día
+    const dayStart = new Date(scheduledDate);
+    dayStart.setHours(0, 0, 0, 0);
+    
+    const dayEnd = new Date(scheduledDate);
+    dayEnd.setHours(23, 59, 59, 999);
 
-      let query = db.collection(this.collectionName)
-        .where('doctorId', '==', doctorId)
-        .where('scheduledDate', '>=', dayStart)
-        .where('scheduledDate', '<=', dayEnd)
-        .where('appointmentStatus', 'in', ['scheduled', 'confirmed', 'in_progress']);
+    let query = db.collection(this.collectionName)
+      .where('doctorId', '==', doctorId)
+      .where('scheduledDate', '>=', dayStart)
+      .where('scheduledDate', '<=', dayEnd)
+      .where('appointmentStatus', 'in', ['scheduled', 'confirmed', 'in_progress']);
 
-      const snapshot = await query.get();
-      let appointments = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
-      } as Appointment));
+    const snapshot = await query.get();
+    let appointments = snapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data() 
+    } as Appointment));
 
-      // Filtrar por conflictos de horario y excluir cita actual si se especifica
-      const conflicts = appointments.filter(apt => {
-        if (excludeAppointmentId && apt.id === excludeAppointmentId) {
-          return false;
-        }
+    // Filtrar por conflictos de horario y excluir cita actual si se especifica
+    const conflicts = appointments.filter(apt => {
+      if (excludeAppointmentId && apt.id === excludeAppointmentId) {
+        return false;
+      }
 
-        return this.hasTimeConflict(
-          apt.scheduledStartTime, apt.scheduledEndTime,
-          startTime, endTime
-        );
-      });
+      return this.hasTimeConflict(
+        apt.scheduledStartTime, apt.scheduledEndTime,
+        startTime, endTime
+      );
+    });
 
-      await this.logAudit('check_conflicts', 'collection', context, { 
-        doctorId, 
-        scheduledDate, 
-        startTime, 
-        endTime,
-        conflictsFound: conflicts.length 
-      });
+    await this.logAudit('check_conflicts', 'collection', context, { 
+      doctorId, 
+      scheduledDate, 
+      startTime, 
+      endTime,
+      conflictsFound: conflicts.length 
+    });
 
-  return {
-        data: conflicts,
-        total: conflicts.length,
-        hasMore: false
-      };
-    } catch (error) {
-      throw error;
-    }
+    return {
+      data: conflicts,
+      total: conflicts.length,
+      hasMore: false
+    };
   }
 
   /**
    * Buscar citas de telemedicina activas
    */
   async findActiveTelemedicine(context: ServiceContext): Promise<RepositoryResult<Appointment>> {
-    try {
-      const db = await this.ensureFirestore();
-      
-      const now = new Date();
-      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-      
-      const query = db.collection(this.collectionName)
-        .where('isTelemedicine', '==', true)
-        .where('appointmentStatus', 'in', ['confirmed', 'in_progress'])
-        .where('scheduledDate', '>=', oneHourAgo);
+    const db = await this.ensureFirestore();
+    
+    const now = new Date();
+    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+    
+    const query = db.collection(this.collectionName)
+      .where('isTelemedicine', '==', true)
+      .where('appointmentStatus', 'in', ['confirmed', 'in_progress'])
+      .where('scheduledDate', '>=', oneHourAgo);
 
-      const snapshot = await query.get();
-      const appointments = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
-      } as Appointment));
+    const snapshot = await query.get();
+    const appointments = snapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data() 
+    } as Appointment));
 
-      await this.logAudit('read_active_telemedicine', 'collection', context, { count: appointments.length });
+    await this.logAudit('read_active_telemedicine', 'collection', context, { count: appointments.length });
 
-  return {
-        data: appointments,
-        total: appointments.length,
-        hasMore: false
-      };
-    } catch (error) {
-      throw error;
-    }
+    return {
+      data: appointments,
+      total: appointments.length,
+      hasMore: false
+    };
   }
 
   /**

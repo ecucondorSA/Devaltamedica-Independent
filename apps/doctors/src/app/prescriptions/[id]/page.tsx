@@ -28,7 +28,7 @@ import {
 } from '@/hooks/queries/usePrescriptions'
 import { usePatient } from '@/hooks/queries/usePatients'
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export default function PrescriptionDetailPage() {
   const router = useRouter()
   const params = useParams()
@@ -111,7 +111,7 @@ export default function PrescriptionDetailPage() {
       await cancelPrescription.mutateAsync(prescriptionId)
       setShowCancelModal(false)
     } catch (error) {
-      logger.error('Failed to cancel prescription:', error)
+      logger.error('Failed to cancel prescription:', String(error))
     }
   }
 
@@ -120,7 +120,7 @@ export default function PrescriptionDetailPage() {
       await refillPrescription.mutateAsync(prescriptionId)
       setShowRefillModal(false)
     } catch (error) {
-      logger.error('Failed to refill prescription:', error)
+      logger.error('Failed to refill prescription:', String(error))
     }
   }
 

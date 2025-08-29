@@ -3,6 +3,8 @@
  * Unified error handling for the application
  */
 
+import { logger } from '@altamedica/shared';
+
 export enum ErrorCode {
   // Authentication errors (1000-1099)
   UNAUTHORIZED = 'AUTH_001',
@@ -194,7 +196,7 @@ export function errorHandler(
   next: any
 ) {
   // Log error
-  console.error('Error:', {
+  logger.error('Request error', {
     name: err.name,
     message: err.message,
     stack: err.stack,
@@ -331,7 +333,7 @@ export class ErrorLogger {
       // Send to logging service (e.g., CloudWatch, Datadog, etc.)
       this.sendToLoggingService(errorLog);
     } else {
-      console.error('Error Log:', errorLog);
+      logger.error('Error Log', errorLog);
     }
   }
   

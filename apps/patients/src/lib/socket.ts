@@ -50,7 +50,7 @@ class SocketManager {
       });
 
       this.socket.on('connect_error', (error) => {
-        logger.error('❌ Error de conexión Socket.IO:', error);
+        logger.error('❌ Error de conexión Socket.IO:', String(error));
         this.isConnected = false;
         reject(error);
       });
@@ -66,7 +66,7 @@ class SocketManager {
       });
 
       this.socket.on('reconnect_error', (error) => {
-        logger.error('❌ Error de reconexión Socket.IO:', error);
+        logger.error('❌ Error de reconexión Socket.IO:', String(error));
         this.reconnectAttempts++;
         
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {

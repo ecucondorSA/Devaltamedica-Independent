@@ -56,8 +56,8 @@ export function validateInput(data: any): { isValid: boolean; errors: string[] }
     /<meta[\s\S]*?>/gi, // Meta tags
     /expression\s*\(/gi, // CSS expression
     /url\s*\(\s*javascript:/gi, // CSS javascript
-    /&\#\d+;/gi, // HTML entities
-    /&\#x[0-9a-f]+;/gi, // Hex entities
+    /&#\d+;/gi, // HTML entities
+    /&#x[0-9a-f]+;/gi, // Hex entities
     /%3cscript/gi, // URL encoded script
     /%3ciframe/gi, // URL encoded iframe
     /vbscript:/gi, // VBScript

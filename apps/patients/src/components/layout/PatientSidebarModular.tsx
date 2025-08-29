@@ -12,7 +12,7 @@ import {
   Calendar, FileText, Pill, User, Heart, Activity, Bell, Settings, LogOut,
   Menu, X, Home, Video, Phone, Download, HelpCircle, Shield, AlertTriangle
 } from 'lucide-react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
 import { logger } from '@altamedica/shared';
 // 📝 TIPOS ROBUSTOS PARA NAVEGACIÓN
@@ -241,7 +241,7 @@ function useSidebarState(config?: SidebarConfig) {
           setIsCollapsed(state.isCollapsed || false);
         }
       } catch (error) {
-        logger.warn('Error loading sidebar state:', error);
+        logger.warn('Error loading sidebar state:', String(error));
       }
     }
   }, [config?.persistState]);
@@ -252,7 +252,7 @@ function useSidebarState(config?: SidebarConfig) {
       try {
         localStorage.setItem(storageKey, JSON.stringify({ isCollapsed: collapsed }));
       } catch (error) {
-        logger.warn('Error saving sidebar state:', error);
+        logger.warn('Error saving sidebar state:', String(error));
       }
     }
   }, [config?.persistState]);
@@ -309,7 +309,7 @@ export default function PatientSidebarModular({
       await logout();
       closeOnMobile();
     } catch (error) {
-      logger.error('Logout failed:', error);
+      logger.error('Logout failed:', String(error));
       onError?.(error instanceof Error ? error : new Error('Logout failed'));
     }
   }, [logout, closeOnMobile, onError]);

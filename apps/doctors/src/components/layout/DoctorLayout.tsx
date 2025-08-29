@@ -213,12 +213,12 @@ export default function DoctorLayout({ children }: DoctorLayoutProps) {
             {sidebarOpen && (
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                  {user?.name?.charAt(0).toUpperCase() || 'D'}
+                  {user ? (user as any).name?.charAt(0).toUpperCase() : 'D'}
                 </div>
                 <div>
-                  <p className="text-sm font-medium">{user?.name || 'Doctor'}</p>
+                  <p className="text-sm font-medium">{user ? (user as any).name : 'Doctor'}</p>
                   <p className="text-xs text-gray-500">
-                    {user?.specialization || 'General Practice'}
+                    {user ? (user as any).specialization : 'General Practice'}
                   </p>
                 </div>
               </div>

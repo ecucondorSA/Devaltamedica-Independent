@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { getFirebaseFirestore } from '../../../adapters/firebase';
 import type { DataCollector, DateRange, CollectionResult, DataCategory } from '../types';
+import { logger } from '../../logger.service';
 
 /**
  * Base abstract class for all data collectors
@@ -43,7 +44,7 @@ export abstract class BaseCollector<T = any> implements DataCollector<T> {
 
       return sanitizedData;
     } catch (error) {
-      console.error(`[${this.category}Collector] Error collecting data:`, error);
+      logger.error(`Error collecting data for ${this.category}`, `${this.category}Collector`, error);
       throw new Error(`Failed to collect ${this.category} data: ${error}`);
     }
   }

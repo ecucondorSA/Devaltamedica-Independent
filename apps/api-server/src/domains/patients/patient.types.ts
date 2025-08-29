@@ -29,22 +29,9 @@ export const CreatePatientSchema = z.object({
 
 export const UpdatePatientSchema = CreatePatientSchema.partial().omit({ userId: true });
 
-export import { Patient } from '@altamedica/types';
-  emergencyContact?: {
-    name: string;
-    relationship: string;
-    phoneNumber: string;
-  };
-  insuranceInfo?: {
-    provider?: string;
-    policyNumber?: string;
-    groupNumber?: string;
-  };
-  medicalHistory?: string[];
-  assignedDoctor?: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+import { Patient } from '@altamedica/types';
+
+export type { Patient };
 
 export interface PatientQueryOptions {
   doctorId?: string;
@@ -53,9 +40,11 @@ export interface PatientQueryOptions {
   limit?: number;
   sortBy?: 'name' | 'createdAt' | 'updatedAt';
   sortOrder?: 'asc' | 'desc';
+}
 
 export interface PatientStats {
   totalPatients: number;
   activePatients: number;
   recentRegistrations: number;
   avgAge: number;
+}

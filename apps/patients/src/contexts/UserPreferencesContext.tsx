@@ -154,7 +154,7 @@ export function UserPreferencesProvider({ children, userId }: UserPreferencesPro
           dispatch({ type: 'LOAD_PREFERENCES', payload: parsed });
         }
       } catch (error) {
-        logger.error('Error cargando preferencias:', error);
+        logger.error('Error cargando preferencias:', String(error));
       } finally {
         setIsLoading(false);
       }
@@ -172,7 +172,7 @@ export function UserPreferencesProvider({ children, userId }: UserPreferencesPro
           JSON.stringify(preferences)
         );
       } catch (error) {
-        logger.error('Error guardando preferencias:', error);
+        logger.error('Error guardando preferencias:', String(error));
       }
     }
   }, [preferences, userId, isLoading]);

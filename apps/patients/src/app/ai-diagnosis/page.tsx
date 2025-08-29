@@ -448,7 +448,7 @@ export default function AIDiagnosisPage() {
         setShowUsageWarning(true);
       }
     } catch (error) {
-      // logger.error('Error verificando restricciones:', error);
+      // logger.error('Error verificando restricciones:', String(error));
       // Si hay error, permitir uso
       setUsageRestriction({
         can_use: true,
@@ -491,7 +491,7 @@ export default function AIDiagnosisPage() {
 
       // logger.info('✅ Diagnóstico guardado localmente:', diagnosisId);
     } catch {
-      // logger.error('❌ Error guardando diagnóstico:', error);
+      // logger.error('❌ Error guardando diagnóstico:', String(error));
     } finally {
       setIsSubmittingDiagnosis(false);
     }

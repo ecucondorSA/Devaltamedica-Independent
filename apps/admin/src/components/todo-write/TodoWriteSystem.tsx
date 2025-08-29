@@ -6,7 +6,7 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
+import React, { useState } from 'react';
 import {
   AlertTriangle,
   BarChart3,
@@ -19,7 +19,8 @@ import {
   Trash2,
   Users,
 } from 'lucide-react';
-import React, { useState } from 'react';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@altamedica/ui';
 
 // ============================================================================
 // TIPOS Y INTERFACES
@@ -116,7 +117,7 @@ export const TodoWriteSystem: React.FC = () => {
   };
 
   const deleteTask = (taskId: string) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
       updateMetrics();
     }
@@ -325,10 +326,10 @@ export const TodoWriteSystem: React.FC = () => {
                           task.priority === 'critical'
                             ? 'bg-red-100 text-red-800'
                             : task.priority === 'high'
-                              ? 'bg-orange-100 text-orange-800'
-                              : task.priority === 'medium'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-green-100 text-green-800'
+                            ? 'bg-orange-100 text-orange-800'
+                            : task.priority === 'medium'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-green-100 text-green-800'
                         }`}
                       >
                         {task.priority}
@@ -338,10 +339,10 @@ export const TodoWriteSystem: React.FC = () => {
                           task.status === 'completed'
                             ? 'bg-green-100 text-green-800'
                             : task.status === 'in-progress'
-                              ? 'bg-blue-100 text-blue-800'
-                              : task.status === 'review'
-                                ? 'bg-purple-100 text-purple-800'
-                                : 'bg-gray-100 text-gray-800'
+                            ? 'bg-blue-100 text-blue-800'
+                            : task.status === 'review'
+                            ? 'bg-purple-100 text-purple-800'
+                            : 'bg-gray-100 text-gray-800'
                         }`}
                       >
                         {task.status}
@@ -433,5 +434,3 @@ export const TodoWriteSystem: React.FC = () => {
     </div>
   );
 };
-
-export default TodoWriteSystem;

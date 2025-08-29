@@ -20,11 +20,11 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@altamedica/ui";
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { useMarketplaceJobs, useJobApplications, useDoctorProfile } from '@altamedica/marketplace-hooks';
 import { useTelemedicineUnified } from '@altamedica/telemedicine-core';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface PatientInfo {
   id: string;
   name: string;
@@ -79,13 +79,14 @@ interface AppointmentDetail {
 export default function DoctorAppointmentDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { authState } = useAuth();
+  const authContext = useAuth();
+  const authState = authContext;
   const appointmentId = params.id as string;
   
   // Marketplace hooks para comunicación mejorada
-  const { profile: doctorProfile } = useDoctorProfile(authState?.user?.id);
+  const { profile: doctorProfile } = useDoctorProfile();
   const { jobs, searchJobs } = useMarketplaceJobs();
-  const { applications } = useJobApplications(authState?.user?.id);
+  const { applications } = useJobApplications();
   
   // Hook unificado de telemedicina + marketplace
   const telemedicineUnified = useTelemedicineUnified({
@@ -101,10 +102,10 @@ export default function DoctorAppointmentDetailPage() {
 
   // Cargar datos de la cita
   useEffect(() => {
-    if (appointmentId && authState?.token) {
+    if (appointmentId && authState?.user) {
       loadAppointmentDetail();
     }
-  }, [appointmentId, authState?.token]);
+  }, [appointmentId, authState?.user]);
 
   // Verificar si se puede iniciar la consulta
   useEffect(() => {
@@ -120,14 +121,14 @@ export default function DoctorAppointmentDetailPage() {
   }, [appointment]);
 
   const loadAppointmentDetail = async () => {
-    if (!authState?.token) return;
+    if (!authState?.user) return;
     
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await fetch(`/api/v1/doctors/appointments/${appointmentId}`, {
-        headers: { Authorization: `Bearer ${authState.token}` },
+        headers: { Authorization: `Bearer ${authState.user?.uid || ''}` },
       });
 
       const responseJson = await response.json();
@@ -146,8 +147,8 @@ export default function DoctorAppointmentDetailPage() {
 
   const handleStartTelemedicine = async () => {
     try {
-      // Inicializar sesión usando el hook unificado
-      await telemedicineUnified.initializeSession();
+      // Conectar usando el hook unificado
+      await telemedicineUnified.connect();
       
       if (appointment?.telemedicineInfo?.joinUrl) {
         window.open(appointment.telemedicineInfo.joinUrl, '_blank');
@@ -157,7 +158,7 @@ export default function DoctorAppointmentDetailPage() {
         router.push(`/telemedicine/session/${sessionId}`);
       }
     } catch (error) {
-      logger.error('Error starting telemedicine session:', error);
+      logger.error('Error starting telemedicine session:', String(error));
       alert('Error al iniciar la videollamada. Por favor intenta nuevamente.');
     }
   };
@@ -170,7 +171,7 @@ export default function DoctorAppointmentDetailPage() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authState.token}`,
+          Authorization: `Bearer ${authState.user?.uid || ''}`,
         },
         body: JSON.stringify({ 
           status: 'completed',

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireRole } from '../../../lib/auth-middleware';
 import { marketplaceService } from '../../../lib/firestore-stub';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Fallback data for when Firestore is not available
 const fallbackMarketplaceOffers = [
   {
@@ -172,7 +172,7 @@ const fallbackMarketplaceOffers = [
   },
 ];
 
-export const GET = requireRole(['doctor'], async (request: NextRequest, user: any) => {
+export const GET = requireRole(['DOCTOR' as any], async (request: NextRequest, user: any) => {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
@@ -193,6 +193,9 @@ export const GET = requireRole(['doctor'], async (request: NextRequest, user: an
         remote: remote || undefined,
       };
 
+      if (!marketplaceService) {
+        throw new Error('Marketplace service not available');
+      }
       const offers = await marketplaceService.getOffers(filters);
 
       return NextResponse.json({
@@ -203,7 +206,7 @@ export const GET = requireRole(['doctor'], async (request: NextRequest, user: an
         filters,
       });
     } catch (firestoreError) {
-      logger.warn('Firestore unavailable, using fallback data:', firestoreError);
+      logger.warn('Firestore unavailable, using fallback data:', String(firestoreError));
 
       // Fallback to mock data with filtering
       let filteredOffers = fallbackMarketplaceOffers;
@@ -259,7 +262,7 @@ export const GET = requireRole(['doctor'], async (request: NextRequest, user: an
       });
     }
   } catch (error) {
-    logger.error('Error obteniendo ofertas del marketplace:', error);
+    logger.error('Error obteniendo ofertas del marketplace:', String(error));
     return NextResponse.json(
       {
         success: false,
@@ -271,7 +274,7 @@ export const GET = requireRole(['doctor'], async (request: NextRequest, user: an
   }
 });
 
-export const POST = requireRole(['doctor'], async (request: NextRequest, user: any) => {
+export const POST = requireRole(['DOCTOR' as any], async (request: NextRequest, user: any) => {
   try {
     const body = await request.json();
 
@@ -287,6 +290,9 @@ export const POST = requireRole(['doctor'], async (request: NextRequest, user: a
 
     try {
       // Try to save to Firestore
+      if (!marketplaceService) {
+        throw new Error('Marketplace service not available');
+      }
       const applicationId = await marketplaceService.applyToOffer({
         offerId,
         doctorId,
@@ -311,7 +317,7 @@ export const POST = requireRole(['doctor'], async (request: NextRequest, user: a
         },
       });
     } catch (firestoreError) {
-      logger.warn('Firestore unavailable, simulating application:', firestoreError);
+      logger.warn('Firestore unavailable, simulating application:', String(firestoreError));
 
       // Fallback simulation
       const application = {
@@ -332,7 +338,7 @@ export const POST = requireRole(['doctor'], async (request: NextRequest, user: a
       });
     }
   } catch (error) {
-    logger.error('Error procesando aplicación:', error);
+    logger.error('Error procesando aplicación:', String(error));
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },
       { status: 500 },

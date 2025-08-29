@@ -8,6 +8,13 @@ export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth';
 // Hooks especializados (desde el nuevo useAuth consolidado)
 export { useProtectedRoute, useRequireAuth, useRole } from './hooks/useAuth';
 
+// Componentes de protección de rutas
+export { AuthGuard } from './components/AuthGuard';
+export type { AuthGuardProps } from './components/AuthGuard';
+
+// UserRole exportado desde AuthService
+export { UserRole } from './services/AuthService';
+
 // Tipos principales (desde AuthService consolidado)
 // UserRole proviene del paquete central de tipos
 // Importar UserRole desde paquete de tipos central. Si hay problemas de resolución durante build temprano,

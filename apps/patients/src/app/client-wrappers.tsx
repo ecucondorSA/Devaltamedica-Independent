@@ -1,5 +1,7 @@
 'use client';
 
+import { logger } from '@altamedica/shared/services/logger.service';
+
 /**
  * Archivo unificado de wrappers cliente para componentes que requieren 'use client'
  * Consolida todos los wrappers pequeños en un solo lugar para mejor mantenimiento
@@ -52,7 +54,7 @@ export function EmergencyBannerWrapper() {
       onDismiss={dismiss}
       onEmergencyCall={() => {
         // Lógica para llamada de emergencia
-        console.log('Llamada de emergencia iniciada');
+        logger.info('Llamada de emergencia iniciada');
       }}
       autoHide={emergency.autoHide}
       autoHideDelay={emergency.autoHideDelay}

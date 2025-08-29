@@ -4,11 +4,11 @@
  * Incluye real-time updates, HIPAA compliance, y emergency alerts
  */
 
+import { useCallback, useEffect, useState } from 'react';
+
 import { MetricCardProps } from '@altamedica/ui';
 
-import { useState, useEffect, useCallback } from 'react';
-
-import { useRealTimeUpdates, RealTimeUpdate } from './useRealTimeUpdates';
+import { RealTimeUpdate, useRealTimeUpdates } from './useRealTimeUpdates';
 
 export interface AdminMetrics {
   totalUsers: number;
@@ -79,15 +79,17 @@ export const useEnhancedAdminDashboard = () => {
         throw new Error('Failed to fetch admin metrics');
       }
 
-      const metrics = await metricsResponse.json() as { data: AdminMetrics };
+      const metrics = (await metricsResponse.json()) as { data: AdminMetrics };
 
       // Fetch system status
       const statusResponse = await fetch('/api/v1/admin/system-status');
-      const systemStatus = await statusResponse.json() as { data: { status: 'healthy' | 'warning' | 'critical'; emergencyAlerts?: string[] } };
+      const systemStatus = (await statusResponse.json()) as {
+        data: { status: 'healthy' | 'warning' | 'critical'; emergencyAlerts?: string[] };
+      };
 
       // Fetch compliance status
       const complianceResponse = await fetch('/api/v1/admin/compliance-status');
-      const complianceStatus = await complianceResponse.json() as { data: ComplianceStatus };
+      const complianceStatus = (await complianceResponse.json()) as { data: ComplianceStatus };
 
       const dashboardData: AdminDashboardData = {
         metrics: metrics.data,

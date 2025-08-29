@@ -61,7 +61,7 @@ function PatientLayoutModularContent({
 
   const handleError = useCallback(
     (error: Error) => {
-      logger.error('Layout Error:', error);
+      logger.error('Layout Error:', String(error));
       onError?.(error);
     },
     [onError],

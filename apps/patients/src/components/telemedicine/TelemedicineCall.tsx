@@ -28,7 +28,7 @@ import {
 import { Button } from '@altamedica/ui';
 import { Card } from '@altamedica/ui';
 import { Badge } from '@altamedica/ui';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useToast } from '../../hooks/useToast';
 
 import { logger } from '@altamedica/shared';
@@ -178,7 +178,7 @@ export default function TelemedicineCall({
     });
 
     newSocket.on('error', (error) => {
-      logger.error('Socket error:', error);
+      logger.error('Socket error:', String(error));
       toast({
         title: 'Error de conexión',
         description: error.message || 'Error desconocido',
@@ -254,7 +254,7 @@ export default function TelemedicineCall({
 
       logger.info('WebRTC initialized successfully');
     } catch (error) {
-      logger.error('Error initializing WebRTC:', error);
+      logger.error('Error initializing WebRTC:', String(error));
       toast({
         title: 'Error de cámara/micrófono',
         description: 'No se pudo acceder a la cámara o micrófono',
@@ -354,7 +354,7 @@ export default function TelemedicineCall({
         }
       }
     } catch (error) {
-      logger.error('Error toggling screen share:', error);
+      logger.error('Error toggling screen share:', String(error));
       toast({
         title: 'Error al compartir pantalla',
         description: 'No se pudo iniciar la compartición de pantalla',

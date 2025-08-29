@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, Input } from '@altamedica/ui';
+import React from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -15,7 +15,6 @@ import {
   Wifi,
   Zap,
 } from 'lucide-react';
-import React from 'react';
 
 interface SystemHealthData {
   status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
@@ -106,7 +105,9 @@ const SystemHealth: React.FC<SystemHealthProps> = ({ health, onRefresh }) => {
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-700">Estado General</h3>
               <div
-                className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(health.status)}`}
+                className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(
+                  health.status,
+                )}`}
               >
                 {getHealthIcon(health.status)}
                 <span className="ml-1">{health.status}</span>

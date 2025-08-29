@@ -5,11 +5,7 @@
     "api-server": {
       "app": "api-server",
       "packageJsonExists": true,
-      "expected": [
-        "@altamedica/types",
-        "@altamedica/database",
-        "@altamedica/auth"
-      ],
+      "expected": ["@altamedica/types", "@altamedica/database", "@altamedica/auth"],
       "actual": [
         "@altamedica/ai-agents",
         "@altamedica/api-helpers",
@@ -596,9 +592,7 @@
         "@altamedica/utils",
         "@altamedica/eslint-config"
       ],
-      "missing": [
-        "@altamedica/types"
-      ],
+      "missing": ["@altamedica/types"],
       "duplicateCode": [
         {
           "file": "app\\marketplace\\applications\\page.tsx",
@@ -1289,7 +1283,5 @@
       "integrationScore": 100
     }
   },
-  "recommendations": [
-    "pnpm --filter doctors add @altamedica/types@workspace:*"
-  ]
+  "recommendations": ["pnpm --filter doctors add @altamedica/types@workspace:*"]
 }

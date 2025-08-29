@@ -1,5 +1,5 @@
 // Cliente WebRTC para telemedicina
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
 export class WebRTCClient {
   private serverUrl: string;

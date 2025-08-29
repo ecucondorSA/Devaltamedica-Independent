@@ -12,7 +12,7 @@ export interface AuditLog {
   actorType: string;
   resource: string;
   action: string;
-  timestamp: string | Date;
+  timestamp: Date;
   metadata?: Record<string, any>;
 }
 
@@ -86,7 +86,16 @@ const fetchAuditLogs = async (
     throw new Error(`Error ${response.status}: ${response.statusText}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  
+  // Parse timestamps
+  if (result.data) {
+    result.data.forEach((log: any) => {
+      log.timestamp = new Date(log.timestamp);
+    });
+  }
+
+  return result;
 };
 
 /**

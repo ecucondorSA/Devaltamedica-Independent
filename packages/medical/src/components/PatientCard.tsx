@@ -28,10 +28,10 @@ export const PatientCard: React.FC<PatientCardProps> = ({
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <h3 className="font-semibold text-lg">{patient.name}</h3>
-          <p className="text-gray-600 text-sm">{patient.email}</p>
-          {patient.phoneNumber && (
+          {/* <p className="text-gray-600 text-sm">{patient.email}</p> */}
+          {/* {patient.phoneNumber && (
             <p className="text-gray-500 text-sm">{patient.phoneNumber}</p>
-          )}
+          )} */}
         </div>
         {age !== null && (
           <div className="text-right">

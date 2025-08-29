@@ -58,7 +58,7 @@ export class AltaMedicaVideoCallClient {
 
       return await response.json();
     } catch (error) {
-      logger.error('Error creating video call:', error);
+      logger.error('Error creating video call:', String(error));
       return {
         success: false,
         room_id: '',
@@ -80,7 +80,7 @@ export class AltaMedicaVideoCallClient {
 
       return await response.json();
     } catch (error) {
-      logger.error('Error getting call status:', error);
+      logger.error('Error getting call status:', String(error));
       return {
         error: error instanceof Error ? error.message : 'Unknown error'
       };
@@ -92,7 +92,7 @@ export class AltaMedicaVideoCallClient {
       const response = await fetch(`${this.baseUrl}/health`);
       return response.ok;
     } catch (error) {
-      logger.error('Video server health check failed:', error);
+      logger.error('Video server health check failed:', String(error));
       return false;
     }
   }

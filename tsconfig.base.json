@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@/types": ["apps/doctors/src/types"],
       "@altamedica/*": ["./packages/*/src"]
     },
     "types": ["node"],

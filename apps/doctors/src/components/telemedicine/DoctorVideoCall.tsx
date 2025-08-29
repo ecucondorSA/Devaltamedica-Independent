@@ -16,7 +16,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface DoctorVideoCallProps {
   roomId: string;
   patientId: string;
@@ -190,7 +190,7 @@ export default function DoctorVideoCall({
       };
 
     } catch (error) {
-      logger.error('Error inicializando WebRTC:', error);
+      logger.error('Error inicializando WebRTC:', String(error));
       if (onError) {
         onError('Error al acceder a la cámara o micrófono');
       }
@@ -212,7 +212,7 @@ export default function DoctorVideoCall({
         });
       }
     } catch (error) {
-      logger.error('Error creando oferta:', error);
+      logger.error('Error creando oferta:', String(error));
     }
   };
 
@@ -232,7 +232,7 @@ export default function DoctorVideoCall({
         });
       }
     } catch (error) {
-      logger.error('Error manejando oferta:', error);
+      logger.error('Error manejando oferta:', String(error));
     }
   };
 
@@ -243,7 +243,7 @@ export default function DoctorVideoCall({
     try {
       await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer));
     } catch (error) {
-      logger.error('Error manejando respuesta:', error);
+      logger.error('Error manejando respuesta:', String(error));
     }
   };
 
@@ -254,7 +254,7 @@ export default function DoctorVideoCall({
     try {
       await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate));
     } catch (error) {
-      logger.error('Error agregando candidato ICE:', error);
+      logger.error('Error agregando candidato ICE:', String(error));
     }
   };
 

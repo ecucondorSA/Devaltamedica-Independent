@@ -27,10 +27,10 @@ export const medicalLogger = {
   warn: (message: string, meta?: any) => logger.warn(`[MEDICAL WARN] ${message}`, meta),
 };
 
-const logger = {
+const localLogger = {
   info: (message: string, meta?: any) => logger.info(`[INFO] ${message}`, meta),
   error: (message: string, meta?: any) => logger.error(`[ERROR] ${message}`, meta),
   warn: (message: string, meta?: any) => logger.warn(`[WARN] ${message}`, meta),
 };
 
-export default logger;
+export default localLogger;

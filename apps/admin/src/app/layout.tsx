@@ -1,8 +1,10 @@
 'use client';
 
-import AdminLayout from '../components/layout/AdminLayout';
-import { AuthProvider } from '@altamedica/auth';
 import type { ReactNode } from 'react';
+
+import { AuthProvider } from '@altamedica/auth';
+
+import AdminLayout from '@/components/layout/AdminLayout';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {

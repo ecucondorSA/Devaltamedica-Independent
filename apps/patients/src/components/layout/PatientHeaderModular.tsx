@@ -7,7 +7,7 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Bell, Search, User, X, Menu } from 'lucide-react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
 // 📝 TIPOS ESPECÍFICOS DEL HEADER
 export interface PatientHeaderProps {

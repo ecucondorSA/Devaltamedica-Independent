@@ -4,8 +4,8 @@
  * @description Hooks para autenticación, autorización y gestión de usuarios
  */
 
-// Hooks principales que existen
-export { useAuth } from './useAuth';
+// Hooks principales que existen (useAuth canónico desde @altamedica/auth)
+export { useAuth } from '@altamedica/auth';
 export { AuthProvider, useAuthContext, type AuthContextValue, type AuthProviderProps } from './AuthProvider';
 
 // Tipos principales que existen

@@ -3,8 +3,8 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth  } from '@altamedica/auth';;
-import { logger } from '@altamedica/shared/services/logger.service';
+import useAuth from '@altamedica/auth';
+import { logger } from '@altamedica/shared';
 import {
   Calendar,
   Clock,
@@ -108,7 +108,7 @@ export default function TelemedicineDashboardPage() {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setIsLoading(false);
       } catch (error) {
-        logger.error('Error loading sessions:', error);
+        logger.error('Error loading sessions:', String(error));
         setIsLoading(false);
       }
     };

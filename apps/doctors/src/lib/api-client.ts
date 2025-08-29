@@ -1,6 +1,6 @@
 import { createApiClient } from '@altamedica/api-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Configuración base apuntando al api-server local en dev
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
 
@@ -9,7 +9,7 @@ export const apiClient = createApiClient({
   onError: (err) => {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      logger.error('[API Client]', err);
+      logger.error('[API Client]', JSON.stringify(err, null, 2));
     }
   }
 });

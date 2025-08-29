@@ -70,31 +70,30 @@ export default function NewPatientPage() {
   const [newCondition, setNewCondition] = useState('')
   const [newMedication, setNewMedication] = useState('')
 
-  const handleInputChange = (field: string, value: any) => {
-    if (field.includes('.')) {
-      const [parent, child] = field.split('.')
-      setFormData(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof typeof prev],
-          [child]: value
-        }
-      }))
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [field]: value
-      }))
-    }
+  const handleInputChange = (field: keyof PatientFormData | `address.${keyof PatientFormData['address']}`, value: any) => {
+    setFormData(prev => {
+      if (field.startsWith('address.')) {
+        const subField = field.split('.')[1] as keyof PatientFormData['address'];
+        return {
+          ...prev,
+          address: {
+            ...prev.address,
+            [subField]: value
+          }
+        };
+      }
+      return { ...prev, [field]: value };
+    });
+
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => {
-        const newErrors = { ...prev }
-        delete newErrors[field]
-        return newErrors
-      })
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
-  }
+  };
 
   const addItem = (type: 'allergies' | 'conditions' | 'medications', value: string) => {
     if (value.trim()) {

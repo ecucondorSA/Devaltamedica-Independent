@@ -120,7 +120,7 @@ export const useTelemedicineAdvanced = (options: UseTelemedicineOptions = {}) =>
 
   const sendMedicalNote = useCallback(async (note: string) => {
     // TODO: Implementar cuando esté disponible
-    console.log('Medical note:', note);
+  import('@altamedica/shared').then(({ logger }) => logger.info('Medical note', { note })).catch(() => {});
   }, []);
 
   const clearError = useCallback(() => {

@@ -21,5 +21,14 @@ module.exports = {
     alert: 'readonly',
     Blob: 'readonly',
     matchMedia: 'readonly',
-  }
+  },
+  overrides: [
+    {
+      files: ['*.js', '*.mjs', '*.cjs'],
+      env: {
+        node: true,
+        browser: false,
+      },
+    },
+  ],
 };

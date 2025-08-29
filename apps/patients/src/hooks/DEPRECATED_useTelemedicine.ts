@@ -113,7 +113,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
     });
 
     newSocket.on('error', (error) => {
-      logger.error('WebRTC socket error:', error);
+      logger.error('WebRTC socket error:', String(error));
       setState((prev) => ({
         ...prev,
         webrtc: {
@@ -156,7 +156,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
       // Cargar historial de chat
       await loadChatHistory(sessionId);
     } catch (error) {
-      logger.error('Error loading session:', error);
+      logger.error('Error loading session:', String(error));
       setState((prev) => ({
         ...prev,
         loading: false,
@@ -184,7 +184,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
         }));
       }
     } catch (error) {
-      logger.error('Error loading chat history:', error);
+      logger.error('Error loading chat history:', String(error));
     }
   }, []);
 
@@ -221,7 +221,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
         // Configurar listeners para WebRTC
         setupWebRTCListeners(socket);
       } catch (error) {
-        logger.error('Error joining room:', error);
+        logger.error('Error joining room:', String(error));
         setState((prev) => ({
           ...prev,
           webrtc: {
@@ -351,7 +351,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
 
       return stream;
     } catch (error) {
-      logger.error('Error accessing media devices:', error);
+      logger.error('Error accessing media devices:', String(error));
       setState((prev) => ({
         ...prev,
         webrtc: {
@@ -407,7 +407,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
           }));
         }
       } catch (error) {
-        logger.error('Error sending chat message:', error);
+        logger.error('Error sending chat message:', String(error));
       }
     },
     [state.session],
@@ -443,7 +443,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
         }
       }
     } catch (error) {
-      logger.error('Error starting session:', error);
+      logger.error('Error starting session:', String(error));
       setState((prev) => ({
         ...prev,
         error: 'Failed to start session',
@@ -485,7 +485,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
           }));
         }
       } catch (error) {
-        logger.error('Error ending session:', error);
+        logger.error('Error ending session:', String(error));
       }
     },
     [state.session, stopLocalStream],
@@ -518,7 +518,7 @@ const DEPRECATED_useTelemedicine_impl = (sessionId?: string) => {
           }));
         }
       } catch (error) {
-        logger.error('Error cancelling session:', error);
+        logger.error('Error cancelling session:', String(error));
       }
     },
     [state.session],
@@ -623,7 +623,7 @@ const DEPRECATED_useTelemedicineSessions_impl = (options: { initialFetch?: boole
       clearTimeout(timeoutId);
       return response.ok;
     } catch (error) {
-      logger.warn('API no disponible, usando datos de ejemplo:', error);
+      logger.warn('API no disponible, usando datos de ejemplo:', String(error));
       return false;
     }
   }, []);
@@ -672,7 +672,7 @@ const DEPRECATED_useTelemedicineSessions_impl = (options: { initialFetch?: boole
         setSessions(data.sessions || []);
         setError(null);
       } catch (error) {
-        logger.error('Error loading sessions:', error);
+        logger.error('Error loading sessions:', String(error));
 
         // Si es un error de red o timeout, usar datos de ejemplo
         if (
@@ -761,7 +761,7 @@ const DEPRECATED_useTelemedicineSessions_impl = (options: { initialFetch?: boole
 
         return newSession;
       } catch (error) {
-        logger.error('Error creating session:', error);
+        logger.error('Error creating session:', String(error));
 
         if (
           error instanceof Error &&
@@ -833,7 +833,7 @@ const DEPRECATED_useTelemedicineSessions_impl = (options: { initialFetch?: boole
 
         return updatedSession;
       } catch (error) {
-        logger.error('Error updating session:', error);
+        logger.error('Error updating session:', String(error));
 
         if (
           error instanceof Error &&
@@ -896,7 +896,7 @@ const DEPRECATED_useTelemedicineSessions_impl = (options: { initialFetch?: boole
         );
         setError(null);
       } catch (error) {
-        logger.error('Error canceling session:', error);
+        logger.error('Error canceling session:', String(error));
 
         if (
           error instanceof Error &&

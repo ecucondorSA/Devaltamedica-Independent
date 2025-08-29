@@ -1,8 +1,9 @@
 // 🏥 ADMIN DASHBOARD HOOK - ALTAMEDICA
 // Hook para gestión de estado del dashboard administrativo
 
-import { logger } from '@altamedica/shared/services/logger.service';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import { logger } from '../services/logger.service';
 
 // ============================================================================
 // TIPOS
@@ -49,7 +50,7 @@ export const useAdminDashboardStandardized = () => {
     } catch (err) {
       const errorMessage = String(err);
       setError(errorMessage);
-      logger.error('Error loading dashboard data:', errorMessage);
+      logger.error(`Error loading dashboard data: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }

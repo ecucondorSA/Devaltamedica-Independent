@@ -84,15 +84,18 @@ export function CrisisControlCenter() {
       if (stored === 'true' || stored === 'false') {
         setSidebarOpen(stored === 'true');
       }
-    } catch {}
+    } catch {
+      // localStorage can throw in sandboxed environments
+    }
     // solo al montar
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem('crisis.sidebar.open', String(sidebarOpen));
-    } catch {}
+    } catch {
+      // localStorage can throw in sandboxed environments
+    }
   }, [sidebarOpen]);
 
   // Avisar a los mapas que el layout cambió (para invalidateSize de Leaflet)
@@ -101,7 +104,9 @@ export function CrisisControlCenter() {
       try {
         const evt = new Event('crisis:layout-changed');
         window.dispatchEvent(evt);
-      } catch {}
+      } catch {
+        // dispatchEvent can fail in some environments
+      }
     };
     // rAF + pequeño delay para post-transiciones
     requestAnimationFrame(() => {

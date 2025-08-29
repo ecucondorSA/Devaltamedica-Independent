@@ -16,7 +16,7 @@ export { usePatients } from './usePatients';
 export { useDoctors } from './useDoctors';
 
 // 📅 Citas
-export { useAppointments } from './useAppointments';
+// export { useAppointments } from './useAppointments';
 
 // 🎥 Video Llamadas
 export { useVideoCall } from './useVideoCall';

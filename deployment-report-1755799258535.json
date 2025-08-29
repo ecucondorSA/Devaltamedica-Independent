@@ -42,14 +42,7 @@
     "dependencies": {
       "critical": 6,
       "installed": 0,
-      "missing": [
-        "next",
-        "react",
-        "firebase",
-        "firebase-admin",
-        "@prisma/client",
-        "tailwindcss"
-      ]
+      "missing": ["next", "react", "firebase", "firebase-admin", "@prisma/client", "tailwindcss"]
     },
     "buildSystem": {
       "turbo": true,
@@ -59,11 +52,7 @@
     "apiEndpoints": {
       "required": 6,
       "implemented": 3,
-      "missing": [
-        "routes/auth",
-        "routes/marketplace",
-        "routes/telemedicine"
-      ]
+      "missing": ["routes/auth", "routes/marketplace", "routes/telemedicine"]
     }
   },
   "missing": [
@@ -73,11 +62,7 @@
     "patients/.env.production",
     "web-app/.env.production"
   ],
-  "ready": [
-    "Project Structure",
-    "Firebase Config",
-    "Build System"
-  ],
+  "ready": ["Project Structure", "Firebase Config", "Build System"],
   "warnings": [],
   "readiness": "50%"
 }

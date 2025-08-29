@@ -1,9 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Shield, Plus, Edit2, Trash2, Check, X } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Button, Input, Badge } from '@altamedica/ui';
-import { useToast } from '../../../hooks/use-toast';
+import { Edit2, Plus, Shield, Trash2 } from 'lucide-react';
+
+import { useToast } from '@altamedica/ui';
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+} from '@altamedica/ui';
 
 interface Role {
   id: string;
@@ -58,13 +67,28 @@ const systemRoles: Role[] = [
 
 const availablePermissions: Permission[] = [
   // User Management
-  { id: 'p1', name: 'users:read', description: 'View user information', category: 'Users' },
+  {
+    id: 'p1',
+    name: 'users:read',
+    description: 'View user information',
+    category: 'Users',
+  },
   { id: 'p2', name: 'users:write', description: 'Create and edit users', category: 'Users' },
   { id: 'p3', name: 'users:delete', description: 'Delete users', category: 'Users' },
 
   // Patient Management
-  { id: 'p4', name: 'patients:read', description: 'View patient records', category: 'Patients' },
-  { id: 'p5', name: 'patients:write', description: 'Edit patient records', category: 'Patients' },
+  {
+    id: 'p4',
+    name: 'patients:read',
+    description: 'View patient records',
+    category: 'Patients',
+  },
+  {
+    id: 'p5',
+    name: 'patients:write',
+    description: 'Edit patient records',
+    category: 'Patients',
+  },
   {
     id: 'p6',
     name: 'patients:delete',
@@ -87,7 +111,12 @@ const availablePermissions: Permission[] = [
   },
 
   // Medical
-  { id: 'p9', name: 'prescriptions:read', description: 'View prescriptions', category: 'Medical' },
+  {
+    id: 'p9',
+    name: 'prescriptions:read',
+    description: 'View prescriptions',
+    category: 'Medical',
+  },
   {
     id: 'p10',
     name: 'prescriptions:write',
@@ -103,12 +132,22 @@ const availablePermissions: Permission[] = [
 
   // Reports
   { id: 'p12', name: 'reports:read', description: 'View reports', category: 'Reports' },
-  { id: 'p13', name: 'reports:generate', description: 'Generate reports', category: 'Reports' },
+  {
+    id: 'p13',
+    name: 'reports:generate',
+    description: 'Generate reports',
+    category: 'Reports',
+  },
   { id: 'p14', name: 'reports:export', description: 'Export reports', category: 'Reports' },
 
   // Settings
   { id: 'p15', name: 'settings:read', description: 'View settings', category: 'Settings' },
-  { id: 'p16', name: 'settings:write', description: 'Modify settings', category: 'Settings' },
+  {
+    id: 'p16',
+    name: 'settings:write',
+    description: 'Modify settings',
+    category: 'Settings',
+  },
 
   // System
   {
@@ -118,13 +157,17 @@ const availablePermissions: Permission[] = [
     category: 'System',
   },
   { id: 'p18', name: 'system:audit', description: 'View audit logs', category: 'System' },
-  { id: 'p19', name: 'system:maintenance', description: 'Perform maintenance', category: 'System' },
+  {
+    id: 'p19',
+    name: 'system:maintenance',
+    description: 'Perform maintenance',
+    category: 'System',
+  },
 ];
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>(systemRoles);
   const [showCreateRole, setShowCreateRole] = useState(false);
-  const [editingRole, setEditingRole] = useState<string | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [newRoleName, setNewRoleName] = useState('');
   const [newRoleDescription, setNewRoleDescription] = useState('');
@@ -172,8 +215,6 @@ export default function RolesPage() {
       return;
     }
 
-    if (!confirm('Are you sure you want to delete this role?')) return;
-
     setRoles(roles.filter((r) => r.id !== roleId));
     toast({
       title: 'Success',
@@ -200,7 +241,7 @@ export default function RolesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Roles & Permissions</h1>
           <p className="text-muted-foreground">
@@ -221,30 +262,41 @@ export default function RolesPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Role Name</label>
+              <label htmlFor="roleName" className="text-sm font-medium">
+                Role Name
+              </label>
               <Input
+                id="roleName"
                 placeholder="e.g., content-editor"
                 value={newRoleName}
                 onChange={(e) => setNewRoleName(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Description</label>
+              <label htmlFor="roleDescription" className="text-sm font-medium">
+                Description
+              </label>
               <Input
+                id="roleDescription"
                 placeholder="Describe the role's purpose"
                 value={newRoleDescription}
                 onChange={(e) => setNewRoleDescription(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-2 block">Permissions</label>
+              <label className="mb-2 block text-sm font-medium" htmlFor="permissions">
+                Permissions
+              </label>
               <div className="space-y-4">
                 {Object.entries(getPermissionsByCategory()).map(([category, perms]) => (
                   <div key={category}>
-                    <h4 className="font-medium text-sm mb-2">{category}</h4>
+                    <h4 className="mb-2 text-sm font-medium">{category}</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {perms.map((perm) => (
-                        <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
+                        <label
+                          key={perm.id}
+                          className="flex cursor-pointer items-center space-x-2"
+                        >
                           <input
                             type="checkbox"
                             checked={selectedPermissions.includes(perm.name)}
@@ -278,7 +330,7 @@ export default function RolesPage() {
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
                     <Shield className="h-5 w-5 text-blue-600" />
-                    <h3 className="font-semibold text-lg">{role.name}</h3>
+                    <h3 className="text-lg font-semibold">{role.name}</h3>
                     {role.isSystem && (
                       <Badge variant="outline" className="text-xs">
                         System
@@ -286,7 +338,7 @@ export default function RolesPage() {
                     )}
                   </div>
                   <p className="text-sm text-gray-600">{role.description}</p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
+                  <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
                     <span>{role.userCount} users</span>
                     <span>•</span>
                     <span>{role.permissions.length} permissions</span>
@@ -298,7 +350,11 @@ export default function RolesPage() {
                       <Button size="sm" variant="outline">
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDeleteRole(role.id)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDeleteRole(role.id)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </>
@@ -308,7 +364,7 @@ export default function RolesPage() {
 
               {/* Permissions */}
               <div className="mt-4">
-                <p className="text-sm font-medium mb-2">Permissions:</p>
+                <p className="mb-2 text-sm font-medium">Permissions:</p>
                 <div className="flex flex-wrap gap-2">
                   {role.permissions[0] === '*' ? (
                     <Badge className="bg-red-100 text-red-800">All Permissions</Badge>

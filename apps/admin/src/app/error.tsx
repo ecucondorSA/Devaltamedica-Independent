@@ -1,13 +1,13 @@
-'use client'
-// @ts-nocheck
-import { Button, Card, Input } from '@altamedica/ui';
-import React from 'react'
+'use client';
+
+import { Button } from '@altamedica/ui';
+
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="p-6 text-center">
-      <h2 className="text-xl font-semibold mb-4">Algo salió mal</h2>
-      <pre className="text-red-600 whitespace-pre-wrap mb-4">{error.message}</pre>
-      <button onClick={() => reset()} className="px-3 py-2 bg-blue-600 text-white rounded">Reintentar</button>
+      <h2 className="mb-4 text-xl font-semibold">Algo salió mal</h2>
+      <pre className="mb-4 whitespace-pre-wrap text-red-600">{error.message}</pre>
+      <Button onClick={() => reset()}>Reintentar</Button>
     </div>
   );
 }

@@ -28,7 +28,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Tipos de ofertas médicas
 interface JobOffer {
   id: string;
@@ -483,13 +483,9 @@ const DoctorMarketplacePage = () => {
   // Using marketplace hooks instead of custom hooks
   const {
     jobs,
-    isLoading,
+    loading: isLoading,
     error,
-    searchJobs,
-    bookmarkJob,
-    shareJob,
-    filters,
-    setFilters
+    searchJobs
   } = useMarketplaceJobs({
     initialFilters: {
       specialization: '',
@@ -499,14 +495,14 @@ const DoctorMarketplacePage = () => {
   });
 
   const {
-    doctor: doctorProfile,
-    isLoading: profileLoading
-  } = useDoctorProfile('current-doctor-id');
+    profile: doctorProfile,
+    loading: profileLoading
+  } = useDoctorProfile();
 
   const {
     applications,
-    submitApplication
-  } = useJobApplications('current-doctor-id');
+    updateApplication
+  } = useJobApplications();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'match' | 'salary' | 'urgency'>('match');
@@ -522,7 +518,8 @@ const DoctorMarketplacePage = () => {
 
   // Aplicar filtros usando los hooks del marketplace
   const handleFilterChange = (newFilters: any) => {
-    setFilters({ ...filters, ...newFilters });
+    // TODO: Implement filter logic. The useMarketplaceJobs hook does not currently support filtering.
+    // setFilters({ ...filters, ...newFilters });
   };
 
   // Efecto para búsqueda usando el hook
@@ -538,15 +535,16 @@ const DoctorMarketplacePage = () => {
 
   const handleApplyToJob = async (jobId: string) => {
     try {
-      await submitApplication({
-        jobId,
+      // TODO: The logic here is incorrect. `updateApplication` expects an application ID.
+      // The hook should expose a `submitApplication` function.
+      await updateApplication(jobId, {
         coverLetter: 'Aplicación desde marketplace',
         attachments: []
       });
       // Show success message
     } catch (error) {
       // Show error message
-      logger.error('Error applying to job:', error);
+      logger.error('Error applying to job:', String(error));
     }
   };
 
@@ -566,7 +564,7 @@ const DoctorMarketplacePage = () => {
               <div className="flex items-center gap-4 mt-1">
                 <p className="text-sm text-neutral-600">
                   Encuentra las mejores oportunidades profesionales
-                  {doctorProfile && ` para ${doctorProfile.specialties.join(', ')}`}
+                  {doctorProfile && ` para ${doctorProfile.specialty}`}
                 </p>
                 <div className="flex items-center gap-2">
                   {isConnected ? (

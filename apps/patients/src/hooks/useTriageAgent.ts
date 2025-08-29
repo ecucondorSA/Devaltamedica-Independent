@@ -1,5 +1,5 @@
 import { triageAgent, type Symptom, type TriageResult } from '@/services/triage-agent.service';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 
@@ -36,7 +36,7 @@ export function useTriageAgent(options: UseTriageAgentOptions = {}) {
     },
     onError: (error: Error) => {
       setIsEvaluating(false);
-      logger.error('Error en evaluación de triaje:', error);
+      logger.error('Error en evaluación de triaje:', String(error));
       options.onError?.(error);
     },
   });

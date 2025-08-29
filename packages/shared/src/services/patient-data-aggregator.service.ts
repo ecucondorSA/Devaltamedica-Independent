@@ -641,8 +641,8 @@ export class PatientDataAggregatorService {
 
     // Extraer condiciones crónicas
     const conditions: ChronicCondition[] = medicalRecords
-      .filter((record: any) => record.type === 'diagnosis')
-      .map((record: any) => ({
+      .filter((record: Record<string, unknown>) => record.type === 'diagnosis')
+      .map((record: Record<string, unknown>) => ({
         id: record.id,
         name: record.diagnosis || '',
         icdCode: record.icdCode || '',
@@ -654,8 +654,8 @@ export class PatientDataAggregatorService {
 
     // Extraer cirugías
     const surgeries: Surgery[] = medicalRecords
-      .filter((record: any) => record.type === 'surgery')
-      .map((record: any) => ({
+      .filter((record: Record<string, unknown>) => record.type === 'surgery')
+      .map((record: Record<string, unknown>) => ({
         id: record.id,
         procedure: record.procedure || '',
         date: record.date,
@@ -723,7 +723,7 @@ export class PatientDataAggregatorService {
     const current: Medication[] = [];
     const past: Medication[] = [];
 
-    prescriptions.forEach((rx: any) => {
+    prescriptions.forEach((rx: Record<string, unknown>) => {
       const medication: Medication = {
         id: rx.id,
         name: rx.medicationName,
@@ -765,7 +765,7 @@ export class PatientDataAggregatorService {
     const environmental: Allergy[] = [];
     const other: Allergy[] = [];
 
-    allergies.forEach((allergy: any) => {
+    allergies.forEach((allergy: Record<string, unknown>) => {
       const allergyRecord: Allergy = {
         id: allergy.id,
         allergen: allergy.allergen,
@@ -805,7 +805,7 @@ export class PatientDataAggregatorService {
   private async aggregateImmunizations(patientId: string): Promise<ImmunizationRecord[]> {
     const immunizations = await this.exportService.getImmunizations(patientId);
 
-    return immunizations.map((imm: any) => ({
+    return immunizations.map((imm: Record<string, unknown>) => ({
       id: imm.id,
       vaccine: imm.vaccine,
       date: imm.date,
@@ -824,7 +824,7 @@ export class PatientDataAggregatorService {
     const labResults = await this.exportService.getLabResults(patientId);
 
     // Convertir a formato estructurado
-    const results: LabResult[] = labResults.map((lab: any) => ({
+    const results: LabResult[] = labResults.map((lab: Record<string, unknown>) => ({
       id: lab.id,
       testName: lab.testName,
       value: lab.value,
@@ -843,7 +843,7 @@ export class PatientDataAggregatorService {
     const trends: LabTrend[] = [];
     const testGroups = new Map<string, LabResult[]>();
 
-    results.forEach((result: any) => {
+    results.forEach((result: LabResult) => {
       if (!testGroups.has(result.testName)) {
         testGroups.set(result.testName, []);
       }
@@ -854,14 +854,14 @@ export class PatientDataAggregatorService {
       if (tests.length >= 3) {
         const values = tests
           .filter((t) => typeof t.value === 'number')
-          .map((t: any) => ({
+          .map((t: { date: Date; value: number }) => ({
             date: t.date,
             value: t.value as number,
           }))
           .sort((a, b) => a.date.getTime() - b.date.getTime());
 
         if (values.length >= 3) {
-          const trend = this.calculateTrend(values.map((v: any) => v.value));
+          const trend = this.calculateTrend(values.map((v) => v.value));
           trends.push({
             testName,
             values,
@@ -888,7 +888,7 @@ export class PatientDataAggregatorService {
   private async aggregateVitalSigns(patientId: string): Promise<VitalSignsTrend> {
     const vitalSigns = await this.exportService.getVitalSigns(patientId);
 
-    const vitals: VitalSigns[] = vitalSigns.map((vs: any) => ({
+    const vitals: VitalSigns[] = vitalSigns.map((vs: Record<string, unknown>) => ({
       date: vs.date,
       bloodPressure: {
         systolic: vs.bloodPressureSystolic || 120,
@@ -943,7 +943,7 @@ export class PatientDataAggregatorService {
   private async aggregateClinicalDocuments(patientId: string): Promise<ClinicalDocument[]> {
     const documents = await this.exportService.getDocuments(patientId);
 
-    return documents.map((doc: any) => ({
+    return documents.map((doc: Record<string, unknown>) => ({
       id: doc.id,
       type: doc.type,
       title: doc.title || doc.type,
@@ -962,7 +962,7 @@ export class PatientDataAggregatorService {
   private async aggregateImagingStudies(patientId: string): Promise<ImagingStudy[]> {
     const imaging = await this.exportService.getImagingStudies(patientId);
 
-    return imaging.map((study: any) => ({
+    return imaging.map((study: Record<string, unknown>) => ({
       id: study.id,
       modality: study.modality || 'other',
       bodyPart: study.bodyPart || '',
@@ -982,7 +982,7 @@ export class PatientDataAggregatorService {
   private async aggregateProcedures(patientId: string): Promise<ProcedureRecord[]> {
     const procedures = await this.exportService.getProcedures(patientId);
 
-    return procedures.map((proc: any) => ({
+    return procedures.map((proc: Record<string, unknown>) => ({
       id: proc.id,
       name: proc.name,
       cptCode: proc.cptCode,
@@ -1008,7 +1008,7 @@ export class PatientDataAggregatorService {
     let noShows = 0;
     let cancellations = 0;
 
-    appointments.forEach((apt: any) => {
+    appointments.forEach((apt: Record<string, unknown>) => {
       const appointment: Appointment = {
         id: apt.id,
         date: apt.date,
@@ -1046,7 +1046,7 @@ export class PatientDataAggregatorService {
   private async aggregateTelemedicine(patientId: string): Promise<TelemedicineRecord[]> {
     const sessions = await this.exportService.getTelemedicine(patientId);
 
-    return sessions.map((session: any) => ({
+    return sessions.map((session: Record<string, unknown>) => ({
       id: session.id,
       date: session.date,
       duration: session.duration || 0,
@@ -1066,7 +1066,7 @@ export class PatientDataAggregatorService {
   private async aggregateInsurance(patientId: string): Promise<InsuranceInfo[]> {
     const insuranceData = await this.exportService.getInsurance(patientId);
 
-    return insuranceData.map((ins: any) => ({
+    return insuranceData.map((ins: Record<string, unknown>) => ({
       id: ins.id,
       provider: ins.provider,
       planName: ins.planName,
@@ -1090,7 +1090,7 @@ export class PatientDataAggregatorService {
     let totalCharges = 0;
     let totalPayments = 0;
 
-    const transactions: BillingTransaction[] = billing.map((bill: any) => {
+    const transactions: BillingTransaction[] = billing.map((bill: Record<string, unknown>) => {
       if (bill.type === 'charge') totalCharges += bill.amount;
       if (bill.type === 'payment') totalPayments += bill.amount;
 
@@ -1120,7 +1120,7 @@ export class PatientDataAggregatorService {
   private async aggregateConsents(patientId: string): Promise<ConsentRecord[]> {
     const consents = await this.exportService.getConsents(patientId);
 
-    return consents.map((consent: any) => ({
+    return consents.map((consent: Record<string, unknown>) => ({
       id: consent.id,
       type: consent.type,
       date: consent.date,
@@ -1136,7 +1136,7 @@ export class PatientDataAggregatorService {
   /**
    * Calcula el total de registros
    */
-  private calculateTotalRecords(data: any): number {
+  private calculateTotalRecords(data: Partial<AggregatedPatientData>): number {
     let total = 0;
 
     if (data.medicalHistory) {
@@ -1189,7 +1189,7 @@ export class PatientDataAggregatorService {
   /**
    * Calcula el rango de fechas de los datos
    */
-  private calculateDateRange(data: any): { start: Date; end: Date } {
+  private calculateDateRange(data: { appointments: AppointmentHistory; labResults: LabResultSummary; vitalSigns: VitalSignsTrend }): { start: Date; end: Date } {
     const dates: Date[] = [];
 
     // Recopilar todas las fechas
@@ -1328,7 +1328,7 @@ export class PatientDataAggregatorService {
     // Medicamentos actuales
     csv.push('Current Medications');
     csv.push('Name,Dosage,Frequency,Start Date');
-    data.medications.current.forEach((med: any) => {
+    data.medications.current.forEach((med: Medication) => {
       csv.push(
         `"${med.name}","${med.dosage}","${med.frequency}",${med.startDate.toISOString().split('T')[0]}`,
       );
@@ -1339,7 +1339,7 @@ export class PatientDataAggregatorService {
     csv.push('Allergies');
     csv.push('Type,Allergen,Reaction,Severity');
     Object.entries(data.allergies).forEach(([type, allergies]) => {
-      allergies.forEach((allergy: any) => {
+      allergies.forEach((allergy: Allergy) => {
         csv.push(`${type},"${allergy.allergen}","${allergy.reaction}",${allergy.severity}`);
       });
     });
@@ -1370,7 +1370,7 @@ export class PatientDataAggregatorService {
             birthDate: data.patientInfo.dateOfBirth.toISOString().split('T')[0],
           },
         },
-        ...data.medications.current.map((med: any) => ({
+        ...data.medications.current.map((med: Medication) => ({
           resource: {
             resourceType: 'MedicationRequest',
             id: med.id,

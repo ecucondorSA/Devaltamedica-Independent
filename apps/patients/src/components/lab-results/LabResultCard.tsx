@@ -14,12 +14,12 @@ const LabResultCard: React.FC<LabResultCardProps> = ({ labResult }) => {
       className="bg-white rounded-xl shadow p-4 flex flex-col hover:shadow-lg transition cursor-pointer"
       onClick={() => router.push(`/lab-results/${labResult.id}`)}
     >
-      <div className="font-bold text-lg mb-1">{labResult.testName}</div>
+      <div className="font-bold text-lg mb-1">{(labResult as any).testName || labResult.testType || 'Examen'}</div>
       <div className="text-gray-600 text-sm mb-2">
-        {labResult.date} • {labResult.status}
+        {(labResult as any).date || (labResult.createdAt ? new Date(labResult.createdAt).toLocaleDateString() : 'N/A')} • {labResult.status || 'Pendiente'}
       </div>
       <div className="text-gray-500 text-xs">
-        Laboratorio: {labResult.laboratoryName}
+        Laboratorio: {(labResult as any).laboratoryName || labResult.laboratory || 'N/A'}
       </div>
       <div className="mt-2 text-blue-600 text-sm">Ver detalle &rarr;</div>
     </div>

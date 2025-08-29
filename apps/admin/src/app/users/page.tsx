@@ -1,5 +1,21 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
+import {
+  Download,
+  Edit,
+  MoreVertical,
+  Plus,
+  Search,
+  Trash2,
+  UserCheck,
+  UserX,
+} from 'lucide-react';
+// eslint-disable-next-line import/no-internal-modules
+import { useRouter } from 'next/navigation';
+
+import { useToast } from '@altamedica/ui';
+import { User } from '@altamedica/types';
 import {
   Badge,
   Button,
@@ -18,12 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from '@altamedica/ui';
-import { Download, Edit, MoreVertical, Plus, Search, Trash2, UserCheck, UserX } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useToast } from '../../hooks/use-toast';
-
-import { User } from '@altamedica/types';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -34,11 +44,7 @@ export default function UsersPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:3001/api/v1/users', {
@@ -49,9 +55,9 @@ export default function UsersPage() {
 
       if (!response.ok) throw new Error('Failed to fetch users');
 
-      const data = await response.json();
+      const data: { users: User[] } = await response.json();
       setUsers(data.users || []);
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to load users',
@@ -60,11 +66,13 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    void fetchUsers();
+  }, [fetchUsers]);
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
-
     try {
       const response = await fetch(`http://localhost:3001/api/v1/users/${userId}`, {
         method: 'DELETE',
@@ -80,8 +88,8 @@ export default function UsersPage() {
         description: 'User deleted successfully',
       });
 
-      fetchUsers();
-    } catch (error) {
+      await fetchUsers();
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to delete user',
@@ -110,8 +118,8 @@ export default function UsersPage() {
         description: `User ${newStatus ? 'activated' : 'deactivated'} successfully`,
       });
 
-      fetchUsers();
-    } catch (error) {
+      await fetchUsers();
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to update user status',
@@ -155,10 +163,12 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
-          <p className="text-muted-foreground">Manage all users across the AltaMedica platform</p>
+          <p className="text-muted-foreground">
+            Manage all users across the AltaMedica platform
+          </p>
         </div>
         <Button onClick={() => router.push('/users/new')}>
           <Plus className="mr-2 h-4 w-4" />
@@ -168,9 +178,9 @@ export default function UsersPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 placeholder="Search users..."
                 value={searchTerm}
@@ -182,7 +192,7 @@ export default function UsersPage() {
               <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="px-3 py-2 border rounded-md"
+                className="rounded-md border px-3 py-2"
               >
                 <option value="all">All Roles</option>
                 <option value="patient">Patient</option>
@@ -194,14 +204,14 @@ export default function UsersPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border rounded-md"
+                className="rounded-md border px-3 py-2"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
               <Button variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 Export
               </Button>
             </div>
@@ -209,7 +219,7 @@ export default function UsersPage() {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8">Loading users...</div>
+            <div className="py-8 text-center">Loading users...</div>
           ) : (
             <Table>
               <TableHeader>
@@ -253,7 +263,9 @@ export default function UsersPage() {
                             Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => user.uid && handleToggleStatus(user.uid, user.isActive)}
+                            onClick={() =>
+                              user.uid && handleToggleStatus(user.uid, user.isActive)
+                            }
                           >
                             {user.isActive ? (
                               <>
@@ -284,7 +296,7 @@ export default function UsersPage() {
           )}
 
           {!loading && filteredUsers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
+            <div className="py-8 text-center text-gray-500">
               No users found matching your filters
             </div>
           )}

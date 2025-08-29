@@ -154,7 +154,7 @@ export class AnamnesisService {
       return result.data;
       
     } catch (error) {
-      logger.error('❌ Error al importar anamnesis:', error);
+      logger.error('❌ Error al importar anamnesis:', String(error));
       throw error;
     }
   }
@@ -183,7 +183,7 @@ export class AnamnesisService {
       return result.data;
       
     } catch (error) {
-      logger.error('❌ Error al obtener anamnesis:', error);
+      logger.error('❌ Error al obtener anamnesis:', String(error));
       throw error;
     }
   }
@@ -217,7 +217,7 @@ export class AnamnesisService {
       return result.data;
       
     } catch (error) {
-      logger.error('❌ Error al obtener resumen de anamnesis:', error);
+      logger.error('❌ Error al obtener resumen de anamnesis:', String(error));
       throw error;
     }
   }
@@ -249,7 +249,7 @@ export class AnamnesisService {
       return result.data;
       
     } catch (error) {
-      logger.error('❌ Error al actualizar anamnesis:', error);
+      logger.error('❌ Error al actualizar anamnesis:', String(error));
       throw error;
     }
   }
@@ -272,7 +272,7 @@ export class AnamnesisService {
       return result.data;
       
     } catch (error) {
-      logger.error('❌ Error al obtener estadísticas:', error);
+      logger.error('❌ Error al obtener estadísticas:', String(error));
       throw error;
     }
   }

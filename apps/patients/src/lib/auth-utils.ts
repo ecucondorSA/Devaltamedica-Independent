@@ -35,7 +35,7 @@ export async function getUserFromHeaders(): Promise<UserInfo | null> {
       roles,
     };
   } catch (error) {
-    logger.error('Error getting user from headers:', error);
+    logger.error('Error getting user from headers:', String(error));
     return null;
   }
 }

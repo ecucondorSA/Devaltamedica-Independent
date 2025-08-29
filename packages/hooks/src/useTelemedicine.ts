@@ -71,7 +71,7 @@ export const useTelemedicine = (config: TelemedicineConfig) => {
     setState((prev) => ({ ...prev, isConnecting: true, error: undefined }));
     try {
       // Placeholder for connection logic
-      console.log('Connecting to room:', roomId);
+    import('@altamedica/shared').then(({ logger }) => logger.info('Connecting to room', { roomId })).catch(() => {});
       setState((prev) => ({
         ...prev,
         isConnecting: false,

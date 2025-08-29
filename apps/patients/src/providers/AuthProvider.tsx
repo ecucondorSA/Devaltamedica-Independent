@@ -9,7 +9,7 @@ export {
     LogoutButton,
     ProtectedComponent, UserProfile, formatUserRole, useAuth, useLoginForm, useProtectedRoute, useRegisterForm, useRole, validateEmail,
     validatePassword
-} from "@altamedica/auth';
+} from '@altamedica/auth';
 
 // Re-exportar tipos
 export type {
@@ -17,5 +17,5 @@ export type {
     RegisterData,
     TokenData, User,
     UserRole
-} from "@altamedica/auth';
+} from '@altamedica/auth';
 

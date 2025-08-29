@@ -178,7 +178,7 @@ export const usePrescriptionsHIPAA = () => {
 
         await addDoc(collection(db, 'prescription_audit_logs'), auditEntry);
       } catch (error) {
-        logger.error('Error logging prescription data access:', error);
+        logger.error('Error logging prescription data access:', String(error));
       }
     },
     [authState.user],
@@ -277,7 +277,7 @@ export const usePrescriptionsHIPAA = () => {
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Error fetching prescriptions:', error);
+        logger.error('Error fetching prescriptions:', String(error));
         throw error;
       }
     },
@@ -364,7 +364,7 @@ export const usePrescriptionsHIPAA = () => {
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Error creating prescription:', error);
+        logger.error('Error creating prescription:', String(error));
         throw error;
       }
     },
@@ -408,7 +408,7 @@ export const usePrescriptionsHIPAA = () => {
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Error updating prescription:', error);
+        logger.error('Error updating prescription:', String(error));
         throw error;
       }
     },
@@ -433,7 +433,7 @@ export const usePrescriptionsHIPAA = () => {
 
         logger.info('Prescription cancelled successfully:', { id: prescriptionId, reason });
       } catch (error) {
-        logger.error('Error cancelling prescription:', error);
+        logger.error('Error cancelling prescription:', String(error));
         throw error;
       }
     },
@@ -471,7 +471,7 @@ export const usePrescriptionsHIPAA = () => {
 
         logger.info('Prescription refill processed:', { id: prescriptionId });
       } catch (error) {
-        logger.error('Error processing prescription refill:', error);
+        logger.error('Error processing prescription refill:', String(error));
         throw error;
       }
     },

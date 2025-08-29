@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Button } from '@altamedica/ui';
 import { logger } from '@altamedica/shared';
 import { 
@@ -145,7 +145,7 @@ export function SecureSessionLauncher({
       return true;
 
     } catch (error) {
-      logger.error('Identity validation error:', error);
+      logger.error('Identity validation error:', String(error));
       setError('Error en la verificación de identidad');
       return false;
     }
@@ -302,7 +302,7 @@ export function SecureSessionLauncher({
       });
 
     } catch (error) {
-      logger.error('Error getting devices:', error);
+      logger.error('Error getting devices:', String(error));
     }
   }, []);
 
@@ -361,7 +361,7 @@ export function SecureSessionLauncher({
       onSessionLaunched(result.data);
 
     } catch (error) {
-      logger.error('Error launching secure session:', error);
+      logger.error('Error launching secure session:', String(error));
       setError(error instanceof Error ? error.message : 'Error al lanzar sesión');
     } finally {
       setLoading(false);

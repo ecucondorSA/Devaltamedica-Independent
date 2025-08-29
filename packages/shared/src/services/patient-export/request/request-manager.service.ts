@@ -9,8 +9,10 @@ import {
   RequestProgress,
   RequestSearchFilter,
   RequestStatistics,
-  RequestStatus
+  RequestStatus,
+  ProcessingStage
 } from './types';
+import { logger } from '../../logger.service';
 
 /**
  * Request Manager Service
@@ -34,7 +36,7 @@ export class RequestManagerService {
     priority: RequestPriority = RequestPriority.NORMAL
   ): Promise<ExportRequest> {
     try {
-      console.log(`[RequestManager] Creating export request for patient ${patientId}`);
+      logger.info(`Creating export request for patient ${patientId}`, 'RequestManager');
 
       // Check if system can accept new requests
       if (!(await this.lifecycle.canAcceptNewRequest())) {
@@ -56,10 +58,10 @@ export class RequestManagerService {
         NotificationType.REQUEST_CREATED
       );
 
-      console.log(`[RequestManager] Export request created successfully: ${request.id}`);
+      logger.info(`Export request created successfully: ${request.id}`, 'RequestManager');
       return request;
     } catch (error) {
-      console.error('[RequestManager] Failed to create export request:', error);
+      logger.error('Failed to create export request', 'RequestManager', error);
       throw error;
     }
   }
@@ -69,7 +71,7 @@ export class RequestManagerService {
    */
   async startProcessing(requestId: string): Promise<void> {
     try {
-      console.log(`[RequestManager] Starting processing for request ${requestId}`);
+      logger.info(`Starting processing for request ${requestId}`, 'RequestManager');
 
       const request = await this.lifecycle.getRequest(requestId);
       if (!request) {
@@ -93,9 +95,9 @@ export class RequestManagerService {
         NotificationType.PROCESSING_STARTED
       );
 
-      console.log(`[RequestManager] Processing started for request ${requestId}`);
+      logger.info(`Processing started for request ${requestId}`, 'RequestManager');
     } catch (error) {
-      console.error(`[RequestManager] Failed to start processing for ${requestId}:`, error);
+      logger.error(`Failed to start processing for ${requestId}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -111,9 +113,12 @@ export class RequestManagerService {
     estimatedTimeRemaining?: number
   ): Promise<void> {
     try {
+      const stageEnum: ProcessingStage = (Object.values(ProcessingStage) as string[]).includes(stage)
+        ? (stage as ProcessingStage)
+        : ProcessingStage.VALIDATION;
       // Update progress in lifecycle service
       await this.lifecycle.updateProgress(requestId, {
-        stage: stage as any,
+        stage: stageEnum,
         progress,
         message,
         estimatedTimeRemaining,
@@ -131,9 +136,9 @@ export class RequestManagerService {
         );
       }
 
-      console.log(`[RequestManager] Progress updated for ${requestId}: ${progress}%`);
+      logger.info(`Progress updated for ${requestId}: ${progress}%`, 'RequestManager');
     } catch (error) {
-      console.error(`[RequestManager] Failed to update progress for ${requestId}:`, error);
+      logger.error(`Failed to update progress for ${requestId}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -148,7 +153,7 @@ export class RequestManagerService {
     checksum?: string
   ): Promise<void> {
     try {
-      console.log(`[RequestManager] Completing request ${requestId}`);
+      logger.info(`Completing request ${requestId}`, 'RequestManager');
 
       const request = await this.lifecycle.getRequest(requestId);
       if (!request) {
@@ -173,9 +178,9 @@ export class RequestManagerService {
         expiresAt
       );
 
-      console.log(`[RequestManager] Request ${requestId} completed successfully`);
+      logger.info(`Request ${requestId} completed successfully`, 'RequestManager');
     } catch (error) {
-      console.error(`[RequestManager] Failed to complete request ${requestId}:`, error);
+      logger.error(`Failed to complete request ${requestId}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -186,11 +191,11 @@ export class RequestManagerService {
   async failRequest(
     requestId: string,
     errorMessage: string,
-    errorDetails?: any,
+    errorDetails?: unknown,
     retryable: boolean = true
   ): Promise<void> {
     try {
-      console.log(`[RequestManager] Failing request ${requestId}: ${errorMessage}`);
+      logger.warn(`Failing request ${requestId}: ${errorMessage}`, 'RequestManager');
 
       const request = await this.lifecycle.getRequest(requestId);
       if (!request) {
@@ -212,9 +217,9 @@ export class RequestManagerService {
         retryable && request.retryCount < request.maxRetries
       );
 
-      console.log(`[RequestManager] Request ${requestId} marked as failed`);
+      logger.warn(`Request ${requestId} marked as failed`, 'RequestManager');
     } catch (error) {
-      console.error(`[RequestManager] Failed to mark request ${requestId} as failed:`, error);
+      logger.error(`Failed to mark request ${requestId} as failed`, 'RequestManager', error);
       throw error;
     }
   }
@@ -224,7 +229,7 @@ export class RequestManagerService {
    */
   async cancelRequest(requestId: string, reason: string): Promise<void> {
     try {
-      console.log(`[RequestManager] Cancelling request ${requestId}: ${reason}`);
+      logger.warn(`Cancelling request ${requestId}: ${reason}`, 'RequestManager');
 
       const request = await this.lifecycle.getRequest(requestId);
       if (!request) {
@@ -241,9 +246,9 @@ export class RequestManagerService {
         { reason }
       );
 
-      console.log(`[RequestManager] Request ${requestId} cancelled successfully`);
+      logger.info(`Request ${requestId} cancelled successfully`, 'RequestManager');
     } catch (error) {
-      console.error(`[RequestManager] Failed to cancel request ${requestId}:`, error);
+      logger.error(`Failed to cancel request ${requestId}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -253,7 +258,7 @@ export class RequestManagerService {
    */
   async retryRequest(requestId: string): Promise<boolean> {
     try {
-      console.log(`[RequestManager] Retrying request ${requestId}`);
+      logger.info(`Retrying request ${requestId}`, 'RequestManager');
 
       const request = await this.lifecycle.getRequest(requestId);
       if (!request) {
@@ -271,10 +276,10 @@ export class RequestManagerService {
         );
       }
 
-      console.log(`[RequestManager] Retry ${canRetry ? 'successful' : 'failed'} for ${requestId}`);
+      logger.info(`Retry ${canRetry ? 'successful' : 'failed'} for ${requestId}`, 'RequestManager');
       return canRetry;
     } catch (error) {
-      console.error(`[RequestManager] Failed to retry request ${requestId}:`, error);
+      logger.error(`Failed to retry request ${requestId}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -302,13 +307,13 @@ export class RequestManagerService {
     offset: number = 0
   ): Promise<ExportRequest[]> {
     try {
-      console.log('[RequestManager] Searching requests with filters:', filter);
+      logger.info('Searching requests with filters', 'RequestManager', filter);
 
       // This would be implemented with proper database queries
       // For now, returning empty array as placeholder
       return [];
     } catch (error) {
-      console.error('[RequestManager] Request search failed:', error);
+      logger.error('Request search failed', 'RequestManager', error);
       throw error;
     }
   }
@@ -323,7 +328,7 @@ export class RequestManagerService {
     try {
       return await this.searchRequests({ status: [status] }, limit);
     } catch (error) {
-      console.error(`[RequestManager] Failed to get requests by status ${status}:`, error);
+      logger.error(`Failed to get requests by status ${status}`, 'RequestManager', error);
       throw error;
     }
   }
@@ -350,7 +355,7 @@ export class RequestManagerService {
       const failedRequests = await this.getRequestsByStatus(RequestStatus.FAILED, limit);
       return failedRequests.filter(request => request.retryCount < request.maxRetries);
     } catch (error) {
-      console.error('[RequestManager] Failed to get retryable requests:', error);
+      logger.error('Failed to get retryable requests', 'RequestManager', error);
       throw error;
     }
   }
@@ -362,7 +367,7 @@ export class RequestManagerService {
     dateRange?: { from: Date; to: Date }
   ): Promise<RequestStatistics> {
     try {
-      console.log('[RequestManager] Calculating request statistics');
+      logger.info('Calculating request statistics', 'RequestManager');
 
       // This would be implemented with proper database aggregation
       // For now, returning mock statistics
@@ -390,7 +395,7 @@ export class RequestManagerService {
         retryRate: 0,
       };
     } catch (error) {
-      console.error('[RequestManager] Failed to calculate statistics:', error);
+      logger.error('Failed to calculate statistics', 'RequestManager', error);
       throw error;
     }
   }
@@ -401,10 +406,10 @@ export class RequestManagerService {
   async cleanupExpiredRequests(): Promise<number> {
     try {
       const cleanedCount = await this.lifecycle.cleanupExpiredRequests();
-      console.log(`[RequestManager] Cleaned up ${cleanedCount} expired requests`);
+      logger.info(`Cleaned up ${cleanedCount} expired requests`, 'RequestManager');
       return cleanedCount;
     } catch (error) {
-      console.error('[RequestManager] Cleanup failed:', error);
+      logger.error('Cleanup failed', 'RequestManager', error);
       return 0;
     }
   }
@@ -431,7 +436,7 @@ export class RequestManagerService {
         utilizationPercentage: utilization,
       };
     } catch (error) {
-      console.error('[RequestManager] Failed to get system capacity:', error);
+      logger.error('Failed to get system capacity', 'RequestManager', error);
       return {
         canAcceptNewRequests: false,
         pendingCount: 0,
@@ -455,12 +460,12 @@ export class RequestManagerService {
         await this.cancelRequest(requestId, reason);
         results.successful.push(requestId);
       } catch (error) {
-        console.error(`[RequestManager] Failed to cancel ${requestId}:`, error);
+        logger.error(`Failed to cancel ${requestId}`, 'RequestManager', error);
         results.failed.push(requestId);
       }
     }
 
-    console.log(`[RequestManager] Bulk cancel completed: ${results.successful.length} successful, ${results.failed.length} failed`);
+    logger.info(`Bulk cancel completed: ${results.successful.length} successful, ${results.failed.length} failed`, 'RequestManager');
     return results;
   }
 
@@ -481,12 +486,12 @@ export class RequestManagerService {
           results.failed.push(requestId);
         }
       } catch (error) {
-        console.error(`[RequestManager] Failed to retry ${requestId}:`, error);
+        logger.error(`Failed to retry ${requestId}`, 'RequestManager', error);
         results.failed.push(requestId);
       }
     }
 
-    console.log(`[RequestManager] Bulk retry completed: ${results.successful.length} successful, ${results.failed.length} failed`);
+    logger.info(`Bulk retry completed: ${results.successful.length} successful, ${results.failed.length} failed`, 'RequestManager');
     return results;
   }
 }

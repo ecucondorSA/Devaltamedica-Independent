@@ -1,10 +1,11 @@
+'use client';
+
+import { logger } from '@altamedica/shared/services/logger.service';
 /**
  * HIPAAIntegrationDemo.tsx
  * Componente de demostración que integra todos los sistemas HIPAA implementados
  * Implementado por ChatGPT-5 (Líder Técnico Principal)
  */
-
-'use client';
 
 import React, { useState } from 'react';
 import { useAIHIPAA } from '../hooks/useAIHIPAA';
@@ -56,7 +57,7 @@ export const HIPAAIntegrationDemo: React.FC = () => {
       await login({ email, password });
       setShowLoginForm(false);
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', String(error));
     }
   };
 
@@ -74,7 +75,7 @@ export const HIPAAIntegrationDemo: React.FC = () => {
       await register({ email, password, displayName, role, phoneNumber, hipaaConsent });
       setShowRegisterForm(false);
     } catch (error) {
-      console.error('Register error:', error);
+      logger.error('Register error:', String(error));
     }
   };
 
@@ -125,7 +126,7 @@ export const HIPAAIntegrationDemo: React.FC = () => {
       setShowPrescriptionForm(false);
       e.currentTarget.reset();
     } catch (error) {
-      console.error('Create prescription error:', error);
+      logger.error('Create prescription error:', String(error));
     }
   };
 
@@ -161,7 +162,7 @@ export const HIPAAIntegrationDemo: React.FC = () => {
       setShowAIDiagnosisForm(false);
       e.currentTarget.reset();
     } catch (error) {
-      console.error('Generate AI diagnosis error:', error);
+      logger.error('Generate AI diagnosis error:', String(error));
     }
   };
 

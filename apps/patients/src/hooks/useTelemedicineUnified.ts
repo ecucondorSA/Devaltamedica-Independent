@@ -22,7 +22,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import io, { Socket } from 'socket.io-client';
 
 import { logger } from '@altamedica/shared';
@@ -317,7 +317,7 @@ export function useTelemedicineUnified() {
       });
 
       socket.on('error', (error) => {
-        logger.error('Signaling server error:', error);
+        logger.error('Signaling server error:', String(error));
         setState(prev => ({ ...prev, error: error.message }));
       });
 
@@ -326,7 +326,7 @@ export function useTelemedicineUnified() {
       return socket;
 
     } catch (error) {
-      logger.error('Error connecting to signaling server:', error);
+      logger.error('Error connecting to signaling server:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to connect to signaling server' }));
       return null;
     }
@@ -349,7 +349,7 @@ export function useTelemedicineUnified() {
 
       return { cameras, microphones, speakers };
     } catch (error) {
-      logger.error('Error getting media devices:', error);
+      logger.error('Error getting media devices:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to get media devices' }));
       return { cameras: [], microphones: [], speakers: [] };
     }
@@ -375,7 +375,7 @@ export function useTelemedicineUnified() {
 
       return stream;
     } catch (error) {
-      logger.error('Error getting user media:', error);
+      logger.error('Error getting user media:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to access camera/microphone' }));
       throw error;
     }
@@ -458,7 +458,7 @@ export function useTelemedicineUnified() {
 
       return peerConnection;
     } catch (error) {
-      logger.error('Error initializing WebRTC connection:', error);
+      logger.error('Error initializing WebRTC connection:', String(error));
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to initialize connection',
@@ -472,7 +472,7 @@ export function useTelemedicineUnified() {
 
     try {
       switch (data.type) {
-        case 'offer':
+        case 'offer': {
           await peerConnectionRef.current.setRemoteDescription(data.offer);
           const answer = await peerConnectionRef.current.createAnswer();
           await peerConnectionRef.current.setLocalDescription(answer);
@@ -486,6 +486,7 @@ export function useTelemedicineUnified() {
             });
           }
           break;
+        }
 
         case 'answer':
           await peerConnectionRef.current.setRemoteDescription(data.answer);
@@ -496,7 +497,7 @@ export function useTelemedicineUnified() {
           break;
       }
     } catch (error) {
-      logger.error('Error handling WebRTC signal:', error);
+      logger.error('Error handling WebRTC signal:', String(error));
     }
   }, []);
 
@@ -589,7 +590,7 @@ export function useTelemedicineUnified() {
       await initializeWebRTCConnection();
 
     } catch (error) {
-      logger.error('Error joining session:', error);
+      logger.error('Error joining session:', String(error));
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to join session',
@@ -627,7 +628,7 @@ export function useTelemedicineUnified() {
         } : null
       }));
     } catch (error) {
-      logger.error('Error sharing vital signs:', error);
+      logger.error('Error sharing vital signs:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to share vital signs' }));
     }
   }, [user]);
@@ -654,7 +655,7 @@ export function useTelemedicineUnified() {
         }]
       }));
     } catch (error) {
-      logger.error('Error sending chat message:', error);
+      logger.error('Error sending chat message:', String(error));
     }
   }, [user]);
 
@@ -734,7 +735,7 @@ export function useTelemedicineUnified() {
 
       sessionRef.current = null;
     } catch (error) {
-      logger.error('Error leaving session:', error);
+      logger.error('Error leaving session:', String(error));
     }
   }, []);
 
@@ -768,7 +769,7 @@ export function useTelemedicineUnified() {
           quality: metrics,
         }));
       } catch (error) {
-        logger.error('Quality monitoring error:', error);
+        logger.error('Quality monitoring error:', String(error));
       }
     }, 5000); // Cada 5 segundos
   }, []);

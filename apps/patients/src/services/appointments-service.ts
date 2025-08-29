@@ -3,7 +3,7 @@
  * Conecta el frontend con las APIs de citas del servidor Docker
  */
 
-import { apiClient, ApiResponse  } from '@altamedica/api-client';;
+import { apiClient, ApiResponse  } from '@altamedica/api-client';
 import { API_CONFIG } from '../config/api';
 
 export // Removed local interface - using @altamedica/types

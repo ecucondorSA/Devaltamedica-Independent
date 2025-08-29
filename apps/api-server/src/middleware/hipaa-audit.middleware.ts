@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { NextFunction, Request, Response } from 'express'
 import DOMPurify from 'isomorphic-dompurify'
 import { v4 as uuidv4 } from 'uuid'
+import { logger } from '@altamedica/shared'
 
 const prisma = new PrismaClient()
 
@@ -74,7 +75,7 @@ class HIPAAAuditService {
         },
       })
     } catch (error) {
-      console.error('Failed to create audit log:', error)
+      logger.error('Failed to create audit log', error)
       // Audit logging should never break the application
       // Send to backup logging service
       this.fallbackLog(context, entry, error)
@@ -113,7 +114,7 @@ class HIPAAAuditService {
     }
     
     // In production, send to CloudWatch or external logging service
-    console.error('HIPAA_AUDIT_FALLBACK:', JSON.stringify(logEntry))
+    logger.error('HIPAA_AUDIT_FALLBACK', logEntry)
   }
 
   async getAuditTrail(
@@ -191,7 +192,7 @@ export function hipaaAuditMiddleware(
       try {
         previousData = await getPreviousData(req, resource)
       } catch (error) {
-        console.error('Failed to get previous data:', error)
+        logger.error('Failed to get previous data', error)
       }
     }
     
@@ -330,7 +331,7 @@ async function getPreviousData(req: Request, resource: string): Promise<any> {
     // Add other resource types as needed
     return null
   } catch (error) {
-    console.error('Failed to fetch previous data:', error)
+    logger.error('Failed to fetch previous data', error)
     return null
   }
 }

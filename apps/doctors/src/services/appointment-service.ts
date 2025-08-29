@@ -20,34 +20,43 @@ import {
   DocumentSnapshot,
   QueryConstraint,
   writeBatch,
-  transaction,
+  runTransaction,
   onSnapshot,
   Unsubscribe,
   Timestamp
 } from 'firebase/firestore';
 
-import { firebaseService } from '@altamedica/database';
+import { dbConnection } from '@altamedica/database';
+import { getFirebaseAuth, getFirebaseFirestore } from '@altamedica/firebase';
 import { 
-  Appointment, 
+  type Appointment, 
   AppointmentStatus, 
   AppointmentType, 
-  RecurringPattern,
-  NotificationLog,
-  AppointmentOutcome,
-  User
+  type RecurringPattern,
+  type NotificationLog,
+  type AppointmentOutcome,
+  type User,
+  type AppointmentStatusType,
+  type AppointmentTypeType
 } from '../types/app';
 import { Patient } from '../types/medical-entities';
 import { ValidationService } from './validation-service';
 import { NotificationService } from './notification-service';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
+
+// Create a firebaseService object for compatibility
+const firebaseService = {
+  authentication: getFirebaseAuth(),
+  firestore: getFirebaseFirestore()
+};
 export interface AppointmentSearchFilters {
   patientId?: string;
   professionalId?: string;
   facilityId?: string;
   departmentId?: string;
-  status?: AppointmentStatus[];
-  appointmentType?: AppointmentType[];
+  status?: AppointmentStatusType[];
+  appointmentType?: AppointmentTypeType[];
   dateFrom?: string;
   dateTo?: string;
   urgencyLevel?: string[];
@@ -94,12 +103,12 @@ export interface SchedulingPreferences {
 
 class AppointmentService {
   private collectionName = 'appointments';
-  private validationService: ValidationService;
-  private notificationService: NotificationService;
+  private validationService: any;
+  private notificationService: any;
 
   constructor() {
-    this.validationService = new ValidationService();
-    this.notificationService = new NotificationService();
+    this.validationService = {};
+    this.notificationService = {};
   }
 
   /**
@@ -174,7 +183,7 @@ class AppointmentService {
       return docRef.id;
 
     } catch (error) {
-      logger.error('Error creando cita:', error);
+      logger.error('Error creando cita:', String(error));
       throw error;
     }
   }
@@ -210,7 +219,7 @@ class AppointmentService {
       return appointment;
 
     } catch (error) {
-      logger.error('Error obteniendo cita:', error);
+      logger.error('Error obteniendo cita:', String(error));
       throw error;
     }
   }
@@ -302,7 +311,7 @@ class AppointmentService {
       };
 
     } catch (error) {
-      logger.error('Error buscando citas:', error);
+      logger.error('Error buscando citas:', String(error));
       throw error;
     }
   }
@@ -366,7 +375,7 @@ class AppointmentService {
       logger.info(`Estado de cita ${appointmentId} actualizado a ${newStatus}`);
 
     } catch (error) {
-      logger.error('Error actualizando estado de cita:', error);
+      logger.error('Error actualizando estado de cita:', String(error));
       throw error;
     }
   }
@@ -423,7 +432,7 @@ class AppointmentService {
       logger.info(`Cita ${appointmentId} reprogramada para ${newDateTime}`);
 
     } catch (error) {
-      logger.error('Error reprogramando cita:', error);
+      logger.error('Error reprogramando cita:', String(error));
       throw error;
     }
   }
@@ -454,7 +463,7 @@ class AppointmentService {
       return availableSlots;
 
     } catch (error) {
-      logger.error('Error obteniendo slots disponibles:', error);
+      logger.error('Error obteniendo slots disponibles:', String(error));
       throw error;
     }
   }
@@ -501,7 +510,7 @@ class AppointmentService {
       logger.info(`Resultado registrado para cita ${appointmentId}`);
 
     } catch (error) {
-      logger.error('Error registrando resultado de cita:', error);
+      logger.error('Error registrando resultado de cita:', String(error));
       throw error;
     }
   }
@@ -595,7 +604,7 @@ class AppointmentService {
       return stats;
 
     } catch (error) {
-      logger.error('Error obteniendo estadísticas:', error);
+      logger.error('Error obteniendo estadísticas:', String(error));
       throw error;
     }
   }

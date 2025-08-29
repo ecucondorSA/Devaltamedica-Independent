@@ -50,7 +50,7 @@ const logger = {
 };
 // TODO: Definir UserRole en @altamedica/types
 // Stub temporal para permitir el build
-enum UserRole {
+export enum UserRole {
   PATIENT = 'patient',
   DOCTOR = 'doctor',
   COMPANY = 'company',

@@ -4,13 +4,9 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { AuthProvider } from '@altamedica/auth';
 // import '@altamedica/firebase/client-only'; // Initialize Firebase Client
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
+// Fuente local deshabilitada por entorno sin red (fallback a sistema)
 
 export const metadata: Metadata = {
   title: 'ALTAMEDICA Companies - Dashboard Empresarial',
@@ -47,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     })();
   `;
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang="es">
       <head>
         <meta name="theme-color" content="#2563eb" />
         <link rel="icon" href="/favicon.ico" />

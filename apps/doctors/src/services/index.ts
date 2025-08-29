@@ -17,16 +17,16 @@ export {
   validatePhone,
   getPatientStatusInfo,
   getTimeSinceLastVisit,
-  sortPatientsByLastName,
-  filterPatientsByStatus,
-  searchPatientsBy
+  // sortPatientsByLastName,
+  // filterPatientsByStatus,
+  // searchPatientsBy
 } from '@altamedica/patient-services';
 
 // Re-export de tipos
 export type {
   Patient,
-  PatientStatus,
-  EmergencyContact,
+  // PatientStatus,
+  // EmergencyContact,
   PatientsService,
   ApiClient,
   ApiResponse

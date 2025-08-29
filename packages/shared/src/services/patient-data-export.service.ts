@@ -13,6 +13,7 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 import { getFirebaseFirestore } from '../adapters/firebase';
+import { logger } from './logger.service';
 
 /**
  * Servicio de Exportación de Datos del Paciente
@@ -444,7 +445,7 @@ export class PatientDataExportService {
   private async getMedicalHistory(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const recordsRef = collection(this.db, 'medical_records');
     let q = query(recordsRef, where('patientId', '==', patientId));
 
@@ -459,7 +460,7 @@ export class PatientDataExportService {
     q = query(q, orderBy('date', 'desc'));
 
     const snapshot = await getDocs(q);
-    const records: any[] = [];
+    const records: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       records.push({
@@ -478,7 +479,7 @@ export class PatientDataExportService {
   private async getLabResultsPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const labsRef = collection(this.db, 'lab_results');
     let q = query(labsRef, where('patientId', '==', patientId));
 
@@ -491,7 +492,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const results: any[] = [];
+    const results: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       results.push({
@@ -510,7 +511,7 @@ export class PatientDataExportService {
   private async getPrescriptionsPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const prescriptionsRef = collection(this.db, 'prescriptions');
     let q = query(prescriptionsRef, where('patientId', '==', patientId));
 
@@ -523,7 +524,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const prescriptions: any[] = [];
+    const prescriptions: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       prescriptions.push({
@@ -542,7 +543,7 @@ export class PatientDataExportService {
   private async getAppointmentsPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const appointmentsRef = collection(this.db, 'appointments');
     let q = query(appointmentsRef, where('patientId', '==', patientId));
 
@@ -555,7 +556,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const appointments: any[] = [];
+    const appointments: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       appointments.push({
@@ -574,7 +575,7 @@ export class PatientDataExportService {
   private async getVitalSignsPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const vitalsRef = collection(this.db, 'vital_signs');
     let q = query(vitalsRef, where('patientId', '==', patientId));
 
@@ -587,7 +588,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const vitals: any[] = [];
+    const vitals: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       vitals.push({
@@ -603,12 +604,12 @@ export class PatientDataExportService {
   /**
    * Obtiene inmunizaciones
    */
-  private async getImmunizationsPrivate(patientId: string): Promise<any[]> {
+  private async getImmunizationsPrivate(patientId: string): Promise<Record<string, unknown>[]> {
     const immunizationsRef = collection(this.db, 'immunizations');
     const q = query(immunizationsRef, where('patientId', '==', patientId));
 
     const snapshot = await getDocs(q);
-    const immunizations: any[] = [];
+    const immunizations: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       immunizations.push({
@@ -624,12 +625,12 @@ export class PatientDataExportService {
   /**
    * Obtiene alergias
    */
-  private async getAllergiesPrivate(patientId: string): Promise<any[]> {
+  private async getAllergiesPrivate(patientId: string): Promise<Record<string, unknown>[]> {
     const allergiesRef = collection(this.db, 'allergies');
     const q = query(allergiesRef, where('patientId', '==', patientId));
 
     const snapshot = await getDocs(q);
-    const allergies: any[] = [];
+    const allergies: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       allergies.push({
@@ -647,7 +648,7 @@ export class PatientDataExportService {
   private async getProceduresPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const proceduresRef = collection(this.db, 'procedures');
     let q = query(proceduresRef, where('patientId', '==', patientId));
 
@@ -660,7 +661,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const procedures: any[] = [];
+    const procedures: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       procedures.push({
@@ -679,7 +680,7 @@ export class PatientDataExportService {
   private async getDiagnoses(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const diagnosesRef = collection(this.db, 'diagnoses');
     let q = query(diagnosesRef, where('patientId', '==', patientId));
 
@@ -692,7 +693,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const diagnoses: any[] = [];
+    const diagnoses: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       diagnoses.push({
@@ -711,7 +712,7 @@ export class PatientDataExportService {
   private async getClinicalNotes(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const notesRef = collection(this.db, 'clinical_notes');
     let q = query(notesRef, where('patientId', '==', patientId));
 
@@ -724,7 +725,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const notes: any[] = [];
+    const notes: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       notes.push({
@@ -740,7 +741,7 @@ export class PatientDataExportService {
   /**
    * Obtiene imágenes médicas
    */
-  private async getImages(patientId: string, dateRange?: { from: Date; to: Date }): Promise<any[]> {
+  private async getImages(patientId: string, dateRange?: { from: Date; to: Date }): Promise<Record<string, unknown>[]> {
     const imagesRef = collection(this.db, 'medical_images');
     let q = query(imagesRef, where('patientId', '==', patientId));
 
@@ -753,7 +754,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const images: any[] = [];
+    const images: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       images.push({
@@ -774,7 +775,7 @@ export class PatientDataExportService {
   private async getDocumentsPrivate(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const documentsRef = collection(this.db, 'medical_documents');
     let q = query(documentsRef, where('patientId', '==', patientId));
 
@@ -787,7 +788,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const documents: any[] = [];
+    const documents: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       documents.push({
@@ -807,7 +808,7 @@ export class PatientDataExportService {
   private async getBillingInfo(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const billingRef = collection(this.db, 'billing');
     let q = query(billingRef, where('patientId', '==', patientId));
 
@@ -820,7 +821,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const billing: any[] = [];
+    const billing: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       const data = doc.data();
@@ -841,12 +842,12 @@ export class PatientDataExportService {
   /**
    * Obtiene consentimientos
    */
-  private async getConsentsPrivate(patientId: string): Promise<any[]> {
+  private async getConsentsPrivate(patientId: string): Promise<Record<string, unknown>[]> {
     const consentsRef = collection(this.db, 'consents');
     const q = query(consentsRef, where('patientId', '==', patientId));
 
     const snapshot = await getDocs(q);
-    const consents: any[] = [];
+    const consents: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       consents.push({
@@ -865,7 +866,7 @@ export class PatientDataExportService {
   private async getAuditLogs(
     patientId: string,
     dateRange?: { from: Date; to: Date },
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const auditRef = collection(this.db, 'audit_logs');
     let q = query(auditRef, where('targetId', '==', patientId));
 
@@ -878,7 +879,7 @@ export class PatientDataExportService {
     }
 
     const snapshot = await getDocs(q);
-    const logs: any[] = [];
+    const logs: Record<string, unknown>[] = [];
 
     snapshot.forEach((doc) => {
       logs.push({

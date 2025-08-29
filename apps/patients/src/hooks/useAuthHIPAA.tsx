@@ -191,7 +191,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           return basicUser;
         }
       } catch (error) {
-        logger.error('Error mapping Firebase user to HIPAA:', error);
+        logger.error('Error mapping Firebase user to HIPAA:', String(error));
         throw new Error('Failed to map user data');
       }
     },
@@ -227,7 +227,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
         await setDoc(doc(db, 'audit_logs', `${userId}_${Date.now()}`), auditEntry);
       } catch (error) {
-        logger.error('Error logging data access:', error);
+        logger.error('Error logging data access:', String(error));
       }
     },
   );
@@ -271,7 +271,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Login error:', error);
+        logger.error('Login error:', String(error));
         throw error;
       }
     },
@@ -341,7 +341,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Registration error:', error);
+        logger.error('Registration error:', String(error));
         throw error;
       }
     },
@@ -367,7 +367,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       logger.info('User logged out successfully');
     } catch (error) {
-      logger.error('Logout error:', error);
+      logger.error('Logout error:', String(error));
       // Forzar logout local en caso de error
       setState({
         user: null,
@@ -405,7 +405,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
         logger.info('User profile updated successfully');
       } catch (error) {
-        logger.error('Profile update error:', error);
+        logger.error('Profile update error:', String(error));
         throw error;
       }
     },
@@ -417,7 +417,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       await sendPasswordResetEmail(auth, email);
       logger.info('Password reset email sent to:', email);
     } catch (error) {
-      logger.error('Password reset error:', error);
+      logger.error('Password reset error:', String(error));
       throw error;
     }
   }, []);
@@ -441,7 +441,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }));
       }
     } catch (error) {
-      logger.error('Error refreshing user:', error);
+      logger.error('Error refreshing user:', String(error));
     }
   }, [state.user]);
 
@@ -471,7 +471,7 @@ export const AuthHIPAAProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           });
         }
       } catch (error) {
-        logger.error('Auth state change error:', error);
+        logger.error('Auth state change error:', String(error));
         setState({
           user: null,
           isAuthenticated: false,

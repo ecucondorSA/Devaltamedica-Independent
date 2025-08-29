@@ -1,5 +1,6 @@
 'use client';
 
+import { User } from '@altamedica/types';
 import {
   Activity,
   AlertTriangle,
@@ -20,8 +21,6 @@ interface Stats {
   systemUptime: string;
   recentActivity: number;
 }
-
-import { User } from '@altamedica/types';
 
 interface SystemHealth {
   status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';

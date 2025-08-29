@@ -264,7 +264,7 @@ export function useAsync<T, P extends any[] = []>(
         // no-op
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [immediate, ...deps]);
 
   // Cleanup al desmontar

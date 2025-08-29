@@ -1,5 +1,6 @@
 import { exportOrchestratorService } from '../orchestrator/export-orchestrator.service';
 import { ExportResult } from '../types';
+import { logger } from '../../logger.service';
 import { ExportOptions, RequestMetadata, RequestPriority } from '../request/types';
 
 /**
@@ -22,7 +23,7 @@ export class CompatibilityLayerService {
     options: LegacyExportOptions
   ): Promise<LegacyExportResult> {
     try {
-      console.log(`[CompatibilityLayer] Legacy export request for patient ${patientId}`);
+      logger.info(`Legacy export request for patient ${patientId}`, 'CompatibilityLayer');
 
       // Transform legacy options to new format
       const modernOptions = this.transformLegacyOptions(options);
@@ -46,7 +47,7 @@ export class CompatibilityLayerService {
       return this.transformResultToLegacy(result, options);
 
     } catch (error) {
-      console.error('[CompatibilityLayer] Legacy export failed:', error);
+      logger.error('Legacy export failed', 'CompatibilityLayer', error);
       throw new Error(`Export failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
@@ -99,7 +100,7 @@ export class CompatibilityLayerService {
       };
 
     } catch (error) {
-      console.error('[CompatibilityLayer] Validation failed:', error);
+      logger.error('Validation failed', 'CompatibilityLayer', error);
       return {
         valid: false,
         errors: [`Validation error: ${error}`],
@@ -138,7 +139,7 @@ export class CompatibilityLayerService {
       };
 
     } catch (error) {
-      console.error(`[CompatibilityLayer] Failed to get status for ${exportId}:`, error);
+      logger.error(`Failed to get status for ${exportId}`, 'CompatibilityLayer', error);
       return {
         found: false,
         status: 'error',
@@ -159,7 +160,7 @@ export class CompatibilityLayerService {
       );
       return true;
     } catch (error) {
-      console.error(`[CompatibilityLayer] Failed to cancel ${exportId}:`, error);
+      logger.error(`Failed to cancel ${exportId}`, 'CompatibilityLayer', error);
       return false;
     }
   }
@@ -171,7 +172,7 @@ export class CompatibilityLayerService {
     try {
       return await exportOrchestratorService.retryExport(exportId);
     } catch (error) {
-      console.error(`[CompatibilityLayer] Failed to retry ${exportId}:`, error);
+      logger.error(`Failed to retry ${exportId}`, 'CompatibilityLayer', error);
       return false;
     }
   }
@@ -222,7 +223,7 @@ export class CompatibilityLayerService {
       };
 
     } catch (error) {
-      console.error(`[CompatibilityLayer] Access validation failed for patient ${patientId}:`, error);
+      logger.error(`Access validation failed for patient ${patientId}`, 'CompatibilityLayer', error);
       return {
         hasAccess: false,
         reason: `Access validation error: ${error}`,

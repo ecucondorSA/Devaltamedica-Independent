@@ -40,3 +40,31 @@ export const TabsTrigger = ({ children, ...props }: any) => <button {...props}>{
 export const LoadingSpinner = ({ ...props }: any) => <div {...props}>Loading...</div>;
 
 export const Separator = ({ ...props }: any) => <hr {...props} />;
+
+// Agregar componentes faltantes para PatientCrystalBall
+export const Label = ({ children, ...props }: any) => <label {...props}>{children}</label>;
+
+export const Textarea = ({ ...props }: any) => <textarea {...props} />;
+
+export const ScrollArea = ({ children, ...props }: any) => (
+  <div style={{ overflow: 'auto' }} {...props}>{children}</div>
+);
+
+export const AlertTitle = ({ children, ...props }: any) => <h4 {...props}>{children}</h4>;
+
+// Agregar componentes Dialog faltantes
+export const Dialog = ({ children, ...props }: any) => <div {...props}>{children}</div>;
+
+export const DialogTrigger = ({ children, ...props }: any) => <button {...props}>{children}</button>;
+
+export const DialogContent = ({ children, ...props }: any) => (
+  <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px' }} {...props}>
+    {children}
+  </div>
+);
+
+export const DialogHeader = ({ children, ...props }: any) => <div {...props}>{children}</div>;
+
+export const DialogTitle = ({ children, ...props }: any) => <h2 {...props}>{children}</h2>;
+
+export const DialogDescription = ({ children, ...props }: any) => <p {...props}>{children}</p>;

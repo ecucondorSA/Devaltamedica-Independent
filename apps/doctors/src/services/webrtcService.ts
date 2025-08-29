@@ -1,5 +1,5 @@
 // Servicio de WebRTC real para telemedicina
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 
 export interface WebRTCConfig {
   iceServers: RTCIceServer[];
@@ -113,12 +113,12 @@ class WebRTCService {
           const message: SignalingMessage = JSON.parse(event.data);
           this.handleSignalingMessage(message);
         } catch (error) {
-          logger.error('Error procesando mensaje de señalización:', error);
+          logger.error('Error procesando mensaje de señalización:', String(error));
         }
       };
 
       this.signalingSocket.onerror = (error) => {
-        logger.error('Error en conexión de señalización:', error);
+        logger.error('Error en conexión de señalización:', String(error));
         reject(error);
       };
 
@@ -168,7 +168,7 @@ class WebRTCService {
         roomId: this.config!.roomId
       });
     } catch (error) {
-      logger.error('Error manejando oferta:', error);
+      logger.error('Error manejando oferta:', String(error));
       this.emit('error', { error: 'Error manejando oferta', details: error });
     }
   }
@@ -179,7 +179,7 @@ class WebRTCService {
     try {
       await this.peerConnection.setRemoteDescription(new RTCSessionDescription(message.data));
     } catch (error) {
-      logger.error('Error manejando respuesta:', error);
+      logger.error('Error manejando respuesta:', String(error));
       this.emit('error', { error: 'Error manejando respuesta', details: error });
     }
   }
@@ -190,7 +190,7 @@ class WebRTCService {
     try {
       await this.peerConnection.addIceCandidate(new RTCIceCandidate(message.data));
     } catch (error) {
-      logger.error('Error agregando ICE candidate:', error);
+      logger.error('Error agregando ICE candidate:', String(error));
     }
   }
 
@@ -234,7 +234,7 @@ class WebRTCService {
 
       return this.localStream;
     } catch (error) {
-      logger.error('Error obteniendo stream local:', error);
+      logger.error('Error obteniendo stream local:', String(error));
       throw error;
     }
   }
@@ -258,7 +258,7 @@ class WebRTCService {
 
       return offer;
     } catch (error) {
-      logger.error('Error creando oferta:', error);
+      logger.error('Error creando oferta:', String(error));
       throw error;
     }
   }
@@ -271,7 +271,7 @@ class WebRTCService {
     return Array.from(this.remoteStreams.values());
   }
 
-  getConnectionState(): RTCConnectionState | null {
+  getConnectionState(): any | null {
     return this.peerConnection?.connectionState || null;
   }
 
@@ -307,9 +307,9 @@ class WebRTCService {
     if (listeners) {
       listeners.forEach(callback => {
         try {
-          callback({ type: event, data });
+          callback({ type: event as any, data });
         } catch (error) {
-          logger.error('Error en event listener:', error);
+          logger.error('Error en event listener:', String(error));
         }
       });
     }

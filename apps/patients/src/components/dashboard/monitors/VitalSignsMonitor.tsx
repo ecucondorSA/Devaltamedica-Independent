@@ -3,6 +3,7 @@
 import { Button, Card, Input } from '@altamedica/ui';
 import React, { useState, useEffect, useRef } from 'react';
 import { VitalSigns } from '@altamedica/types';
+import { SimpleVitalSigns, toCompatibleVitalSigns } from '../../../types';
 
 interface VitalSignsMonitorProps {
   vitalSigns: VitalSigns;
@@ -26,31 +27,47 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const animationRef = useRef<number>(0);
 
+  // Convertir VitalSigns a formato compatible usando adapter
+  const compatibleVitalSigns = React.useMemo(() => {
+    const simpleVitals: SimpleVitalSigns = {
+      temperature: vitalSigns.temperature || 36.5,
+      heartRate: vitalSigns.heartRate || 72,
+      bloodPressure: {
+        systolic: vitalSigns.bloodPressureSystolic || 120,
+        diastolic: vitalSigns.bloodPressureDiastolic || 80
+      },
+      weight: vitalSigns.weight,
+      height: vitalSigns.height,
+      timestamp: new Date()
+    };
+    return toCompatibleVitalSigns(simpleVitals);
+  }, [vitalSigns]);
+
   // Configuración de métricas vitales
   const vitalMetrics = [
     {
       id: 'heartRate',
       name: 'Frecuencia Cardíaca',
       icon: '❤️',
-      unit: 'lpm',
+      unit: compatibleVitalSigns.heartRate.unit,
       color: '#ef4444',
       normalRange: { min: 60, max: 100 },
       criticalRange: { min: 40, max: 180 },
-      currentValue: vitalSigns.heartRate || 0,
-      status: 'normal', // This needs to be calculated based on the value
+      currentValue: compatibleVitalSigns.heartRate.value,
+      status: compatibleVitalSigns.heartRate.status,
       waveform: true
     },
     {
       id: 'bloodPressure',
       name: 'Presión Arterial',
       icon: '🩺',
-      unit: 'mmHg',
+      unit: compatibleVitalSigns.bloodPressure.systolic.unit,
       color: '#3b82f6',
       normalRange: { min: 90, max: 140 },
-      currentValue: `${vitalSigns.bloodPressureSystolic}/${vitalSigns.bloodPressureDiastolic}`,
-      systolic: vitalSigns.bloodPressureSystolic,
-      diastolic: vitalSigns.bloodPressureDiastolic,
-      status: 'normal' // This needs to be calculated
+      currentValue: `${compatibleVitalSigns.bloodPressure.systolic.value}/${compatibleVitalSigns.bloodPressure.diastolic.value}`,
+      systolic: compatibleVitalSigns.bloodPressure.systolic.value,
+      diastolic: compatibleVitalSigns.bloodPressure.diastolic.value,
+      status: compatibleVitalSigns.bloodPressure.status
     },
     {
       id: 'oxygenSaturation',
@@ -61,7 +78,7 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
       normalRange: { min: 95, max: 100 },
       criticalRange: { min: 88, max: 100 },
       currentValue: vitalSigns.oxygenSaturation || 98,
-      status: 'normal' // This needs to be calculated
+      status: 'normal' // Fallback para propiedades no incluidas en adapter
     },
     {
       id: 'respiratoryRate',
@@ -71,18 +88,18 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
       color: '#8b5cf6',
       normalRange: { min: 12, max: 20 },
       currentValue: vitalSigns.respiratoryRate || 16,
-      status: 'normal' // This needs to be calculated
+      status: 'normal' // Fallback para propiedades no incluidas en adapter
     },
     {
       id: 'temperature',
       name: 'Temperatura',
       icon: '🌡️',
-      unit: '°C',
+      unit: compatibleVitalSigns.temperature.unit,
       color: '#f59e0b',
       normalRange: { min: 36.1, max: 37.2 },
       criticalRange: { min: 35, max: 40 },
-      currentValue: vitalSigns.temperature?.value || 0,
-      status: vitalSigns.temperature?.status || 'normal'
+      currentValue: compatibleVitalSigns.temperature.value,
+      status: compatibleVitalSigns.temperature.status
     },
     {
       id: 'glucose',
@@ -91,8 +108,8 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
       unit: 'mg/dL',
       color: '#ec4899',
       normalRange: { min: 70, max: 140 },
-      currentValue: vitalSigns.glucose?.value || 95,
-      status: vitalSigns.glucose?.status || 'normal'
+      currentValue: (vitalSigns as any).glucose || 95,
+      status: 'normal' as const
     }
   ];
 
@@ -106,8 +123,8 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
           time: now.toLocaleTimeString(),
           ...vitalMetrics.reduce((acc, metric) => {
             if (metric.id === 'bloodPressure') {
-              acc[`${metric.id}_systolic`] = metric.systolic + (Math.random() - 0.5) * 5;
-              acc[`${metric.id}_diastolic`] = metric.diastolic + (Math.random() - 0.5) * 3;
+              acc[`${metric.id}_systolic`] = (metric.systolic || 120) + (Math.random() - 0.5) * 5;
+              acc[`${metric.id}_diastolic`] = (metric.diastolic || 80) + (Math.random() - 0.5) * 3;
             } else {
               const baseValue = typeof metric.currentValue === 'number' ? metric.currentValue : 0;
               acc[metric.id] = baseValue + (Math.random() - 0.5) * 2;
@@ -279,7 +296,7 @@ const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({
       )}
 
       {/* Alertas activas */}
-      {vitalSigns.hasAnomalies && (
+      {(vitalSigns as any).hasAnomalies && (
         <div className="bg-red-50 border-t border-red-200 px-6 py-4">
           <div className="flex items-center">
             <span className="text-red-600 text-xl mr-3">⚠️</span>

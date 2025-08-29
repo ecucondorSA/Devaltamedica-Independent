@@ -1,4 +1,5 @@
 # 🏥 AltaMedica Infrastructure Diagnosis Report
+
 **Date:** 2025-08-27  
 **Status:** CRITICAL - Multiple Infrastructure Issues Detected
 
@@ -13,30 +14,39 @@ El proyecto AltaMedica presenta múltiples problemas críticos de infraestructur
 ## 🚨 PROBLEMAS CRÍTICOS (Requieren Acción Inmediata)
 
 ### 1. ❌ Branch Names Hardcoded en GitHub Actions
+
 **Archivo:** `.github/workflows/main.yml`  
 **Líneas:** 7, 240-241, 360
 
 **Problema:**
+
 ```yaml
-branches: [auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps, develop]
+branches:
+  [
+    auth-funcional-redireccion-no-funcional-rol-no-funcional-pagina-inicial-sin-videos-3d-maps,
+    develop,
+  ]
 ```
+
 Branch names extremadamente largos y hardcoded en múltiples workflows.
 
-**Impacto:** 
+**Impacto:**
+
 - CI/CD pipelines fallan al cambiar de branch
 - Imposible mantener diferentes ambientes
 - Deployment automatizado comprometido
 
 **Solución:**
+
 ```yaml
 on:
   push:
-    branches: 
+    branches:
       - main
       - develop
       - 'release/**'
   pull_request:
-    branches: 
+    branches:
       - main
       - develop
 ```
@@ -46,22 +56,27 @@ on:
 ---
 
 ### 2. ❌ Docker Build Context Incorrecto
+
 **Archivo:** `.github/workflows/main.yml`  
 **Líneas:** 223-224
 
 **Problema:**
+
 ```yaml
 context: apps/${{ matrix.app }}
 file: apps/${{ matrix.app }}/Dockerfile
 ```
+
 Asume que cada app tiene su Dockerfile cuando algunos no lo tienen.
 
 **Impacto:**
+
 - Build de Docker falla para apps sin Dockerfile
 - Pipeline CI/CD se interrumpe
 - Imágenes Docker no se generan
 
 **Solución:**
+
 ```yaml
 - name: Check Dockerfile exists
   id: check_docker
@@ -82,10 +97,12 @@ Asume que cada app tiene su Dockerfile cuando algunos no lo tienen.
 ---
 
 ### 3. ❌ Variables de Entorno No Configuradas
+
 **Archivos:** `.env.example`, `apps/*/.env.example`
 
 **Problema:**
 Variables críticas sin valores reales:
+
 - `FIREBASE_PRIVATE_KEY` (vacío)
 - `JWT_SECRET` (no configurado)
 - `DATABASE_URL` (sin valor)
@@ -93,12 +110,14 @@ Variables críticas sin valores reales:
 - `ENCRYPTION_SECRET` (valor dev inseguro)
 
 **Impacto:**
+
 - Aplicaciones no pueden iniciar
 - Autenticación no funcional
 - Base de datos inaccesible
 - Pagos no procesables
 
 **Solución:**
+
 ```bash
 # Crear archivo .env.vault para secretos
 cat > .env.vault << 'EOF'
@@ -120,32 +139,37 @@ openssl enc -aes-256-cbc -salt -in .env.vault -out .env.vault.enc
 ---
 
 ### 4. ❌ Docker Compose Ports Conflicts
+
 **Archivo:** `docker-compose.yml`  
 **Líneas:** 62-66, 123
 
 **Problema:**
+
 ```yaml
 ports:
-  - "3000:3000"  # Web App
-  - "3003:3000"  # Grafana conflicto con patients app
+  - '3000:3000' # Web App
+  - '3003:3000' # Grafana conflicto con patients app
 ```
+
 Puerto 3003 usado tanto por Grafana como por patients app.
 
 **Impacto:**
+
 - Servicios no pueden iniciarse simultáneamente
 - Conflictos de puertos causan crashes
 - Desarrollo local imposible
 
 **Solución:**
+
 ```yaml
 services:
   grafana:
     ports:
-      - "3030:3000"  # Cambiar a puerto no conflictivo
-  
+      - '3030:3000' # Cambiar a puerto no conflictivo
+
   patients:
     ports:
-      - "3003:3003"  # Mantener para patients app
+      - '3003:3003' # Mantener para patients app
 ```
 
 **Prioridad:** CRÍTICA
@@ -153,17 +177,20 @@ services:
 ---
 
 ### 5. ❌ Dockerfile Sin Healthchecks Consistentes
+
 **Archivos:** `apps/*/Dockerfile`
 
 **Problema:**
 Solo patients app tiene healthcheck. Otros servicios carecen de monitoreo.
 
 **Impacto:**
+
 - Contenedores unhealthy no detectados
 - Restarts automáticos no funcionan
 - Downtime no monitoreado
 
-**Solución para todos los Dockerfiles:
+\*\*Solución para todos los Dockerfiles:
+
 ```dockerfile
 # API Server
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
@@ -183,21 +210,26 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 ---
 
 ### 6. ❌ TypeScript Version Conflicts
+
 **Archivo:** `package.json`
 
 **Problema:**
+
 ```json
 "typescript": "5.5.4"  // En overrides
 "typescript": "5.5.4"  // En devDependencies
 ```
+
 Múltiples versiones de TypeScript pueden causar conflictos.
 
 **Impacto:**
+
 - Build failures inconsistentes
 - Type checking errores
 - CI/CD pipeline interrumpido
 
 **Solución:**
+
 ```json
 {
   "pnpm": {
@@ -218,7 +250,9 @@ Múltiples versiones de TypeScript pueden causar conflictos.
 ## 🔥 PROBLEMAS DE ALTA PRIORIDAD
 
 ### 7. ⚠️ Workflows Duplicados y Conflictivos
-**Archivos:** 
+
+**Archivos:**
+
 - `.github/workflows/main.yml`
 - `.github/workflows/ci-optimized.yml`
 - `.github/workflows/optimized-ci.yml`
@@ -226,11 +260,13 @@ Múltiples versiones de TypeScript pueden causar conflictos.
 **Problema:** Tres workflows hacen esencialmente lo mismo con diferentes configuraciones.
 
 **Impacto:**
+
 - Recursos desperdiciados en GitHub Actions
 - Confusión sobre cuál workflow es el correcto
 - Mantenimiento triplicado
 
 **Solución:**
+
 ```bash
 # Consolidar en un único workflow
 mv .github/workflows/ci-optimized.yml .github/workflows/ci.yml
@@ -242,21 +278,25 @@ rm .github/workflows/main.yml .github/workflows/optimized-ci.yml
 ---
 
 ### 8. ⚠️ Secrets No Configurados en GitHub Actions
+
 **Archivos:** Todos los workflows
 
 **Problema:**
 Workflows esperan secrets que no están documentados:
+
 - `TURBO_TOKEN`
 - `TURBO_TEAM`
 - `SNYK_TOKEN`
 - `CODECOV_TOKEN`
 
 **Impacto:**
+
 - Caché de Turbo no funcional
 - Security scanning deshabilitado
 - Coverage reports no disponibles
 
 **Solución:**
+
 ```bash
 # Documentar en README
 cat >> .github/SECRETS_REQUIRED.md << 'EOF'
@@ -280,22 +320,27 @@ EOF
 ---
 
 ### 9. ⚠️ Docker Images Sin Tags Versionados
+
 **Archivo:** `.github/workflows/main.yml`
 
 **Problema:**
+
 ```yaml
 tags: |
   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.app }}:${{ github.sha }}
   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.app }}:latest
 ```
+
 Solo usa SHA y latest, no semantic versioning.
 
 **Impacto:**
+
 - Imposible rollback a versiones específicas
 - No hay control de versiones semántico
 - Dificulta tracking de cambios
 
 **Solución:**
+
 ```yaml
 - name: Generate version tags
   id: meta
@@ -315,21 +360,26 @@ Solo usa SHA y latest, no semantic versioning.
 ---
 
 ### 10. ⚠️ Missing Init Scripts for Database
+
 **Archivo:** `docker-compose.yml`  
 **Línea:** 14
 
 **Problema:**
+
 ```yaml
 - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
 ```
+
 Archivo `scripts/init-db.sql` no existe.
 
 **Impacto:**
+
 - Base de datos no se inicializa correctamente
 - Tablas y schemas faltantes
 - Aplicación no puede conectarse a DB
 
 **Solución:**
+
 ```sql
 -- scripts/init-db.sql
 CREATE DATABASE IF NOT EXISTS altamedica;
@@ -357,16 +407,19 @@ CREATE TABLE IF NOT EXISTS patients (
 ---
 
 ### 11. ⚠️ No Resource Limits in Docker Compose
+
 **Archivo:** `docker-compose.yml`
 
 **Problema:** Servicios sin límites de recursos pueden consumir toda la memoria/CPU.
 
 **Impacto:**
+
 - Host puede quedar sin recursos
 - Servicios pueden crashear por OOM
 - Performance degradado
 
 **Solución:**
+
 ```yaml
 services:
   app:
@@ -378,7 +431,7 @@ services:
         reservations:
           cpus: '1'
           memory: 1G
-  
+
   postgres:
     deploy:
       resources:
@@ -392,21 +445,25 @@ services:
 ---
 
 ### 12. ⚠️ Deprecated Dependencies
+
 **Resultado del comando:** `pnpm outdated`
 
 **Problema:**
 Múltiples dependencias deprecated:
+
 - `@types/cookie`: 0.6.0 (deprecated)
 - `@types/express-rate-limit`: 6.0.2 (deprecated)
 - `@types/ioredis`: 5.0.0 (deprecated)
 - `critters`: 0.0.25 (deprecated)
 
 **Impacto:**
+
 - Security vulnerabilities no patcheadas
 - Features obsoletos
 - Soporte discontinuado
 
 **Solución:**
+
 ```bash
 # Update deprecated packages
 pnpm remove @types/cookie @types/express-rate-limit @types/ioredis
@@ -424,15 +481,19 @@ pnpm add -D @critters/webpack-plugin
 ## 📊 PROBLEMAS DE PRIORIDAD MEDIA
 
 ### 13. ℹ️ Missing Monitoring Configuration
+
 **Archivo:** `docker-compose.yml`
 
 **Problema:**
+
 ```yaml
 - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
 ```
+
 Archivo de configuración de Prometheus no existe.
 
 **Solución:**
+
 ```yaml
 # config/prometheus.yml
 global:
@@ -444,7 +505,7 @@ scrape_configs:
     static_configs:
       - targets: ['app:3001']
     metrics_path: /metrics
-  
+
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node-exporter:9100']
@@ -455,15 +516,19 @@ scrape_configs:
 ---
 
 ### 14. ℹ️ Nginx Configuration Missing
+
 **Archivo:** `docker-compose.yml`
 
 **Problema:**
+
 ```yaml
 - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
 ```
+
 Configuración de Nginx no existe.
 
 **Solución:**
+
 ```nginx
 # config/nginx.conf
 events {
@@ -474,21 +539,21 @@ http {
     upstream api {
         server app:3001;
     }
-    
+
     upstream web {
         server app:3000;
     }
-    
+
     server {
         listen 80;
         server_name altamedica.local;
-        
+
         location /api {
             proxy_pass http://api;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
         }
-        
+
         location / {
             proxy_pass http://web;
             proxy_set_header Host $host;
@@ -503,9 +568,11 @@ http {
 ---
 
 ### 15. ℹ️ No E2E Tests Configuration
+
 **Problema:** Tests E2E mencionados pero no configurados.
 
 **Solución:**
+
 ```typescript
 // e2e/playwright.config.ts
 import { defineConfig } from '@playwright/test';
@@ -535,6 +602,7 @@ export default defineConfig({
 ## 📝 RESUMEN DE ACCIONES REQUERIDAS
 
 ### Acciones Inmediatas (24-48 horas)
+
 1. ✅ Corregir branch names en workflows
 2. ✅ Configurar variables de entorno críticas
 3. ✅ Resolver conflictos de puertos
@@ -542,6 +610,7 @@ export default defineConfig({
 5. ✅ Crear script init-db.sql
 
 ### Acciones a Corto Plazo (1 semana)
+
 1. ✅ Consolidar workflows duplicados
 2. ✅ Configurar GitHub Secrets
 3. ✅ Implementar semantic versioning para Docker
@@ -549,6 +618,7 @@ export default defineConfig({
 5. ✅ Agregar límites de recursos
 
 ### Acciones a Medio Plazo (2-4 semanas)
+
 1. ✅ Configurar monitoring completo
 2. ✅ Implementar E2E tests
 3. ✅ Setup Nginx reverse proxy
@@ -559,6 +629,7 @@ export default defineConfig({
 ## 🎯 Scripts de Remediación Automática
 
 ### Script 1: Fix Critical Issues
+
 ```bash
 #!/bin/bash
 # fix-critical.sh
@@ -590,6 +661,7 @@ echo "✅ Critical issues fixed!"
 ```
 
 ### Script 2: Validate Infrastructure
+
 ```bash
 #!/bin/bash
 # validate-infrastructure.sh
@@ -634,11 +706,11 @@ echo "🏁 Validation complete!"
 
 ## 📊 Métricas de Impacto
 
-| Categoría | Issues | Impacto | Tiempo Estimado |
-|-----------|---------|---------|-----------------|
-| Críticos | 6 | Sistema no funcional | 48 horas |
-| Alta | 6 | CI/CD comprometido | 1 semana |
-| Media | 3 | Features limitados | 2 semanas |
+| Categoría | Issues | Impacto                   | Tiempo Estimado |
+| --------- | ------ | ------------------------- | --------------- |
+| Críticos  | 6      | Sistema no funcional      | 48 horas        |
+| Alta      | 6      | CI/CD comprometido        | 1 semana        |
+| Media     | 3      | Features limitados        | 2 semanas       |
 | **TOTAL** | **15** | **Sistema 40% funcional** | **3-4 semanas** |
 
 ---
@@ -658,4 +730,4 @@ El proyecto AltaMedica requiere intervención inmediata en su infraestructura. L
 
 ---
 
-*Generado el 2025-08-27 por Infrastructure Diagnostic Tool v1.0*
+_Generado el 2025-08-27 por Infrastructure Diagnostic Tool v1.0_

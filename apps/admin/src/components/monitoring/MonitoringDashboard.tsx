@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -12,7 +12,6 @@ import {
   Network,
   RefreshCw,
   Server,
-  Wifi,
   ZapOff,
 } from 'lucide-react';
 
@@ -70,7 +69,7 @@ const MonitoringDashboard: React.FC = () => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(5000); // 5 seconds
+  const [refreshInterval] = useState(5000); // 5 seconds
 
   // Mock data para demostración
   const generateMockMetrics = (): SystemMetrics => {
@@ -152,7 +151,7 @@ const MonitoringDashboard: React.FC = () => {
     };
   };
 
-  const fetchMetrics = async () => {
+  const fetchMetrics = useCallback(async () => {
     setIsLoading(true);
     try {
       // En producción, esto haría una llamada real a la API
@@ -232,18 +231,18 @@ const MonitoringDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchMetrics();
-  }, []);
+    void fetchMetrics();
+  }, [fetchMetrics]);
 
   useEffect(() => {
     if (autoRefresh) {
       const interval = setInterval(fetchMetrics, refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [autoRefresh, refreshInterval]);
+  }, [autoRefresh, refreshInterval, fetchMetrics]);
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -300,8 +299,11 @@ const MonitoringDashboard: React.FC = () => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <label className="text-sm text-gray-600">Auto Refresh:</label>
+            <label className="text-sm text-gray-600" htmlFor="autoRefresh">
+              Auto Refresh:
+            </label>
             <button
+              id="autoRefresh"
               onClick={() => setAutoRefresh(!autoRefresh)}
               className={`px-3 py-1 rounded text-sm font-medium ${
                 autoRefresh ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -311,7 +313,7 @@ const MonitoringDashboard: React.FC = () => {
             </button>
           </div>
           <button
-            onClick={fetchMetrics}
+            onClick={() => fetchMetrics()}
             disabled={isLoading}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
           >
@@ -339,8 +341,8 @@ const MonitoringDashboard: React.FC = () => {
                       metrics.cpu.usage > 80
                         ? 'bg-red-500'
                         : metrics.cpu.usage > 60
-                          ? 'bg-yellow-500'
-                          : 'bg-green-500'
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
                     }`}
                     style={{ width: `${metrics.cpu.usage}%` }}
                   />
@@ -366,8 +368,8 @@ const MonitoringDashboard: React.FC = () => {
                       metrics.memory.percentage > 85
                         ? 'bg-red-500'
                         : metrics.memory.percentage > 70
-                          ? 'bg-yellow-500'
-                          : 'bg-green-500'
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
                     }`}
                     style={{ width: `${metrics.memory.percentage}%` }}
                   />
@@ -392,8 +394,8 @@ const MonitoringDashboard: React.FC = () => {
                       metrics.disk.percentage > 90
                         ? 'bg-red-500'
                         : metrics.disk.percentage > 75
-                          ? 'bg-yellow-500'
-                          : 'bg-green-500'
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
                     }`}
                     style={{ width: `${metrics.disk.percentage}%` }}
                   />
@@ -483,8 +485,8 @@ const MonitoringDashboard: React.FC = () => {
                           alert.type === 'critical'
                             ? 'border-red-500 bg-red-50'
                             : alert.type === 'warning'
-                              ? 'border-yellow-500 bg-yellow-50'
-                              : 'border-blue-500 bg-blue-50'
+                            ? 'border-yellow-500 bg-yellow-50'
+                            : 'border-blue-500 bg-blue-50'
                         }`}
                       >
                         <div className="flex items-center justify-between">

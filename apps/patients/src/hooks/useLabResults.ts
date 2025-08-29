@@ -1,4 +1,4 @@
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useCallback, useEffect, useState } from 'react';
 
 import { logger } from '@altamedica/shared';

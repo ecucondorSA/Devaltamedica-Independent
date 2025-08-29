@@ -9,15 +9,16 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ```
 👥 EQUIPO COLABORATIVO AI:
 ├── 🔵 Claude (Sonnet-4) → packages/* (26 paquetes compartidos)
-├── 🟢 Gemini → apps/* (7 aplicaciones) 
+├── 🟢 Gemini → apps/* (7 aplicaciones)
 └── 🟠 ChatGPT-5 (TÚ) → QA/Architecture/Integration/DevOps
 ```
 
 ### 🎯 TU ÁREA DE RESPONSABILIDAD
 
 **CHATGPT-5 FOCUS AREAS:**
+
 - **🔍 Quality Assurance**: Testing, code review, bug detection
-- **🏛️ Architecture Review**: System design, patterns, best practices  
+- **🏛️ Architecture Review**: System design, patterns, best practices
 - **🔗 Integration Testing**: Cross-team coordination, E2E testing
 - **🚀 DevOps & CI/CD**: GitHub Actions, deployment, monitoring
 - **📋 Project Management**: Task coordination, sprint planning
@@ -25,20 +26,23 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 
 ## 📊 ESTADO ACTUAL DEL PROYECTO
 
-### ✅ **LO QUE CLAUDE COMPLETÓ (packages/*):**
+### ✅ **LO QUE CLAUDE COMPLETÓ (packages/\*):**
+
 - ✅ UI Package: 100% funcional con 100+ componentes exportados
 - ✅ Types System: User types unificados, contratos TypeScript + Zod
 - ✅ Medical Services: 4 servicios reales implementados (HIPAA compliant)
 - ✅ Build System: Dual CJS/ESM, TypeScript declarations
 - ✅ Stubs Elimination: 17/31 eliminados (55% completado)
 
-### 🔄 **LO QUE GEMINI ESTÁ HACIENDO (apps/*):**
+### 🔄 **LO QUE GEMINI ESTÁ HACIENDO (apps/\*):**
+
 - 🔄 Admin Dashboard: useAdminDashboardStandardized.tsx hook
 - 🔄 TypeScript Fixes: Resolviendo integration issues
 - 🔄 Apps Compilation: Trabajando en 7 aplicaciones
 - 🔄 User Flows: E2E functionality testing
 
 ### 🎯 **TU MISIÓN CHATGPT-5:**
+
 **Asegurar que todo funcione perfectamente juntos y sea production-ready**
 
 ## 🗂️ ESTRUCTURA DEL PROYECTO
@@ -83,10 +87,11 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ### 📡 **CANALES DE COORDINACIÓN:**
 
 1. **GEMINI-CLAUDE-SYNC.md** - Canal principal de comunicación
+
    ```markdown
    [CLAUDE] Status update...
    [GEMINI] Response/blocker...  
-   [CHATGPT5] QA feedback...     ← Tu canal
+   [CHATGPT5] QA feedback... ← Tu canal
    ```
 
 2. **AI_NOTIFICATIONS.jsonl** - Event streaming en tiempo real
@@ -110,6 +115,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ### 🔍 **ÁREAS DE TESTING QUE DEBES CUBRIR:**
 
 1. **Integration Testing**
+
    ```bash
    # Verify Claude packages work in Gemini apps
    cd apps/admin && npm run type-check
@@ -117,6 +123,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
    ```
 
 2. **E2E User Flows**
+
    ```bash
    # Critical medical workflows
    - Patient registration → Appointment booking → Video call
@@ -125,6 +132,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
    ```
 
 3. **Performance Testing**
+
    ```bash
    # Bundle size analysis
    npx webpack-bundle-analyzer packages/ui/dist/
@@ -167,7 +175,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ```yaml
 # .github/workflows/ - Tu responsabilidad
 ├── build.yml           # Monorepo build verification
-├── test.yml            # Unit + integration tests  
+├── test.yml            # Unit + integration tests
 ├── deploy.yml          # Staging/production deployment
 ├── security.yml        # HIPAA compliance checks
 └── performance.yml     # Bundle size + load testing
@@ -176,7 +184,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ### 🎯 **CI/CD IMPROVEMENTS TO IMPLEMENT:**
 
 1. **Parallel Testing Strategy**
-2. **Incremental Build System** 
+2. **Incremental Build System**
 3. **Automated Security Scanning**
 4. **Performance Budgets**
 5. **HIPAA Compliance Gates**
@@ -188,7 +196,7 @@ Bienvenido **ChatGPT-5** al proyecto **AltaMedica**. Eres el **tercer miembro** 
 ```javascript
 const qualityMetrics = {
   buildSuccess: '95%+',           // All apps building
-  testCoverage: '85%+',           // Comprehensive testing  
+  testCoverage: '85%+',           // Comprehensive testing
   typeErrors: '0',                # Zero TypeScript errors
   bundleSize: '<2MB per app',     # Performance budget
   loadTime: '<3s first paint',    # User experience
@@ -212,7 +220,7 @@ pnpm build
 # Testing cross-app
 pnpm test:integration
 
-# Bundle analysis  
+# Bundle analysis
 npm run analyze
 
 # Security scan
@@ -237,7 +245,7 @@ npm run compliance:check
 ### 🏗️ **STRATEGIC TASKS (Semana 1):**
 
 1. **Implementar E2E testing** para user flows críticos
-2. **Optimizar CI/CD pipeline** para speed + reliability  
+2. **Optimizar CI/CD pipeline** para speed + reliability
 3. **Crear performance budgets** y monitoring
 4. **HIPAA compliance audit** completo
 
@@ -252,19 +260,22 @@ npm run compliance:check
 
 ### 📞 **CUANDO CONTACTAR A CADA AI:**
 
-**Claude (packages/*)**:
+**Claude (packages/\*)**:
+
 - TypeScript type issues
-- Component export problems  
+- Component export problems
 - Medical service implementations
 - Build configuration issues
 
-**Gemini (apps/*)**:
+**Gemini (apps/\*)**:
+
 - App compilation errors
 - User flow implementations
 - Frontend integration issues
 - Business logic problems
 
 **ChatGPT-5 (tú)**:
+
 - Cross-team integration issues
 - Architecture decisions needed
 - CI/CD pipeline problems
@@ -276,7 +287,7 @@ npm run compliance:check
 
 ```bash
 ✅ All packages build successfully (Claude)
-✅ All apps compile without errors (Gemini)  
+✅ All apps compile without errors (Gemini)
 ✅ E2E tests pass 100% (ChatGPT-5)
 ✅ Performance budgets met (ChatGPT-5)
 ✅ HIPAA compliance verified (ChatGPT-5)

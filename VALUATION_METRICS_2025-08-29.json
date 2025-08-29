@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-08-29T09:38:53.366Z",
+  "code": {
+    "totalFiles": 5603,
+    "totalLines": 142286,
+    "testFiles": 130,
+    "reactComponents": 983,
+    "customHooks": 572
+  },
+  "files": {},
+  "dependencies": {
+    "total": 52,
+    "internalPackages": 27,
+    "apps": 7
+  },
+  "commits": {
+    "total": 79,
+    "lastMonth": 79,
+    "contributors": 3
+  },
+  "complexity": {
+    "typeErrors": 0,
+    "documentationFiles": 235
+  },
+  "infrastructure": {
+    "cloud": "Vercel + Firebase",
+    "cicd": "GitHub Actions",
+    "monitoring": "Vercel Analytics",
+    "database": "Firestore",
+    "auth": "Firebase Auth + Custom JWT",
+    "storage": "Firebase Storage",
+    "cdn": "Vercel Edge Network",
+    "serverless": "Vercel Edge Functions"
+  },
+  "business": {
+    "developmentHours": 4743,
+    "developmentValue": 355725,
+    "replacementCost": {
+      "conservative": 474300,
+      "realistic": 711450,
+      "aggressive": 948600
+    }
+  }
+}

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@altamedica/ui'
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface TimeSlot {
   id: string
   dayOfWeek: number
@@ -86,7 +86,7 @@ export default function SchedulePage() {
 
   const saveSchedule = () => {
     // Save schedule to backend
-    logger.info('Saving schedule...', { weeklySchedule, breaks, slotDuration })
+    logger.info('Saving schedule...', JSON.stringify({ weeklySchedule, breaks, slotDuration }))
     setScheduleModified(false)
   }
 

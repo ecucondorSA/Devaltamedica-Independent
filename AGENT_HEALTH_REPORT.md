@@ -1,0 +1,425 @@
+# Agent Health Report
+
+## Totales por patrón
+- TODO: 492
+- FIXME: 3
+- HACK: 1
+- TS_IGNORE: 12
+- ESLINT_DISABLE: 94
+- ANY_TYPE: 2262
+- CONSOLE_LOG: 699
+- RELATIVE_IMPORT_DEEP: 0
+
+## Archivos con issues: 754
+
+## Top 25 archivos por ocurrencias
+- apps/companies/src/app/marketplace/page.tsx: 34
+- apps/doctors/src/components/ui-stub.tsx: 28
+- apps/api-server/src/middleware/hipaa-audit.middleware.ts: 27
+- integration-health-check.cjs: 27
+- apps/doctors/src/components/telemedicine/ProfessionalTelemedicineCall.tsx: 25
+- packages/hooks/src/api/useAltamedicaAPI.ts: 25
+- apps/api-server/src/app/api/v1/webhooks/stripe/route.ts: 24
+- apps/doctors/src/hooks/DEPRECATED_useTelemedicineDoctorHybrid.ts: 24
+- monitor-gemini.cjs: 24
+- packages/shared/src/services/patient-data-export.service.ts: 24
+- packages/alta-agent/src/core/AltaAgentWithAI.ts: 23
+- apps/api-server/src/__tests__/notifications.test.ts: 22
+- apps/patients/src/components/dashboard/__tests__/TelemedicineDashboard.test.tsx: 22
+- apps/api-server/src/__tests__/telemedicine.test.ts: 21
+- packages/auth/src/services/AuthService.ts: 21
+- apps/doctors/src/components/b2c/MyJobApplications.tsx: 20
+- packages/shared/src/services/baa.service.ts: 20
+- packages/utils/src/storage.ts: 20
+- quick-health-check.cjs: 20
+- apps/patients/src/components/notifications/__tests__/NotificationSystem.test.tsx: 19
+- apps/web-app/src/hooks/api-hooks.ts: 19
+- packages/database/src/services/transaction.service.ts: 19
+- apps/doctors/src/components/qos/RealtimeQoSMetrics.tsx: 18
+- packages/shared/src/services/patient-export/types/index.ts: 18
+- packages/utils/src/TechnicalKnowledgeService.ts: 18
+
+## Duplicados de sincronización
+- GEMINI-CLAUDE-SYNC.md: sí
+- gemini-claude-sync.md: sí
+
+## Muestras (máx. 100)
+- .vscode/extensions.json
+  - [info] TODO @27 → "gruntfuggly.todo-tree",
+- .vscode/settings.json
+  - [info] TODO @118 → // 🎯 Security settings - habilitado todo
+- AGENT_BACKLOG.md
+  - [info] TODO @7 → - Salud del código: identificar TODO/FIXME/ts-ignore y patrones de riesgo.
+  - [warn] FIXME @7 → - Salud del código: identificar TODO/FIXME/ts-ignore y patrones de riesgo.
+  - [info] TODO @17 → - Escanear y listar: TODO, FIXME, HACK, ts-ignore, eslint-disable, any, console.log en código productivo.
+  - [warn] FIXME @17 → - Escanear y listar: TODO, FIXME, HACK, ts-ignore, eslint-disable, any, console.log en código productivo.
+  - [warn] HACK @17 → - Escanear y listar: TODO, FIXME, HACK, ts-ignore, eslint-disable, any, console.log en código productivo.
+- AUDITORIA_CONTEXTO_CLAUDE.md
+  - [info] TODO @39 → - **#3**: Hacer que todo funcione E2E para el usuario final
+  - [info] TODO @112 → ✅ **Objetivo**: Hacer que todo funcione para el usuario final
+  - [info] TODO @131 → - `devaltamedica-validate/` → Verificar todo
+- AUDITORIA_CRITICA_PROYECTO_ALTAMEDICA.md
+  - [warn] ANY_TYPE @167 → const processData = (data: any) => { ... }
+- AUDITORIA_SISTEMA_BUILD_ALTAMEDICA.md
+  - [info] TODO @555 → 2. **Errores actuales bloquean TODO el progreso**
+- CHATGPT5_INTEGRATION_PROMPT.md
+  - [info] TODO @46 → **Asegurar que todo funcione perfectamente juntos y sea production-ready**
+- CLAUDE.md
+  - [info] TODO @69 → 3. **Web-app**: Solo landing page, falta todo el contenido
+  - [info] CONSOLE_LOG @198 → console.log(JSON.stringify(status, null, 2));
+  - [info] CONSOLE_LOG @220 → console.log(`Fixed: ${file}`);
+  - [info] CONSOLE_LOG @246 → console.log(JSON.stringify(validateBuild(), null, 2));
+  - [info] CONSOLE_LOG @398 → console.log(JSON.stringify(runCompleteDiagnostics(), null, 2));
+- CLAUDE_IMPLEMENTATION_TASKS.md
+  - [info] TODO @5 → **Proyecto**: AltaMedica - Sistema Todo-Write
+  - [info] TODO @10 → ## 📋 **TAREA PRINCIPAL: COMPLETAR SISTEMA TODO-WRITE**
+  - [info] TODO @32 → **Archivo**: `apps/admin/src/components/todo-write/TodoWriteSystem.tsx`
+  - [info] TODO @223 → **Archivo**: `apps/admin/src/components/todo-write/TodoWriteSystem.tsx`
+  - [info] TODO @236 → **Archivo**: `apps/admin/src/components/todo-write/TodoWriteSystem.tsx`
+- CLAUDE_STATE_RECOVERY_PROMPT.md
+  - [info] TODO @11 → - **Claude (TÚ)**: Responsable de todo en `packages/*` (26 paquetes compartidos)
+  - [info] TODO @12 → - **Gemini**: Responsable de todo en `apps/*` (7 aplicaciones)
+  - [info] CONSOLE_LOG @133 → node -e "console.log(Object.keys(require('./dist/index.cjs')).length)" # Debe mostrar ~101
+  - [info] CONSOLE_LOG @140 → node -e "const { Dialog, CardCorporate, AuditLogTable } = require('@altamedica/ui'); console.log('Imports OK')"
+  - [info] CONSOLE_LOG @251 → console.log('✅ All packages importable');
+- DOCKER_SETUP.md
+  - [info] TODO @38 → make dev     # Inicia todo el entorno de desarrollo
+  - [info] TODO @161 → ### Limpiar todo y empezar de nuevo
+  - [info] TODO @164 → make clean  # ⚠️ Borra TODO
+- DOCUMENTACION_ACTUALIZADA_WORKTREES.md
+  - [info] TODO @109 → 1. **Documentación coherente** en todo el proyecto
+- FINAL_EXECUTIVE_REPORT.md
+  - [info] TODO @272 → - Todo código IA debe ser verificado por humano senior
+- GEMINI-CLAUDE-SYNC.md
+  - [info] TODO @16 → - **Alcance**: Todo el ecosistema AltaMedica analizado
+  - [info] TODO @55 → 1. **📊 Análisis Masivo**: 1M tokens permite procesar todo el monorepo
+  - [info] TODO @445 → - **Investigación Completa**: Todo el ecosistema AltaMedica analizado
+  - [info] TODO @607 → 1. **ANALIZAR TODO** (1M tokens): packages/ + apps/
+  - [info] TODO @614 → 8. **REPORTAR TODO** lo que cambies
+- GEMINI_STATE_RECOVERY_PROMPT.md
+  - [info] TODO @11 → - **Claude**: Responsable de todo en `packages/*` (26 paquetes compartidos)
+  - [info] TODO @12 → - **Gemini (TÚ)**: Responsable de todo en `apps/*` (7 aplicaciones)
+  - [info] TODO @34 → - Zero errores de TypeScript en todo el package
+  - [info] CONSOLE_LOG @78 → node -e "const ui = require('@altamedica/ui'); console.log('UI exports:', Object.keys(ui).length)"
+  - [info] CONSOLE_LOG @81 → node -e "const { Dialog, CardCorporate, AuditLogTable } = require('@altamedica/ui'); console.log('Critical components available')"
+- INFORME_DEPURACION_COMPILACION.md
+  - [info] TODO @54 → 3.  Leí el archivo `aliases.ts` y confirmé que reexportaba todo desde los paquetes del workspace, creando una **dependencia circular** que probablemente era la causa raíz del problema.
+- INFORME_DEPURACION_COMPILACION_EXTENDIDO.md
+  - [info] TODO @43 → js: `'use client';`, // Esto rompía todo el código del servidor
+  - [info] TODO @57 → - Los banners de compilación afectan a TODO el output
+  - [warn] ANY_TYPE @118 → export const useMarketplaceJobs = (params?: any) => {
+  - [info] TODO @345 → Si todo falla, use este script que garantiza un build:
+  - [info] TODO @353 → # Limpiar todo
+- INFORME_FALSAS_COMPLETACIONES_CLAUDE.md
+  - [info] TODO @39 → > _"When Claude has a long list and runs for more than 30 minutes, it will stop and leave the todo list undone."_
+  - [info] TODO @210 → "✅ Todo completado exitosamente!"
+- INFORME_TECNICO_ALTAMEDICA_2025.md
+  - [info] TODO @129 → - **Reciente**: Sistema Todo-Write implementado
+- INVESTIGACION_CLAUDE_VIBECODING.md
+  - [info] TODO @213 → 1. **Code review obligatorio** para todo código AI-generado
+- OBTENER_CREDENCIALES.md
+  - [info] TODO @102 → Ejecuta este comando para configurar todo automáticamente:
+  - [info] TODO @154 → ¡Con esto deberías tener todo listo en menos de 15 minutos! 🚀
+- PLATFORM_AUDIT_AND_ACTION_PLAN.md
+  - [info] TODO @18 → 4.  **Inspección de Configuración:** Se revisaron sistemáticamente los archivos de configuración clave en todo el monorepo, incluyendo:
+  - [info] TODO @36 → - **Investigación:** Se observó que las aplicaciones (`doctors`, `companies`) fallaban porque no encontraban los módulos de sus dependencias (`types`, `shared`). Esto indicaba que Turbo estaba intentando construir todo en paralelo, sin espe
+  - [info] TODO @152 → - **Acción:** Ejecuta el build para todo el monorepo. Con las correcciones aplicadas, este comando debería completarse sin errores.
+- README.md
+  - [info] TODO @16 → - **✅ Sistema Todo-Write**: Implementado y operativo
+  - [info] TODO @168 → ### 🎯 **Sistema Todo-Write - Gestión de Tareas**
+  - [info] TODO @189 → | **Sistema Todo-Write**       | 0% implementado | 100% funcional      | **100%** |
+  - [info] TODO @380 → - **Sistema Todo-Write**: Implementado y operativo
+- VERCEL_SETUP.md
+  - [info] TODO @7 → - ✅ **UI simple** - todo en un dashboard
+  - [info] TODO @38 → 7. **Copia TODO** y pégalo en tu `.env`
+  - [info] TODO @48 → 7. **Copia TODO** y agrégalo a tu `.env`
+  - [info] TODO @139 → 1. **Usar Vercel CLI para todo:**
+  - [info] TODO @158 → ¡Con Vercel todo es más fácil y GRATIS! 🚀
+- VOTING_SYSTEM_LEADERSHIP.md
+  - [info] TODO @302 → **Método**: Universidad del Creador (respuesta privada)
+  - [info] TODO @311 → ## 🎯 MÉTODO SELECCIONADO:
+  - [info] TODO @313 → **MÉTODO DE DESEMPATE CONFIRMADO**: Universidad del Creador
+  - [info] TODO @321 → **Estado**: 🟢 MÉTODO DE DESEMPATE CONFIGURADO
+- apps/admin/src/app/api/health/route.ts
+  - [warn] ESLINT_DISABLE @2 → // eslint-disable-next-line import/no-internal-modules
+- apps/admin/src/app/login/page.tsx
+  - [warn] ESLINT_DISABLE @6 → // eslint-disable-next-line import/no-internal-modules
+- apps/admin/src/app/monitoring/page.tsx
+  - [warn] ESLINT_DISABLE @3 → // eslint-disable-next-line import/no-internal-modules
+- apps/admin/src/app/page.tsx
+  - [warn] ESLINT_DISABLE @3 → // eslint-disable-next-line import/no-internal-modules
+- apps/admin/src/app/todo-write/page.tsx
+  - [warn] ESLINT_DISABLE @1 → // eslint-disable-next-line import/no-internal-modules
+  - [info] TODO @2 → import { TodoWriteSystem } from '../../components/todo-write/TodoWriteSystem';
+- apps/admin/src/app/users/page.tsx
+  - [warn] ESLINT_DISABLE @13 → // eslint-disable-next-line import/no-internal-modules
+- apps/admin/src/components/dashboard/Analytics.tsx
+  - [info] CONSOLE_LOG @142 → console.log(`Exporting analytics as ${exportFormat}...`);
+- apps/admin/src/components/dashboard/AuditLogs.tsx
+  - [info] CONSOLE_LOG @108 → console.error('Error loading audit logs:', error);
+  - [info] CONSOLE_LOG @213 → console.error('Error exportando logs:', error);
+- apps/admin/src/components/dashboard/SystemSettings.tsx
+  - [info] CONSOLE_LOG @116 → console.error('Error loading system settings:', error);
+  - [warn] ANY_TYPE @126 → const handleSettingChange = (section: keyof SystemSettingsType, field: string, value: any) => {
+  - [warn] ANY_TYPE @132 → ...(settings[section] as any),
+  - [info] CONSOLE_LOG @151 → console.log('Settings saved:', settings);
+  - [info] CONSOLE_LOG @153 → console.error('Error saving settings:', error);
+- apps/admin/src/components/todo-write/TodoWriteSystem.tsx
+  - [info] TODO @2 → * TODO-WRITE SYSTEM - ALTAMEDICA
+  - [info] TODO @201 → <h1 className="text-3xl font-bold text-gray-900 mb-2">🎯 TODO-WRITE SYSTEM</h1>
+- apps/admin/src/hooks/useEnhancedAdminDashboard.ts
+  - [info] TODO @96 → recentActivities: [], // TODO: Implement
+- apps/api-server/AUDIT_REPORT_2025.md
+  - [warn] ANY_TYPE @136 → export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+  - [warn] ANY_TYPE @137 → const requestId = (req as any).requestId || crypto.randomUUID();
+  - [info] CONSOLE_LOG @140 → console.error(`[ERROR] ${requestId}`, {
+- apps/api-server/CLAUDE.md
+  - [info] CONSOLE_LOG @27 → console.error(err.stack);
+  - [info] CONSOLE_LOG @220 → console.error(`Attempt ${i + 1} failed:`, error.message);
+  - [info] CONSOLE_LOG @250 → console.log(`Processed ${Math.min(i + batchSize, items.length)}/${items.length} items`);
+  - [info] TODO @450 → | Endpoint                   | Método | Descripción            | Auth | Service                    |
+  - [info] TODO @495 → | Endpoint         | Método | Descripción                  | Auth            | Service              |
+- apps/api-server/sentry.client.config.ts
+  - [warn] ANY_TYPE @47 → function sanitizeMedicalData(data: any): any {
+  - [warn] ANY_TYPE @57 → const sanitized: any = {};
+- apps/api-server/sentry.server.config.ts
+  - [warn] ANY_TYPE @57 → function sanitizeMedicalData(data: any): any {
+  - [warn] ANY_TYPE @68 → const sanitized: any = {};
+- apps/api-server/src/__tests__/audit-prescription.test.ts
+  - [warn] ANY_TYPE @34 → let consoleSpy: any;
+  - [warn] ANY_TYPE @35 → let auditRepo: any;
+  - [warn] ANY_TYPE @52 → Object.values(consoleSpy).forEach((spy: any) => spy.mockRestore());
+  - [warn] ANY_TYPE @206 → (UnifiedAuth as any).mockResolvedValueOnce({
+  - [warn] ANY_TYPE @310 → (global as any).auditEvent = auditEventSpy;
+- apps/api-server/src/__tests__/auth.test.ts
+  - [warn] ANY_TYPE @56 → const decoded = jwt.decode(token) as any;
+  - [warn] ANY_TYPE @204 → const token = generateAuthToken(sensitiveUser as any);
+  - [warn] ANY_TYPE @205 → const decoded = jwt.decode(token) as any;
+  - [warn] ANY_TYPE @213 → const decoded = jwt.decode(token) as any;
+- apps/api-server/src/__tests__/doctors.test.ts
+  - [warn] ANY_TYPE @123 → } as any);
+  - [warn] ANY_TYPE @166 → } as any);
+  - [warn] ANY_TYPE @206 → } as any);
+  - [warn] ANY_TYPE @246 → } as any);
+  - [warn] ANY_TYPE @286 → } as any);
+- apps/api-server/src/__tests__/notifications.test.ts
+  - [warn] ANY_TYPE @55 → let testDb: any;
+  - [warn] ANY_TYPE @99 → (NotificationService.getNotifications as any).mockResolvedValue(mockNotifications);
+  - [warn] ANY_TYPE @129 → (NotificationService.getNotifications as any).mockResolvedValue(mockNotifications);
+  - [warn] ANY_TYPE @159 → (NotificationService.getNotifications as any).mockResolvedValue(mockNotifications);
+  - [warn] ANY_TYPE @177 → (NotificationService.getNotifications as any).mockResolvedValue([]);
+- apps/api-server/src/__tests__/patients.test.ts
+  - [warn] ANY_TYPE @106 → } as any);
+  - [warn] ANY_TYPE @148 → } as any);
+  - [warn] ANY_TYPE @187 → } as any);
+  - [warn] ANY_TYPE @226 → } as any);
+  - [warn] ANY_TYPE @263 → } as any);
+- apps/api-server/src/__tests__/server.test.ts
+  - [warn] ANY_TYPE @6 → let server: any;
+- apps/api-server/src/__tests__/setup.ts
+  - [info] CONSOLE_LOG @19 → console.log('🧪 Setting up test environment...');
+  - [info] CONSOLE_LOG @24 → console.log('🧹 Cleaning up after test...');
+  - [info] CONSOLE_LOG @29 → console.log('🏁 Test environment cleanup completed');
+- apps/api-server/src/__tests__/telemedicine.test.ts
+  - [warn] ANY_TYPE @47 → let testDb: any;
+  - [warn] ANY_TYPE @84 → (TelemedicineService.getStats as any).mockResolvedValue(mockStats);
+  - [warn] ANY_TYPE @102 → (TelemedicineService.getStats as any).mockRejectedValue(new Error('Service error'));
+  - [warn] ANY_TYPE @118 → (authenticateToken as any).mockImplementation((req, res) => {
+  - [warn] ANY_TYPE @160 → (TelemedicineService.getActiveSessions as any).mockResolvedValue(mockSessions);
+- apps/api-server/src/__tests__/test-utils.ts
+  - [warn] ANY_TYPE @3 → export const mockRequest = (options: any = {}) => ({
+  - [warn] ANY_TYPE @11 → const res: any = {
+- apps/api-server/src/app/api/v1/anamnesis/save/route.ts
+  - [warn] ANY_TYPE @230 → async function processWithAIAgents(anamnesisId: string, summary: any) {
+- apps/api-server/src/app/api/v1/audit/verify-integrity/route.ts
+  - [warn] ANY_TYPE @36 → const filter: any = {
+- apps/api-server/src/app/api/v1/audit-logs/route.ts
+  - [warn] ANY_TYPE @56 → const filters: any = {};
+- apps/api-server/src/app/api/v1/auth/mfa/verify/route.ts
+  - [warn] ANY_TYPE @213 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/baa/[baaId]/compliance/route.ts
+  - [warn] ANY_TYPE @221 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/baa/[baaId]/route.ts
+  - [warn] ANY_TYPE @151 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/baa/[baaId]/sign/route.ts
+  - [warn] ANY_TYPE @185 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/baa/onboarding/route.ts
+  - [warn] ANY_TYPE @80 → } catch (error: any) {
+  - [warn] ANY_TYPE @175 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/lab-results/route.ts
+  - [warn] ANY_TYPE @256 → async function getLastDocument(query: any, offset: number) {
+- apps/api-server/src/app/api/v1/medications/route.ts
+  - [warn] ANY_TYPE @39 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/patients/[id]/lab-results/route.ts
+  - [warn] ANY_TYPE @152 → async function getLabResultsStats(patientId: string, user: any) {
+  - [warn] ANY_TYPE @239 → async function getLastDocument(query: any, offset: number) {
+- apps/api-server/src/app/api/v1/patients/[id]/medical-records/route.ts
+  - [warn] ANY_TYPE @126 → async function getRecordsByType(patientId: string, user: any) {
+  - [warn] ANY_TYPE @150 → async function getLastConsultation(patientId: string, user: any) {
+  - [warn] ANY_TYPE @180 → async function getActivePrescriptions(patientId: string, user: any) {
+- apps/api-server/src/app/api/v1/patients/export/route.ts
+  - [info] TODO @106 → // TODO: Implementar verificación de relación doctor-paciente
+  - [info] TODO @287 → // TODO: Implementar notificación por email/push
+  - [info] TODO @316 → // TODO: Implementar guardado real en almacenamiento
+  - [info] TODO @333 → // TODO: Implementar firma de URL con JWT o servicio de almacenamiento
+- apps/api-server/src/app/api/v1/predictions/route.ts
+  - [warn] ANY_TYPE @153 → async function logAuditEvent(event: any) {
+- apps/api-server/src/app/api/v1/prescriptions/route.ts
+  - [warn] ANY_TYPE @52 → status: searchParams.get('status') as any || undefined,
+  - [warn] ANY_TYPE @268 → } catch (error: any) {
+- apps/api-server/src/app/api/v1/telemedicine/emergency/route.ts
+  - [info] TODO @74 → // TODO: Send emergency notifications to available doctors
+  - [info] TODO @75 → // TODO: Integrate with emergency services if critical
+- apps/api-server/src/app/api/v1/telemedicine/qos/sessions/[id]/route.ts
+  - [warn] ANY_TYPE @75 → function getQoSRecommendations(score: number, metrics: any) {
+- apps/api-server/src/app/api/v1/webhooks/stripe/route.ts
+  - [warn] ANY_TYPE @109 → async function handlePaymentSuccess(data: any) {
+  - [info] TODO @112 → // TODO: Update order/invoice status
+  - [info] TODO @113 → // TODO: Send confirmation email
+  - [info] TODO @114 → // TODO: Update subscription status if applicable
+  - [warn] ANY_TYPE @120 → async function handlePaymentFailure(data: any) {
+- apps/api-server/src/auth/UnifiedAuthSystem.ts
+  - [warn] ANY_TYPE @419 → return async (request: NextRequest, ...args: any[]) => {
+  - [warn] ANY_TYPE @433 → return async (request: NextRequest, ...args: any[]) => {
+- apps/api-server/src/components/dashboard/HealthStatus.tsx
+  - [warn] ANY_TYPE @144 → data.issues.forEach((issue: any, index: number) => {
+- apps/api-server/src/components/dashboard/RealTimeLogs.tsx
+  - [info] TODO @332 → <option value="all">Todo el tiempo</option>
+- apps/api-server/src/components/dashboard/SystemMetrics.tsx
+  - [warn] ANY_TYPE @68 → memoryUsage: any;
+  - [warn] ANY_TYPE @69 → cpuUsage: any;
+- apps/api-server/src/config/cors.config.ts
+  - [warn] ANY_TYPE @49 → export function applyCorsHeaders(req: any, res: any) {
+  - [warn] ANY_TYPE @83 → export function corsMiddleware(req: any, res: any, next: any) {
+- apps/api-server/src/config/production-security.ts
+  - [warn] ANY_TYPE @129 → (merged as any).REFRESH_TOKEN_EXPIRES_IN
+  - [warn] ANY_TYPE @131 → merged.JWT_REFRESH_EXPIRES_IN = (merged as any).REFRESH_TOKEN_EXPIRES_IN as string;
+  - [warn] ANY_TYPE @135 → (merged as any).ENABLE_AUDIT_LOGGING
+  - [warn] ANY_TYPE @137 → merged.AUDIT_LOGGING_ENABLED = (merged as any).ENABLE_AUDIT_LOGGING as string;
+  - [warn] ANY_TYPE @141 → (merged as any).ENCRYPTION_KEY
+- apps/api-server/src/config/secrets-loader.ts
+  - [info] CONSOLE_LOG @12 → console.log('[secrets-loader] 📁 Usando secrets locales para desarrollo');
+  - [info] CONSOLE_LOG @35 → console.log('[secrets-loader] ✅ Secrets locales cargados desde archivo');
+  - [info] CONSOLE_LOG @39 → console.log('[secrets-loader] ⚠️ No se pudo cargar archivo local-secrets.json');
+  - [info] CONSOLE_LOG @44 → console.log('[secrets-loader] ✅ Usando secrets desde .env');
+  - [info] CONSOLE_LOG @47 → console.error(
+- apps/api-server/src/config/swagger.ts
+  - [info] CONSOLE_LOG @42 → console.log('📄 Swagger docs available at /api-docs');
+- apps/api-server/src/config/vercel-secrets-loader.ts
+  - [info] CONSOLE_LOG @11 → console.log('[secrets-loader] 🚀 Inicializando secrets...');
+  - [info] CONSOLE_LOG @20 → console.log('[secrets-loader] 📡 Conectando a Vercel KV...');
+  - [info] CONSOLE_LOG @32 → console.log('[secrets-loader] ✅ Secrets cargados desde Vercel KV');
+  - [info] CONSOLE_LOG @43 → console.log(
+  - [info] CONSOLE_LOG @50 → console.log('[secrets-loader] ⚠️ Vercel KV no disponible, usando secrets locales');
+- apps/api-server/src/controllers/marketplace-controller.ts
+  - [warn] ANY_TYPE @16 → export const createCompany = async (req: any, res: any) => {
+  - [warn] ANY_TYPE @28 → } catch (error: any) {
+  - [warn] ANY_TYPE @37 → export const updateCompany = async (req: any, res: any) => {
+  - [warn] ANY_TYPE @47 → } catch (error: any) {
+  - [warn] ANY_TYPE @57 → export const createListing = async (req: any, res: any) => {
+- apps/api-server/src/domains/marketplace/marketplace.service.ts
+  - [warn] ANY_TYPE @24 → static async getCompanies(filters: any = {}): Promise<Company[]> {
+  - [warn] ANY_TYPE @46 → static async getJobListings(filters: any = {}): Promise<JobListing[]> {
+  - [warn] ANY_TYPE @71 → static async getJobApplicationsByListing(listingId: string, filters: any = {}): Promise<JobApplication[]> {
+- apps/api-server/src/domains/patients/patient.controller.ts
+  - [warn] ANY_TYPE @21 → sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
+  - [warn] ANY_TYPE @22 → sortOrder: (searchParams.get('sortOrder') as any) || 'desc'
+- apps/api-server/src/domains/patients/patient.service.ts
+  - [warn] ANY_TYPE @89 → static async createPatient(data: any, context?: ServiceContext): Promise<Patient> {
+  - [warn] ANY_TYPE @118 → static async updatePatient(patientId: string, data: any, context?: ServiceContext): Promise<Patient> {
+  - [warn] ANY_TYPE @220 → private static mapDocToPatient(doc: any): Patient {
+- apps/api-server/src/domains/telemedicine/telemedicine.service.ts
+  - [warn] ANY_TYPE @51 → socket.on('offer', (roomId: string, offer: any) => {
+  - [warn] ANY_TYPE @55 → socket.on('answer', (roomId: string, answer: any) => {
+  - [warn] ANY_TYPE @59 → socket.on('ice-candidate', (roomId: string, candidate: any) => {
+  - [warn] ANY_TYPE @221 → const updateData: any = {
+  - [warn] ANY_TYPE @276 → const updateData: any = {
+- apps/api-server/src/infrastructure/database/firestore.ts
+  - [warn] ANY_TYPE @31 → value: any;
+  - [warn] ANY_TYPE @45 → [key: string]: any;
+  - [warn] ANY_TYPE @170 → constraints.push(where(whereClause.field, whereClause.operator as any, whereClause.value));
+  - [warn] ANY_TYPE @216 → constraints.push(where(whereClause.field, whereClause.operator as any, whereClause.value));
+  - [warn] ANY_TYPE @321 → private static convertTimestamps(data: any): any {
+- apps/api-server/src/lib/audit-logger.ts
+  - [info] TODO @102 → // TODO: Implement encryption for PHI-related logs
+  - [warn] ANY_TYPE @124 → user: any,
+- apps/api-server/src/lib/audit.ts
+  - [warn] ANY_TYPE @14 → details: any;
+  - [warn] ANY_TYPE @100 → details: any;
+  - [warn] ANY_TYPE @181 → export async function auditAuthentication(action: string, userId: string, success: boolean, details: any, ipAddress?: string, userAgent?: string): Promise<void> {
+  - [warn] ANY_TYPE @197 → export async function auditMedicalDataAccess(action: string, userId: string, patientId: string, details: any, ipAddress?: string): Promise<void> {
+  - [warn] ANY_TYPE @212 → export async function auditMedicalDataModification(action: string, userId: string, patientId: string, changes: any, ipAddress?: string): Promise<void> {
+- apps/api-server/src/lib/auth-helpers.ts
+  - [warn] ANY_TYPE @64 → handler: (request: NextRequest, user: AuthenticatedUser, ...args: any[]) => Promise<NextResponse>
+  - [warn] ANY_TYPE @66 → return async (request: NextRequest, ...args: any[]): Promise<NextResponse> => {
+  - [warn] ANY_TYPE @86 → handler: (request: NextRequest, user: AuthenticatedUser, ...args: any[]) => Promise<NextResponse>
+  - [warn] ANY_TYPE @88 → return withAuth(async (request: NextRequest, user: AuthenticatedUser, ...args: any[]): Promise<NextResponse> => {
+  - [warn] ANY_TYPE @104 → handler: (request: NextRequest, user: AuthenticatedUser, ...args: any[]) => Promise<NextResponse>
+- apps/api-server/src/lib/database-compat.ts
+  - [info] TODO @6 → * Este archivo proporcionaa un wrapper temporal mientras se migra todo el código
+  - [warn] ANY_TYPE @42 → async create(patientData: any) {
+  - [warn] ANY_TYPE @57 → async update(id: string, updateData: any) {
+  - [warn] ANY_TYPE @67 → async search(filters: any) {
+  - [warn] ANY_TYPE @86 → async create(doctorData: any) {
+- apps/api-server/src/lib/drug-analysis.ts
+  - [warn] ANY_TYPE @10 → medications: any[];
+  - [warn] ANY_TYPE @11 → interactions: any[];
+  - [warn] ANY_TYPE @18 → export function analyzeDrugInteractions(data: any): DrugInteractionResult {
+  - [warn] ANY_TYPE @26 → const interactions: any[] = [];
+  - [warn] ANY_TYPE @95 → (inter: any) => inter.drug.toLowerCase() === med2
+- apps/api-server/src/lib/email.ts
+  - [info] TODO @15 → // Método para enviar correo electrónico
+- apps/api-server/src/lib/encryption.ts
+  - [warn] ANY_TYPE @146 → export function encryptPatientData(patientData: any): any {
+  - [warn] ANY_TYPE @187 → export function decryptPatientData(encryptedPatientData: any): any {
+  - [warn] ANY_TYPE @233 → export function encryptMedicalRecord(recordData: any): any {
+  - [warn] ANY_TYPE @268 → export function decryptMedicalRecord(encryptedRecordData: any): any {
+  - [warn] ANY_TYPE @349 → export function isPHIData(fieldName: string, value: any): boolean {
+- apps/api-server/src/lib/logger.ts
+  - [warn] ANY_TYPE @14 → export function logMedicalAction(action: string, userId: string, details?: any) {
+  - [warn] ANY_TYPE @25 → info: (message: string, meta?: any) => logger.info(`[MEDICAL INFO] ${message}`, meta),
+  - [warn] ANY_TYPE @26 → error: (message: string, meta?: any) => logger.error(`[MEDICAL ERROR] ${message}`, meta),
+  - [warn] ANY_TYPE @27 → warn: (message: string, meta?: any) => logger.warn(`[MEDICAL WARN] ${message}`, meta),
+  - [warn] ANY_TYPE @31 → info: (message: string, meta?: any) => logger.info(`[INFO] ${message}`, meta),
+- apps/api-server/src/lib/mediasoup-server.ts
+  - [warn] ANY_TYPE @20 → async function query(sql: string, params: any[] = []): Promise<any> {
+  - [warn] ANY_TYPE @42 → async function transaction(callback: (client: any) => Promise<any>): Promise<any> {
+  - [warn] ANY_TYPE @78 → deviceInfo?: any;
+  - [warn] ANY_TYPE @678 → private async logSessionEvent(action: string, userId: string, patientId: string, details: any) {
+- apps/api-server/src/lib/medical-data-integration.ts
+  - [warn] ANY_TYPE @145 → static convertPatientToFHIR(altamedicaPatient: any): z.infer<typeof FHIRPatientSchema> {
+  - [warn] ANY_TYPE @190 → static convertObservationToFHIR(observation: any): z.infer<typeof FHIRObservationSchema> {
+  - [warn] ANY_TYPE @508 → private static convertToFHIRResource(record: any, reportType: string): any {
+  - [warn] ANY_TYPE @543 → handler: (request: NextRequest, user: any, patientId: string) => Promise<NextResponse>
+  - [warn] TS_IGNORE @591 → // @ts-ignore: NextRequest no tiene ip, usar cabeceras
+- apps/api-server/src/lib/memory-db.ts
+  - [warn] ANY_TYPE @82 → query: async (sql: string, params: any[] = []): Promise<{ rows: any[] }> => {
+  - [warn] ANY_TYPE @177 → transaction: async (callback: (client: any) => Promise<any>): Promise<any> => {
+- apps/api-server/src/lib/mercadopago.ts
+  - [warn] ANY_TYPE @29 → export const createPaymentPreference = async (preferenceData: any) => {
+- apps/api-server/src/lib/middleware/UnifiedAuth.ts
+  - [warn] ANY_TYPE @146 → (request as any).serviceContext = {
+  - [warn] ANY_TYPE @412 → return async (request: NextRequest, context?: any) => {
+  - [warn] ANY_TYPE @422 → return async (request: NextRequest, context?: any) => {
+- apps/api-server/src/lib/middleware.ts
+  - [warn] ANY_TYPE @11 → handler: (req: NextRequest, authUser?: any) => Promise<NextResponse>,
+  - [warn] ANY_TYPE @22 → let authUser: any = null;
+  - [warn] ANY_TYPE @228 → handler: (req: NextRequest, authUser?: any) => Promise<NextResponse>,
+  - [warn] ANY_TYPE @247 → handler: (req: NextRequest, authUser?: any) => Promise<NextResponse>,
+  - [warn] ANY_TYPE @266 → handler: (req: NextRequest, authUser?: any) => Promise<NextResponse>,
+- apps/api-server/src/lib/mock-medical.ts
+  - [warn] ANY_TYPE @8 → set: async (key: string, value: any) => true,
+  - [warn] ANY_TYPE @26 → audit(action: string, userId: string, data?: any) {
+  - [warn] ANY_TYPE @32 → constructor(prisma: any) {}
+- apps/api-server/src/lib/monitoring.ts
+  - [warn] ANY_TYPE @10 → details?: any;
+  - [warn] ANY_TYPE @549 → async function sendAlert(channel: string, alert: any): Promise<void> {
+  - [warn] ANY_TYPE @576 → return (req: any, res: any, next: any) => {
+- apps/api-server/src/lib/patterns/ServicePattern.ts
+  - [warn] ANY_TYPE @59 → protected validateCreate(data: any): any {
+  - [warn] ANY_TYPE @63 → protected validateUpdate(data: any): any {
+  - [warn] ANY_TYPE @125 → async GET(request: NextRequest, context?: { params?: any }) {
+  - [warn] ANY_TYPE @142 → const serviceContext = (request as any).serviceContext as ServiceContext;
+  - [warn] ANY_TYPE @194 → const serviceContext = (request as any).serviceContext as ServiceContext;
+- apps/api-server/src/lib/rate-limit.ts
+  - [warn] ANY_TYPE @400 → async function applyRateLimit(req: NextRequest, key: string, config: any): Promise<RateLimitResult> {

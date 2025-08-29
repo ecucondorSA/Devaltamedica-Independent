@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Configuración del cliente Socket.IO
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
 
@@ -50,7 +50,7 @@ class SocketManager {
       });
 
       this.socket.on('connect_error', (error) => {
-        logger.error('❌ Error de conexión Socket.IO:', error);
+        logger.error('❌ Error de conexión Socket.IO:', String(error));
         this.isConnected = false;
         reject(error);
       });
@@ -66,7 +66,7 @@ class SocketManager {
       });
 
       this.socket.on('reconnect_error', (error) => {
-        logger.error('❌ Error de reconexión Socket.IO:', error);
+        logger.error('❌ Error de reconexión Socket.IO:', String(error));
         this.reconnectAttempts++;
         
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {

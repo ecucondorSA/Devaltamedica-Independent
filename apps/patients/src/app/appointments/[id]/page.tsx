@@ -1,5 +1,7 @@
 'use client';
 
+import { logger } from '@altamedica/shared/services/logger.service';
+
 import {
   AlertCircle,
   ArrowLeft,
@@ -128,7 +130,7 @@ export default function AppointmentDetailPage() {
         router.push(`/telemedicine/room/${sessionId}`);
       }
     } catch (error) {
-      console.error('Error joining telemedicine session:', error);
+      logger.error('Error joining telemedicine session:', String(error));
       alert('Error al unirse a la videollamada. Por favor intenta nuevamente.');
     }
   };

@@ -1,5 +1,6 @@
 import { getFirebaseFirestore } from '@altamedica/firebase/client';
 import { doc, getDoc } from 'firebase/firestore';
+import { logger } from '../../logger.service';
 
 /**
  * Access Control Service for Patient Data Export
@@ -130,7 +131,7 @@ export class AccessControlService {
         restrictions: this.generateRestrictions(accessRights, exportOptions),
       };
     } catch (error) {
-      console.error('[AccessControl] Error verifying access rights:', error);
+      logger.error('Error verifying access rights', 'AccessControl', error);
       return this.createDeniedResult(
         patientId,
         requestedBy,
@@ -167,7 +168,7 @@ export class AccessControlService {
         lockoutUntil: data.lockoutUntil?.toDate(),
       };
     } catch (error) {
-      console.error('[AccessControl] Error fetching user:', error);
+      logger.error('Error fetching user', 'AccessControl', error);
       return null;
     }
   }
@@ -342,7 +343,7 @@ export class AccessControlService {
       // For now, return true for mock purposes
       return true;
     } catch (error) {
-      console.error('[AccessControl] Error checking doctor authorization:', error);
+      logger.error('Error checking doctor authorization', 'AccessControl', error);
       return false;
     }
   }
@@ -356,7 +357,7 @@ export class AccessControlService {
       // For now, return true for mock purposes
       return true;
     } catch (error) {
-      console.error('[AccessControl] Error checking company authorization:', error);
+      logger.error('Error checking company authorization', 'AccessControl', error);
       return false;
     }
   }
@@ -372,9 +373,12 @@ export class AccessControlService {
   ): Promise<void> {
     try {
       // This would log to audit collection
-      console.log(`[AccessControl] Access attempt: User ${userId}, Patient ${patientId}, Success: ${success}${reason ? `, Reason: ${reason}` : ''}`);
+      logger.info(
+        `Access attempt: User ${userId}, Patient ${patientId}, Success: ${success}${reason ? `, Reason: ${reason}` : ''}`,
+        'AccessControl'
+      );
     } catch (error) {
-      console.error('[AccessControl] Error logging access attempt:', error);
+      logger.error('Error logging access attempt', 'AccessControl', error);
     }
   }
 
@@ -442,7 +446,7 @@ export class AccessControlService {
 
       return user.permissions?.includes(permission) || false;
     } catch (error) {
-      console.error('[AccessControl] Error checking permission:', error);
+      logger.error('Error checking permission', 'AccessControl', error);
       return false;
     }
   }
@@ -467,7 +471,7 @@ export class AccessControlService {
 
       return permissions;
     } catch (error) {
-      console.error('[AccessControl] Error getting effective permissions:', error);
+      logger.error('Error getting effective permissions', 'AccessControl', error);
       return [];
     }
   }

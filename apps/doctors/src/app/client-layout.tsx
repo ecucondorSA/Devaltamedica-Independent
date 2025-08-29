@@ -5,7 +5,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { AuthProvider } from "@altamedica/auth";
 import { useEffect, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface ClientLayoutProps {
   children: React.ReactNode;
 }
@@ -22,7 +22,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
   initializeFirebase();
   setFirebaseInitialized(true);
       } catch (error) {
-  logger.error('Error inicializando Firebase:', error);
+  logger.error('Error inicializando Firebase:', String(error));
   // Continuar de todas formas para desarrollo
   setFirebaseInitialized(true);
       }

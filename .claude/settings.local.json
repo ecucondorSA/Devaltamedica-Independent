@@ -75,7 +75,13 @@
       "Bash(do)",
       "Bash(if [[ ! \"$file\" =~ \"node_modules\" ]])",
       "Bash(then)",
-      "Bash(echo \"Processed: $file\")"
+      "Bash(echo \"Processed: $file\")",
+      "Bash(turbo build:*)",
+      "Bash(turbo clean:*)",
+      "WebSearch",
+      "Bash(SKIP_ENV_VALIDATION=true npx next build --no-lint)",
+      "Bash(export SKIP_ENV_VALIDATION=true)",
+      "Bash(SKIP_ENV_VALIDATION=true pnpm build)"
     ],
     "deny": [],
     "ask": [],

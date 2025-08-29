@@ -19,9 +19,11 @@ export {
 } from './notificationServiceUnified';
 
 // Re-export tipos si son necesarios para compatibilidad
+/*
 export type {
   NotificationTemplate,
   NotificationChannel,
   NotificationPriority,
   NotificationStatus
 } from './notificationServiceUnified';
+*/

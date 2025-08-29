@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Button } from '@altamedica/ui';
 import { logger } from '@altamedica/shared';
 import { 
@@ -170,7 +170,7 @@ export function RecordingConsent({
       }
 
     } catch (error) {
-      logger.error('Error handling consent:', error);
+      logger.error('Error handling consent:', String(error));
       setError(error instanceof Error ? error.message : 'Error al procesar consentimiento');
     } finally {
       setLoading(false);

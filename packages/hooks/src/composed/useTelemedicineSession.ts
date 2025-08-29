@@ -4,8 +4,10 @@
  * @description Hook de alto nivel que combina WebRTC, chat, formularios médicos y notificaciones
  */
 
+import { User } from '@altamedica/auth';
+import { UserRole } from '@altamedica/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAuth } from '../auth/useAuth';
+import { useAuth } from '@altamedica/auth';
 import { usePatients } from '../medical/usePatients';
 import type { MessageEvent } from '../realtime/types';
 import { useNotifications } from '../realtime/useNotifications';
@@ -35,7 +37,6 @@ const logger = {
     }
   }
 };
-type User = { id: string; name: string; userType: string };
 type Patient = { id: string; name?: string } | null;
 
 // ==========================================
@@ -200,7 +201,7 @@ export function useTelemedicineSession(
   // ==========================================
 
   // Autenticación
-  const { user: currentUser, hasPermission } = useAuth();
+  const { user: currentUser, hasRole } = useAuth();
 
   // Datos del paciente
   const patientsApi = usePatients();
@@ -247,7 +248,7 @@ export function useTelemedicineSession(
   const notifications = useNotifications({
     notificationTypes: ['telemedicine', 'medical_alert', 'session_event'],
     userConfig: {
-      userType: currentUser?.userType as any,
+      userType: currentUser?.role as any,
       preferences: {
         enableSound: true,
         enableDesktop: true
@@ -378,7 +379,7 @@ export function useTelemedicineSession(
       setError(null);
 
       // Verificar permisos
-      if (!hasPermission('access_telemedicine')) {
+      if (!hasRole(UserRole.DOCTOR)) {
         throw new Error('No tienes permisos para acceder a telemedicina');
       }
 
@@ -416,7 +417,7 @@ export function useTelemedicineSession(
       setSessionState('error');
       throw error;
     }
-  }, [webrtc, doctorId, hasPermission, realtime, sessionId, patientId, recordSession, consultationType, notifications]);
+  }, [webrtc, doctorId, hasRole, realtime, sessionId, patientId, recordSession, consultationType, notifications]);
 
   const endSession = useCallback(async (reason?: string): Promise<void> => {
     try {
@@ -500,7 +501,7 @@ export function useTelemedicineSession(
     const note: SessionNote = {
       id: `note_${Date.now()}`,
       timestamp: new Date(),
-      author: currentUser?.name || 'Unknown',
+      author: currentUser?.displayName || 'Unknown',
       ...noteData
     };
 
@@ -516,7 +517,7 @@ export function useTelemedicineSession(
   // ==========================================
 
   const startRecording = useCallback(async (): Promise<void> => {
-    if (!hasPermission('hipaa_access')) {
+    if (!hasRole(UserRole.DOCTOR)) {
       throw new Error('No tienes permisos para grabar sesiones médicas');
     }
 
@@ -529,7 +530,7 @@ export function useTelemedicineSession(
       type: 'info',
       priority: 'high'
     });
-  }, [hasPermission, notifications]);
+  }, [hasRole, notifications]);
 
   const stopRecording = useCallback(async (): Promise<void> => {
     setIsRecording(false);

@@ -53,6 +53,7 @@ export * from './components/billing';
 
 // ==================== ONBOARDING COMPONENTS ====================
 export { EnhancedPatientOnboarding } from './components/onboarding/EnhancedPatientOnboarding';
+export { EnhancedPatientOnboarding as EnhancedDoctorOnboarding } from './components/onboarding/EnhancedPatientOnboarding';
 
 // ==================== 3D COMPONENTS ====================
 export * from './components/3d';
@@ -99,6 +100,9 @@ export { Badge } from './badge';
 // Progress component from root
 export { Progress } from './progress';
 
+// Toast hook
+export { useToast } from './hooks/use-toast';
+
 // Table components from root
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 
@@ -109,7 +113,15 @@ export { Input } from './input';
 export { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 // DropdownMenu components
-export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './dropdown-menu';
+export { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel
+} from './dropdown-menu';
 
 // Select components
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
@@ -119,6 +131,15 @@ export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 
 // Textarea component
 export { Textarea } from './textarea';
+
+// Alert components
+export { Alert, AlertDescription, AlertTitle } from './alert';
+
+// Form components (stubs for compatibility)
+export const Checkbox = ({ children, ...props }: any) => <input type="checkbox" {...props} />;
+export const RadioGroup = ({ children, ...props }: any) => <div {...props}>{children}</div>;
+export const RadioGroupItem = ({ children, ...props }: any) => <input type="radio" {...props} />;
+export const Label = ({ children, ...props }: any) => <label {...props}>{children}</label>;
 
 // ==================== HOOKS ====================
 export * from './hooks';

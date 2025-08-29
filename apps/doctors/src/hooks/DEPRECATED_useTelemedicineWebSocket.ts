@@ -3,10 +3,10 @@
  * Manejo de conexiones WebSocket en tiempo real para sesiones de telemedicina
  */
 
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 export interface TelemedicineWebSocketMessage {
   type:
     | 'session_update'
@@ -97,11 +97,11 @@ export function useTelemedicineWebSocket(
           };
           wsRef.current.send(JSON.stringify(messageWithTimestamp));
         } catch (error) {
-          logger.error('Error sending WebSocket message:', error);
+          logger.error('Error sending WebSocket message:', String(error));
           setError('Error enviando mensaje');
         }
       } else {
-        logger.warn('WebSocket not connected. Cannot send message:', message);
+        logger.warn('WebSocket not connected. Cannot send message:', JSON.stringify(message, null, 2));
       }
     },
     [user?.id],
@@ -215,7 +215,7 @@ export function useTelemedicineWebSocket(
 
           // Solo mostrar tipo de mensaje en producción (HIPAA compliance)
           if (process.env.NODE_ENV === 'development') {
-            logger.info('📨 Mensaje WebSocket recibido:', message);
+            logger.info('📨 Mensaje WebSocket recibido:', JSON.stringify(message, null, 2));
           } else {
             logger.info(
               '📨 WebSocket message type:',
@@ -225,13 +225,13 @@ export function useTelemedicineWebSocket(
             );
           }
         } catch (error) {
-          logger.error('Error parsing WebSocket message:', error);
+          logger.error('Error parsing WebSocket message:', String(error));
         }
       };
 
       ws.onclose = (event) => {
         if (process.env.NODE_ENV === 'development') {
-          logger.info('🔌 WebSocket desconectado:', event.code, event.reason);
+          logger.info('🔌 WebSocket desconectado:', String(event.code), event.reason);
         }
         setIsConnected(false);
         setConnectionStatus('disconnected');
@@ -257,12 +257,12 @@ export function useTelemedicineWebSocket(
       };
 
       ws.onerror = (error) => {
-        logger.error('🚨 Error en WebSocket:', error);
+        logger.error('🚨 Error en WebSocket:', String(error));
         setError('Error de conexión WebSocket');
         setConnectionStatus('error');
       };
     } catch (error) {
-      logger.error('Error creating WebSocket:', error);
+      logger.error('Error creating WebSocket:', String(error));
       setError('Error creando conexión WebSocket');
       setConnectionStatus('error');
     }

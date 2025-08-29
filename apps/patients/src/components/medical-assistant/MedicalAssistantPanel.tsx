@@ -71,7 +71,7 @@ export function MedicalAssistantPanel({
       const suggestions = await medicalAssistant.suggestDiagnosis(symptoms);
       setDiagnoses(suggestions);
     } catch (error) {
-      logger.error('Error al sugerir diagnósticos:', error);
+      logger.error('Error al sugerir diagnósticos:', String(error));
     } finally {
       setIsProcessing(false);
     }
@@ -90,7 +90,7 @@ export function MedicalAssistantPanel({
       const results = await medicalAssistant.checkDrugInteractions(medicationData);
       setInteractions(results);
     } catch (error) {
-      logger.error('Error al verificar interacciones:', error);
+      logger.error('Error al verificar interacciones:', String(error));
     } finally {
       setIsProcessing(false);
     }
@@ -110,7 +110,7 @@ export function MedicalAssistantPanel({
       });
       setClinicalNote(note);
     } catch (error) {
-      logger.error('Error al generar nota clínica:', error);
+      logger.error('Error al generar nota clínica:', String(error));
     } finally {
       setIsProcessing(false);
     }
@@ -122,7 +122,7 @@ export function MedicalAssistantPanel({
       const protocolSteps = await medicalAssistant.getProtocol(condition);
       setProtocol(protocolSteps);
     } catch (error) {
-      logger.error('Error al cargar protocolo:', error);
+      logger.error('Error al cargar protocolo:', String(error));
     } finally {
       setIsProcessing(false);
     }
@@ -136,7 +136,7 @@ export function MedicalAssistantPanel({
       const analysis = await medicalAssistant.analyzeConversation(transcript);
       setConversationAnalysis(analysis);
     } catch (error) {
-      logger.error('Error al analizar conversación:', error);
+      logger.error('Error al analizar conversación:', String(error));
     } finally {
       setIsProcessing(false);
     }

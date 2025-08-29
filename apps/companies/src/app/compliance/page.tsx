@@ -2,7 +2,7 @@
 
 import { BAAComplianceStatus } from '@/components/baa/BAAComplianceStatus';
 import { BAAOnboarding } from '@/components/baa/BAAOnboarding';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@altamedica/ui';
 import { Activity, ArrowLeft, FileText, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';

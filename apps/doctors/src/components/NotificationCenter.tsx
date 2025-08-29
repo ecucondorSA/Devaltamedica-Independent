@@ -37,7 +37,7 @@ export default function NotificationCenter() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
-  const [preferences, setPreferences] = useState(notificationService.getPreferences());
+  const [preferences, setPreferences] = useState((notificationService as any).getPreferences());
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,10 +47,10 @@ export default function NotificationCenter() {
       setUnreadCount(newNotifications.filter(n => !n.read).length);
     };
 
-    notificationService.subscribe(handleNotifications);
+    (notificationService as any).subscribe(handleNotifications);
 
     // Limpiar notificaciones antiguas al cargar
-    notificationService.cleanOldNotifications();
+    (notificationService as any).cleanOldNotifications();
 
     // Click outside handler
     const handleClickOutside = (event: MouseEvent) => {
@@ -62,31 +62,31 @@ export default function NotificationCenter() {
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      notificationService.unsubscribe(handleNotifications);
+      (notificationService as any).unsubscribe(handleNotifications);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   const handleNotificationClick = (notification: Notification) => {
-    notificationService.markAsRead(notification.id);
+    (notificationService as any).markAsRead(notification.id);
     if (notification.actionUrl) {
       window.location.href = notification.actionUrl;
     }
   };
 
   const handleMarkAllAsRead = () => {
-    notificationService.markAllAsRead();
+    (notificationService as any).markAllAsRead();
   };
 
   const handleDeleteNotification = (e: React.MouseEvent, notificationId: string) => {
     e.stopPropagation();
-    notificationService.deleteNotification(notificationId);
+    (notificationService as any).deleteNotification(notificationId);
   };
 
   const handlePreferenceChange = (key: string, value: any) => {
     const newPreferences = { ...preferences, [key]: value };
     setPreferences(newPreferences);
-    notificationService.updatePreferences(newPreferences);
+    (notificationService as any).updatePreferences(newPreferences);
   };
 
   const getNotificationIcon = (type: Notification['type']) => {

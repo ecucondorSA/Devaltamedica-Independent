@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings, Globe, Bell, Shield, Database, Mail, Save, RefreshCw } from 'lucide-react';
+import { Bell, Database, Globe, Mail, RefreshCw, Save, Shield } from 'lucide-react';
+
+import { useToast } from '@altamedica/ui';
 import {
+  Button,
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  Button,
   Input,
 } from '@altamedica/ui';
-import { useToast } from '../../hooks/use-toast';
 
 interface SystemSettings {
   general: {
@@ -101,7 +102,7 @@ export default function SettingsPage() {
         title: 'Success',
         description: 'Settings saved successfully',
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to save settings',
@@ -112,7 +113,11 @@ export default function SettingsPage() {
     }
   };
 
-  const updateSettings = (category: keyof SystemSettings, field: string, value: any) => {
+  const updateSettings = (
+    category: keyof SystemSettings,
+    field: string,
+    value: string | number | boolean,
+  ) => {
     setSettings((prev) => ({
       ...prev,
       [category]: {
@@ -132,10 +137,12 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
-          <p className="text-muted-foreground">Configure global system settings and preferences</p>
+          <p className="text-muted-foreground">
+            Configure global system settings and preferences
+          </p>
         </div>
         <Button onClick={handleSave} disabled={loading}>
           <Save className="mr-2 h-4 w-4" />
@@ -153,11 +160,11 @@ export default function SettingsPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm
+                  flex items-center space-x-2 border-b-2 px-1 py-2 text-sm font-medium
                   ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }
                 `}
               >
@@ -179,33 +186,45 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Site Name</label>
+                <label htmlFor="siteName" className="text-sm font-medium">
+                  Site Name
+                </label>
                 <Input
+                  id="siteName"
                   value={settings.general.siteName}
                   onChange={(e) => updateSettings('general', 'siteName', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Site URL</label>
+                <label htmlFor="siteUrl" className="text-sm font-medium">
+                  Site URL
+                </label>
                 <Input
+                  id="siteUrl"
                   value={settings.general.siteUrl}
                   onChange={(e) => updateSettings('general', 'siteUrl', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Admin Email</label>
+                <label htmlFor="adminEmail" className="text-sm font-medium">
+                  Admin Email
+                </label>
                 <Input
+                  id="adminEmail"
                   type="email"
                   value={settings.general.adminEmail}
                   onChange={(e) => updateSettings('general', 'adminEmail', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Time Zone</label>
+                <label htmlFor="timeZone" className="text-sm font-medium">
+                  Time Zone
+                </label>
                 <select
+                  id="timeZone"
                   value={settings.general.timeZone}
                   onChange={(e) => updateSettings('general', 'timeZone', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
+                  className="w-full rounded-md border px-3 py-2"
                 >
                   <option value="America/Mexico_City">Mexico City</option>
                   <option value="America/New_York">New York</option>
@@ -229,45 +248,63 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">SMTP Host</label>
+                <label htmlFor="smtpHost" className="text-sm font-medium">
+                  SMTP Host
+                </label>
                 <Input
+                  id="smtpHost"
                   value={settings.email.smtpHost}
                   onChange={(e) => updateSettings('email', 'smtpHost', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">SMTP Port</label>
+                <label htmlFor="smtpPort" className="text-sm font-medium">
+                  SMTP Port
+                </label>
                 <Input
+                  id="smtpPort"
                   value={settings.email.smtpPort}
                   onChange={(e) => updateSettings('email', 'smtpPort', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">SMTP Username</label>
+                <label htmlFor="smtpUser" className="text-sm font-medium">
+                  SMTP Username
+                </label>
                 <Input
+                  id="smtpUser"
                   value={settings.email.smtpUser}
                   onChange={(e) => updateSettings('email', 'smtpUser', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">SMTP Password</label>
+                <label htmlFor="smtpPassword" className="text-sm font-medium">
+                  SMTP Password
+                </label>
                 <Input
+                  id="smtpPassword"
                   type="password"
                   value={settings.email.smtpPassword}
                   onChange={(e) => updateSettings('email', 'smtpPassword', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">From Email</label>
+                <label htmlFor="fromEmail" className="text-sm font-medium">
+                  From Email
+                </label>
                 <Input
+                  id="fromEmail"
                   type="email"
                   value={settings.email.fromEmail}
                   onChange={(e) => updateSettings('email', 'fromEmail', e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">From Name</label>
+                <label htmlFor="fromName" className="text-sm font-medium">
+                  From Name
+                </label>
                 <Input
+                  id="fromName"
                   value={settings.email.fromName}
                   onChange={(e) => updateSettings('email', 'fromName', e.target.value)}
                 />
@@ -293,8 +330,11 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Session Timeout (minutes)</label>
+                <label htmlFor="sessionTimeout" className="text-sm font-medium">
+                  Session Timeout (minutes)
+                </label>
                 <Input
+                  id="sessionTimeout"
                   type="number"
                   value={settings.security.sessionTimeout}
                   onChange={(e) =>
@@ -303,8 +343,11 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Max Login Attempts</label>
+                <label htmlFor="maxLoginAttempts" className="text-sm font-medium">
+                  Max Login Attempts
+                </label>
                 <Input
+                  id="maxLoginAttempts"
                   type="number"
                   value={settings.security.maxLoginAttempts}
                   onChange={(e) =>
@@ -313,8 +356,11 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Min Password Length</label>
+                <label htmlFor="passwordMinLength" className="text-sm font-medium">
+                  Min Password Length
+                </label>
                 <Input
+                  id="passwordMinLength"
                   type="number"
                   value={settings.security.passwordMinLength}
                   onChange={(e) =>
@@ -323,8 +369,11 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Allowed IPs (comma-separated)</label>
+                <label htmlFor="allowedIPs" className="text-sm font-medium">
+                  Allowed IPs (comma-separated)
+                </label>
                 <Input
+                  id="allowedIPs"
                   placeholder="Leave empty to allow all IPs"
                   value={settings.security.allowedIPs}
                   onChange={(e) => updateSettings('security', 'allowedIPs', e.target.value)}
@@ -339,7 +388,7 @@ export default function SettingsPage() {
                 onChange={(e) => updateSettings('security', 'require2FA', e.target.checked)}
                 className="rounded"
               />
-              <label htmlFor="require2FA" className="text-sm font-medium cursor-pointer">
+              <label htmlFor="require2FA" className="cursor-pointer text-sm font-medium">
                 Require 2-Factor Authentication for all admin users
               </label>
             </div>
@@ -356,7 +405,7 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              <label className="flex items-center space-x-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={settings.notifications.emailNotifications}
@@ -367,7 +416,7 @@ export default function SettingsPage() {
                 />
                 <span className="text-sm font-medium">Email Notifications</span>
               </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={settings.notifications.smsNotifications}
@@ -378,7 +427,7 @@ export default function SettingsPage() {
                 />
                 <span className="text-sm font-medium">SMS Notifications</span>
               </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={settings.notifications.pushNotifications}
@@ -389,11 +438,13 @@ export default function SettingsPage() {
                 />
                 <span className="text-sm font-medium">Push Notifications</span>
               </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={settings.notifications.adminAlerts}
-                  onChange={(e) => updateSettings('notifications', 'adminAlerts', e.target.checked)}
+                  onChange={(e) =>
+                    updateSettings('notifications', 'adminAlerts', e.target.checked)
+                  }
                   className="rounded"
                 />
                 <span className="text-sm font-medium">Critical Admin Alerts</span>
@@ -408,16 +459,23 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Database Management</CardTitle>
-            <CardDescription>Configure database backup and maintenance settings</CardDescription>
+            <CardDescription>
+              Configure database backup and maintenance settings
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Backup Frequency</label>
+                <label htmlFor="backupFrequency" className="text-sm font-medium">
+                  Backup Frequency
+                </label>
                 <select
+                  id="backupFrequency"
                   value={settings.database.backupFrequency}
-                  onChange={(e) => updateSettings('database', 'backupFrequency', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
+                  onChange={(e) =>
+                    updateSettings('database', 'backupFrequency', e.target.value)
+                  }
+                  className="w-full rounded-md border px-3 py-2"
                 >
                   <option value="hourly">Hourly</option>
                   <option value="daily">Daily</option>
@@ -426,8 +484,11 @@ export default function SettingsPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Retention Days</label>
+                <label htmlFor="retentionDays" className="text-sm font-medium">
+                  Retention Days
+                </label>
                 <Input
+                  id="retentionDays"
                   type="number"
                   value={settings.database.retentionDays}
                   onChange={(e) =>
@@ -444,11 +505,11 @@ export default function SettingsPage() {
                 onChange={(e) => updateSettings('database', 'autoCleanup', e.target.checked)}
                 className="rounded"
               />
-              <label htmlFor="autoCleanup" className="text-sm font-medium cursor-pointer">
+              <label htmlFor="autoCleanup" className="cursor-pointer text-sm font-medium">
                 Enable automatic database cleanup for old records
               </label>
             </div>
-            <div className="pt-4 space-x-2">
+            <div className="space-x-2 pt-4">
               <Button variant="outline" size="sm">
                 Backup Now
               </Button>

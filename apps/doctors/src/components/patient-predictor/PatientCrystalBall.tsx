@@ -91,7 +91,7 @@ export function PatientCrystalBall({
     getPriorityInterventions,
     hasCriticalAlerts,
     getPredictionSummary,
-  } = usePatientPredictor(patientId);
+  } = usePatientPredictor(patientId) as any;
 
   const [selectedIntervention, setSelectedIntervention] = useState<string | null>(null);
   const [implementationNotes, setImplementationNotes] = useState('');
@@ -236,7 +236,7 @@ export function PatientCrystalBall({
             <div className="mt-4 pt-4 border-t">
               <p className="text-sm font-medium mb-2">Factores de Riesgo Principales:</p>
               <div className="space-y-1">
-                {summary.mainFactors.map((factor, idx) => (
+                {summary.mainFactors.map((factor: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-2 text-sm">
                     <AlertTriangle className="h-3 w-3 text-amber-500" />
                     <span>{factor}</span>
@@ -277,7 +277,7 @@ export function PatientCrystalBall({
             {/* Tab de Intervenciones */}
             <TabsContent value="interventions" className="mt-4 space-y-3">
               {priorityInterventions.length > 0 ? (
-                priorityInterventions.map((intervention) => (
+                priorityInterventions.map((intervention: any) => (
                   <Card key={intervention.id} className="relative">
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
@@ -325,7 +325,7 @@ export function PatientCrystalBall({
                                 <Label>Notas de implementación</Label>
                                 <Textarea
                                   value={implementationNotes}
-                                  onChange={(e) => setImplementationNotes(e.target.value)}
+                                  onChange={(e: any) => setImplementationNotes(e.target.value)}
                                   placeholder="Describa cómo se implementó esta intervención..."
                                   className="mt-2"
                                 />
@@ -386,7 +386,7 @@ export function PatientCrystalBall({
                   <div>
                     <h4 className="font-medium mb-3">Calendario de Seguimiento</h4>
                     <div className="space-y-2">
-                      {prediction.followUpPlan.schedule.map((item, idx) => (
+                      {prediction.followUpPlan.schedule.map((item: any, idx: number) => (
                         <div
                           key={idx}
                           className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
@@ -429,7 +429,7 @@ export function PatientCrystalBall({
                   <div>
                     <h4 className="font-medium mb-3">Parámetros de Monitoreo</h4>
                     <div className="grid grid-cols-2 gap-3">
-                      {prediction.followUpPlan.monitoringParameters.map((param, idx) => (
+                      {prediction.followUpPlan.monitoringParameters.map((param: any, idx: number) => (
                         <Card key={idx}>
                           <CardContent className="pt-4">
                             <div className="flex items-start gap-2">
@@ -469,7 +469,7 @@ export function PatientCrystalBall({
               <ScrollArea className="h-[400px]">
                 {alerts && alerts.length > 0 ? (
                   <div className="space-y-3">
-                    {alerts.map((alert) => (
+                    {alerts.map((alert: any) => (
                       <Alert
                         key={alert.id}
                         variant={alert.severity === 'critical' ? 'destructive' : 'default'}

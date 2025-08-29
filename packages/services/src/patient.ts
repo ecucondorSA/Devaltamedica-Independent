@@ -14,6 +14,10 @@ import type {
   Treatment
 } from '@altamedica/interfaces';
 
+/**
+ * DEPRECATED name: PatientService (kept for compatibility)
+ * Prefer using PatientAnalyticsService to avoid confusion with database PatientService.
+ */
 export class PatientService {
   /**
    * Calculate patient risk score based on medical history
@@ -348,6 +352,9 @@ export class PatientService {
     return reminders;
   }
 }
+
+// Preferred alias to avoid confusion with database-level PatientService
+export const PatientAnalyticsService = PatientService;
 
 /**
  * Types

@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import IntegratedDoctorVideoCall from '../../../../components/telemedicine/IntegratedDoctorVideoCall';
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { AlertCircle, ArrowLeft, User, FileText, Clock } from 'lucide-react';
-import { EmergencyButton, EmergencyType } from '@altamedica/ui';
-import { toast } from '@altamedica/ui';
+import { EmergencyButton, EmergencyType, useToast } from '@altamedica/ui';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 // Mock data para propósitos de demostración
 // En producción, estos datos vendrían de la API
 const mockSessions: { [key: string]: {
@@ -62,6 +61,7 @@ export default function DoctorTelemedicineSessionPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<typeof mockSessions[string] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,7 @@ export default function DoctorTelemedicineSessionPage() {
         // En producción, verificar que el doctor tenga permiso para acceder a esta sesión
         setSession(sessionData);
       } catch (error) {
-        logger.error('Error loading session:', error);
+        logger.error('Error loading session:', String(error));
         setError('Error al cargar la sesión');
       } finally {
         setIsLoading(false);
@@ -306,25 +306,33 @@ export default function DoctorTelemedicineSessionPage() {
   const handleEmergencyActivate = async (type: EmergencyType, notes?: string) => {
     try {
       // En producción, esto llamaría a la API de emergencias
-      logger.info('🚨 Emergencia activada:', {
+      logger.info('🚨 Emergencia activada:', JSON.stringify({
         type,
         notes,
         sessionId: session.id,
         patientName: session.patientName,
         timestamp: new Date().toISOString()
-      });
+      }));
 
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Notificar éxito
-      toast.success(`Protocolo ${type.code} activado - Servicios de emergencia notificados`);
+      toast({
+        title: "Protocolo Activado",
+        description: `Protocolo ${type.code} activado - Servicios de emergencia notificados`,
+        variant: "default",
+      });
 
       // En producción, esto podría redirigir a una vista de emergencia específica
       // o mantener la sesión pero con indicadores de emergencia activa
     } catch (error) {
-      logger.error('Error activando emergencia:', error);
-      toast.error('Error al activar protocolo de emergencia');
+      logger.error('Error activando emergencia:', String(error));
+      toast({
+        title: "Error",
+        description: 'Error al activar protocolo de emergencia',
+        variant: "destructive",
+      });
       throw error;
     }
   };

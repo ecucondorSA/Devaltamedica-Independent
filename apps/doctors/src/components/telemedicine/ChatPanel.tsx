@@ -6,7 +6,7 @@ import { io, Socket } from "socket.io-client";
 import { Send, Paperclip, Image, File, User, Clock } from "lucide-react";
 import DOMPurify from "dompurify";
 
-import { logger } from '@altamedica/shared/services/logger.service';
+import { logger } from '@altamedica/shared';
 interface ChatMessage {
   id: string;
   senderId: string;

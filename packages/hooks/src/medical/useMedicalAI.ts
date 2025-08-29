@@ -4,8 +4,9 @@
  * @description Hook avanzado para análisis de IA médica, diagnósticos y recomendaciones
  */
 
+import { UserRole } from '@altamedica/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useAuth } from '../auth/useAuth';
+import { useAuth } from '@altamedica/auth';
 import { useNotifications } from '../realtime/useNotifications';
 
 // Simple logger implementation to avoid circular dependencies
@@ -682,7 +683,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
   // HOOKS DEPENDIENTES
   // ==========================================
   
-  const { user, hasPermission } = useAuth();
+  const { user, hasRole } = useAuth();
   const notifications = useNotifications();
   
   // ==========================================
@@ -702,7 +703,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     patientContext: PatientContext
   ): Promise<AIAnalysisResult> => {
     if (!aiEngineRef.current) throw new Error('AI Engine not initialized');
-    if (!hasPermission('read_medical_records')) {
+    if (!hasRole(UserRole.DOCTOR)) {
       throw new Error('No tiene permisos para realizar análisis médicos');
     }
     
@@ -745,7 +746,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     } finally {
       setIsAnalyzing(false);
     }
-  }, [aiEngineRef.current, hasPermission, user, finalConfig, notifications]);
+  }, [aiEngineRef.current, hasRole, user, finalConfig, notifications]);
   
   const getDiagnosticSuggestions = useCallback(async (
     symptoms: string[], 
@@ -765,7 +766,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
   const checkDrugInteractions = useCallback(async (
     medications: Medication[]
   ): Promise<DrugInteraction[]> => {
-    if (!hasPermission('prescribe_medications')) {
+    if (!hasRole(UserRole.DOCTOR)) {
       throw new Error('No tiene permisos para verificar interacciones de medicamentos');
     }
     
@@ -793,7 +794,7 @@ export function useMedicalAI(config: Partial<MedicalAIConfig> = {}): UseMedicalA
     }
     
     return interactions;
-  }, [hasPermission]);
+  }, [hasRole]);
   
   const assessRisk = useCallback(async (
     patientContext: PatientContext

@@ -8,6 +8,6 @@ export * from './doctor';
 export * from './appointment';
 
 // Re-export services for convenience
-export { PatientService } from './patient';
+export { PatientService, PatientAnalyticsService } from './patient';
 export { DoctorService } from './doctor';
 export { AppointmentService } from './appointment';

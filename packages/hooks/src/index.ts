@@ -39,6 +39,12 @@ export * from './auth';
 // 🌐 HOOKS DE API (evitar re-export de QUERY_KEYS duplicado)
 // ==========================================
 export { default as useAltamedicaAPI } from './useAltamedicaAPI';
+export { 
+  useDoctorToCompanyCommunication,
+  useCompanyToDoctorCommunication,
+  useUnreadNotificationsCount,
+  useJobApplication 
+} from './api/useB2CCommunication';
 
 // ==========================================
 // 🎨 HOOKS DE UI/UX

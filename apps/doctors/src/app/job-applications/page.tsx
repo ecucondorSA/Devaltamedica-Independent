@@ -6,7 +6,7 @@
 'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
-import { useAuth  } from '@altamedica/auth';;
+import useAuth from '@altamedica/auth';
 import { useState } from 'react';
 import MyJobApplications from '../../components/b2c/MyJobApplications';
 
@@ -20,7 +20,7 @@ export default function JobApplicationsPage() {
   );
 
   // Mock doctor ID - en producción vendría del contexto de auth
-  const doctorId = user?.doctorId || user?.id || 'mock-doctor-id';
+  const doctorId = (user as any)?.doctorId || user?.id || 'mock-doctor-id';
 
   return (
     <div className="min-h-screen bg-gray-50">

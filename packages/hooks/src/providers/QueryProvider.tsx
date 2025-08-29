@@ -8,32 +8,11 @@ import {
     QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
+import { logger } from '@altamedica/shared';
 // TODO: Re-enable when dependency is properly installed
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-// Simple logger implementation to avoid circular dependencies
-const logger = {
-  info: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.log(message, data);
-    }
-  },
-  warn: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.warn(message, data);
-    }
-  },
-  error: (message, data) => {
-    if (typeof console !== 'undefined') {
-      console.error(message, data);
-    }
-  },
-  debug: (message, data) => {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      console.debug(message, data);
-    }
-  }
-};
+// Unificar logging usando shared logger (Edge-safe)
 // 🔧 UNIFIED QUERY PROVIDER - Configuración centralizada para TanStack Query
 // Combina las mejores prácticas de todas las implementaciones
 

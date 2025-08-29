@@ -1,6 +1,7 @@
 import { AUTH_COOKIES } from '@altamedica/auth';
-import { createCsp } from '@altamedica/config-next';
-import { rateLimiter } from '@altamedica/utils/rate-limiter';
+// Remove problematic import - createCsp doesn't exist
+// import { createCsp } from '@altamedica/config-next';
+import { rateLimiter } from '@altamedica/utils';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -13,15 +14,24 @@ function addSecurityHeaders(response: NextResponse, nonce: string) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  const csp = createCsp({
-    nonce,
-    overrides: {
-      'connect-src': [
-        'http://localhost:3001', // API server
-        'ws://localhost:8888', // Signaling server
-      ],
-    },
-  });
+  // Simple CSP implementation
+  const cspDirectives = {
+    'default-src': ["'self'"],
+    'script-src': ["'self'", `'nonce-${nonce}'`, "'unsafe-inline'"],
+    'style-src': ["'self'", "'unsafe-inline'"],
+    'connect-src': [
+      "'self'",
+      'http://localhost:3001', // API server
+      'ws://localhost:8888', // Signaling server
+    ],
+    'img-src': ["'self'", 'data:', 'https:'],
+    'font-src': ["'self'", 'data:'],
+  };
+
+  const csp = Object.entries(cspDirectives)
+    .map(([key, values]) => `${key} ${values.join(' ')}`)
+    .join('; ');
+    
   response.headers.set('Content-Security-Policy', csp);
   return response;
 }
@@ -30,7 +40,7 @@ export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const { pathname } = request.nextUrl;
 
-  const clientIP = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+  const clientIP = (request as any).ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
   const { isAllowed } = await rateLimiter(`doctors-app:${clientIP}`, 100, 60);
 
   if (!isAllowed) {

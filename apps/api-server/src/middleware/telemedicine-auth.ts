@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UnifiedAuth, createAuthContext  } from '@altamedica/auth';;
+import { UnifiedAuth, createAuthContext  } from '@altamedica/auth';
 
 import { logger } from '@altamedica/shared/services/logger.service';
 // Tipos de middleware de autorización para telemedicina

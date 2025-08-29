@@ -5,9 +5,9 @@
 
 import axios from 'axios';
 import { User } from 'firebase/auth';
-import { logger, medicalLogger } from '@altamedica/shared';
+import { logger } from '@altamedica/shared';
 
-import { logger } from '@altamedica/shared/services/logger.service';
+const medicalLogger: any = console;
 // Configuración de la API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -154,7 +154,7 @@ class DoctorService {
     try {
       const response = await this.api.get(`/doctors/profile/${userId}`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       medicalLogger.critical('Error obteniendo perfil del doctor', { userId, error: error.message });
       throw new Error('No se pudo obtener el perfil del doctor');
     }
@@ -167,7 +167,7 @@ class DoctorService {
     try {
       const response = await this.api.put(`/doctors/profile/${userId}`, profileData);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       medicalLogger.critical('Error actualizando perfil del doctor', { userId, error: error.message });
       throw new Error('No se pudo actualizar el perfil del doctor');
     }
@@ -180,7 +180,7 @@ class DoctorService {
     try {
       const response = await this.api.get(`/doctors/${userId}/stats`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       medicalLogger.critical('Error obteniendo estadísticas del doctor', { userId, error: error.message });
       throw new Error('No se pudieron obtener las estadísticas');
     }
@@ -193,7 +193,7 @@ class DoctorService {
     try {
       const response = await this.api.get(`/doctors/${userId}/appointments/today`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       medicalLogger.critical('Error obteniendo citas del día', { userId, error: error.message });
       throw new Error('No se pudieron obtener las citas del día');
     }
@@ -212,7 +212,7 @@ class DoctorService {
       const response = await this.api.get(`/doctors/${userId}/appointments`, { params: filters });
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo citas:', error);
+      logger.error('Error obteniendo citas:', String(error));
       throw new Error('No se pudieron obtener las citas');
     }
   }
@@ -228,7 +228,7 @@ class DoctorService {
       });
       return response.data;
     } catch (error) {
-      logger.error('Error actualizando estado de cita:', error);
+      logger.error('Error actualizando estado de cita:', String(error));
       throw new Error('No se pudo actualizar el estado de la cita');
     }
   }
@@ -245,7 +245,7 @@ class DoctorService {
       const response = await this.api.get(`/doctors/${userId}/patients`, { params: filters });
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo pacientes:', error);
+      logger.error('Error obteniendo pacientes:', String(error));
       throw new Error('No se pudieron obtener los pacientes');
     }
   }
@@ -258,7 +258,7 @@ class DoctorService {
       const response = await this.api.get(`/doctors/${userId}/patients/${patientId}`);
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo paciente:', error);
+      logger.error('Error obteniendo paciente:', String(error));
       throw new Error('No se pudo obtener el paciente');
     }
   }
@@ -271,7 +271,7 @@ class DoctorService {
       const response = await this.api.get(`/doctors/${userId}/alerts/critical`);
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo alertas críticas:', error);
+      logger.error('Error obteniendo alertas críticas:', String(error));
       throw new Error('No se pudieron obtener las alertas críticas');
     }
   }
@@ -284,7 +284,7 @@ class DoctorService {
       const response = await this.api.patch(`/alerts/${alertId}/acknowledge`, { notes });
       return response.data;
     } catch (error) {
-      logger.error('Error reconociendo alerta:', error);
+      logger.error('Error reconociendo alerta:', String(error));
       throw new Error('No se pudo reconocer la alerta');
     }
   }
@@ -299,7 +299,7 @@ class DoctorService {
       });
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo actividad reciente:', error);
+      logger.error('Error obteniendo actividad reciente:', String(error));
       throw new Error('No se pudo obtener la actividad reciente');
     }
   }
@@ -318,7 +318,7 @@ class DoctorService {
       });
       return response.data;
     } catch (error) {
-      logger.error('Error creando sesión de telemedicina:', error);
+      logger.error('Error creando sesión de telemedicina:', String(error));
       throw new Error('No se pudo crear la sesión de telemedicina');
     }
   }
@@ -335,7 +335,7 @@ class DoctorService {
       const response = await this.api.get(`/doctors/${userId}/availability/${date}`);
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo horarios disponibles:', error);
+      logger.error('Error obteniendo horarios disponibles:', String(error));
       throw new Error('No se pudieron obtener los horarios disponibles');
     }
   }
@@ -350,7 +350,7 @@ class DoctorService {
       });
       return response.data;
     } catch (error) {
-      logger.error('Error actualizando disponibilidad:', error);
+      logger.error('Error actualizando disponibilidad:', String(error));
       throw new Error('No se pudo actualizar la disponibilidad');
     }
   }
@@ -372,7 +372,7 @@ class DoctorService {
       });
       return response.data;
     } catch (error) {
-      logger.error('Error obteniendo analytics:', error);
+      logger.error('Error obteniendo analytics:', String(error));
       throw new Error('No se pudieron obtener los analytics');
     }
   }

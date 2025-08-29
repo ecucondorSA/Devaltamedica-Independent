@@ -1,7 +1,7 @@
 'use client';
 
 import { triageAgent, UrgencyLevel, type TriageResult } from '@/services/triage-agent.service';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { Badge, Button, Card, Input, Textarea } from '@altamedica/ui';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Activity, AlertCircle, Clock, MapPin, Phone, Send } from 'lucide-react';
@@ -142,7 +142,7 @@ export function TriageChat() {
         );
       }
     } catch (error) {
-      logger.error('Error en triaje:', error);
+      logger.error('Error en triaje:', String(error));
       addMessage(
         'system',
         '❌ Ocurrió un error al procesar tu evaluación. Por favor, intenta nuevamente.',

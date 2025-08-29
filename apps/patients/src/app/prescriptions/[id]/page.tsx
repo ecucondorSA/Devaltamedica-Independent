@@ -7,7 +7,8 @@ import PrescriptionDetailCard from '../../../components/prescriptions/Prescripti
 
 export default function PrescriptionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { prescription, isLoading: loading, error } = usePrescription(id);
+  const { prescriptions, isLoading: loading, error } = usePrescriptions();
+  const prescription = prescriptions?.find((p: any) => p.id === id);
   const router = useRouter();
 
   if (loading) return <div className="text-center py-12">Cargando prescripción...</div>;

@@ -5,6 +5,7 @@ import {
   AppointmentsCollector,
   VitalSignsCollector,
 } from '../collectors';
+import { logger } from '../../logger.service';
 
 /**
  * Collector Factory
@@ -152,7 +153,7 @@ export class CollectorFactory {
         const data = await collector.collect(patientId, dateRange);
         return { category, data };
       } catch (error) {
-        console.error(`Failed to collect ${category} data:`, error);
+        logger.error(`Failed to collect ${category} data`, 'CollectorFactory', error);
         return { category, data: [] };
       }
     });

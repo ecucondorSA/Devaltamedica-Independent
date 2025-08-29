@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+// eslint-disable-next-line import/no-internal-modules
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AdminPage() {
   const router = useRouter();

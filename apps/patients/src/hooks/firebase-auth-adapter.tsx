@@ -30,7 +30,7 @@ import type {
   AuthState,
   LoginCredentials,
   RegisterData,
-} from "@altamedica/auth';
+} from '@altamedica/auth';
 
 /**
  * Servicio adaptador que conecta Firebase con el sistema existente

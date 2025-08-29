@@ -2,7 +2,8 @@
 
 export const useAppointments = () => {
   return {
-    appointments: [],
+    data: [],
+    appointments: [], // Keep for backward compatibility
     isLoading: false,
     error: null,
     refetch: () => Promise.resolve(),
@@ -11,9 +12,20 @@ export const useAppointments = () => {
 
 export const usePatients = () => {
   return {
-    patients: [],
+    data: [],
+    patients: [], // Keep for backward compatibility
     isLoading: false,
     error: null,
     refetch: () => Promise.resolve(),
   };
 };
+
+// Add missing exports for compatibility
+export const useAppointment = () => useAppointments();
+export const useAvailableSlots = () => ({ data: [], isLoading: false, error: null });
+export const useCancelAppointment = () => ({ mutate: () => {}, isLoading: false });
+export const useCompleteAppointment = () => ({ mutate: () => {}, isLoading: false });
+export const useConfirmAppointment = () => ({ mutate: () => {}, isLoading: false });
+export const useCreateAppointment = () => ({ mutate: () => {}, isLoading: false });
+export const useRescheduleAppointment = () => ({ mutate: () => {}, isLoading: false });
+export const useUpdateAppointment = () => ({ mutate: () => {}, isLoading: false });

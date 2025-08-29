@@ -22,7 +22,7 @@ import { useTelemedicineUnified } from '@altamedica/telemedicine-core';
 // Backward compatibility export
 export const useWebRTCPatientHybrid = useTelemedicineUnified;
 
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { logger } from '@altamedica/shared';
@@ -111,7 +111,7 @@ interface WebRTCHookActions {
   runDiagnostics: () => Promise<ConnectionQualityMetrics>;
 }
 
-export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
+function useWebRTCPatientHybridImpl(): [WebRTCHookState, WebRTCHookActions] {
   const { user } = useAuth();
 
   // State management
@@ -170,7 +170,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       return { cameras, microphones, speakers };
 
     } catch (error) {
-      logger.error('Error getting media devices:', error);
+      logger.error('Error getting media devices:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to get media devices' }));
       return { cameras: [], microphones: [], speakers: [] };
     }
@@ -198,7 +198,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       return stream;
 
     } catch (error) {
-      logger.error('Error getting user media:', error);
+      logger.error('Error getting user media:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to access camera/microphone' }));
       throw error;
     }
@@ -286,7 +286,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       signalingRef.current = signaling;
 
     } catch (error) {
-      logger.error('Error initializing WebRTC connection:', error);
+      logger.error('Error initializing WebRTC connection:', String(error));
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to initialize connection',
@@ -309,7 +309,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       return answer;
 
     } catch (error) {
-      logger.error('Error creating answer:', error);
+      logger.error('Error creating answer:', String(error));
       throw error;
     }
   }, []);
@@ -327,7 +327,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       return offer;
 
     } catch (error) {
-      logger.error('Error creating offer:', error);
+      logger.error('Error creating offer:', String(error));
       throw error;
     }
   }, []);
@@ -342,7 +342,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
     try {
       await peerConnectionRef.current.addIceCandidate(candidate);
     } catch (error) {
-      logger.error('Error adding ICE candidate:', error);
+      logger.error('Error adding ICE candidate:', String(error));
     }
   }, []);
 
@@ -417,7 +417,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       }
 
     } catch (error) {
-      logger.error('Error sharing screen:', error);
+      logger.error('Error sharing screen:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to share screen' }));
     }
   }, []);
@@ -447,7 +447,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       }
 
     } catch (error) {
-      logger.error('Error stopping screen share:', error);
+      logger.error('Error stopping screen share:', String(error));
     }
   }, []);
 
@@ -491,7 +491,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       }
 
     } catch (error) {
-      logger.error('Error switching camera:', error);
+      logger.error('Error switching camera:', String(error));
       setState(prev => ({ ...prev, error: 'Failed to switch camera' }));
     }
   }, []);
@@ -541,7 +541,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       }
 
     } catch (error) {
-      logger.error(`Error changing ${deviceType}:`, error);
+      logger.error(`Error changing ${deviceType}:`, String(error));
       setState(prev => ({ ...prev, error: `Failed to change ${deviceType}` }));
     }
   }, []);
@@ -577,7 +577,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       }));
 
     } catch (error) {
-      logger.error('Error closing connection:', error);
+      logger.error('Error closing connection:', String(error));
     }
   }, []);
 
@@ -599,7 +599,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       return metrics;
 
     } catch (error) {
-      logger.error('Error running diagnostics:', error);
+      logger.error('Error running diagnostics:', String(error));
       throw error;
     }
   }, []);
@@ -625,7 +625,7 @@ export function useWebRTCPatientHybrid(): [WebRTCHookState, WebRTCHookActions] {
       try {
         await runDiagnostics();
       } catch (error) {
-        logger.error('Quality monitoring error:', error);
+        logger.error('Quality monitoring error:', String(error));
       }
     }, 5000); // Cada 5 segundos
   };

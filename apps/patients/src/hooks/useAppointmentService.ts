@@ -14,7 +14,7 @@ import {
   useQueryClient
 } from '@altamedica/api-client';
 import { useMemo } from 'react';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 
 /**
  * Hook principal para gestionar citas del paciente

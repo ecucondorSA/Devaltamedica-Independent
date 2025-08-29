@@ -175,7 +175,7 @@ export const useAIHIPAA = () => {
 
         await addDoc(collection(db, 'ai_audit_logs'), auditEntry);
       } catch (error) {
-        logger.error('Error logging AI data access:', error);
+        logger.error('Error logging AI data access:', String(error));
       }
     },
     [authState.user],
@@ -257,7 +257,7 @@ export const useAIHIPAA = () => {
           error: errorMessage,
           aiModelStatus: 'error',
         }));
-        logger.error('Error generating AI diagnosis:', error);
+        logger.error('Error generating AI diagnosis:', String(error));
         throw error;
       }
     },
@@ -463,7 +463,7 @@ export const useAIHIPAA = () => {
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Error fetching AI diagnoses:', error);
+        logger.error('Error fetching AI diagnoses:', String(error));
         throw error;
       }
     },
@@ -505,7 +505,7 @@ export const useAIHIPAA = () => {
           isLoading: false,
           error: errorMessage,
         }));
-        logger.error('Error updating AI diagnosis:', error);
+        logger.error('Error updating AI diagnosis:', String(error));
         throw error;
       }
     },
@@ -531,7 +531,7 @@ export const useAIHIPAA = () => {
 
         logger.info('AI diagnosis confirmed successfully:', JSON.stringify({ id: diagnosisId }));
       } catch (error) {
-        logger.error('Error confirming AI diagnosis:', error);
+        logger.error('Error confirming AI diagnosis:', String(error));
         throw error;
       }
     },
@@ -560,7 +560,7 @@ export const useAIHIPAA = () => {
           JSON.stringify({ id: diagnosisId, reason }),
         );
       } catch (error) {
-        logger.error('Error rejecting AI diagnosis:', error);
+        logger.error('Error rejecting AI diagnosis:', String(error));
         throw error;
       }
     },

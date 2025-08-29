@@ -93,7 +93,7 @@ class AuthJWTService {
         user: data.user,
       };
     } catch (error) {
-      logger.error('Error en login:', error);
+      logger.error('Error en login:', String(error));
       return {
         success: false,
         error: 'Error de conexión con el servidor',
@@ -146,7 +146,7 @@ class AuthJWTService {
         user: data.user,
       };
     } catch (error) {
-      logger.error('Error en registro:', error);
+      logger.error('Error en registro:', String(error));
       return {
         success: false,
         error: 'Error de conexión con el servidor',
@@ -203,7 +203,7 @@ class AuthJWTService {
         user: data.user,
       };
     } catch (error) {
-      logger.error('Error obteniendo usuario:', error);
+      logger.error('Error obteniendo usuario:', String(error));
       return {
         success: false,
         error: 'Error de conexión',
@@ -260,7 +260,7 @@ class AuthJWTService {
         refreshToken: data.refreshToken,
       };
     } catch (error) {
-      logger.error('Error en refresh token:', error);
+      logger.error('Error en refresh token:', String(error));
       return {
         success: false,
         error: 'Error de conexión',
@@ -284,7 +284,7 @@ class AuthJWTService {
           },
         });
       } catch (error) {
-        logger.error('Error en logout servidor:', error);
+        logger.error('Error en logout servidor:', String(error));
       }
     }
 
@@ -319,7 +319,7 @@ class AuthJWTService {
         }, refreshIn);
       }
     } catch (error) {
-      logger.error('Error configurando auto-refresh:', error);
+      logger.error('Error configurando auto-refresh:', String(error));
     }
   }
 
@@ -338,7 +338,7 @@ class AuthJWTService {
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
-      logger.error('Error decodificando token:', error);
+      logger.error('Error decodificando token:', String(error));
       return null;
     }
   }

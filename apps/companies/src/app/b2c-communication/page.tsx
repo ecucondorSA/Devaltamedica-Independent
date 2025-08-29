@@ -6,7 +6,7 @@
 'use client';
 
 import { Button, Card, Input } from '@altamedica/ui';
-import { useAuth  } from '@altamedica/auth';;
+import { useAuth  } from '@altamedica/auth';
 import { useState } from 'react';
 import JobApplicationsManager from '../../components/b2c/JobApplicationsManager';
 

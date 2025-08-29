@@ -5,7 +5,7 @@ import { Button, Card, Input } from '@altamedica/ui';
 import { useEffect, useState } from 'react';
 import { AlertCircle, CheckCircle, Clock, RefreshCw } from 'lucide-react';
 
-interface ServiceStatus {
+interface IServiceStatus {
   name: string;
   url: string;
   status: 'online' | 'offline' | 'checking';
@@ -13,7 +13,7 @@ interface ServiceStatus {
 }
 
 export function ServiceStatus() {
-  const [services, setServices] = useState<ServiceStatus[]>([
+  const [services, setServices] = useState<IServiceStatus[]>([
     {
       name: 'API Server',
       url: 'http://localhost:3001/api/health',
@@ -28,7 +28,7 @@ export function ServiceStatus() {
     }
   ]);
 
-  const checkServiceStatus = async (service: ServiceStatus): Promise<'online' | 'offline'> => {
+  const checkServiceStatus = async (service: IServiceStatus): Promise<'online' | 'offline'> => {
     try {
       const response = await fetch(service.url, { 
         method: 'GET',

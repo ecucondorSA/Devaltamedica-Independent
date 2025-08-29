@@ -1,3 +1,4 @@
+import process from 'process';
 /** @type {import('next').NextConfig} */
 const config = {
   transpilePackages: [

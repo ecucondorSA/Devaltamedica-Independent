@@ -12,14 +12,18 @@
   },
   "packageManager": "pnpm@9.15.2",
   "scripts": {
+    "agent:scan": "node scripts/agent-health-scan.mjs",
+    "agent:watch:sync": "node scripts/watch-sync-file.mjs",
     "repair:dry": "node scripts/repair-orchestrator.mjs",
     "repair:write": "node scripts/repair-orchestrator.mjs --write",
     "dev": "turbo dev",
     "dev:min": "turbo dev --filter=api-server --filter=patients --filter=doctors --filter=web-app",
     "dev:medical": "turbo dev --filter=api-server --filter=patients --filter=doctors",
-    "build": "turbo build",
-    "build:packages": "turbo build --filter=./packages/*",
+    "build": "turbo build && node scripts/sync-glosarios.mjs && node scripts/docs-auto-update.mjs build",
+    "build:packages": "turbo build --filter=./packages/* && node scripts/sync-glosarios.mjs",
     "build:apps": "turbo build --filter=./apps/*",
+    "docs:sync": "node scripts/sync-glosarios.mjs",
+    "docs:sync:watch": "node scripts/sync-glosarios.mjs --watch",
     "apps:repair:dry": "node scripts/apps-repair-orchestrator.mjs",
     "apps:repair:write": "node scripts/apps-repair-orchestrator.mjs --write",
     "clean:cache": "turbo clean && rimraf .turbo **/turbo",
@@ -33,11 +37,16 @@
     "ci:build": "pnpm build:packages && pnpm build:apps",
     "ci:test": "pnpm test:all",
     "prepare": "husky install",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit && node scripts/docs-auto-update.mjs tsc",
+    "type-check:watch": "node scripts/docs-watch.mjs --with-tsc",
     "clean": "rimraf dist",
-    "lint": "turbo lint",
+    "lint": "turbo lint && node scripts/docs-auto-update.mjs lint",
     "lint:fix": "turbo lint:fix",
-    "test:unit": "turbo test:unit",
+    "test:unit": "turbo test:unit && node scripts/docs-auto-update.mjs test",
+    "docs:update": "node scripts/docs-auto-update.mjs force",
+    "docs:watch": "node scripts/docs-watch.mjs",
+    "docs:validate": "node scripts/validate-package-exports.mjs",
+    "docs:health": "node scripts/docs-auto-update.mjs health",
     "test:integration": "turbo test:integration",
     "test:e2e": "turbo test:e2e",
     "test:all": "turbo test:unit test:integration test:e2e",
@@ -122,28 +131,7 @@
       ]
     }
   },
-  "turbo": {
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "outputs": [
-          "dist/**",
-          ".next/**"
-        ],
-        "cache": true
-      },
-      "test": {
-        "dependsOn": [
-          "^build"
-        ],
-        "cache": true,
-        "inputs": [
-          "src/**/*.{ts,tsx}",
-          "test/**/*.{ts,tsx}"
-        ]
-      }
-    }
+  "dependencies": {
+    "pino": "^9.9.0"
   }
 }

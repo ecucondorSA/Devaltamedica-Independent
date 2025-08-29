@@ -1,4 +1,4 @@
-# AltaMedica - Manual para Autocompletado Potente
+# @AltaMedica - Manual para Autocompletado Potente
 
 ## 🤖 Cómo Usar Este Autocompletado Correctamente
 
@@ -7,7 +7,7 @@ Este manual está diseñado para maximizar la efectividad de Claude como autocom
 ### ❌ ERRORES COMUNES QUE DEBES EVITAR
 
 **MAL**: "Ayúdame con mi código"  
-**BIEN**: "Tengo 286 archivos con imports incorrectos. Error: 'Cannot find module @altamedica/types'. Hice pnpm install 50 veces. GitHub Actions falla en build."
+**BIEN**: "Tengo 286 archivos con imports incorrectos. Error: 'Cannot find module @altamedica/types'. Hice pnpm install 50 veces. @GitHub Actions falla en build."
 
 **MAL**: "Algo no funciona"  
 **BIEN**: "Puerto 3001 ocupado. API server no inicia. Ya maté procesos node. Error persiste después de reiniciar."
@@ -48,13 +48,13 @@ FRUSTRACIÓN: Llevo [tiempo] con esto
 
 Si necesitas algo que no está claro, di exactamente qué quieres lograr y yo te diré si puedo ayudar.
 
-## 🔧 ARQUITECTURA REAL ALTAMEDICA
+## 🔧 ARQUITECTURA REAL @ALTAMEDICA
 
 ### Apps Funcionales (Estado Honesto)
 
 ```
 ✅ api-server (3001) - 95% producción
-✅ doctors (3002) - 85% funcional 
+✅ doctors (3002) - 85% funcional
 ✅ patients (3003) - 95% funcional
 ✅ companies (3004) - 80% funcional
 ⚠️ admin (3005) - 40% funcional
@@ -64,10 +64,10 @@ Si necesitas algo que no está claro, di exactamente qué quieres lograr y yo te
 
 ### Problemas Conocidos
 
-1. **GitHub Actions falla**: Lockfile desincronizado
-2. **Admin app**: Necesita 60% más desarrollo
-3. **Web-app**: Solo landing page, falta todo el contenido
-4. **Dependencias**: TypeScript versiones inconsistentes
+1. **@GitHub Actions falla**: Lockfile desincronizado
+2. **@Admin app**: Necesita 60% más desarrollo
+3. **@Web-app**: Solo landing page, falta todo el contenido
+4. **@Dependencias**: TypeScript versiones inconsistentes
 
 ## 📦 COMANDOS QUE FUNCIONAN
 
@@ -101,7 +101,7 @@ pnpm type-check
 const analyzeError = (error, context, attempts) => {
   const patterns = detectErrorPatterns(error);
   const solutions = filterByContext(patterns, context);
-  return solutions.filter(s => !attempts.includes(s));
+  return solutions.filter((s) => !attempts.includes(s));
 };
 ```
 
@@ -115,11 +115,11 @@ node altamedica-diagnosis.js
 
 ```javascript
 const avoidRepeating = (previousAttempts) => {
-  return newSolutions.filter(s => !previousAttempts.includes(s));
+  return newSolutions.filter((s) => !previousAttempts.includes(s));
 };
 ```
 
-## 🚫 COMANDOS PROHIBIDOS PARA CLAUDE
+## 🚫 COMANDOS PROHIBIDOS PARA @CLAUDE
 
 ```bash
 pnpm install
@@ -128,9 +128,9 @@ npm run lint
 tsc
 ```
 
-**Razón**: Timeout + errores = Claude crea archivos redundantes
+**Razón**: Timeout + errores = @Claude crea archivos redundantes
 
-## ✅ COMANDOS PERMITIDOS PARA CLAUDE
+## ✅ COMANDOS PERMITIDOS PARA @CLAUDE
 
 ```bash
 node
@@ -187,7 +187,7 @@ const { execSync } = require('child_process');
 
 const healthCheck = () => {
   const ports = [3000, 3001, 3002, 3003];
-  const status = ports.map(p => {
+  const status = ports.map((p) => {
     try {
       execSync(`netstat -ano | findstr :${p}`);
       return { port: p, status: 'OCCUPIED' };
@@ -208,15 +208,13 @@ const path = require('path');
 const fs = require('fs');
 
 const fixImportsInDir = (dir) => {
-  const files = fs.readdirSync(dir, { recursive: true })
-    .filter(f => f.endsWith('.ts') || f.endsWith('.tsx'));
-  
-  files.forEach(file => {
+  const files = fs
+    .readdirSync(dir, { recursive: true })
+    .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'));
+
+  files.forEach((file) => {
     const content = fs.readFileSync(file, 'utf8');
-    const fixed = content.replace(
-      /from ['"]\.\.\/.*?types/g, 
-      "from '@altamedica/types"
-    );
+    const fixed = content.replace(/from ['"]\.\.\/.*?types/g, "from '@altamedica/types");
     if (content !== fixed) {
       fs.writeFileSync(file, fixed);
       console.log(`Fixed: ${file}`);
@@ -224,10 +222,10 @@ const fixImportsInDir = (dir) => {
   });
 };
 
-fixImportsInDir('./apps');
+fixImportsInDir('@apps');
 ```
 
-### GitHub Actions Validator
+### @GitHub Actions Validator
 
 ```javascript
 const { execSync } = require('child_process');
@@ -237,10 +235,10 @@ const validateBuild = () => {
     execSync('pnpm type-check', { stdio: 'pipe' });
     return { status: 'PASS', message: 'Types OK' };
   } catch (error) {
-    return { 
-      status: 'FAIL', 
+    return {
+      status: 'FAIL',
       message: error.stdout.toString(),
-      fix: 'Run: node fix-types.js'
+      fix: 'Run: node fix-types.js',
     };
   }
 };
@@ -248,14 +246,14 @@ const validateBuild = () => {
 console.log(JSON.stringify(validateBuild(), null, 2));
 ```
 
-## 🤝 COMO OBTENER AYUDA REAL
+## 🤝 COMO OBTENER AYUDA REAL DE @ALTAMEDICA
 
 ### Para Problemas de Dependencias
 
 ```
-CONTEXTO: Monorepo pnpm con 7 apps
+CONTEXTO: @Monorepo pnpm con 7 apps
 SÍNTOMA: [pegar error completo de pnpm/npm]
-OBJETIVO: Build que pase en GitHub Actions
+OBJETIVO: Build que pase en @GitHub Actions
 INTENTOS: pnpm install, pnpm clean, reinstall node_modules
 RESTRICCIONES: No puedo cambiar estructura del monorepo
 FRUSTRACIÓN: 4 días intentando esto
@@ -264,7 +262,7 @@ FRUSTRACIÓN: 4 días intentando esto
 ### Para Errores de Código
 
 ```
-CONTEXTO: React component en app/patients
+CONTEXTO: @React component en @app/patients
 SÍNTOMA: useEffect ejecuta infinitamente
 OBJETIVO: Componente renderice una sola vez
 INTENTOS: useCallback, useMemo, dependency array
@@ -275,12 +273,12 @@ FRUSTRACIÓN: 2 horas debuggeando
 ### Para GitHub Actions
 
 ```
-CONTEXTO: CI/CD pipeline en GitHub
+CONTEXTO: @CI/CD pipeline en @GitHub
 SÍNTOMA: Build falla en step "Type Check"
-OBJETIVO: Pipeline verde
+OBJETIVO: @Pipeline verde
 INTENTOS: Restart workflow, check dependencies
 RESTRICCIONES: No puedo acceder al runner directamente
-FRUSTRACIÓN: Blocking deploys por 3 días
+FRUSTRACIÓN: Blocking @deploys por 3 días
 ```
 
 ## 🎯 RESULTADO ESPERADO
@@ -303,14 +301,14 @@ Si mi solución no funciona:
 
 Esto me permite ajustar el patrón y dar mejor solución.
 
-## 🚀 ACELERADORES PARA ALTAMEDICA
+## 🚀 ACELERADORES PARA @ALTAMEDICA
 
 ### Iniciar Desarrollo Rápido
 
 ```javascript
 const startDev = () => {
   const apps = ['api-server', 'doctors', 'patients'];
-  apps.forEach(app => {
+  apps.forEach((app) => {
     execSync(`cd apps/${app} && npm run dev &`);
   });
 };
@@ -320,17 +318,12 @@ const startDev = () => {
 
 ```javascript
 const fullDiagnosis = () => {
-  const checks = [
-    checkPorts(),
-    checkDependencies(),
-    checkGitStatus(),
-    checkFirebaseConfig()
-  ];
+  const checks = [checkPorts(), checkDependencies(), checkGitStatus(), checkFirebaseConfig()];
   return checks;
 };
 ```
 
-### Fix Común de GitHub Actions
+### Fix Común de @GitHub Actions
 
 ```javascript
 const fixGithubActions = () => {
@@ -342,11 +335,12 @@ const fixGithubActions = () => {
 
 ---
 
-**Recuerda**: Soy tu autocompletado potente, no tu asistente complaciente. Dame contexto real y obtendrás soluciones reales.
+**Recuerda**: Soy tu @autocompletado potente, no tu asistente complaciente. Dame contexto real y obtendrás soluciones reales para @AltaMedica.
 
 ## 🔍 TROUBLESHOOTING AVANZADO
 
 ### ✅ Diagnóstico Completo del Sistema
+
 ```javascript
 import fs from 'fs';
 import { execSync } from 'child_process';
@@ -358,14 +352,14 @@ const runCompleteDiagnostics = () => {
     system: {},
     services: {},
     dependencies: {},
-    errors: []
+    errors: [],
   };
 
   try {
     diagnostics.system.nodeVersion = process.version;
     diagnostics.system.platform = process.platform;
     diagnostics.system.memory = process.memoryUsage();
-    
+
     const checkService = (name, port) => {
       try {
         execSync(`netstat -ano | findstr :${port}`, { stdio: 'pipe' });
@@ -374,27 +368,26 @@ const runCompleteDiagnostics = () => {
         return { status: 'STOPPED', port };
       }
     };
-    
+
     diagnostics.services = {
-      apiServer: checkService('api-server', 3001),
-      doctors: checkService('doctors', 3002),
-      patients: checkService('patients', 3003),
-      companies: checkService('companies', 3004),
-      admin: checkService('admin', 3005),
-      webApp: checkService('web-app', 3000),
-      signaling: checkService('signaling', 8888)
+      apiServer: checkService('@api-server', 3001),
+      doctors: checkService('@doctors', 3002),
+      patients: checkService('@patients', 3003),
+      companies: checkService('@companies', 3004),
+      admin: checkService('@admin', 3005),
+      webApp: checkService('@web-app', 3000),
+      signaling: checkService('@signaling', 8888),
     };
-    
+
     diagnostics.dependencies.lockfile = fs.existsSync('./pnpm-lock.yaml');
     diagnostics.dependencies.nodeModules = fs.existsSync('./node_modules');
-    
+
     try {
       execSync('pnpm ls --depth=0', { stdio: 'pipe' });
       diagnostics.dependencies.status = 'INSTALLED';
     } catch {
       diagnostics.dependencies.status = 'MISSING';
     }
-    
   } catch (error) {
     diagnostics.errors.push(error.message);
   }
@@ -406,12 +399,13 @@ console.log(JSON.stringify(runCompleteDiagnostics(), null, 2));
 ```
 
 ### ✅ Fix de Problemas Comunes
+
 ```javascript
 const fixCommonIssues = async () => {
   const fixes = {
     portsOccupied: () => {
       const ports = [3000, 3001, 3002, 3003, 3004, 3005, 8888];
-      ports.forEach(port => {
+      ports.forEach((port) => {
         try {
           const result = execSync(`netstat -ano | findstr :${port}`).toString();
           const pid = result.split(/\s+/).pop().trim();
@@ -422,7 +416,7 @@ const fixCommonIssues = async () => {
         }
       });
     },
-    
+
     lockfileSync: () => {
       try {
         execSync('pnpm install --frozen-lockfile=false');
@@ -431,21 +425,21 @@ const fixCommonIssues = async () => {
         console.log('❌ Lockfile sync failed:', error.message);
       }
     },
-    
+
     clearCache: () => {
       const cacheDirs = ['.next', 'node_modules/.cache', '.turbo'];
-      cacheDirs.forEach(dir => {
+      cacheDirs.forEach((dir) => {
         if (fs.existsSync(dir)) {
           fs.rmSync(dir, { recursive: true, force: true });
           console.log(`✅ Cleared ${dir}`);
         }
       });
     },
-    
+
     resetGit: () => {
       execSync('git status --porcelain');
       console.log('✅ Git status checked');
-    }
+    },
   };
 
   console.log('🔧 Running fixes...\n');
@@ -459,65 +453,60 @@ fixCommonIssues();
 ```
 
 ### ✅ Validación de Integridad
+
 ```javascript
 const validateProjectIntegrity = () => {
   const checks = {
-    requiredFiles: [
-      'package.json',
-      'pnpm-workspace.yaml',
-      'tsconfig.json',
-      '.env.local'
-    ],
-    requiredDirs: [
-      'apps',
-      'packages',
-      'scripts',
-      'docs'
-    ],
+    requiredFiles: ['package.json', 'pnpm-workspace.yaml', 'tsconfig.json', '.env.local'],
+    requiredDirs: ['apps', 'packages', 'scripts', 'docs'],
     appStructure: [
-      'apps/api-server',
-      'apps/doctors',
-      'apps/patients',
-      'apps/companies',
-      'apps/admin',
-      'apps/web-app',
-      'apps/signaling-server'
+      '@apps/api-server',
+      '@apps/doctors',
+      '@apps/patients',
+      '@apps/companies',
+      '@apps/admin',
+      '@apps/web-app',
+      '@apps/signaling-server',
     ],
     packageStructure: [
-      'packages/auth',
-      'packages/ui',
-      'packages/types',
-      'packages/medical',
-      'packages/telemedicine-core'
-    ]
+      '@packages/auth',
+      '@packages/ui',
+      '@packages/types',
+      '@packages/medical',
+      '@packages/telemedicine-core',
+    ],
   };
 
   const results = {
-    files: checks.requiredFiles.map(file => ({
+    files: checks.requiredFiles.map((file) => ({
       file,
-      exists: fs.existsSync(file)
+      exists: fs.existsSync(file),
     })),
-    dirs: checks.requiredDirs.map(dir => ({
+    dirs: checks.requiredDirs.map((dir) => ({
       dir,
-      exists: fs.existsSync(dir)
+      exists: fs.existsSync(dir),
     })),
-    apps: checks.appStructure.map(app => ({
+    apps: checks.appStructure.map((app) => ({
       app,
       exists: fs.existsSync(app),
-      hasPackageJson: fs.existsSync(path.join(app, 'package.json'))
+      hasPackageJson: fs.existsSync(path.join(app, 'package.json')),
     })),
-    packages: checks.packageStructure.map(pkg => ({
+    packages: checks.packageStructure.map((pkg) => ({
       package: pkg,
       exists: fs.existsSync(pkg),
-      hasPackageJson: fs.existsSync(path.join(pkg, 'package.json'))
-    }))
+      hasPackageJson: fs.existsSync(path.join(pkg, 'package.json')),
+    })),
   };
 
   const score = {
-    files: results.files.filter(f => f.exists).length / results.files.length * 100,
-    dirs: results.dirs.filter(d => d.exists).length / results.dirs.length * 100,
-    apps: results.apps.filter(a => a.exists && a.hasPackageJson).length / results.apps.length * 100,
-    packages: results.packages.filter(p => p.exists && p.hasPackageJson).length / results.packages.length * 100
+    files: (results.files.filter((f) => f.exists).length / results.files.length) * 100,
+    dirs: (results.dirs.filter((d) => d.exists).length / results.dirs.length) * 100,
+    apps:
+      (results.apps.filter((a) => a.exists && a.hasPackageJson).length / results.apps.length) * 100,
+    packages:
+      (results.packages.filter((p) => p.exists && p.hasPackageJson).length /
+        results.packages.length) *
+      100,
   };
 
   const overall = (score.files + score.dirs + score.apps + score.packages) / 4;
@@ -526,7 +515,7 @@ const validateProjectIntegrity = () => {
     results,
     score,
     overall: overall.toFixed(1),
-    status: overall >= 90 ? 'HEALTHY' : overall >= 70 ? 'WARNING' : 'CRITICAL'
+    status: overall >= 90 ? 'HEALTHY' : overall >= 70 ? 'WARNING' : 'CRITICAL',
   };
 };
 
@@ -535,23 +524,24 @@ console.log(`Project Integrity: ${integrity.status} (${integrity.overall}%)`);
 ```
 
 ### ✅ Performance Profiler
+
 ```javascript
 const profilePerformance = async () => {
   const measurements = {};
-  
+
   const measure = async (name, fn) => {
     const start = performance.now();
     const result = await fn();
     const end = performance.now();
     measurements[name] = {
       duration: (end - start).toFixed(2) + 'ms',
-      result
+      result,
     };
     return result;
   };
 
   await measure('fileSystemRead', () => {
-    return fs.readdirSync('./apps', { recursive: true }).length;
+    return fs.readdirSync('@apps', { recursive: true }).length;
   });
 
   await measure('gitStatus', () => {
@@ -569,7 +559,7 @@ const profilePerformance = async () => {
 
   await measure('portScan', () => {
     const ports = [3000, 3001, 3002, 3003];
-    return ports.map(p => {
+    return ports.map((p) => {
       try {
         execSync(`netstat -ano | findstr :${p}`, { stdio: 'pipe' });
         return `${p}:OCCUPIED`;
@@ -582,7 +572,7 @@ const profilePerformance = async () => {
   return measurements;
 };
 
-profilePerformance().then(results => {
+profilePerformance().then((results) => {
   console.log('⚡ Performance Profile:');
   Object.entries(results).forEach(([name, data]) => {
     console.log(`  ${name}: ${data.duration}`);
@@ -591,16 +581,17 @@ profilePerformance().then(results => {
 ```
 
 ### ✅ Dependency Analyzer
+
 ```javascript
 const analyzeDependencies = () => {
-  const packages = fs.readdirSync('./packages');
-  const apps = fs.readdirSync('./apps');
-  
+  const packages = fs.readdirSync('@packages');
+  const apps = fs.readdirSync('@apps');
+
   const analysis = {
     packages: {},
     apps: {},
     conflicts: [],
-    duplicates: []
+    duplicates: [],
   };
 
   const readPackageJson = (dir) => {
@@ -611,32 +602,33 @@ const analyzeDependencies = () => {
     return null;
   };
 
-  packages.forEach(pkg => {
-    const packageJson = readPackageJson(`./packages/${pkg}`);
+  packages.forEach((pkg) => {
+    const packageJson = readPackageJson(`@packages/${pkg}`);
     if (packageJson) {
       analysis.packages[pkg] = {
         version: packageJson.version,
         dependencies: Object.keys(packageJson.dependencies || {}),
-        devDependencies: Object.keys(packageJson.devDependencies || {})
+        devDependencies: Object.keys(packageJson.devDependencies || {}),
       };
     }
   });
 
-  apps.forEach(app => {
-    const packageJson = readPackageJson(`./apps/${app}`);
+  apps.forEach((app) => {
+    const packageJson = readPackageJson(`@apps/${app}`);
     if (packageJson) {
       analysis.apps[app] = {
         version: packageJson.version,
         dependencies: Object.keys(packageJson.dependencies || {}),
-        internalDeps: Object.keys(packageJson.dependencies || {})
-          .filter(dep => dep.startsWith('@altamedica/'))
+        internalDeps: Object.keys(packageJson.dependencies || {}).filter((dep) =>
+          dep.startsWith('@altamedica/'),
+        ),
       };
     }
   });
 
   const allDeps = {};
-  Object.values(analysis.packages).forEach(pkg => {
-    [...pkg.dependencies, ...pkg.devDependencies].forEach(dep => {
+  Object.values(analysis.packages).forEach((pkg) => {
+    [...pkg.dependencies, ...pkg.devDependencies].forEach((dep) => {
       if (!allDeps[dep]) allDeps[dep] = 0;
       allDeps[dep]++;
     });
